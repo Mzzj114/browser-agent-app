@@ -35,7 +35,10 @@ const pythonCellSchema = z
 
 const stepSchema = z
   .strictObject({
-    id: z.string().regex(/^step-\d{2}$/).brand("StepId"),
+    id: z
+      .string()
+      .regex(/^step-\d{2}$/)
+      .brand("StepId"),
     ordinal: z.number().int().positive(),
     timestamp: z.iso.datetime(),
     thinking: z.string().min(1).optional(),

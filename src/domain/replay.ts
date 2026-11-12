@@ -1,3 +1,5 @@
+import { assertNever } from "./assert-never"
+
 export type ReplaySelection =
   | { readonly kind: "final" }
   | { readonly kind: "step"; readonly stepIndex: number }
@@ -14,17 +16,6 @@ export function initialReplaySelection(): ReplaySelection {
 
 export function stepReplaySelection(stepIndex: number): ReplaySelection {
   return { kind: "step", stepIndex }
-}
-
-class UnexpectedStateError extends Error {
-  public constructor(public readonly state: never) {
-    super("Unsupported replay or decision state")
-    this.name = "UnexpectedStateError"
-  }
-}
-
-function assertNever(value: never): never {
-  throw new UnexpectedStateError(value)
 }
 
 export function previousReplaySelection(
@@ -63,10 +54,7 @@ export function finalReplaySelection(): ReplaySelection {
   return { kind: "final" }
 }
 
-export function submitDecision(
-  current: DecisionState,
-  choice: DecisionChoice,
-): DecisionState {
+export function submitDecision(current: DecisionState, choice: DecisionChoice): DecisionState {
   switch (current.kind) {
     case "undecided":
       return { kind: "decided", choice }
