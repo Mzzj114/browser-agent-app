@@ -4,6 +4,7 @@ import { StrictMode, useState } from "react"
 import { createRoot } from "react-dom/client"
 import {
   ActionButton,
+  AgentPrompt,
   BrandMark,
   BrowserFrame,
   DecisionFooter,
@@ -182,6 +183,15 @@ function Showcase() {
                   state={{ kind: "decided", choice: "rejected" }}
                   onDecision={() => undefined}
                 />
+              </article>
+            </div>
+          </section>
+
+          <section className="showcase-section">
+            <h2>Agent 输入</h2>
+            <div className="showcase-grid">
+              <article className="specimen-agent-prompt">
+                <AgentPrompt model={agentRun.engine.model} />
               </article>
             </div>
           </section>

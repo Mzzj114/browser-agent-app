@@ -1,3 +1,4 @@
+export { AgentPrompt } from "./agent-prompt"
 export { BrowserFrame } from "./browser-frame"
 export { ActionButton, BrandMark, IconButton, StatusBadge } from "./buttons"
 export { CodeCell } from "./code-cell"

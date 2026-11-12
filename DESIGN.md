@@ -233,7 +233,15 @@ All spacing derives from 4px.
 - Spacing: space-4 padding and space-3 button gap.
 - States: default, hover, active, focus-visible, submitted-disabled.
 - Accessibility: immediate state announced with `aria-live="polite"`; no correctness message.
-- Layout: fixed final row of the agent panel.
+- Layout: closes the final response inside the scrollable transcript, directly after the assistant message.
+
+### AgentPrompt
+
+- Structure: disabled prompt field, recorded model label, read-only note, and disabled send IconButton.
+- Variants: replay-only read-only composer.
+- States: disabled input and disabled send action.
+- Accessibility: labelled fieldset group; the prompt textarea and send control stay visibly disabled.
+- Layout: fixed final row of the agent panel; the model name comes from the run metadata (`engine.model`).
 
 ### DesktopOnlyMessage
 

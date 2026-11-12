@@ -30,6 +30,26 @@ test("locks both neutral decisions after one choice", async ({ page }) => {
   await expect(page.locator(".decision-footer")).not.toContainText(/正确|错误/)
 })
 
+test("keeps the decision in the transcript and jumps to the latest content", async ({ page }) => {
+  await page.goto("/")
+  const scroll = page.locator(".chat-scroll")
+  await expect(scroll.locator(".decision-footer")).toBeVisible()
+  await expect(page.locator(".agent-prompt textarea")).toBeDisabled()
+  await expect(page.locator(".agent-prompt")).toContainText("synthetic-model")
+
+  const jump = page.getByRole("button", { name: "跳到最新内容" })
+  await expect(jump).toBeVisible()
+  await jump.click()
+  await expect
+    .poll(() =>
+      scroll.evaluate(
+        (element) => Math.ceil(element.scrollTop + element.clientHeight) >= element.scrollHeight - 1,
+      ),
+    )
+    .toBe(true)
+  await expect(jump).toBeHidden()
+})
+
 test("zooms beyond native width, closes with Escape, and restores trigger focus", async ({
   page,
 }) => {

@@ -87,4 +87,24 @@ describe("verification workspace", () => {
     expect(screen.queryByRole("dialog", { name: "放大查看" })).not.toBeInTheDocument()
     await waitFor(() => expect(zoomTrigger).toHaveFocus())
   })
+
+  it("keeps the decision at the end of the final response inside the transcript", () => {
+    // Given the verification workspace.
+    const { container } = render(<App />)
+    // Then the decision prompt closes the final response inside the scroll area.
+    const decision = screen.getByRole("contentinfo")
+    const scroll = container.querySelector(".chat-scroll")
+    const messages = container.querySelector(".chat-messages")
+    expect(scroll).toContainElement(decision)
+    expect(messages?.lastElementChild).toBe(decision)
+  })
+
+  it("shows the recorded model in a disabled agent prompt", () => {
+    // Given the replay workspace.
+    render(<App />)
+    // Then the composer is read-only and names the model recorded in the run metadata.
+    expect(screen.getByRole("textbox", { name: /Agent 指令/ })).toBeDisabled()
+    expect(screen.getByText(agentRun.engine.model)).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "发送指令" })).toBeDisabled()
+  })
 })

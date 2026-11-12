@@ -1,10 +1,12 @@
-import { ListTree } from "lucide-react"
-import { useReducer, useState } from "react"
+import { ArrowDown, ListTree } from "lucide-react"
+import { useCallback, useEffect, useReducer, useRef, useState } from "react"
 import {
+  AgentPrompt,
   BrandMark,
   BrowserFrame,
   DecisionFooter,
   DesktopOnlyMessage,
+  IconButton,
   MessageBlock,
   ReplayControls,
   ScreenshotDialog,
@@ -48,6 +50,30 @@ export function App() {
     kind: "undecided",
   } satisfies DecisionState)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const chatScrollRef = useRef<HTMLDivElement>(null)
+  const [showJump, setShowJump] = useState(false)
+  const syncJump = useCallback(() => {
+    const scroller = chatScrollRef.current
+    if (scroller === null) return
+    const distanceFromBottom = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight
+    setShowJump(distanceFromBottom > 24)
+  }, [])
+  useEffect(() => {
+    const scroller = chatScrollRef.current
+    if (scroller === null) return
+    syncJump()
+    if (typeof ResizeObserver === "undefined") return
+    const observer = new ResizeObserver(syncJump)
+    for (const child of scroller.children) {
+      observer.observe(child)
+    }
+    return () => observer.disconnect()
+  }, [syncJump])
+  const jumpToLatest = () => {
+    const scroller = chatScrollRef.current
+    if (scroller === null) return
+    scroller.scrollTo({ top: scroller.scrollHeight, behavior: "smooth" })
+  }
   const pageState = viewedPageState(selection)
   const screenshot = pageState.screenshot
   const dialogPage = screenshot === null ? null : { ...pageState, screenshot }
@@ -87,33 +113,46 @@ export function App() {
             />
           </section>
           <aside className="agent-panel" aria-label="Agent 任务记录">
-            <div className="chat-scroll">
-              <div className="chat-messages">
-                <MessageBlock label="原始任务" speaker="user">
-                  {agentRun.task}
-                </MessageBlock>
-                <MessageBlock label="Agent 最终回复" speaker="assistant">
-                  {agentRun.final.text}
-                </MessageBlock>
+            <div className="chat-shell">
+              <div className="chat-scroll" ref={chatScrollRef} onScroll={syncJump}>
+                <div className="chat-messages">
+                  <MessageBlock label="原始任务" speaker="user">
+                    {agentRun.task}
+                  </MessageBlock>
+                  <MessageBlock label="Agent 最终回复" speaker="assistant">
+                    {agentRun.final.text}
+                  </MessageBlock>
+                  <DecisionFooter state={decision} onDecision={chooseDecision} />
+                </div>
+                <section className="execution-history" aria-labelledby="execution-heading">
+                  <div className="execution-heading">
+                    <h2 id="execution-heading">执行历史</h2>
+                    <span>{agentRun.steps.length} 步</span>
+                  </div>
+                  <div className="step-list">
+                    {agentRun.steps.map((step, index) => (
+                      <StepCard
+                        key={step.id}
+                        step={step}
+                        selected={selectedStepIndex === index}
+                        onSelect={() => setSelection(stepReplaySelection(index))}
+                      />
+                    ))}
+                  </div>
+                </section>
               </div>
-              <section className="execution-history" aria-labelledby="execution-heading">
-                <div className="execution-heading">
-                  <h2 id="execution-heading">执行历史</h2>
-                  <span>{agentRun.steps.length} 步</span>
-                </div>
-                <div className="step-list">
-                  {agentRun.steps.map((step, index) => (
-                    <StepCard
-                      key={step.id}
-                      step={step}
-                      selected={selectedStepIndex === index}
-                      onSelect={() => setSelection(stepReplaySelection(index))}
-                    />
-                  ))}
-                </div>
-              </section>
+              {showJump ? (
+                <IconButton
+                  className="chat-jump"
+                  label="跳到最新内容"
+                  variant="outlined"
+                  onClick={jumpToLatest}
+                >
+                  <ArrowDown />
+                </IconButton>
+              ) : null}
             </div>
-            <DecisionFooter state={decision} onDecision={chooseDecision} />
+            <AgentPrompt model={agentRun.engine.model} />
           </aside>
         </main>
       </div>

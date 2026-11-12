@@ -45,12 +45,20 @@
   background: var(--surface-primary);
 }
 
+.chat-shell {
+  position: relative;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr);
+  min-inline-size: 0;
+  min-block-size: 0;
+}
+
 .chat-scroll {
   min-inline-size: 0;
   min-block-size: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: var(--space-6) var(--space-5) 0;
+  padding: var(--space-6) var(--space-5);
 }
 
 .chat-messages {
@@ -58,6 +66,25 @@
   gap: var(--space-5);
   padding-block-end: var(--space-6);
   border-block-end: 1px solid var(--border-default);
+}
+
+.chat-messages > .decision-footer {
+  padding: 0;
+  border-block-start: 0;
+  background: transparent;
+}
+
+.chat-jump {
+  position: absolute;
+  z-index: 5;
+  inset-block-end: var(--space-3);
+  inset-inline-end: var(--space-4);
+  inline-size: 38px;
+  block-size: 38px;
+  min-block-size: 38px;
+  flex-basis: 38px;
+  border-radius: var(--radius-round);
+  box-shadow: var(--shadow-browser);
 }
 
 .execution-history {
@@ -89,6 +116,82 @@
 .step-list {
   display: grid;
   gap: var(--space-3);
+}
+
+.agent-prompt {
+  min-inline-size: 0;
+  margin: 0;
+  padding: var(--space-3) var(--space-5) var(--space-4);
+  border: 0;
+  border-block-start: 1px solid var(--border-default);
+  background: var(--surface-primary);
+}
+
+.agent-prompt-field {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-surface);
+  background: var(--surface-secondary);
+}
+
+.agent-prompt-input {
+  inline-size: 100%;
+  min-block-size: 2.6rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-disabled);
+  font-size: 14px;
+  line-height: 1.55;
+  resize: none;
+}
+
+.agent-prompt-input::placeholder {
+  color: var(--text-disabled);
+}
+
+.agent-prompt-footer {
+  display: flex;
+  min-inline-size: 0;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.agent-prompt-model {
+  display: inline-flex;
+  min-inline-size: 0;
+  align-items: center;
+  gap: var(--space-1);
+  overflow: hidden;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 510;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agent-prompt-model svg {
+  inline-size: 14px;
+  block-size: 14px;
+  color: var(--accent-primary);
+}
+
+.agent-prompt-note {
+  margin-inline-start: auto;
+  overflow: hidden;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agent-prompt-send {
+  inline-size: 34px;
+  block-size: 34px;
+  min-block-size: 34px;
+  flex-basis: 34px;
 }
 
 .browser-panel {

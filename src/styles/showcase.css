@@ -118,6 +118,17 @@
   border-block-start: 0;
 }
 
+.specimen-agent-prompt {
+  overflow: hidden;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-surface);
+  background: var(--surface-primary);
+}
+
+.specimen-agent-prompt .agent-prompt {
+  border-block-start: 0;
+}
+
 @media (width < 960px) {
   .showcase-grid,
   .specimen-columns {

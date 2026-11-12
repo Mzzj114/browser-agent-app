@@ -16,12 +16,12 @@ type DecisionView = {
 function decisionView(state: DecisionState): DecisionView {
   switch (state.kind) {
     case "undecided":
-      return { disabled: false, choice: null, status: "选择后不可更改。" }
+      return { disabled: false, choice: null, status: "" }
     case "decided":
       return {
         disabled: true,
         choice: state.choice,
-        status: `已记录：${state.choice === "accepted" ? "接受结果" : "拒绝结果"}。本次选择不可更改。`,
+        status: `已记录：${state.choice === "accepted" ? "接受结果" : "拒绝结果"}。`,
       }
     default:
       return assertNever(state)
