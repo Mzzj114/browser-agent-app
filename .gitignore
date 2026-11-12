@@ -1,0 +1,11 @@
+node_modules/
+dist/
+coverage/
+test-results/
+playwright-report/
+.react-doctor-report*.json
+*.tsbuildinfo
+.DS_Store
+
+.omo/
+.codegraph/

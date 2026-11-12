@@ -1,0 +1,54 @@
+我们自己设计情形，运行Agent若干次，然后理应获得 70% 的成功案例和 30% 的失败
+在取那些失败案例做文章
+
+至少可以复刻/验证其它论文的结论，把它们扩展到 browser-use agent 上
+（一个问题可能是 GUI use 和 browser use 差不多）
+
+现在思考如何让`调换 evidence 和 claim 的顺序`更强一点
+
+那既然 Trace 和 Flow 的可视化/提取研究的这么明白了
+为什么不让AI在做出final claim的时候客观一点引用它自己的 trace 作为依据呢？
+（linking assertion to steps/trace）
+
+那所以我们主要就算解决自信报告瞎说的问题
+
+第一组：对照组，claim+evidence
+第二组：小实验组，evidence 然后 claim (可选,毕竟仅有受试者较少)
+第三组：大实验组，assertions linked to steps; user can unfold steps to traces/evidence
+
+收集数据
+1. accuracy
+2. perceived effort level
+3. screen records (potentially measure time)
+
+App 的话，我们甚至可以做纯前端，浏览器做成一个玩具浏览器（比如 iframe），
+traces自己跑，记录transcript和screenshots，
+然后我们的特殊 verifier 前端用前端就行了
+
+这样甚至可以把测试用问卷的方式发出去
+
+
+---
+
+主题？
+如何设计 verification screen 能使用户更好地确认 browser-use agent 完成的工作
+- “browser-use agent”: 控制你浏览器的 AI Agent，网上有很多。
+- “更好地确认”：这可能包含多个维度，比如挑错准确率，确认所需时间，用户认为确认是否轻松(perceived effort level)
+- “完成的工作”：比如你让它打开 amazon.com 然后把销量最高的红色运动鞋加入购物车
+
+我们怎么知道如何设计？
+前人在相关领域有过一些结论，但没有人直接研究过我们要研究的方向，我们试着结合前人的结论到 browser-use agent 的情景，看看它们还成不成立
+
+App 做什么？
+理想情况下我们做个 browser-use agent 的 app。
+但实际上我们主要集中精力做这个 verification screen 的前端，其它都可以做个假的。
+
+如何测试？
+我们自己设计一个或多个 browser-use agent 的使用场景和任务（可以参考前人的，但因为前人的环境和我们不完全一样，我们需要改）然后我们自己用 browser-use agent 跑这些任务，用程序记录它们的运行情况。根据前人的统计结果大概30%的情况下 agent 不能完美完成任务。我们挑一点 agent 运行的结果，主要挑 agent 部分完成或没有完成任务的情形。这些就是我们的实验样例。
+
+然后我们找受试者/用户，我们把这些实验样例在app中呈现给用户，让它们进行确认(看输出决定接受还是不接受)。我们记录这些过程。
+
+在这个实验过程中，不同用户收到不同版本的 app：有的版本我们使用最普通的 verification screen，作为对照组，有的版本我们使用结合了前人结论，升级过的 verification screen，作为实验组。
+
+我们会测量挑错准确率，确认所需时间，用户认为确认是否轻松(perceived effort level)等指标。
+
