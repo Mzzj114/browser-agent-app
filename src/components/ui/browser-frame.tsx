@@ -1,13 +1,15 @@
 import { Globe2, ImageOff, LockKeyhole, Maximize2 } from "lucide-react"
+import type { ReactNode } from "react"
 import type { PageState } from "../../domain/run-schema"
 import { ActionButton } from "./buttons"
 
 type BrowserFrameProps = {
   readonly pageState: PageState
   readonly onZoom: () => void
+  readonly controls?: ReactNode
 }
 
-export function BrowserFrame({ pageState, onZoom }: BrowserFrameProps) {
+export function BrowserFrame({ pageState, onZoom, controls }: BrowserFrameProps) {
   const screenshot = pageState.screenshot
   return (
     <section className="browser-frame" aria-label="Agent 浏览器">
@@ -23,12 +25,6 @@ export function BrowserFrame({ pageState, onZoom }: BrowserFrameProps) {
           <LockKeyhole aria-hidden="true" />
           <span>{pageState.url}</span>
         </div>
-      </div>
-      <div className="browser-stage-toolbar">
-        <span>录制页面</span>
-        <ActionButton icon={<Maximize2 />} onClick={onZoom} disabled={!screenshot}>
-          放大查看
-        </ActionButton>
       </div>
       <div className="browser-viewport">
         {screenshot ? (
@@ -48,6 +44,15 @@ export function BrowserFrame({ pageState, onZoom }: BrowserFrameProps) {
             <span>仍可查看上方记录的网址与页面标题。</span>
           </div>
         )}
+      </div>
+      <div className="browser-stage-toolbar">
+        <span className="browser-stage-label">录制页面</span>
+        <div className="browser-stage-actions">
+          {controls}
+          <ActionButton icon={<Maximize2 />} onClick={onZoom} disabled={!screenshot}>
+            放大查看
+          </ActionButton>
+        </div>
       </div>
     </section>
   )

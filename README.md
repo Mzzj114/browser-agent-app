@@ -6,7 +6,7 @@ An HCI research prototype: a verification workspace for reviewing work done by b
 
 ## What it does
 
-- Split workspace: agent transcript and execution rail on the left, recorded browser on the right.
+- Split workspace: recorded browser on the left, agent transcript and execution rail on the right.
 - Inspect any step, replay previous/next through the run, or return to the final state.
 - Zoom screenshots and inspect each step's Python cells, output, and captured page state.
 - Accept or reject the result; the decision locks after one choice.

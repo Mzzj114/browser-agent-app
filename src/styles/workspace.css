@@ -31,7 +31,7 @@
 
 .workspace {
   display: grid;
-  grid-template-columns: var(--agent-width) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) var(--agent-width);
   min-inline-size: 0;
   min-block-size: 0;
 }
@@ -41,7 +41,7 @@
   grid-template-rows: minmax(0, 1fr) auto;
   min-inline-size: 0;
   min-block-size: 0;
-  border-inline-end: 1px solid var(--border-default);
+  border-inline-start: 1px solid var(--border-default);
   background: var(--surface-primary);
 }
 
@@ -93,20 +93,13 @@
 
 .browser-panel {
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr);
   min-inline-size: 0;
   min-block-size: 0;
-  gap: var(--space-3);
   padding: var(--space-4);
   background: var(--canvas);
 }
 
 .browser-panel > .browser-frame {
   block-size: 100%;
-}
-
-.browser-panel > .replay-controls {
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-surface);
-  background: var(--surface-primary);
 }

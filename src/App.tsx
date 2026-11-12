@@ -62,6 +62,30 @@ export function App() {
           <StatusBadge label={`${agentRun.steps.length} 个执行步骤`} icon={<ListTree />} />
         </header>
         <main className="workspace">
+          <section className="browser-panel" aria-labelledby="browser-heading">
+            <h2 id="browser-heading" className="sr-only">
+              网页结果
+            </h2>
+            <BrowserFrame
+              pageState={pageState}
+              onZoom={() => setDialogOpen(true)}
+              controls={
+                <ReplayControls
+                  currentStep={selectedStepIndex}
+                  stepCount={agentRun.steps.length}
+                  onPrevious={() =>
+                    setSelection((current) =>
+                      previousReplaySelection(current, agentRun.steps.length),
+                    )
+                  }
+                  onNext={() =>
+                    setSelection((current) => nextReplaySelection(current, agentRun.steps.length))
+                  }
+                  onFinal={() => setSelection(finalReplaySelection())}
+                />
+              }
+            />
+          </section>
           <aside className="agent-panel" aria-label="Agent 任务记录">
             <div className="chat-scroll">
               <div className="chat-messages">
@@ -91,23 +115,6 @@ export function App() {
             </div>
             <DecisionFooter state={decision} onDecision={chooseDecision} />
           </aside>
-          <section className="browser-panel" aria-labelledby="browser-heading">
-            <h2 id="browser-heading" className="sr-only">
-              网页结果
-            </h2>
-            <BrowserFrame pageState={pageState} onZoom={() => setDialogOpen(true)} />
-            <ReplayControls
-              currentStep={selectedStepIndex}
-              stepCount={agentRun.steps.length}
-              onPrevious={() =>
-                setSelection((current) => previousReplaySelection(current, agentRun.steps.length))
-              }
-              onNext={() =>
-                setSelection((current) => nextReplaySelection(current, agentRun.steps.length))
-              }
-              onFinal={() => setSelection(finalReplaySelection())}
-            />
-          </section>
         </main>
       </div>
       <DesktopOnlyMessage />

@@ -199,22 +199,22 @@ All spacing derives from 4px.
 
 ### BrowserFrame
 
-- Structure: recorded tab, read-only address, Agent browser label, screenshot well.
+- Structure: recorded tab, read-only address, Agent browser label, screenshot well, inline stage toolbar.
 - Variants: final state, selected historical state, missing screenshot.
 - Spacing: tab-height, space-3 chrome padding, space-4 well padding.
 - States: default, historical selection, final selection, empty screenshot.
 - Accessibility: read-only text is not disguised as editable input; screenshots have state-specific alt text.
 - Depth: border-strong plus the subtle browser shadow token.
-- Layout: bounded grid; `.browser-viewport` owns screenshot scrolling.
+- Layout: bounded grid; `.browser-viewport` owns screenshot scrolling; `.browser-stage-toolbar` sits at the bottom of the frame and holds the stage label, replay controls, and zoom action in one row.
 
 ### ReplayControls
 
 - Structure: previous-step IconButton, current-position text, next-step IconButton, final-state ActionButton.
 - Variants: first step, middle step, last step, final state.
-- Spacing: space-2 cluster gaps and space-3 toolbar padding.
+- Spacing: space-2 cluster gaps inside the browser stage toolbar.
 - States: default, hover, active, focus-visible, disabled at boundaries.
 - Accessibility: disabled arrows at boundaries, current position announced as text.
-- Layout: fixed toolbar below the browser viewport; never overlaps evidence.
+- Layout: inline at the trailing edge of the bottom browser stage toolbar; never overlaps evidence.
 
 ### ScreenshotDialog
 

@@ -1,6 +1,6 @@
 .browser-frame {
   display: grid;
-  grid-template-rows: var(--tab-height) auto auto minmax(0, 1fr);
+  grid-template-rows: var(--tab-height) auto minmax(0, 1fr) auto;
   min-inline-size: 0;
   min-block-size: 0;
   overflow: hidden;
@@ -89,33 +89,42 @@
   white-space: nowrap;
 }
 
-.browser-stage-toolbar,
-.replay-controls {
+.browser-stage-toolbar {
   display: flex;
+  min-inline-size: 0;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-2) var(--space-3);
-  border-block-end: 1px solid var(--border-default);
+  border-block-start: 1px solid var(--border-default);
   background: var(--surface-primary);
 }
 
-.browser-stage-toolbar > span {
+.browser-stage-label {
   color: var(--text-tertiary);
   font-size: 12px;
   font-weight: 510;
+  white-space: nowrap;
+}
+
+.browser-stage-actions {
+  display: flex;
+  min-inline-size: 0;
+  align-items: center;
+  gap: var(--space-3);
 }
 
 .browser-stage-toolbar .action-button {
   padding-inline: var(--space-3);
   font-size: 14px;
+  white-space: nowrap;
 }
 
 .browser-viewport {
   min-inline-size: 0;
   min-block-size: 0;
   overflow: auto;
-  padding: var(--space-4);
+  /* padding: var(--space-4); */
   background: var(--surface-sunken);
 }
 
@@ -156,11 +165,17 @@
 }
 
 .replay-controls {
+  display: flex;
   min-inline-size: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
   margin: 0;
+  padding: var(--space-2) var(--space-3);
   border-block-start: 1px solid var(--border-default);
   border-block-end: 0;
   border-inline: 0;
+  background: var(--surface-primary);
 }
 
 .replay-navigation {
@@ -180,6 +195,17 @@
 
 .replay-controls > .action-button {
   font-size: 14px;
+}
+
+.browser-stage-toolbar .replay-controls {
+  display: flex;
+  min-inline-size: 0;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
 }
 
 .screenshot-dialog {
