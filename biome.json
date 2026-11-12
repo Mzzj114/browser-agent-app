@@ -44,6 +44,18 @@
       "semicolons": "asNeeded"
     }
   },
+  "overrides": [
+    {
+      "includes": ["playwright.config.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off"
+          }
+        }
+      }
+    }
+  ],
   "files": {
     "includes": [
       "**",
@@ -52,9 +64,11 @@
       "!!**/coverage",
       "!!**/test-results",
       "!!**/playwright-report",
+      "!!**/.playwright-mcp",
       "!!**/.omo",
       "!!**/.codegraph",
-      "!**/DESIGN.md"
+      "!**/DESIGN.md",
+      "!**/.debug-journal.md"
     ]
   }
 }

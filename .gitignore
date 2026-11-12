@@ -3,6 +3,7 @@ dist/
 coverage/
 test-results/
 playwright-report/
+.playwright-mcp/
 .react-doctor-report*.json
 *.tsbuildinfo
 .DS_Store
