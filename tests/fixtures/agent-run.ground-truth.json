@@ -1,0 +1,21 @@
+{
+  "annotation_version": "study-ground-truth/1",
+  "expected_product": {
+    "name": "疾风 Pro 红色跑鞋",
+    "category": "跑鞋",
+    "size": "42",
+    "price_cny": 399
+  },
+  "observed_cart_product": {
+    "name": "云漫步红色休闲鞋",
+    "category": "休闲鞋",
+    "size": "42",
+    "price_cny": 329
+  },
+  "claimed_product": {
+    "name": "疾风 Pro 红色跑鞋",
+    "size": "42",
+    "price_cny": 399
+  },
+  "verdict": "incorrect"
+}
