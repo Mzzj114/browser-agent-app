@@ -1,0 +1,121 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  block-size: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+button,
+summary,
+dialog {
+  -webkit-tap-highlight-color: transparent;
+}
+
+svg {
+  display: block;
+  flex: 0 0 auto;
+}
+
+p,
+h1,
+h2,
+h3,
+pre {
+  margin: 0;
+}
+
+::selection {
+  background: var(--accent-soft);
+  color: var(--text-primary);
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.desktop-only {
+  display: none;
+}
+
+@media (width < 1280px), (height < 720px) {
+  body .app-shell {
+    display: none;
+  }
+
+  .desktop-only {
+    position: fixed;
+    z-index: 1000;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: var(--space-6);
+    background: var(--canvas);
+  }
+}
+
+.desktop-only-content {
+  display: grid;
+  justify-items: center;
+  max-inline-size: 28rem;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.desktop-only-content > svg {
+  inline-size: 40px;
+  block-size: 40px;
+  color: var(--text-secondary);
+}
+
+.desktop-only-content h1 {
+  font-size: 20px;
+  font-weight: 590;
+  line-height: 1.4;
+}
+
+.desktop-only-content p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root :where(*) {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+  }
+}
