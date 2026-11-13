@@ -15,7 +15,7 @@
   block-size: 32px;
   place-items: center;
   border: 1px solid var(--border-strong);
-  border-radius: var(--radius-surface);
+  border-radius: var(--radius-control);
   background: var(--surface-primary);
   color: var(--accent-primary);
 }
@@ -162,7 +162,6 @@
 
 .message-block[data-speaker="user"] .message-content {
   padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--border-default);
   border-radius: var(--radius-surface);
   background: var(--surface-secondary);
 }

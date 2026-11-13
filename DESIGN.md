@@ -9,7 +9,7 @@
 
 ## 1. Atmosphere & Identity
 
-A calm forensic workspace that feels precise without feeling like a laboratory instrument. Information is dense only where the run is technical; the final response and browser remain easy to read. The signature is a physical browser sheet recessed into a cool-gray well, paired with a quiet execution rail whose selected step is marked by a narrow indigo edge. Hierarchy comes from alignment, luminance, and native content rather than decorative cards or motion.
+A calm forensic workspace that feels precise without feeling like a laboratory instrument. Information is dense only where the run is technical; the final response and browser remain easy to read. The signature is a physical browser sheet recessed into a warm-gray well, paired with a quiet execution rail whose selected step is marked by a narrow indigo edge. Hierarchy comes from alignment, luminance, and native content rather than decorative cards or motion.
 
 Design dials: variance 4, motion 2, density 7. Light mode only, explicitly chosen by the user.
 
@@ -19,26 +19,26 @@ Design dials: variance 4, motion 2, density 7. Light mode only, explicitly chose
 
 | Role | Token | Light | Usage |
 |------|-------|-------|-------|
-| Canvas | --canvas | #F4F5F7 | App background and browser well |
+| Canvas | --canvas | #F5F5F1 | App background and browser well |
 | Surface primary | --surface-primary | #FFFFFF | Chat, header, decision footer, dialog |
-| Surface secondary | --surface-secondary | #F8F9FA | Browser chrome and code cells |
-| Surface sunken | --surface-sunken | #EEF0F3 | Recessed browser surround |
-| Surface hover | --surface-hover | #F0F1F5 | Interactive row hover |
-| Surface selected | --surface-selected | #EEEFFC | Selected step background |
-| Text primary | --text-primary | #24262B | Headings and main content |
-| Text secondary | --text-secondary | #575E6B | Secondary copy and metadata |
-| Text tertiary | --text-tertiary | #6B7280 | Captions and inactive labels |
-| Text disabled | --text-disabled | #8B919C | Disabled text only |
-| Border default | --border-default | #E1E4E9 | Dividers and control outlines |
-| Border strong | --border-strong | #C9CED7 | Browser frame and emphasized outlines |
+| Surface secondary | --surface-secondary | #F7F7F3 | Browser chrome and code cells |
+| Surface sunken | --surface-sunken | #EFEFE9 | Recessed browser surround |
+| Surface hover | --surface-hover | #F2F2EC | Interactive row hover |
+| Surface selected | --surface-selected | #EDEDFA | Selected step background |
+| Text primary | --text-primary | #26251F | Headings and main content |
+| Text secondary | --text-secondary | #5D5C54 | Secondary copy and metadata |
+| Text tertiary | --text-tertiary | #6F6E66 | Captions and inactive labels |
+| Text disabled | --text-disabled | #8C8B83 | Disabled text only |
+| Border default | --border-default | #E5E4DD | Dividers and control outlines |
+| Border strong | --border-strong | #D2D1C8 | Browser frame and emphasized outlines |
 | Accent primary | --accent-primary | #5158B8 | Focus, selected controls, interactive affordance |
 | Accent hover | --accent-hover | #444BA3 | Accent hover state |
 | Accent border | --accent-border | #A9AFE6 | Selected-step edge and focus support |
 | Accent soft | --accent-soft | #E3E6FA | Subtle interactive tint |
-| Code text | --code-text | #343947 | Native REPL code |
+| Code text | --code-text | #34342C | Native REPL code |
 | Error text | --error-text | #B42318 | Native error output with text label |
 | Error surface | --error-surface | #FFF4F2 | Inline native error background |
-| Scrim | --scrim | rgb(24 26 32 / 58%) | Screenshot dialog backdrop |
+| Scrim | --scrim | rgb(30 29 24 / 58%) | Screenshot dialog backdrop |
 | Focus ring | --focus-ring | rgb(81 88 184 / 28%) | Keyboard focus halo |
 
 ### Rules
@@ -97,10 +97,11 @@ All spacing derives from 4px.
 | --header-height | 56px | Fixed product header |
 | --tab-height | 40px | Recorded browser tab strip |
 | --agent-width | clamp(25rem, 30vw, 27rem) | Fixed, non-draggable agent track |
-| --radius-control | 6px | Buttons and inputs |
-| --radius-surface | 8px | Code cells and small surfaces |
-| --radius-panel | 10px | Browser sheet and dialog |
-| --radius-round | 50% | Brand icon and icon-only controls |
+| --radius-control | 8px | Buttons and inputs |
+| --radius-surface | 12px | Code cells, message bubbles, step cards |
+| --radius-panel | 14px | Browser sheet and dialog |
+| --radius-composer | 18px | Assistant composer field |
+| --radius-round | 50% | Circular icon controls and authoring send |
 
 ### Grid
 
@@ -274,12 +275,13 @@ All spacing derives from 4px.
 
 ### Strategy
 
-Mixed: structural borders and tonal shifts own normal hierarchy. Shadows are reserved for the physical browser sheet and modal dialog.
+Mixed: structural borders and tonal shifts own normal hierarchy. Shadows are reserved for the physical browser sheet, the assistant composer, content cards, and modal dialog.
 
 | Level | Token | Value | Usage |
 |------|-------|-------|-------|
-| Browser | --shadow-browser | 0 1px 2px rgb(36 42 56 / 5%), 0 12px 32px rgb(36 42 56 / 6%) | Physical recorded-browser sheet |
-| Dialog | --shadow-dialog | 0 24px 80px rgb(24 26 32 / 22%), 0 4px 16px rgb(24 26 32 / 10%) | Screenshot overlay |
+| Browser | --shadow-browser | 0 1px 2px rgb(38 37 31 / 5%), 0 12px 32px rgb(38 37 31 / 7%) | Physical recorded-browser sheet |
+| Card | --shadow-card | 0 1px 2px rgb(38 37 31 / 4%), 0 2px 10px rgb(38 37 31 / 5%) | Content cards and assistant composer |
+| Dialog | --shadow-dialog | 0 24px 80px rgb(30 29 24 / 22%), 0 4px 16px rgb(30 29 24 / 10%) | Screenshot overlay |
 | Inset | --shadow-inset | inset 0 1px 0 rgb(255 255 255 / 70%) | Subtle browser-chrome highlight |
 | Default border | --border-ring-default | 1px solid var(--border-default) | Controls and dividers |
 | Strong border | --border-ring-strong | 1px solid var(--border-strong) | Browser sheet |
@@ -287,6 +289,7 @@ Mixed: structural borders and tonal shifts own normal hierarchy. Shadows are res
 ### Rules
 
 - No floating card grid, gradient mesh, glow, glassmorphism, or decorative shadow stacks.
+- Card shadow is a single low-opacity layer set, applied only to content cards and the assistant composer.
 - Browser depth supports the metaphor of a recorded physical page and must remain subtle at 1366x768.
 
 ## 8. Accessibility Constraints & Accepted Debt
