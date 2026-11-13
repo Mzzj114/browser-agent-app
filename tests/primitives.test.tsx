@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { ZoomIn } from "lucide-react"
+import type { ReactElement } from "react"
 import { describe, expect, it, vi } from "vitest"
 import {
   ActionButton,
@@ -12,6 +13,7 @@ import {
   StepCard,
 } from "../src/components/ui"
 import { agentRun } from "../src/data/agent-run"
+import { LocaleProvider } from "../src/i18n"
 
 class MissingFixtureStepError extends Error {
   public readonly ordinal: number
@@ -27,6 +29,14 @@ if (sampleStep === undefined) {
   throw new MissingFixtureStepError(2)
 }
 const samplePage = sampleStep.pageState
+
+function renderWithLocale(ui: ReactElement) {
+  return render(
+    <LocaleProvider initialLocale="zh" syncDocument={false}>
+      {ui}
+    </LocaleProvider>,
+  )
+}
 
 describe("primitive controls", () => {
   it("exposes an icon button through its accessible name", () => {
@@ -67,7 +77,7 @@ describe("primitive controls", () => {
     // Given an execution step with a recovered error.
     const user = userEvent.setup()
     const onSelect = vi.fn()
-    render(<StepCard step={sampleStep} selected={false} onSelect={onSelect} />)
+    renderWithLocale(<StepCard step={sampleStep} selected={false} onSelect={onSelect} />)
     // When its page-selection button is clicked.
     await user.click(screen.getByRole("button", { name: /查看页面/ }))
     // Then selection is requested without hiding the native cell.
@@ -83,7 +93,7 @@ describe("primitive controls", () => {
     // Given a recorded page state without an image.
     const pageState = { ...samplePage, screenshot: null }
     // When the browser frame is rendered.
-    render(<BrowserFrame pageState={pageState} onZoom={vi.fn()} />)
+    renderWithLocale(<BrowserFrame pageState={pageState} onZoom={vi.fn()} />)
     // Then a textual fallback replaces the image and zoom is unavailable.
     expect(screen.getByText("此步骤没有可用截图")).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "放大查看" })).toBeDisabled()
@@ -97,7 +107,7 @@ describe("primitive controls", () => {
       throw new MissingFixtureStepError(2)
     }
     const dialogPage = { ...samplePage, screenshot: samplePage.screenshot }
-    render(<ScreenshotDialog pageState={dialogPage} onClose={onClose} />)
+    renderWithLocale(<ScreenshotDialog pageState={dialogPage} onClose={onClose} />)
     // When the user zooms in once.
     await user.click(screen.getByRole("button", { name: "放大" }))
     // Then the image exceeds its native width and remains inspectable.
@@ -108,7 +118,9 @@ describe("primitive controls", () => {
 
   it("keeps both decisions disabled and neutral after acceptance", () => {
     // Given an already accepted decision.
-    render(<DecisionFooter state={{ kind: "decided", choice: "accepted" }} onDecision={vi.fn()} />)
+    renderWithLocale(
+      <DecisionFooter state={{ kind: "decided", choice: "accepted" }} onDecision={vi.fn()} />,
+    )
     // When the completed footer is inspected.
     // Then both equal actions are disabled and no correctness verdict appears.
     expect(screen.getByRole("button", { name: "接受结果" })).toBeDisabled()

@@ -19,6 +19,7 @@ import {
 import { agentRun } from "./data/agent-run"
 import type { DecisionState } from "./domain/replay"
 import type { AgentStep, PageState } from "./domain/run-schema"
+import { LocaleProvider } from "./i18n"
 import "./styles/index.css"
 
 class MissingShowcaseFixtureError extends Error {
@@ -212,6 +213,8 @@ if (!(rootElement instanceof HTMLElement)) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <Showcase />
+    <LocaleProvider initialLocale="zh" syncDocument={false}>
+      <Showcase />
+    </LocaleProvider>
   </StrictMode>,
 )

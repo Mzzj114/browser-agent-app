@@ -1,6 +1,7 @@
 import { X, ZoomIn, ZoomOut } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import type { PageState } from "../../domain/run-schema"
+import { useMessages } from "../../i18n"
 import { ActionButton, IconButton } from "./buttons"
 
 type ScreenshotPageState = PageState & {
@@ -13,6 +14,7 @@ type ScreenshotDialogProps = {
 }
 
 export function ScreenshotDialog({ pageState, onClose }: ScreenshotDialogProps) {
+  const messages = useMessages()
   const dialogRef = useRef<HTMLDialogElement>(null)
   const returnFocusRef = useRef<HTMLElement | null>(null)
   const capturedReturnFocusRef = useRef(false)
@@ -51,29 +53,33 @@ export function ScreenshotDialog({ pageState, onClose }: ScreenshotDialogProps) 
     >
       <div className="dialog-toolbar">
         <div>
-          <h2 id="screenshot-dialog-title">放大查看</h2>
+          <h2 id="screenshot-dialog-title">{messages.dialogTitle}</h2>
           <p>{pageState.title}</p>
         </div>
         <div className="dialog-actions">
           <IconButton
-            label="缩小"
+            label={messages.zoomOut}
             variant="dialog"
             disabled={zoom === 50}
             onClick={() => setZoom(zoom === "fit" ? 100 : Math.max(50, zoom - 25))}
           >
             <ZoomOut />
           </IconButton>
-          <span className="zoom-value">{zoom === "fit" ? "适应" : `${zoom}%`}</span>
+          <span className="zoom-value">{zoom === "fit" ? messages.fitValue : `${zoom}%`}</span>
           <IconButton
-            label="放大"
+            label={messages.zoomIn}
             variant="dialog"
             disabled={zoom === 200}
             onClick={() => setZoom(zoom === "fit" ? 125 : Math.min(200, zoom + 25))}
           >
             <ZoomIn />
           </IconButton>
-          <ActionButton onClick={() => setZoom("fit")}>适应窗口</ActionButton>
-          <IconButton label="关闭截图" variant="dialog" onClick={() => dialogRef.current?.close()}>
+          <ActionButton onClick={() => setZoom("fit")}>{messages.fitWindow}</ActionButton>
+          <IconButton
+            label={messages.closeScreenshot}
+            variant="dialog"
+            onClick={() => dialogRef.current?.close()}
+          >
             <X />
           </IconButton>
         </div>
@@ -84,7 +90,7 @@ export function ScreenshotDialog({ pageState, onClose }: ScreenshotDialogProps) 
           width={screenshot.width}
           height={screenshot.height}
           style={{ width: imageWidth }}
-          alt={`${pageState.title}，可缩放录制页面截图`}
+          alt={messages.dialogAlt(pageState.title)}
         />
       </div>
     </dialog>

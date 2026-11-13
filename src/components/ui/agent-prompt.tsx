@@ -1,4 +1,5 @@
 import { ArrowUp, Cpu } from "lucide-react"
+import { useMessages } from "../../i18n"
 import { IconButton } from "./buttons"
 
 type AgentPromptProps = {
@@ -6,13 +7,14 @@ type AgentPromptProps = {
 }
 
 export function AgentPrompt({ model }: AgentPromptProps) {
+  const messages = useMessages()
   return (
-    <fieldset className="agent-prompt" aria-label="Agent 指令输入">
+    <fieldset className="agent-prompt" aria-label={messages.promptLabel}>
       <div className="agent-prompt-field">
         <textarea
           className="agent-prompt-input"
-          aria-label="Agent 指令（回放模式下不可用）"
-          placeholder="继续向 Agent 提问"
+          aria-label={messages.promptInputLabel}
+          placeholder={messages.promptPlaceholder}
           rows={2}
           disabled
         />
@@ -21,8 +23,8 @@ export function AgentPrompt({ model }: AgentPromptProps) {
             <Cpu aria-hidden="true" />
             {model}
           </span>
-          <span className="agent-prompt-note">回放中 · 输入已禁用</span>
-          <IconButton className="agent-prompt-send" label="发送指令" disabled>
+          <span className="agent-prompt-note">{messages.promptNote}</span>
+          <IconButton className="agent-prompt-send" label={messages.sendPrompt} disabled>
             <ArrowUp />
           </IconButton>
         </div>

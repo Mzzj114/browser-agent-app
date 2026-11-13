@@ -71,7 +71,7 @@ Design dials: variance 4, motion 2, density 7. Light mode only, explicitly chose
 
 ### Rules
 
-- Inter Variable is self-hosted through the application bundle. Chinese uses local system fonts to avoid a large runtime font download.
+- Inter Variable is self-hosted through the application bundle. Chinese text uses local system fonts to avoid a large runtime font download.
 - Weights 400, 510, and 590 form the hierarchy. No weight above 650.
 - Body content never drops below 14px; 12px is reserved for captions and metadata.
 - Code and URLs wrap intentionally. Horizontal scrolling is allowed only inside a native code block or zoomed image, never the page shell.
@@ -147,7 +147,7 @@ All spacing derives from 4px.
 - Variants: neutral and selected; no separate Accept/Reject hierarchy.
 - Spacing: control-height, space-4 inline padding, space-2 icon gap.
 - States: default, hover, active, focus-visible, disabled, selected.
-- Accessibility: one-line Chinese label, visible focus, 4.5:1 text contrast.
+- Accessibility: one-line label in the active interface language, visible focus, 4.5:1 text contrast.
 - Motion: 120ms color and active scale.
 - Layout: equal-width pair in the decision footer.
 
@@ -171,7 +171,7 @@ All spacing derives from 4px.
 
 ### Disclosure
 
-- Structure: native `<details>` and `<summary>` with a chevron and Chinese label.
+- Structure: native `<details>` and `<summary>` with a chevron and a label in the active interface language.
 - Variants: thinking, output, error output, technical details.
 - Spacing: space-3 summary gap and content padding.
 - States: default, hover, focus-visible, open, empty, error.
@@ -245,7 +245,7 @@ All spacing derives from 4px.
 
 ### DesktopOnlyMessage
 
-- Structure: browser icon, Chinese heading, short viewport instruction.
+- Structure: browser icon, heading in the active interface language, short viewport instruction.
 - Variants: narrow width or short height.
 - Spacing: space-6 to space-12 grouping.
 - States: static fallback only.
@@ -294,12 +294,12 @@ Mixed: structural borders and tonal shifts own normal hierarchy. Shadows are res
 ### Constraints
 
 - Target WCAG 2.2 AA: 4.5:1 normal text and 3:1 large text/icon contrast.
-- `lang="zh-CN"`, logical heading order, real landmarks, native buttons/details/dialog, and useful alt text.
+- The document `lang` reflects the active interface language (`zh-CN` or `en`), with logical heading order, real landmarks, native buttons/details/dialog, and useful alt text.
 - Every action is keyboard reachable with a visible focus indicator and a minimum 44px target.
 - Dialog traps and releases focus correctly; Escape closes it.
 - No automatic motion or timed trial progression; reduced-motion preferences are respected.
 - Selection, native errors, and decision state are never communicated through color alone.
-- Long Chinese text, URLs, and code cannot create page-level horizontal scrolling.
+- Long interface text (Chinese or English), URLs, and code cannot create page-level horizontal scrolling.
 - Cognitive load is stabilized through persistent pane positions, no automatic replay, and progressive disclosure of native detail.
 
 ### Accepted Debt

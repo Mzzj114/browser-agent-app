@@ -54,6 +54,23 @@ export function finalReplaySelection(): ReplaySelection {
   return { kind: "final" }
 }
 
+export function clampReplaySelection(
+  selection: ReplaySelection,
+  stepCount: number,
+): ReplaySelection {
+  switch (selection.kind) {
+    case "final":
+      return selection
+    case "step": {
+      if (stepCount <= 0) return finalReplaySelection()
+      const stepIndex = Math.min(Math.max(selection.stepIndex, 0), stepCount - 1)
+      return stepIndex === selection.stepIndex ? selection : stepReplaySelection(stepIndex)
+    }
+    default:
+      return assertNever(selection)
+  }
+}
+
 export function submitDecision(current: DecisionState, choice: DecisionChoice): DecisionState {
   switch (current.kind) {
     case "undecided":

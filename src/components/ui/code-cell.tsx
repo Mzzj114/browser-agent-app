@@ -1,5 +1,6 @@
 import { Code2 } from "lucide-react"
 import type { PythonCell } from "../../domain/run-schema"
+import { useMessages } from "../../i18n"
 import { Disclosure } from "./disclosure"
 
 type CodeCellProps = {
@@ -8,19 +9,20 @@ type CodeCellProps = {
 }
 
 export function CodeCell({ cell, index }: CodeCellProps) {
+  const messages = useMessages()
   const result = cell.result
   return (
-    <section className="code-cell" aria-label={`Python 单元 ${index}`}>
+    <section className="code-cell" aria-label={messages.pythonCellLabel(index)}>
       <div className="code-cell-heading">
         <Code2 aria-hidden="true" />
-        <span>Python · 单元 {index}</span>
+        <span>{messages.pythonCellHeading(index)}</span>
       </div>
       <pre className="code-block">
         <code>{cell.code}</code>
       </pre>
       {result ? (
         <Disclosure
-          label={result.isError ? "查看错误输出" : "查看输出"}
+          label={result.isError ? messages.showErrorOutput : messages.showOutput}
           defaultOpen={result.isError}
           tone={result.isError ? "error" : "default"}
         >

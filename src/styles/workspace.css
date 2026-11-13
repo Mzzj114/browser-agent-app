@@ -29,6 +29,26 @@
   background: var(--surface-primary);
 }
 
+.product-header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.language-toggle {
+  display: inline-flex;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.language-option {
+  min-inline-size: 52px;
+  padding: 0 var(--space-3);
+  font-size: 13px;
+}
+
 .workspace {
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--agent-width);

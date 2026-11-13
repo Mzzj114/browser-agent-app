@@ -1,4 +1,5 @@
 import { ChevronLeft, ChevronRight, RotateCcw } from "lucide-react"
+import { useMessages } from "../../i18n"
 import { ActionButton, IconButton } from "./buttons"
 
 type ReplayControlsProps = {
@@ -16,12 +17,14 @@ export function ReplayControls({
   onNext,
   onFinal,
 }: ReplayControlsProps) {
-  const position = currentStep === null ? "最终状态" : `步骤 ${currentStep + 1} / ${stepCount}`
+  const messages = useMessages()
+  const position =
+    currentStep === null ? messages.finalState : messages.replayPosition(currentStep + 1, stepCount)
   return (
-    <fieldset className="replay-controls" aria-label="页面回放控制">
+    <fieldset className="replay-controls" aria-label={messages.replayControlsLabel}>
       <div className="replay-navigation">
         <IconButton
-          label="上一步"
+          label={messages.previousStep}
           variant="outlined"
           disabled={currentStep === 0 || stepCount === 0}
           onClick={onPrevious}
@@ -32,7 +35,7 @@ export function ReplayControls({
           {position}
         </span>
         <IconButton
-          label="下一步"
+          label={messages.nextStep}
           variant="outlined"
           disabled={currentStep === null || currentStep === stepCount - 1}
           onClick={onNext}
@@ -41,7 +44,7 @@ export function ReplayControls({
         </IconButton>
       </div>
       <ActionButton icon={<RotateCcw />} onClick={onFinal} disabled={currentStep === null}>
-        返回最终状态
+        {messages.returnToFinal}
       </ActionButton>
     </fieldset>
   )

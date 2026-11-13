@@ -1,14 +1,16 @@
 import { Globe2 } from "lucide-react"
 import type { ButtonHTMLAttributes, ReactNode } from "react"
+import { useMessages } from "../../i18n"
 import { joinClassNames } from "./class-names"
 
 export function BrandMark() {
+  const messages = useMessages()
   return (
     <div className="brand-mark">
       <span className="brand-icon" aria-hidden="true">
         <Globe2 />
       </span>
-      <span>浏览助手</span>
+      <span>{messages.brand}</span>
     </div>
   )
 }

@@ -1,5 +1,20 @@
 import { expect, test } from "@playwright/test"
 
+test("offers an English interface backed by the English run", async ({ page }) => {
+  await page.goto("/?lang=en")
+
+  await expect(page.getByRole("button", { name: "Accept result" })).toBeVisible()
+  await expect(page.getByRole("region", { name: "Agent browser" })).toContainText("Cart | Cloud Mall")
+  await expect(page.locator(".page-screenshot")).toHaveAttribute(
+    "src",
+    "screenshots/en/08-cart.webp",
+  )
+  await expect(page.getByRole("button", { name: "Step 3: view page" })).toBeVisible()
+
+  await page.getByRole("button", { name: "中文" }).click()
+  await expect(page.getByRole("button", { name: "接受结果" })).toBeVisible()
+})
+
 test("inspects a historical step and returns to the final result", async ({ page }) => {
   await page.goto("/")
   await expect(

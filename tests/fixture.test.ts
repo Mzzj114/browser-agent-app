@@ -1,23 +1,23 @@
 import { existsSync } from "node:fs"
 import { resolve } from "node:path"
 import { describe, expect, it } from "vitest"
-import { agentRun } from "../src/data/agent-run"
+import { agentRuns } from "../src/data/agent-run"
 import { agentRunSchema } from "../src/domain/run-schema"
 
-describe("synthetic browser-use replay fixture", () => {
+describe.each(Object.entries(agentRuns))("synthetic browser-use replay fixture (%s)", (_, run) => {
   it("contains eight chronological model-response steps", () => {
     // Given the normalized fixture is loaded.
     // When its steps are inspected.
     // Then the run contains the agreed execution length and native count.
-    expect(agentRun.steps).toHaveLength(8)
-    expect(agentRun.final.steps).toBe(agentRun.steps.length)
-    expect(agentRun.steps.map((step) => step.ordinal)).toEqual([1, 2, 3, 4, 5, 6, 7, 8])
+    expect(run.steps).toHaveLength(8)
+    expect(run.final.steps).toBe(run.steps.length)
+    expect(run.steps.map((step) => step.ordinal)).toEqual([1, 2, 3, 4, 5, 6, 7, 8])
   })
 
   it("uses native Python cells without legacy summaries", () => {
     // Given a completed fixture.
     // When every execution step is inspected.
-    for (const step of agentRun.steps) {
+    for (const step of run.steps) {
       // Then only native 1.x cells and optional provider thinking are present.
       expect(step.cells.length).toBeGreaterThan(0)
       for (const cell of step.cells) {
@@ -33,7 +33,7 @@ describe("synthetic browser-use replay fixture", () => {
 
   it("binds every step to an existing recorder-captured local screenshot", () => {
     // Given recorder-produced page states.
-    for (const step of agentRun.steps) {
+    for (const step of run.steps) {
       // When the step screenshot binding is inspected.
       const screenshot = step.pageState.screenshot
       // Then its provenance and local asset are explicit.
@@ -50,10 +50,10 @@ describe("synthetic browser-use replay fixture", () => {
   it("passes the normalized boundary schema without runtime ground truth", () => {
     // Given the bundled fixture object.
     // When it crosses the application data boundary.
-    const parsed = agentRunSchema.parse(agentRun)
+    const parsed = agentRunSchema.parse(run)
     // Then it is valid and contains no participant-facing correctness annotation.
-    expect(parsed).toEqual(agentRun)
-    expect("groundTruth" in agentRun).toBe(false)
-    expect("verdict" in agentRun).toBe(false)
+    expect(parsed).toEqual(run)
+    expect("groundTruth" in run).toBe(false)
+    expect("verdict" in run).toBe(false)
   })
 })

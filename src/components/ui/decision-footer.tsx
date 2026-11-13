@@ -1,5 +1,7 @@
 import { assertNever } from "../../domain/assert-never"
 import type { DecisionChoice, DecisionState } from "../../domain/replay"
+import type { Messages } from "../../i18n"
+import { useMessages } from "../../i18n"
 import { ActionButton } from "./buttons"
 
 type DecisionFooterProps = {
@@ -13,7 +15,7 @@ type DecisionView = {
   readonly status: string
 }
 
-function decisionView(state: DecisionState): DecisionView {
+function decisionView(state: DecisionState, messages: Messages): DecisionView {
   switch (state.kind) {
     case "undecided":
       return { disabled: false, choice: null, status: "" }
@@ -21,7 +23,7 @@ function decisionView(state: DecisionState): DecisionView {
       return {
         disabled: true,
         choice: state.choice,
-        status: `已记录：${state.choice === "accepted" ? "接受结果" : "拒绝结果"}。`,
+        status: messages.decisionStatus(state.choice === "accepted"),
       }
     default:
       return assertNever(state)
@@ -29,24 +31,25 @@ function decisionView(state: DecisionState): DecisionView {
 }
 
 export function DecisionFooter({ state, onDecision }: DecisionFooterProps) {
-  const view = decisionView(state)
+  const messages = useMessages()
+  const view = decisionView(state, messages)
   return (
     <footer className="decision-footer">
-      <p id="decision-question">你是否接受 Agent 的任务结果？</p>
+      <p id="decision-question">{messages.decisionQuestion}</p>
       <fieldset className="decision-actions" aria-labelledby="decision-question">
         <ActionButton
           disabled={view.disabled}
           selected={view.choice === "accepted"}
           onClick={() => onDecision("accepted")}
         >
-          接受结果
+          {messages.acceptResult}
         </ActionButton>
         <ActionButton
           disabled={view.disabled}
           selected={view.choice === "rejected"}
           onClick={() => onDecision("rejected")}
         >
-          拒绝结果
+          {messages.rejectResult}
         </ActionButton>
       </fieldset>
       <p className="decision-status" aria-live="polite">

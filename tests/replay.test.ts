@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import {
+  clampReplaySelection,
   finalReplaySelection,
   initialReplaySelection,
   nextReplaySelection,
@@ -60,6 +61,71 @@ describe("replay selection", () => {
     const next = nextReplaySelection(selection, 8)
     // Then the final state remains selected.
     expect(next).toEqual(selection)
+  })
+})
+
+describe("clampReplaySelection", () => {
+  it("keeps the final state for any step count", () => {
+    // Given the final state is selected.
+    const selection = finalReplaySelection()
+    // When the selection is clamped against an eight-step run.
+    const clamped = clampReplaySelection(selection, 8)
+    // Then the final state is returned unchanged.
+    expect(clamped).toBe(selection)
+  })
+
+  it("keeps an in-range step unchanged", () => {
+    // Given the third step of an eight-step run is selected.
+    const selection = stepReplaySelection(2)
+    // When the selection is clamped against the run.
+    const clamped = clampReplaySelection(selection, 8)
+    // Then the same step remains selected.
+    expect(clamped).toBe(selection)
+  })
+
+  it("clamps a step at the run length to the last step", () => {
+    // Given the step index equals the step count.
+    const selection = stepReplaySelection(8)
+    // When the selection is clamped against the eight-step run.
+    const clamped = clampReplaySelection(selection, 8)
+    // Then the last step is selected.
+    expect(clamped).toEqual({ kind: "step", stepIndex: 7 })
+  })
+
+  it("clamps a step beyond the run length to the last step", () => {
+    // Given the selected step index is far beyond the run.
+    const selection = stepReplaySelection(99)
+    // When the selection is clamped against the eight-step run.
+    const clamped = clampReplaySelection(selection, 8)
+    // Then the last step is selected.
+    expect(clamped).toEqual({ kind: "step", stepIndex: 7 })
+  })
+
+  it("clamps a negative step index to the first step", () => {
+    // Given a negative step index is selected.
+    const selection = stepReplaySelection(-3)
+    // When the selection is clamped against the eight-step run.
+    const clamped = clampReplaySelection(selection, 8)
+    // Then the first step is selected.
+    expect(clamped).toEqual({ kind: "step", stepIndex: 0 })
+  })
+
+  it("returns the final state when the run has no steps", () => {
+    // Given a step is selected but the run records no steps.
+    const selection = stepReplaySelection(2)
+    // When the selection is clamped against an empty run.
+    const clamped = clampReplaySelection(selection, 0)
+    // Then the final state is selected.
+    expect(clamped).toEqual({ kind: "final" })
+  })
+
+  it("returns the final state when the step count is negative", () => {
+    // Given a step is selected but the step count is negative.
+    const selection = stepReplaySelection(2)
+    // When the selection is clamped against the negative count.
+    const clamped = clampReplaySelection(selection, -1)
+    // Then the final state is selected.
+    expect(clamped).toEqual({ kind: "final" })
   })
 })
 

@@ -7,15 +7,17 @@ import {
   DecisionFooter,
   DesktopOnlyMessage,
   IconButton,
+  LanguageToggle,
   MessageBlock,
   ReplayControls,
   ScreenshotDialog,
   StatusBadge,
   StepCard,
 } from "./components/ui"
-import { agentRun } from "./data/agent-run"
+import { agentRuns } from "./data/agent-run"
 import type { DecisionState, ReplaySelection } from "./domain/replay"
 import {
+  clampReplaySelection,
   finalReplaySelection,
   initialReplaySelection,
   nextReplaySelection,
@@ -23,7 +25,8 @@ import {
   stepReplaySelection,
   submitDecision,
 } from "./domain/replay"
-import type { PageState } from "./domain/run-schema"
+import type { AgentRun, PageState } from "./domain/run-schema"
+import { LocaleProvider, useLocale } from "./i18n"
 
 class InvalidReplayIndexError extends Error {
   public readonly index: number
@@ -35,9 +38,9 @@ class InvalidReplayIndexError extends Error {
   }
 }
 
-function viewedPageState(selection: ReplaySelection): PageState {
-  const index = selection.kind === "final" ? agentRun.steps.length - 1 : selection.stepIndex
-  const step = agentRun.steps[index]
+function viewedPageState(run: AgentRun, selection: ReplaySelection): PageState {
+  const index = selection.kind === "final" ? run.steps.length - 1 : selection.stepIndex
+  const step = run.steps[index]
   if (step === undefined) {
     throw new InvalidReplayIndexError(index)
   }
@@ -45,7 +48,18 @@ function viewedPageState(selection: ReplaySelection): PageState {
 }
 
 export function App() {
+  return (
+    <LocaleProvider>
+      <Workspace />
+    </LocaleProvider>
+  )
+}
+
+function Workspace() {
+  const { locale, messages } = useLocale()
+  const run = agentRuns[locale]
   const [selection, setSelection] = useState<ReplaySelection>(initialReplaySelection)
+  const activeSelection = clampReplaySelection(selection, run.steps.length)
   const [decision, chooseDecision] = useReducer(submitDecision, {
     kind: "undecided",
   } satisfies DecisionState)
@@ -74,23 +88,26 @@ export function App() {
     if (scroller === null) return
     scroller.scrollTo({ top: scroller.scrollHeight, behavior: "smooth" })
   }
-  const pageState = viewedPageState(selection)
+  const pageState = viewedPageState(run, activeSelection)
   const screenshot = pageState.screenshot
   const dialogPage = screenshot === null ? null : { ...pageState, screenshot }
-  const selectedStepIndex = selection.kind === "step" ? selection.stepIndex : null
+  const selectedStepIndex = activeSelection.kind === "step" ? activeSelection.stepIndex : null
 
   return (
     <>
       <div className="app-shell">
-        <h1 className="sr-only">浏览助手任务结果核验</h1>
+        <h1 className="sr-only">{messages.workspaceHeading}</h1>
         <header className="product-header">
           <BrandMark />
-          <StatusBadge label={`${agentRun.steps.length} 个执行步骤`} icon={<ListTree />} />
+          <div className="product-header-actions">
+            <StatusBadge label={messages.stepCountBadge(run.steps.length)} icon={<ListTree />} />
+            <LanguageToggle />
+          </div>
         </header>
         <main className="workspace">
           <section className="browser-panel" aria-labelledby="browser-heading">
             <h2 id="browser-heading" className="sr-only">
-              网页结果
+              {messages.pageResultHeading}
             </h2>
             <BrowserFrame
               pageState={pageState}
@@ -98,39 +115,37 @@ export function App() {
               controls={
                 <ReplayControls
                   currentStep={selectedStepIndex}
-                  stepCount={agentRun.steps.length}
+                  stepCount={run.steps.length}
                   onPrevious={() =>
-                    setSelection((current) =>
-                      previousReplaySelection(current, agentRun.steps.length),
-                    )
+                    setSelection(previousReplaySelection(activeSelection, run.steps.length))
                   }
                   onNext={() =>
-                    setSelection((current) => nextReplaySelection(current, agentRun.steps.length))
+                    setSelection(nextReplaySelection(activeSelection, run.steps.length))
                   }
                   onFinal={() => setSelection(finalReplaySelection())}
                 />
               }
             />
           </section>
-          <aside className="agent-panel" aria-label="Agent 任务记录">
+          <aside className="agent-panel" aria-label={messages.agentRecordLabel}>
             <div className="chat-shell">
               <div className="chat-scroll" ref={chatScrollRef} onScroll={syncJump}>
                 <div className="chat-messages">
-                  <MessageBlock label="原始任务" speaker="user">
-                    {agentRun.task}
+                  <MessageBlock label={messages.originalTask} speaker="user">
+                    {run.task}
                   </MessageBlock>
-                  <MessageBlock label="Agent 最终回复" speaker="assistant">
-                    {agentRun.final.text}
+                  <MessageBlock label={messages.agentFinalResponse} speaker="assistant">
+                    {run.final.text}
                   </MessageBlock>
                   <DecisionFooter state={decision} onDecision={chooseDecision} />
                 </div>
                 <section className="execution-history" aria-labelledby="execution-heading">
                   <div className="execution-heading">
-                    <h2 id="execution-heading">执行历史</h2>
-                    <span>{agentRun.steps.length} 步</span>
+                    <h2 id="execution-heading">{messages.executionHistory}</h2>
+                    <span>{messages.executionStepCount(run.steps.length)}</span>
                   </div>
                   <div className="step-list">
-                    {agentRun.steps.map((step, index) => (
+                    {run.steps.map((step, index) => (
                       <StepCard
                         key={step.id}
                         step={step}
@@ -144,7 +159,7 @@ export function App() {
               {showJump ? (
                 <IconButton
                   className="chat-jump"
-                  label="跳到最新内容"
+                  label={messages.jumpToLatest}
                   variant="outlined"
                   onClick={jumpToLatest}
                 >
@@ -152,7 +167,7 @@ export function App() {
                 </IconButton>
               ) : null}
             </div>
-            <AgentPrompt model={agentRun.engine.model} />
+            <AgentPrompt model={run.engine.model} />
           </aside>
         </main>
       </div>
