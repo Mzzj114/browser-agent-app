@@ -1,60 +1,86 @@
-import { assertNever } from "../../domain/assert-never"
-import type { DecisionChoice, DecisionState } from "../../domain/replay"
+import type { DecisionAction, DecisionState } from "../../domain/replay"
 import type { Messages } from "../../i18n"
 import { useMessages } from "../../i18n"
 import { ActionButton } from "./buttons"
+import { Disclosure } from "./disclosure"
 
 type DecisionFooterProps = {
   readonly state: DecisionState
-  readonly onDecision: (choice: DecisionChoice) => void
+  readonly onDecision: (action: DecisionAction) => void
 }
 
-type DecisionView = {
-  readonly disabled: boolean
-  readonly choice: DecisionChoice | null
-  readonly status: string
-}
-
-function decisionView(state: DecisionState, messages: Messages): DecisionView {
-  switch (state.kind) {
-    case "undecided":
-      return { disabled: false, choice: null, status: "" }
-    case "decided":
-      return {
-        disabled: true,
-        choice: state.choice,
-        status: messages.decisionStatus(state.choice === "accepted"),
-      }
-    default:
-      return assertNever(state)
+function decisionStatus(state: DecisionState, messages: Messages): string {
+  if (state.choice === null) return ""
+  if (state.status === "submitted") {
+    return messages.decisionSubmittedStatus(state.choice === "accepted")
   }
+  return messages.decisionPendingStatus(state.choice === "accepted")
 }
 
 export function DecisionFooter({ state, onDecision }: DecisionFooterProps) {
   const messages = useMessages()
-  const view = decisionView(state, messages)
+  const submitted = state.status === "submitted"
+  const status = decisionStatus(state, messages)
   return (
-    <footer className="decision-footer">
+    <footer
+      className="decision-footer"
+      data-status={state.status}
+      data-choice={state.choice ?? "none"}
+      data-revisions={state.revisions}
+    >
       <p id="decision-question">{messages.decisionQuestion}</p>
-      <fieldset className="decision-actions" aria-labelledby="decision-question">
+      <fieldset
+        className="decision-actions"
+        aria-labelledby="decision-question"
+        disabled={submitted}
+      >
         <ActionButton
-          disabled={view.disabled}
-          selected={view.choice === "accepted"}
-          onClick={() => onDecision("accepted")}
+          disabled={submitted}
+          selected={state.choice === "accepted"}
+          onClick={() => onDecision({ type: "select", choice: "accepted" })}
         >
           {messages.acceptResult}
         </ActionButton>
         <ActionButton
-          disabled={view.disabled}
-          selected={view.choice === "rejected"}
-          onClick={() => onDecision("rejected")}
+          disabled={submitted}
+          selected={state.choice === "rejected"}
+          onClick={() => onDecision({ type: "select", choice: "rejected" })}
         >
           {messages.rejectResult}
         </ActionButton>
       </fieldset>
-      <p className="decision-status" aria-live="polite">
-        {view.status}
+      <div className="decision-submit-row">
+        <ActionButton
+          disabled={submitted || state.choice === null}
+          aria-describedby="decision-consequence"
+          onClick={() => onDecision({ type: "submit" })}
+        >
+          {messages.decisionSubmit}
+        </ActionButton>
+        <p className="decision-status" aria-live="polite">
+          {status}
+        </p>
+      </div>
+      <p id="decision-consequence" className="decision-explanation">
+        {messages.decisionExplanation}
       </p>
+      {state.revisions > 0 ? (
+        <p className="decision-revisions">{messages.decisionRevisions(state.revisions)}</p>
+      ) : null}
+      <Disclosure label={messages.decisionReasonLabel}>
+        <label className="decision-reason-field">
+          <span className="sr-only">{messages.decisionReasonLabel}</span>
+          <textarea
+            aria-label={messages.decisionReasonLabel}
+            value={state.reason}
+            maxLength={500}
+            rows={2}
+            disabled={submitted}
+            placeholder={messages.decisionReasonPlaceholder}
+            onChange={(event) => onDecision({ type: "reason", reason: event.target.value })}
+          />
+        </label>
+      </Disclosure>
     </footer>
   )
 }

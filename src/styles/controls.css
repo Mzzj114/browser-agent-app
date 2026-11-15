@@ -145,10 +145,43 @@
 .message-block {
   display: grid;
   gap: var(--space-2);
-  max-inline-size: 65ch;
+  min-inline-size: 0;
 }
 
-.message-label {
+.message-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.message-block[data-speaker="user"] .message-header {
+  justify-content: flex-end;
+}
+
+.message-avatar {
+  display: grid;
+  flex: none;
+  inline-size: 28px;
+  block-size: 28px;
+  place-items: center;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-round);
+  background: var(--surface-secondary);
+  color: var(--text-secondary);
+}
+
+.message-avatar svg {
+  inline-size: 15px;
+  block-size: 15px;
+}
+
+.message-block[data-speaker="assistant"] .message-avatar {
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+  color: var(--accent-primary);
+}
+
+.message-speaker {
   color: var(--text-secondary);
   font-size: 12px;
   font-weight: 510;
@@ -158,6 +191,7 @@
 .message-content {
   font-size: 16px;
   line-height: 1.7;
+  overflow-wrap: anywhere;
 }
 
 .message-block[data-speaker="user"] .message-content {
@@ -227,17 +261,76 @@
   line-height: 1.5;
 }
 
+.decision-explanation {
+  margin-block-start: var(--space-2);
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
 .decision-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-3);
   min-inline-size: 0;
-  margin: var(--space-3) 0 var(--space-2);
+  margin: var(--space-3) 0;
   padding: 0;
   border: 0;
 }
 
+.decision-footer .disclosure {
+  margin-block-start: var(--space-2);
+}
+
+.decision-footer .disclosure summary {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.decision-reason-field {
+  display: block;
+}
+
+.decision-reason-field textarea {
+  inline-size: 100%;
+  min-block-size: 3.5rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-control);
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.decision-reason-field textarea:disabled {
+  background: var(--surface-secondary);
+  color: var(--text-disabled);
+}
+
+.decision-submit-row {
+  display: flex;
+  min-inline-size: 0;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+}
+
+.decision-submit-row .action-button {
+  padding-inline: var(--space-3);
+  font-size: 14px;
+}
+
 .decision-status {
+  flex: 1 1 12rem;
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.decision-revisions {
+  margin-block-start: var(--space-1);
   color: var(--text-tertiary);
   font-size: 12px;
   line-height: 1.45;
