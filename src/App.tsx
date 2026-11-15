@@ -10,22 +10,23 @@ import {
   LanguageToggle,
   MessageBlock,
   ReplayControls,
-  ScreenshotDialog,
   StatusBadge,
   StepCard,
 } from "./components/ui"
 import { agentRuns } from "./data/agent-run"
-import type { DecisionState, ReplaySelection } from "./domain/replay"
+import type { ReplaySelection } from "./domain/replay"
 import {
   clampReplaySelection,
   finalReplaySelection,
+  initialDecisionState,
   initialReplaySelection,
   nextReplaySelection,
   previousReplaySelection,
   stepReplaySelection,
-  submitDecision,
+  updateDecision,
 } from "./domain/replay"
 import type { AgentRun, PageState } from "./domain/run-schema"
+import type { Locale } from "./i18n"
 import { LocaleProvider, useLocale } from "./i18n"
 
 class InvalidReplayIndexError extends Error {
@@ -47,6 +48,15 @@ function viewedPageState(run: AgentRun, selection: ReplaySelection): PageState {
   return step.pageState
 }
 
+function formatCapturedAt(iso: string, locale: Locale): string {
+  const date = new Date(iso)
+  if (Number.isNaN(date.getTime())) return ""
+  return new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en-US", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  }).format(date)
+}
+
 export function App() {
   return (
     <LocaleProvider>
@@ -60,10 +70,9 @@ function Workspace() {
   const run = agentRuns[locale]
   const [selection, setSelection] = useState<ReplaySelection>(initialReplaySelection)
   const activeSelection = clampReplaySelection(selection, run.steps.length)
-  const [decision, chooseDecision] = useReducer(submitDecision, {
-    kind: "undecided",
-  } satisfies DecisionState)
-  const [dialogOpen, setDialogOpen] = useState(false)
+  const [decision, dispatchDecision] = useReducer(updateDecision, null, () =>
+    initialDecisionState(),
+  )
   const chatScrollRef = useRef<HTMLDivElement>(null)
   const [showJump, setShowJump] = useState(false)
   const syncJump = useCallback(() => {
@@ -89,9 +98,20 @@ function Workspace() {
     scroller.scrollTo({ top: scroller.scrollHeight, behavior: "smooth" })
   }
   const pageState = viewedPageState(run, activeSelection)
-  const screenshot = pageState.screenshot
-  const dialogPage = screenshot === null ? null : { ...pageState, screenshot }
   const selectedStepIndex = activeSelection.kind === "step" ? activeSelection.stepIndex : null
+  const selectedStep = selectedStepIndex === null ? null : (run.steps[selectedStepIndex] ?? null)
+  const stateLabel =
+    selectedStep === null
+      ? messages.lastRecordedState
+      : messages.stepRecordedAfter(selectedStep.ordinal, run.steps.length)
+  const stateNote = selectedStep === null ? messages.lastRecordedStateNote : null
+  const actionLabel = selectedStep?.action ?? null
+  const capturedAtLabel = messages.capturedAt(formatCapturedAt(pageState.capturedAt, locale))
+  const stepCount = run.steps.length
+  const goToStep = (stepIndex: number) => setSelection(stepReplaySelection(stepIndex))
+  const goPrevious = () => setSelection(previousReplaySelection(activeSelection, stepCount))
+  const goNext = () => setSelection(nextReplaySelection(activeSelection, stepCount))
+  const goFinal = () => setSelection(finalReplaySelection())
 
   return (
     <>
@@ -111,46 +131,57 @@ function Workspace() {
             </h2>
             <BrowserFrame
               pageState={pageState}
-              onZoom={() => setDialogOpen(true)}
-              controls={
-                <ReplayControls
-                  currentStep={selectedStepIndex}
-                  stepCount={run.steps.length}
-                  onPrevious={() =>
-                    setSelection(previousReplaySelection(activeSelection, run.steps.length))
-                  }
-                  onNext={() =>
-                    setSelection(nextReplaySelection(activeSelection, run.steps.length))
-                  }
-                  onFinal={() => setSelection(finalReplaySelection())}
-                />
-              }
+              stepCount={stepCount}
+              stateLabel={stateLabel}
+              stateNote={stateNote}
+              actionLabel={actionLabel}
+              capturedAtLabel={capturedAtLabel}
             />
+            <div className="replay-bar">
+              <div className="replay-bar-heading">
+                <span className="replay-bar-label">{messages.replayBarLabel}</span>
+                <span className="replay-bar-count">
+                  {messages.executionStepCount(run.steps.length)}
+                </span>
+              </div>
+              <ReplayControls
+                currentStep={selectedStepIndex}
+                steps={run.steps}
+                onPrevious={goPrevious}
+                onNext={goNext}
+                onFinal={goFinal}
+                onJump={goToStep}
+              />
+            </div>
           </section>
           <aside className="agent-panel" aria-label={messages.agentRecordLabel}>
             <div className="chat-shell">
               <div className="chat-scroll" ref={chatScrollRef} onScroll={syncJump}>
                 <div className="chat-messages">
-                  <MessageBlock label={messages.originalTask} speaker="user">
+                  <MessageBlock name={messages.userSpeaker} speaker="user">
                     {run.task}
                   </MessageBlock>
-                  <MessageBlock label={messages.agentFinalResponse} speaker="assistant">
+                  <MessageBlock name={messages.agentSpeaker} speaker="assistant">
                     {run.final.text}
                   </MessageBlock>
-                  <DecisionFooter state={decision} onDecision={chooseDecision} />
+                  <DecisionFooter state={decision} onDecision={dispatchDecision} />
                 </div>
                 <section className="execution-history" aria-labelledby="execution-heading">
                   <div className="execution-heading">
                     <h2 id="execution-heading">{messages.executionHistory}</h2>
                     <span>{messages.executionStepCount(run.steps.length)}</span>
                   </div>
+                  <p className="inspection-hint">
+                    <strong>{messages.inspectionHintLabel}</strong>
+                    {messages.inspectionHint}
+                  </p>
                   <div className="step-list">
                     {run.steps.map((step, index) => (
                       <StepCard
                         key={step.id}
                         step={step}
                         selected={selectedStepIndex === index}
-                        onSelect={() => setSelection(stepReplaySelection(index))}
+                        onSelect={() => goToStep(index)}
                       />
                     ))}
                   </div>
@@ -172,9 +203,6 @@ function Workspace() {
         </main>
       </div>
       <DesktopOnlyMessage />
-      {dialogOpen && dialogPage !== null ? (
-        <ScreenshotDialog pageState={dialogPage} onClose={() => setDialogOpen(false)} />
-      ) : null}
     </>
   )
 }

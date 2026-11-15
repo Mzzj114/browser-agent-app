@@ -12,12 +12,12 @@ import {
   IconButton,
   MessageBlock,
   ReplayControls,
-  ScreenshotDialog,
   StatusBadge,
   StepCard,
 } from "./components/ui"
 import { agentRun } from "./data/agent-run"
 import type { DecisionState } from "./domain/replay"
+import { initialDecisionState, updateDecision } from "./domain/replay"
 import type { AgentStep, PageState } from "./domain/run-schema"
 import { LocaleProvider } from "./i18n"
 import "./styles/index.css"
@@ -48,13 +48,9 @@ const firstStep = fixtureStep(0)
 const selectedStep = fixtureStep(1)
 const finalStep = fixtureStep(agentRun.steps.length - 1)
 const missingPage: PageState = { ...finalStep.pageState, screenshot: null }
-const selectedScreenshot = selectedStep.pageState.screenshot
-const dialogPage =
-  selectedScreenshot === null ? null : { ...selectedStep.pageState, screenshot: selectedScreenshot }
 
 function Showcase() {
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [decision, setDecision] = useState<DecisionState>({ kind: "undecided" })
+  const [decision, setDecision] = useState<DecisionState>(initialDecisionState)
 
   return (
     <div className="showcase-document">
@@ -108,12 +104,12 @@ function Showcase() {
                 </div>
               </article>
               <article className="specimen">
-                <h3>MessageBlock · 原始任务 / 最终回复</h3>
+                <h3>MessageBlock · 用户 / Agent</h3>
                 <div className="specimen-stack">
-                  <MessageBlock label="原始任务" speaker="user">
+                  <MessageBlock name="你" speaker="user">
                     {agentRun.task}
                   </MessageBlock>
-                  <MessageBlock label="Agent 最终回复" speaker="assistant">
+                  <MessageBlock name="Agent" speaker="assistant">
                     {agentRun.final.text}
                   </MessageBlock>
                 </div>
@@ -137,9 +133,20 @@ function Showcase() {
                 <div className="specimen-columns">
                   <BrowserFrame
                     pageState={selectedStep.pageState}
-                    onZoom={() => setDialogOpen(true)}
+                    stepCount={agentRun.steps.length}
+                    stateLabel="Step 2 / 8 · recorded after this step"
+                    stateNote={null}
+                    actionLabel={selectedStep.action}
+                    capturedAtLabel="Captured 09:00"
                   />
-                  <BrowserFrame pageState={missingPage} onZoom={() => undefined} />
+                  <BrowserFrame
+                    pageState={missingPage}
+                    stepCount={agentRun.steps.length}
+                    stateLabel="Last recorded state"
+                    stateNote="Captured at the end of this run; not a new live check."
+                    actionLabel={null}
+                    capturedAtLabel="Captured 09:00"
+                  />
                 </div>
               </article>
               <article className="specimen specimen-wide">
@@ -147,17 +154,19 @@ function Showcase() {
                 <div className="specimen-stack">
                   <ReplayControls
                     currentStep={1}
-                    stepCount={agentRun.steps.length}
+                    steps={agentRun.steps}
                     onPrevious={() => undefined}
                     onNext={() => undefined}
                     onFinal={() => undefined}
+                    onJump={() => undefined}
                   />
                   <ReplayControls
                     currentStep={null}
-                    stepCount={agentRun.steps.length}
+                    steps={agentRun.steps}
                     onPrevious={() => undefined}
                     onNext={() => undefined}
                     onFinal={() => undefined}
+                    onJump={() => undefined}
                   />
                 </div>
               </article>
@@ -170,18 +179,30 @@ function Showcase() {
               <article className="specimen-decision">
                 <DecisionFooter
                   state={decision}
-                  onDecision={(choice) => setDecision({ kind: "decided", choice })}
+                  onDecision={(action) => setDecision(updateDecision(decision, action))}
                 />
               </article>
               <article className="specimen-decision">
                 <DecisionFooter
-                  state={{ kind: "decided", choice: "accepted" }}
+                  state={updateDecision(
+                    updateDecision(initialDecisionState(), {
+                      type: "select",
+                      choice: "accepted",
+                    }),
+                    { type: "submit" },
+                  )}
                   onDecision={() => undefined}
                 />
               </article>
               <article className="specimen-decision">
                 <DecisionFooter
-                  state={{ kind: "decided", choice: "rejected" }}
+                  state={updateDecision(
+                    updateDecision(initialDecisionState(), {
+                      type: "select",
+                      choice: "rejected",
+                    }),
+                    { type: "submit" },
+                  )}
                   onDecision={() => undefined}
                 />
               </article>
@@ -198,10 +219,6 @@ function Showcase() {
           </section>
         </main>
       </div>
-
-      {dialogOpen && dialogPage ? (
-        <ScreenshotDialog pageState={dialogPage} onClose={() => setDialogOpen(false)} />
-      ) : null}
     </div>
   )
 }

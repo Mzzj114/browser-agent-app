@@ -133,6 +133,20 @@
   line-height: 1.45;
 }
 
+.inspection-hint {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.inspection-hint strong {
+  margin-inline-end: var(--space-2);
+  color: var(--text-secondary);
+  font-size: inherit;
+  font-weight: 590;
+  line-height: inherit;
+}
+
 .step-list {
   display: grid;
   gap: var(--space-3);
@@ -220,9 +234,10 @@
 
 .browser-panel {
   display: grid;
-  grid-template-rows: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
   min-inline-size: 0;
   min-block-size: 0;
+  gap: var(--space-3);
   padding: var(--space-4);
   background: var(--canvas);
 }
