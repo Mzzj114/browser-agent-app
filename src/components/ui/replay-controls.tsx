@@ -1,25 +1,31 @@
 import { ChevronLeft, ChevronRight, RotateCcw } from "lucide-react"
+import type { AgentStep } from "../../domain/run-schema"
 import { useMessages } from "../../i18n"
 import { ActionButton, IconButton } from "./buttons"
 
 type ReplayControlsProps = {
   readonly currentStep: number | null
-  readonly stepCount: number
+  readonly steps: readonly AgentStep[]
   readonly onPrevious: () => void
   readonly onNext: () => void
   readonly onFinal: () => void
+  readonly onJump: (stepIndex: number) => void
 }
 
 export function ReplayControls({
   currentStep,
-  stepCount,
+  steps,
   onPrevious,
   onNext,
   onFinal,
+  onJump,
 }: ReplayControlsProps) {
   const messages = useMessages()
+  const stepCount = steps.length
   const position =
-    currentStep === null ? messages.finalState : messages.replayPosition(currentStep + 1, stepCount)
+    currentStep === null
+      ? messages.lastRecordedState
+      : messages.replayPosition(currentStep + 1, stepCount)
   return (
     <fieldset className="replay-controls" aria-label={messages.replayControlsLabel}>
       <div className="replay-navigation">
@@ -43,6 +49,28 @@ export function ReplayControls({
           <ChevronRight />
         </IconButton>
       </div>
+      <label className="replay-jump">
+        <span>{messages.jumpToStep}</span>
+        <select
+          className="replay-select"
+          aria-label={messages.jumpToStep}
+          value={currentStep === null ? "final" : String(currentStep)}
+          onChange={(event) => {
+            if (event.target.value === "final") {
+              onFinal()
+            } else {
+              onJump(Number(event.target.value))
+            }
+          }}
+        >
+          {steps.map((step, index) => (
+            <option key={step.id} value={index}>
+              {messages.stepOption(step.ordinal, step.action)}
+            </option>
+          ))}
+          <option value="final">{messages.lastRecordedState}</option>
+        </select>
+      </label>
       <ActionButton icon={<RotateCcw />} onClick={onFinal} disabled={currentStep === null}>
         {messages.returnToFinal}
       </ActionButton>
