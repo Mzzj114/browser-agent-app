@@ -1,18 +1,33 @@
-import { Globe2, ImageOff, LockKeyhole, Maximize2 } from "lucide-react"
-import type { ReactNode } from "react"
+import { Globe2, ImageOff, LockKeyhole } from "lucide-react"
+import { useState } from "react"
 import type { PageState } from "../../domain/run-schema"
 import { useMessages } from "../../i18n"
-import { ActionButton } from "./buttons"
 
 type BrowserFrameProps = {
   readonly pageState: PageState
-  readonly onZoom: () => void
-  readonly controls?: ReactNode
+  readonly stepCount: number
+  readonly stateLabel: string
+  readonly stateNote: string | null
+  readonly actionLabel: string | null
+  readonly capturedAtLabel: string
 }
 
-export function BrowserFrame({ pageState, onZoom, controls }: BrowserFrameProps) {
+export function BrowserFrame({
+  pageState,
+  stepCount,
+  stateLabel,
+  stateNote,
+  actionLabel,
+  capturedAtLabel,
+}: BrowserFrameProps) {
   const messages = useMessages()
   const screenshot = pageState.screenshot
+  const [zoomedPath, setZoomedPath] = useState<string | null>(null)
+  const isZoomed = screenshot !== null && zoomedPath === screenshot.path
+  const toggleZoom = () => {
+    if (screenshot === null) return
+    setZoomedPath((current) => (current === screenshot.path ? null : screenshot.path))
+  }
   return (
     <section className="browser-frame" aria-label={messages.browserLabel}>
       <div className="browser-tabs">
@@ -20,7 +35,7 @@ export function BrowserFrame({ pageState, onZoom, controls }: BrowserFrameProps)
           <Globe2 aria-hidden="true" />
           <span>{pageState.title}</span>
         </div>
-        <span className="browser-agent-label">{messages.browserLabel}</span>
+        <span className="browser-agent-label">{messages.recordedExecution(stepCount)}</span>
       </div>
       <div className="browser-address-row">
         <div className="browser-address">
@@ -28,17 +43,37 @@ export function BrowserFrame({ pageState, onZoom, controls }: BrowserFrameProps)
           <span>{pageState.url}</span>
         </div>
       </div>
+      <div className="browser-evidence-caption">
+        <span className="browser-state-label" aria-live="polite">
+          {stateLabel}
+        </span>
+        {actionLabel === null ? null : <span className="browser-state-action">{actionLabel}</span>}
+        <time className="browser-state-time" dateTime={pageState.capturedAt}>
+          {capturedAtLabel}
+        </time>
+        {stateNote === null ? null : (
+          <span className="browser-state-badge">{stateNote}</span>
+        )}
+      </div>
       <div className="browser-viewport">
         {screenshot ? (
-          <img
-            className="page-screenshot"
-            src={screenshot.path}
-            width={screenshot.width}
-            height={screenshot.height}
-            alt={messages.screenshotAlt(pageState.title)}
-            decoding="async"
-            fetchPriority="high"
-          />
+          <button
+            type="button"
+            className="screenshot-trigger"
+            data-zoomed={isZoomed}
+            onClick={toggleZoom}
+            aria-label={isZoomed ? messages.fitScreenshot : messages.zoomScreenshot}
+          >
+            <img
+              className="page-screenshot"
+              src={screenshot.path}
+              width={screenshot.width}
+              height={screenshot.height}
+              alt={messages.screenshotAlt(pageState.title)}
+              decoding="async"
+              fetchPriority="high"
+            />
+          </button>
         ) : (
           <div className="missing-screenshot" role="status">
             <ImageOff aria-hidden="true" />
@@ -46,15 +81,6 @@ export function BrowserFrame({ pageState, onZoom, controls }: BrowserFrameProps)
             <span>{messages.missingScreenshotHint}</span>
           </div>
         )}
-      </div>
-      <div className="browser-stage-toolbar">
-        <span className="browser-stage-label">{messages.recordedPage}</span>
-        <div className="browser-stage-actions">
-          {controls}
-          <ActionButton icon={<Maximize2 />} onClick={onZoom} disabled={!screenshot}>
-            {messages.zoomScreenshot}
-          </ActionButton>
-        </div>
       </div>
     </section>
   )
