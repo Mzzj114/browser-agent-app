@@ -9,10 +9,10 @@ import {
   DecisionFooter,
   Disclosure,
   IconButton,
-  ScreenshotDialog,
   StepCard,
 } from "../src/components/ui"
 import { agentRun } from "../src/data/agent-run"
+import { initialDecisionState, updateDecision } from "../src/domain/replay"
 import { LocaleProvider } from "../src/i18n"
 
 class MissingFixtureStepError extends Error {
@@ -38,6 +38,15 @@ function renderWithLocale(ui: ReactElement) {
   )
 }
 
+const browserProps = {
+  pageState: samplePage,
+  stepCount: agentRun.steps.length,
+  stateLabel: "步骤 2 / 8 · 此步之后录制",
+  stateNote: null,
+  actionLabel: sampleStep.action,
+  capturedAtLabel: "录制于 17:00",
+}
+
 describe("primitive controls", () => {
   it("exposes an icon button through its accessible name", () => {
     // Given an icon-only zoom control.
@@ -55,9 +64,9 @@ describe("primitive controls", () => {
     // Given a clickable action.
     const user = userEvent.setup()
     const onClick = vi.fn()
-    render(<ActionButton onClick={onClick}>接受结果</ActionButton>)
+    render(<ActionButton onClick={onClick}>符合原始任务</ActionButton>)
     // When the user clicks it.
-    await user.click(screen.getByRole("button", { name: "接受结果" }))
+    await user.click(screen.getByRole("button", { name: "符合原始任务" }))
     // Then the action fires once.
     expect(onClick).toHaveBeenCalledOnce()
   })
@@ -73,59 +82,113 @@ describe("primitive controls", () => {
     expect(summary.closest("details")).toHaveAttribute("open")
   })
 
-  it("selects a step while keeping its native Python visible", async () => {
-    // Given an execution step with a recovered error.
+  it("shows the action label first and keeps Python behind technical details", async () => {
+    // Given an execution step with native Python.
     const user = userEvent.setup()
     const onSelect = vi.fn()
     renderWithLocale(<StepCard step={sampleStep} selected={false} onSelect={onSelect} />)
-    // When its page-selection button is clicked.
-    await user.click(screen.getByRole("button", { name: /查看页面/ }))
-    // Then selection is requested without hiding the native cell.
-    expect(onSelect).toHaveBeenCalledOnce()
+    // Then the factual action is the primary label.
+    expect(screen.getByText(sampleStep.action)).toBeVisible()
+    expect(screen.getByText("技术细节 · 2 个 Python 单元")).toBeVisible()
     const nativeCells = screen.getAllByText(/DOM.focus/)
     expect(nativeCells).toHaveLength(2)
     for (const nativeCell of nativeCells) {
+      expect(nativeCell).not.toBeVisible()
+    }
+    // When technical details are opened.
+    await user.click(screen.getByText("技术细节 · 2 个 Python 单元"))
+    // Then the native cells become readable.
+    for (const nativeCell of nativeCells) {
       expect(nativeCell).toBeVisible()
     }
+    // And the step can still be selected as evidence.
+    await user.click(screen.getByRole("button", { name: /输入搜索词.*查看页面/ }))
+    expect(onSelect).toHaveBeenCalledOnce()
   })
 
   it("shows a neutral missing-screenshot fallback", () => {
     // Given a recorded page state without an image.
     const pageState = { ...samplePage, screenshot: null }
     // When the browser frame is rendered.
-    renderWithLocale(<BrowserFrame pageState={pageState} onZoom={vi.fn()} />)
-    // Then a textual fallback replaces the image and zoom is unavailable.
+    renderWithLocale(<BrowserFrame {...browserProps} pageState={pageState} />)
+    // Then a textual fallback replaces the image and the execution count stays visible.
     expect(screen.getByText("此步骤没有可用截图")).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "放大查看" })).toBeDisabled()
+    expect(screen.getByText("录制执行 · 8 步")).toBeInTheDocument()
+    expect(screen.queryByRole("img")).not.toBeInTheDocument()
   })
 
-  it("supports native-resolution zoom and close in the screenshot dialog", async () => {
-    // Given an opened screenshot dialog.
+  it("labels the recorded state and toggles the screenshot between fit and actual size", async () => {
+    // Given a historical frame with a screenshot.
     const user = userEvent.setup()
-    const onClose = vi.fn()
-    if (samplePage.screenshot === null) {
-      throw new MissingFixtureStepError(2)
-    }
-    const dialogPage = { ...samplePage, screenshot: samplePage.screenshot }
-    renderWithLocale(<ScreenshotDialog pageState={dialogPage} onClose={onClose} />)
-    // When the user zooms in once.
-    await user.click(screen.getByRole("button", { name: "放大" }))
-    // Then the image exceeds its native width and remains inspectable.
-    expect(screen.getByRole("img")).toHaveStyle({ width: "1500px" })
-    await user.click(screen.getByRole("button", { name: "关闭截图" }))
-    expect(onClose).toHaveBeenCalledOnce()
+    renderWithLocale(<BrowserFrame {...browserProps} />)
+    // Then the step identity, action, and capture time are present.
+    expect(screen.getByText("步骤 2 / 8 · 此步之后录制")).toBeVisible()
+    expect(screen.getByText(sampleStep.action)).toBeVisible()
+    expect(screen.getByText("录制于 17:00")).toBeVisible()
+    // And the image keeps its recorded pixel dimensions for inspectable scaling.
+    const image = screen.getByRole("img")
+    expect(image).toHaveAttribute("width", "1200")
+    expect(image).toHaveAttribute("height", "800")
+    // The screenshot starts fitted to the panel.
+    const trigger = screen.getByRole("button", { name: "放大截图至实际大小" })
+    expect(trigger).toHaveAttribute("data-zoomed", "false")
+    // When the image is clicked, it switches to actual size.
+    await user.click(trigger)
+    expect(trigger).toHaveAttribute("data-zoomed", "true")
+    expect(screen.getByRole("button", { name: "缩放截图以适应面板" })).toBe(trigger)
+    // And clicking again returns it to fit.
+    await user.click(trigger)
+    expect(trigger).toHaveAttribute("data-zoomed", "false")
   })
 
-  it("keeps both decisions disabled and neutral after acceptance", () => {
-    // Given an already accepted decision.
+  it("marks the last recorded state as an end-of-run capture, not a live check", () => {
+    // Given the final recorded state rather than a historical step.
     renderWithLocale(
-      <DecisionFooter state={{ kind: "decided", choice: "accepted" }} onDecision={vi.fn()} />,
+      <BrowserFrame
+        {...browserProps}
+        stateLabel="最后一次录制的状态"
+        stateNote="运行结束时录制 · 非实时"
+      />,
+    )
+    // Then the provenance caveat reads as a compact badge beside the state.
+    const badge = screen.getByText("运行结束时录制 · 非实时")
+    expect(badge).toBeVisible()
+    expect(badge).toHaveClass("browser-state-badge")
+  })
+
+  it("shows a tentative decision as changeable and explains submission", () => {
+    // Given a selected but unsubmitted choice.
+    const tentative = updateDecision(initialDecisionState(), {
+      type: "select",
+      choice: "accepted",
+    })
+    // When the footer is rendered.
+    renderWithLocale(<DecisionFooter state={tentative} onDecision={vi.fn()} />)
+    // Then both choices and submission remain available.
+    expect(screen.getByRole("button", { name: "符合原始任务" })).toBeEnabled()
+    expect(screen.getByRole("button", { name: "不符合原始任务" })).toBeEnabled()
+    expect(screen.getByRole("button", { name: "提交评估" })).toBeEnabled()
+    expect(screen.getByText(/已选择：符合原始任务。提交前仍可更改。/)).toBeInTheDocument()
+    expect(screen.getByText(/提交不会下单、不会重新运行 Agent/)).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "提交评估" })).toHaveAccessibleDescription(
+      "提交不会下单、不会重新运行 Agent，也不会触发修复。",
+    )
+    expect(screen.queryByText(/正确|错误/)).not.toBeInTheDocument()
+  })
+
+  it("keeps both decisions locked after submission", () => {
+    // Given a submitted acceptance.
+    const submitted = updateDecision(
+      updateDecision(initialDecisionState(), { type: "select", choice: "accepted" }),
+      { type: "submit" },
     )
     // When the completed footer is inspected.
-    // Then both equal actions are disabled and no correctness verdict appears.
-    expect(screen.getByRole("button", { name: "接受结果" })).toBeDisabled()
-    expect(screen.getByRole("button", { name: "拒绝结果" })).toBeDisabled()
-    expect(screen.getByText(/已记录：接受结果/)).toBeInTheDocument()
+    renderWithLocale(<DecisionFooter state={submitted} onDecision={vi.fn()} />)
+    // Then both equal choices and submission are disabled with a neutral status.
+    expect(screen.getByRole("button", { name: "符合原始任务" })).toBeDisabled()
+    expect(screen.getByRole("button", { name: "不符合原始任务" })).toBeDisabled()
+    expect(screen.getByRole("button", { name: "提交评估" })).toBeDisabled()
+    expect(screen.getByText(/已提交：符合原始任务。/)).toBeInTheDocument()
     expect(screen.queryByText(/正确|错误/)).not.toBeInTheDocument()
   })
 })

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 import { App } from "../src/App"
@@ -58,9 +58,10 @@ describe("bilingual workspace", () => {
     render(<App />)
 
     expect(screen.getByText(agentRuns.en.final.text)).toBeInTheDocument()
-    expect(screen.getByRole("region", { name: "Agent browser" })).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Accept result" })).toBeInTheDocument()
-    expect(screen.getByText("Final state")).toBeInTheDocument()
+    const browser = screen.getByRole("region", { name: "Agent browser" })
+    expect(browser).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Fulfills the request" })).toBeInTheDocument()
+    expect(within(browser).getByText("Last recorded state")).toBeVisible()
     expect(document.documentElement.lang).toBe("en")
     expect(document.title).toBe("Browser Assistant")
   })
@@ -72,7 +73,7 @@ describe("bilingual workspace", () => {
     await user.click(screen.getByRole("button", { name: "English" }))
 
     expect(screen.getByText(agentRuns.en.final.text)).toBeInTheDocument()
-    expect(screen.getByRole("button", { name: "Accept result" })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Fulfills the request" })).toBeInTheDocument()
     expect(window.localStorage.getItem(LOCALE_STORAGE_KEY)).toBe("en")
     expect(document.documentElement.lang).toBe("en")
   })
@@ -97,12 +98,13 @@ describe("bilingual workspace", () => {
     // Given a Chinese workspace.
     const user = userEvent.setup()
     render(<App />)
-    // When the result is accepted and English is then selected.
-    await user.click(screen.getByRole("button", { name: "接受结果" }))
+    // When a choice is submitted and English is then selected.
+    await user.click(screen.getByRole("button", { name: "符合原始任务" }))
+    await user.click(screen.getByRole("button", { name: "提交评估" }))
     await user.click(screen.getByRole("button", { name: "English" }))
-    // Then the decision stays locked and its status is translated.
-    expect(screen.getByRole("button", { name: "Accept result" })).toBeDisabled()
-    expect(screen.getByText("Recorded: result accepted.")).toBeInTheDocument()
+    // Then the submitted decision stays locked and its status is translated.
+    expect(screen.getByRole("button", { name: "Fulfills the request" })).toBeDisabled()
+    expect(screen.getByText("Submitted: fulfills the request.")).toBeInTheDocument()
   })
 
   it("restores the Chinese document metadata when switching back", async () => {
