@@ -6,6 +6,7 @@
 - Lazyweb: 3 searches plus current-tool discovery; viewed `manus.png`, `replit.png`, `github.png`, and `coinbase.png` from the temporary research directory. Adopted fixed pane toolbars, thin structural dividers, dense native code presentation, independent panel scrolling, and restrained completed-state labels. No reference image is shipped or traced.
 - UI/UX DB: one design-system query and three focused queries. Rejected its marketing-oriented single-column layout and gold accent; retained Noto Sans SC guidance, keyboard/focus requirements, and progressive-disclosure checks.
 - Imagen drafts: skipped because no image-generation tool is available in this environment. The composition contract is the approved split workspace plus the real-product layout grammar above.
+- Guidance layering: rejected a one-shot product tour. Consequence and provenance disclosures stay in place at the moment of use, compressed to a single line or badge; orientation to affordances remains visible text rather than a skippable overlay. This also keeps the transparency condition constant across study participants.
 
 ## 1. Atmosphere & Identity
 
@@ -20,7 +21,7 @@ Design dials: variance 4, motion 2, density 7. Light mode only, explicitly chose
 | Role | Token | Light | Usage |
 |------|-------|-------|-------|
 | Canvas | --canvas | #F5F5F1 | App background and browser well |
-| Surface primary | --surface-primary | #FFFFFF | Chat, header, decision footer, dialog |
+| Surface primary | --surface-primary | #FFFFFF | Chat, header, decision footer |
 | Surface secondary | --surface-secondary | #F7F7F3 | Browser chrome and code cells |
 | Surface sunken | --surface-sunken | #EFEFE9 | Recessed browser surround |
 | Surface hover | --surface-hover | #F2F2EC | Interactive row hover |
@@ -38,13 +39,13 @@ Design dials: variance 4, motion 2, density 7. Light mode only, explicitly chose
 | Code text | --code-text | #34342C | Native REPL code |
 | Error text | --error-text | #B42318 | Native error output with text label |
 | Error surface | --error-surface | #FFF4F2 | Inline native error background |
-| Scrim | --scrim | rgb(30 29 24 / 58%) | Screenshot dialog backdrop |
+| Scrim | --scrim | rgb(30 29 24 / 58%) | Reserved for future overlays |
 | Focus ring | --focus-ring | rgb(81 88 184 / 28%) | Keyboard focus halo |
 
 ### Rules
 
 - Accent is reserved for interaction and current selection, never decorative washes or gradients.
-- Accept and Reject use identical neutral treatment. No color communicates correctness.
+- The fulfilment choices use identical neutral treatment. No color communicates correctness.
 - Native errors use both text and color. No run-level failure banner is allowed.
 - Every color used in CSS must reference this table.
 
@@ -99,7 +100,7 @@ All spacing derives from 4px.
 | --agent-width | clamp(25rem, 30vw, 27rem) | Fixed, non-draggable agent track |
 | --radius-control | 8px | Buttons and inputs |
 | --radius-surface | 12px | Code cells, message bubbles, step cards |
-| --radius-panel | 14px | Browser sheet and dialog |
+| --radius-panel | 14px | Browser sheet |
 | --radius-composer | 18px | Assistant composer field |
 | --radius-round | 50% | Circular icon controls and authoring send |
 
@@ -118,7 +119,6 @@ All spacing derives from 4px.
 - `.chat-scroll` owns agent-content scrolling.
 - `.browser-viewport` owns screenshot scrolling.
 - `.code-block` owns optional horizontal code scrolling.
-- `.dialog-scroll` owns zoomed-image scrolling.
 - Every scroll region has `min-block-size: 0` and `min-inline-size: 0`.
 
 ## 5. Components
@@ -181,60 +181,59 @@ All spacing derives from 4px.
 
 ### StepCard
 
-- Structure: article with a full-width native step-selection button, native cells, and disclosures.
+- Structure: article with a full-width step-selection button whose primary text is the recorded action label, followed by one “Technical details” disclosure containing thinking and native cells.
 - Variants: default, selected, missing screenshot, contains native error.
 - Spacing: space-3 cell gaps and space-4 padding.
-- States: default, hover, active, focus-visible, selected, disabled where applicable.
-- Accessibility: selected state uses `aria-pressed`; selection is text and border plus accent, not accent alone.
+- States: default, hover, active, focus-visible, selected, technical details closed/open.
+- Accessibility: selected state uses `aria-pressed`; selection is text and border plus accent, not accent alone; the action label is the accessible selection name.
 - Motion: 120ms color and active scale on the selection button only.
-- Layout: vertical execution rail; article itself does not scroll.
+- Layout: vertical execution rail; article itself does not scroll; technical details stay collapsed until requested.
 
 ### CodeCell
 
-- Structure: labeled native Python block and optional native output block.
+- Structure: labeled native Python block and optional native output block inside the StepCard technical-details disclosure.
 - Variants: code, output, error output, long content, missing thinking.
 - Spacing: space-3 internal padding, code line-height from Section 3.
 - States: default, expanded, collapsed, error, empty output.
 - Accessibility: literal text remains selectable; long lines wrap by default, with optional horizontal code scroll only when required.
-- Layout: stack inside StepCard; `.code-block` owns code-specific overflow.
+- Layout: stack inside StepCard; `.code-block` owns code-specific overflow. The delivered final-report argument is replaced by a neutral pointer so the report is not duplicated in code.
 
 ### BrowserFrame
 
-- Structure: recorded tab, read-only address, Agent browser label, screenshot well, inline stage toolbar.
-- Variants: final state, selected historical state, missing screenshot.
-- Spacing: tab-height, space-3 chrome padding, space-4 well padding.
-- States: default, historical selection, final selection, empty screenshot.
-- Accessibility: read-only text is not disguised as editable input; screenshots have state-specific alt text.
+- Structure: recorded tab, read-only address, recorded-execution count, evidence caption (state label, end-of-run badge, recorded action, capture time), and a screenshot well whose image toggles between fit and actual size.
+- Variants: last recorded state, selected historical state, missing screenshot, fitted screenshot, actual-size screenshot.
+- Spacing: tab-height, space-3 chrome padding, no extra well padding.
+- States: default, historical selection, last recorded state, empty screenshot, fitted, actual size.
+- Accessibility: read-only text is not disguised as editable input; screenshots have state-specific alt text; the caption announces the selected state; the image is a native button whose accessible name describes the current fit/actual-size action.
 - Depth: border-strong plus the subtle browser shadow token.
-- Layout: bounded grid; `.browser-viewport` owns screenshot scrolling; `.browser-stage-toolbar` sits at the bottom of the frame and holds the stage label, replay controls, and zoom action in one row.
+- Layout: bounded grid; `.browser-viewport` owns screenshot scrolling; the default image fits the panel width, and clicking switches to native pixel size with two-axis scrolling.
 
 ### ReplayControls
 
-- Structure: previous-step IconButton, current-position text, next-step IconButton, final-state ActionButton.
-- Variants: first step, middle step, last step, final state.
-- Spacing: space-2 cluster gaps inside the browser stage toolbar.
+- Structure: previous-step IconButton, current-position text, next-step IconButton, chronological step menu, and return-to-last-recorded-state ActionButton.
+- Variants: first step, middle step, last step, last recorded state.
+- Spacing: space-2 cluster gaps inside the dedicated replay bar.
 - States: default, hover, active, focus-visible, disabled at boundaries.
-- Accessibility: disabled arrows at boundaries, current position announced as text.
-- Layout: inline at the trailing edge of the bottom browser stage toolbar; never overlaps evidence.
-
-### ScreenshotDialog
-
-- Structure: native `<dialog>`, close button, zoom controls, scrollable image canvas.
-- Variants: fit, zoomed, missing screenshot fallback is outside this component.
-- Spacing: space-3 toolbar gaps, space-4 canvas padding.
-- States: closed, open, fit, zoom in, zoom out, zoom boundary disabled.
-- Accessibility: native focus containment, Escape dismissal, explicit close button, focus restored to trigger.
-- Motion: 160ms opacity and scale only, disabled under reduced motion.
-- Layout: overlay-stack; `.dialog-scroll` owns image scrolling.
+- Accessibility: disabled arrows at boundaries, current position announced as text, the menu names each recorded action.
+- Layout: a separate replay bar below the browser frame; it never sits inside browser decoration.
 
 ### DecisionFooter
 
-- Structure: question text, equal ActionButton pair, or neutral recorded-decision status.
-- Variants: undecided, accepted, rejected.
+- Structure: fulfilment question, equal tentative-choice pair, explicit submit action with its consequence line, neutral status, optional reason disclosure, and a revision note.
+- Variants: no selection, tentative selection, submitted accepted, submitted rejected.
 - Spacing: space-4 padding and space-3 button gap.
-- States: default, hover, active, focus-visible, submitted-disabled.
-- Accessibility: immediate state announced with `aria-live="polite"`; no correctness message.
+- States: default, hover, active, focus-visible, choice-selected, submitted-disabled.
+- Accessibility: immediate tentative/submitted state announced with `aria-live="polite"`; no correctness message; choice changes are recorded; the consequence line is linked to the submit action with `aria-describedby` rather than sitting above the choices.
 - Layout: closes the final response inside the scrollable transcript, directly after the assistant message.
+
+### InspectionHint
+
+- Structure: one muted static line inside the execution history; the label and guidance share a single line.
+- Variants: default only.
+- Spacing: no enclosing panel; space-2 inline gap after the label, subordinate to the section heading.
+- States: static.
+- Accessibility: plain text, no auto-advance and no task-specific hint.
+- Layout: above the step list; never obscures evidence.
 
 ### AgentPrompt
 
@@ -260,28 +259,28 @@ All spacing derives from 4px.
 | Type | Duration | Easing | Usage |
 |------|----------|--------|-------|
 | Micro | 120ms | ease-out | Button press, hover color |
-| Standard | 160ms | cubic-bezier(0.16, 1, 0.3, 1) | Dialog opacity and scale |
+| Standard | 160ms | cubic-bezier(0.16, 1, 0.3, 1) | Reserved for future overlays |
 | Maximum | 200ms | ease-out | Exceptional state emphasis only |
 
 ### Rules
 
 - Only transform, opacity, and color transitions are allowed; no layout-property animation.
-- Motion communicates selection, press feedback, or dialog entry/exit. No decorative or perpetual animation.
+- Motion communicates selection, press feedback, or state change. No decorative or perpetual animation.
 - No streaming, simulated execution, autoplay, animated scrolling, or automatic evidence movement.
 - `prefers-reduced-motion: reduce` removes nonessential transitions and active scaling.
-- z-index scale: base 0, fixed browser/chrome 10, screenshot dialog 100, dialog toolbar 110.
+- z-index scale: base 0, fixed browser/chrome 10.
 
 ## 7. Depth & Surface
 
 ### Strategy
 
-Mixed: structural borders and tonal shifts own normal hierarchy. Shadows are reserved for the physical browser sheet, the assistant composer, content cards, and modal dialog.
+Mixed: structural borders and tonal shifts own normal hierarchy. Shadows are reserved for the physical browser sheet, the assistant composer, and content cards.
 
 | Level | Token | Value | Usage |
 |------|-------|-------|-------|
 | Browser | --shadow-browser | 0 1px 2px rgb(38 37 31 / 5%), 0 12px 32px rgb(38 37 31 / 7%) | Physical recorded-browser sheet |
 | Card | --shadow-card | 0 1px 2px rgb(38 37 31 / 4%), 0 2px 10px rgb(38 37 31 / 5%) | Content cards and assistant composer |
-| Dialog | --shadow-dialog | 0 24px 80px rgb(30 29 24 / 22%), 0 4px 16px rgb(30 29 24 / 10%) | Screenshot overlay |
+| Dialog | --shadow-dialog | 0 24px 80px rgb(30 29 24 / 22%), 0 4px 16px rgb(30 29 24 / 10%) | Reserved for future overlays |
 | Inset | --shadow-inset | inset 0 1px 0 rgb(255 255 255 / 70%) | Subtle browser-chrome highlight |
 | Default border | --border-ring-default | 1px solid var(--border-default) | Controls and dividers |
 | Strong border | --border-ring-strong | 1px solid var(--border-strong) | Browser sheet |
@@ -297,9 +296,8 @@ Mixed: structural borders and tonal shifts own normal hierarchy. Shadows are res
 ### Constraints
 
 - Target WCAG 2.2 AA: 4.5:1 normal text and 3:1 large text/icon contrast.
-- The document `lang` reflects the active interface language (`zh-CN` or `en`), with logical heading order, real landmarks, native buttons/details/dialog, and useful alt text.
+- The document `lang` reflects the active interface language (`zh-CN` or `en`), with logical heading order, real landmarks, native buttons/details, and useful alt text.
 - Every action is keyboard reachable with a visible focus indicator and a minimum 44px target.
-- Dialog traps and releases focus correctly; Escape closes it.
 - No automatic motion or timed trial progression; reduced-motion preferences are respected.
 - Selection, native errors, and decision state are never communicated through color alone.
 - Long interface text (Chinese or English), URLs, and code cannot create page-level horizontal scrolling.
@@ -310,7 +308,7 @@ Mixed: structural borders and tonal shifts own normal hierarchy. Shadows are res
 | Item | Location | Why accepted | Owner / Exit |
 |------|----------|--------------|--------------|
 | No responsive mobile or 200%-zoom workspace; the desktop-only message appears below 1280x720 CSS px | App shell | Explicit user-approved desktop-only experiment viewport and consistent evidence presentation | Revisit only if the study adds mobile or scalable-workspace requirements |
-| Raw REPL cells may be difficult for non-technical participants | Execution history | Explicit user decision to reflect real 1.x REPL tools without generated summaries | Preserve native code and readable formatting; reconsider only through a new research decision |
+| Raw REPL cells remain verbatim for provenance | StepCard technical details | Explicit user decision to reflect real 1.x REPL tools without generated summaries; now secondary to the action label and screenshot | Preserve native code and readable formatting; reconsider only through a new research decision |
 | Decision irreversibility lasts only for the mounted session | Decision footer | Backend and durable study flow are explicitly out of scope | Future study apparatus owns persistence |
 | Synthetic fixture is not a real recorded run | Fixture source and assets | Required to build before trial generation; source remains marked synthetic while the UI does not reveal the answer | Replace through the future exact 1.x recorder adapter |
 | Chinese glyph appearance varies with local system fonts | All Chinese text | Avoids a multi-megabyte CJK webfont and keeps runtime assets local | Revisit if cross-platform screenshot fidelity becomes a study requirement |
