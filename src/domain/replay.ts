@@ -6,9 +6,17 @@ export type ReplaySelection =
 
 export type DecisionChoice = "accepted" | "rejected"
 
-export type DecisionState =
-  | { readonly kind: "undecided" }
-  | { readonly kind: "decided"; readonly choice: DecisionChoice }
+export type DecisionState = {
+  readonly status: "pending" | "submitted"
+  readonly choice: DecisionChoice | null
+  readonly reason: string
+  readonly revisions: number
+}
+
+export type DecisionAction =
+  | { readonly type: "select"; readonly choice: DecisionChoice }
+  | { readonly type: "reason"; readonly reason: string }
+  | { readonly type: "submit" }
 
 export function initialReplaySelection(): ReplaySelection {
   return { kind: "final" }
@@ -71,13 +79,25 @@ export function clampReplaySelection(
   }
 }
 
-export function submitDecision(current: DecisionState, choice: DecisionChoice): DecisionState {
-  switch (current.kind) {
-    case "undecided":
-      return { kind: "decided", choice }
-    case "decided":
-      return current
+export function initialDecisionState(): DecisionState {
+  return { status: "pending", choice: null, reason: "", revisions: 0 }
+}
+
+export function updateDecision(state: DecisionState, action: DecisionAction): DecisionState {
+  if (state.status === "submitted") return state
+  switch (action.type) {
+    case "select":
+      if (state.choice === action.choice) return state
+      return {
+        ...state,
+        choice: action.choice,
+        revisions: state.choice === null ? state.revisions : state.revisions + 1,
+      }
+    case "reason":
+      return action.reason === state.reason ? state : { ...state, reason: action.reason }
+    case "submit":
+      return state.choice === null ? state : { ...state, status: "submitted" }
     default:
-      return assertNever(current)
+      return assertNever(action)
   }
 }

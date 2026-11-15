@@ -2,11 +2,12 @@ import { describe, expect, it } from "vitest"
 import {
   clampReplaySelection,
   finalReplaySelection,
+  initialDecisionState,
   initialReplaySelection,
   nextReplaySelection,
   previousReplaySelection,
   stepReplaySelection,
-  submitDecision,
+  updateDecision,
 } from "../src/domain/replay"
 
 describe("replay selection", () => {
@@ -129,31 +130,83 @@ describe("clampReplaySelection", () => {
   })
 })
 
-describe("decision submission", () => {
-  it("records acceptance when the first decision is accepted", () => {
-    // Given no decision has been submitted.
-    const current = { kind: "undecided" } as const
-    // When acceptance is submitted.
-    const decision = submitDecision(current, "accepted")
-    // Then acceptance is recorded.
-    expect(decision).toEqual({ kind: "decided", choice: "accepted" })
+describe("decision state", () => {
+  it("starts with no tentative choice and no submission", () => {
+    expect(initialDecisionState()).toEqual({
+      status: "pending",
+      choice: null,
+      reason: "",
+      revisions: 0,
+    })
   })
 
-  it("preserves acceptance when a later rejection is attempted", () => {
-    // Given acceptance was already submitted.
-    const current = { kind: "decided", choice: "accepted" } as const
-    // When another decision is attempted.
-    const decision = submitDecision(current, "rejected")
-    // Then the original acceptance cannot be changed.
-    expect(decision).toEqual(current)
+  it("keeps a first selection tentative", () => {
+    // Given no choice has been made.
+    const current = initialDecisionState()
+    // When a choice is selected.
+    const decision = updateDecision(current, { type: "select", choice: "accepted" })
+    // Then the choice is remembered but nothing is submitted.
+    expect(decision).toEqual({
+      status: "pending",
+      choice: "accepted",
+      reason: "",
+      revisions: 0,
+    })
   })
 
-  it("preserves rejection when a later acceptance is attempted", () => {
-    // Given rejection was already submitted.
-    const current = { kind: "decided", choice: "rejected" } as const
-    // When another decision is attempted.
-    const decision = submitDecision(current, "accepted")
-    // Then the original rejection cannot be changed.
-    expect(decision).toEqual(current)
+  it("allows a tentative choice to change and records the revision", () => {
+    // Given a tentative acceptance.
+    const accepted = updateDecision(initialDecisionState(), {
+      type: "select",
+      choice: "accepted",
+    })
+    // When the participant changes to rejection.
+    const rejected = updateDecision(accepted, { type: "select", choice: "rejected" })
+    // Then the rejection replaces it and the change is counted.
+    expect(rejected).toEqual({
+      status: "pending",
+      choice: "rejected",
+      reason: "",
+      revisions: 1,
+    })
+  })
+
+  it("does not count reselecting the same choice as a revision", () => {
+    const accepted = updateDecision(initialDecisionState(), {
+      type: "select",
+      choice: "accepted",
+    })
+    expect(updateDecision(accepted, { type: "select", choice: "accepted" })).toBe(accepted)
+  })
+
+  it("keeps an optional reason while the decision is pending", () => {
+    const decided = updateDecision(initialDecisionState(), {
+      type: "select",
+      choice: "rejected",
+    })
+    const withReason = updateDecision(decided, { type: "reason", reason: "Wrong product in cart" })
+    expect(withReason.reason).toBe("Wrong product in cart")
+    expect(withReason.status).toBe("pending")
+  })
+
+  it("submits the selected choice and locks later actions", () => {
+    // Given a tentative rejection.
+    const selected = updateDecision(initialDecisionState(), {
+      type: "select",
+      choice: "rejected",
+    })
+    // When it is submitted.
+    const submitted = updateDecision(selected, { type: "submit" })
+    // Then the submitted state is final.
+    expect(submitted.status).toBe("submitted")
+    expect(submitted.choice).toBe("rejected")
+    expect(updateDecision(submitted, { type: "select", choice: "accepted" })).toBe(submitted)
+    expect(updateDecision(submitted, { type: "reason", reason: "changed my mind" })).toBe(submitted)
+    expect(updateDecision(submitted, { type: "submit" })).toBe(submitted)
+  })
+
+  it("does not submit before a choice is selected", () => {
+    const current = initialDecisionState()
+    expect(updateDecision(current, { type: "submit" })).toBe(current)
   })
 })
