@@ -8,9 +8,7 @@
 
 .step-card[data-selected="true"] {
   border-color: var(--accent-border);
-  box-shadow:
-    var(--shadow-card),
-    inset 2px 0 0 var(--accent-primary);
+  box-shadow: inset 2px 0 0 var(--accent-primary);
   background: var(--surface-selected);
 }
 

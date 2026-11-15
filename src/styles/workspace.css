@@ -210,7 +210,7 @@
 .agent-prompt-model svg {
   inline-size: 14px;
   block-size: 14px;
-  color: var(--accent-primary);
+  color: var(--text-secondary);
 }
 
 .agent-prompt-note {

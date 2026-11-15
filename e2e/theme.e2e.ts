@@ -1,4 +1,4 @@
-import { expect, type Page, test } from "@playwright/test"
+import { expect, type Locator, type Page, test } from "@playwright/test"
 
 const tokenNames = [
   "--canvas",
@@ -136,5 +136,90 @@ test("keeps enabled text and focus colors legible", async ({ page }) => {
       contrastRatio(tokens["--focus-ring"], tokens[surface]),
       `--focus-ring on ${surface}`,
     ).toBeGreaterThanOrEqual(3)
+  }
+})
+
+test("uses neutral static identity styling", async ({ page }) => {
+  await page.goto("/?lang=en")
+  await page.evaluate(() => document.fonts.ready)
+
+  await expect(page.locator(".brand-icon")).toHaveCSS("color", "rgb(85, 93, 104)")
+  await expect(page.locator('.message-block[data-speaker="assistant"] .message-avatar'))
+    .toHaveCSS("background-color", "rgb(247, 248, 250)")
+  await expect(page.locator(".agent-prompt-model svg")).toHaveCSS("color", "rgb(85, 93, 104)")
+  await expect(page.locator(".agent-prompt-field")).toHaveCSS("box-shadow", "none")
+  await expect(page.locator(".replay-bar")).toHaveCSS("box-shadow", "none")
+  await expect(page.locator(".step-card").first()).toHaveCSS("box-shadow", "none")
+
+  const avatarStyle = (speaker: string) =>
+    page.locator(`.message-block[data-speaker="${speaker}"] .message-avatar`).evaluate((element) => {
+      const style = getComputedStyle(element)
+      return {
+        color: style.color,
+        background: style.backgroundColor,
+        border: style.borderTopColor,
+      }
+    })
+  expect(await avatarStyle("assistant")).toEqual(await avatarStyle("user"))
+})
+
+test("removes card elevation without losing historical selection", async ({ page }) => {
+  await page.goto("/?lang=en")
+  await page.evaluate(() => document.fonts.ready)
+
+  await page.getByRole("combobox", { name: "Jump to step" }).selectOption("2")
+  const step = page.locator('.step-card[data-selected="true"]')
+  const stepButton = step.locator(".step-select")
+  await expect(stepButton).toHaveAttribute("aria-pressed", "true")
+  await expect(step).toHaveCSS("background-color", "rgb(240, 241, 251)")
+  await expect(step).toHaveCSS("box-shadow", /rgb\(81, 88, 184\) 2px 0px 0px 0px inset/)
+
+  await page.getByRole("combobox", { name: "Jump to step" }).selectOption("final")
+  await expect(page.locator('.step-card[data-selected="true"]')).toHaveCount(0)
+  await expect(page.locator(".step-card").first()).toHaveCSS("box-shadow", "none")
+})
+
+test("keeps keyboard focus visible on replay and assessment controls", async ({ page }) => {
+  const tabUntilFocused = async (target: Locator) => {
+    for (let press = 0; press < 80; press += 1) {
+      if (await target.evaluate((element) => element === document.activeElement)) {
+        return
+      }
+      await page.keyboard.press("Tab")
+    }
+    throw new Error("target was not reached with Tab navigation")
+  }
+  const expectVisibleFocusRing = async (target: Locator) => {
+    await expect(target).toBeFocused()
+    await expect(target.evaluate((element) => element.matches(":focus-visible"))).resolves.toBe(
+      true,
+    )
+    await expect(target).toHaveCSS("outline-style", "solid")
+    await expect(target).toHaveCSS("outline-width", "3px")
+    await expect(target).toHaveCSS("outline-color", "rgb(81, 88, 184)")
+    await expect(target).toHaveCSS("outline-offset", "2px")
+  }
+
+  for (const reducedMotion of ["no-preference", "reduce"] as const) {
+    await page.emulateMedia({ reducedMotion })
+    await page.goto("/?lang=en")
+    await page.evaluate(() => document.fonts.ready)
+
+    const replaySelect = page.getByRole("combobox", { name: "Jump to step" })
+    await tabUntilFocused(replaySelect)
+    await expectVisibleFocusRing(replaySelect)
+
+    const assessment = page.getByRole("button", { name: "Fulfills the request", exact: true })
+    await tabUntilFocused(assessment)
+    await expectVisibleFocusRing(assessment)
+    await expect(
+      assessment.evaluate((element) => {
+        const scroller = element.closest(".chat-scroll")
+        if (!(scroller instanceof HTMLElement)) return true
+        const box = element.getBoundingClientRect()
+        const viewport = scroller.getBoundingClientRect()
+        return box.top >= viewport.top && box.bottom <= viewport.bottom
+      }),
+    ).resolves.toBe(true)
   }
 })

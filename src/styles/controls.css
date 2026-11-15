@@ -17,7 +17,7 @@
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-control);
   background: var(--surface-primary);
-  color: var(--accent-primary);
+  color: var(--text-secondary);
 }
 
 .brand-icon svg {
@@ -173,12 +173,6 @@
 .message-avatar svg {
   inline-size: 15px;
   block-size: 15px;
-}
-
-.message-block[data-speaker="assistant"] .message-avatar {
-  border-color: var(--accent-border);
-  background: var(--accent-soft);
-  color: var(--accent-primary);
 }
 
 .message-speaker {
