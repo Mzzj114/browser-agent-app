@@ -51,9 +51,7 @@ export function BrowserFrame({
         <time className="browser-state-time" dateTime={pageState.capturedAt}>
           {capturedAtLabel}
         </time>
-        {stateNote === null ? null : (
-          <span className="browser-state-badge">{stateNote}</span>
-        )}
+        {stateNote === null ? null : <span className="browser-state-badge">{stateNote}</span>}
       </div>
       <div className="browser-viewport">
         {screenshot ? (

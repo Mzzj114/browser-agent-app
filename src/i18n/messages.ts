@@ -178,8 +178,7 @@ export const enMessages = {
     `Technical details · ${cellCount} Python ${cellCount === 1 ? "cell" : "cells"}`,
   technicalFinalReportRedacted: "[final response shown in the conversation]",
   decisionQuestion: "Does the recorded work fulfill the original request?",
-  decisionExplanation:
-    "Submitting does not place an order, rerun the agent, or trigger a repair.",
+  decisionExplanation: "Submitting does not place an order, rerun the agent, or trigger a repair.",
   acceptResult: "Fulfills the request",
   rejectResult: "Does not fulfill the request",
   decisionSubmit: "Submit assessment",
