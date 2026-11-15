@@ -29,6 +29,7 @@
     {
       "id": "step-01",
       "ordinal": 1,
+      "action": "Opened the store homepage",
       "timestamp": "2026-11-11T09:00:00.000Z",
       "cells": [
         {
@@ -55,6 +56,7 @@
     {
       "id": "step-02",
       "ordinal": 2,
+      "action": "Typed “red running shoes”",
       "timestamp": "2026-11-11T09:00:04.100Z",
       "thinking": "I need to locate the search box first, then enter the product keyword.",
       "cells": [
@@ -90,6 +92,7 @@
     {
       "id": "step-03",
       "ordinal": 3,
+      "action": "Submitted the search",
       "timestamp": "2026-11-11T09:00:11.800Z",
       "cells": [
         {
@@ -116,6 +119,7 @@
     {
       "id": "step-04",
       "ordinal": 4,
+      "action": "Sorted results by sales",
       "timestamp": "2026-11-11T09:00:17.200Z",
       "cells": [
         {
@@ -142,6 +146,7 @@
     {
       "id": "step-05",
       "ordinal": 5,
+      "action": "Opened “Cloud Walk Red Sneakers”",
       "timestamp": "2026-11-11T09:00:23.600Z",
       "thinking": "The second product is cheaper and also shown in red, so I'll open it to check the sizes.",
       "cells": [
@@ -169,6 +174,7 @@
     {
       "id": "step-06",
       "ordinal": 6,
+      "action": "Selected size 42",
       "timestamp": "2026-11-11T09:00:30.500Z",
       "cells": [
         {
@@ -195,6 +201,7 @@
     {
       "id": "step-07",
       "ordinal": 7,
+      "action": "Added the item to the cart",
       "timestamp": "2026-11-11T09:00:36.900Z",
       "cells": [
         {
@@ -221,6 +228,7 @@
     {
       "id": "step-08",
       "ordinal": 8,
+      "action": "Opened the cart",
       "timestamp": "2026-11-11T09:00:43.700Z",
       "cells": [
         {

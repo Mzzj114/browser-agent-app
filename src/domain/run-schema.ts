@@ -40,6 +40,7 @@ const stepSchema = z
       .regex(/^step-\d{2}$/)
       .brand("StepId"),
     ordinal: z.number().int().positive(),
+    action: z.string().min(1),
     timestamp: z.iso.datetime(),
     thinking: z.string().min(1).optional(),
     cells: z.array(pythonCellSchema).min(1).readonly(),

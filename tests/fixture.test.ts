@@ -14,6 +14,16 @@ describe.each(Object.entries(agentRuns))("synthetic browser-use replay fixture (
     expect(run.steps.map((step) => step.ordinal)).toEqual([1, 2, 3, 4, 5, 6, 7, 8])
   })
 
+  it("labels every step with a short factual action", () => {
+    // Given the normalized fixture is loaded.
+    // When the step labels are inspected.
+    // Then each step has a non-empty action label that does not claim correctness.
+    for (const step of run.steps) {
+      expect(step.action.trim().length).toBeGreaterThan(0)
+      expect(step.action).not.toMatch(/success|correct|错误|成功|正确/i)
+    }
+  })
+
   it("uses native Python cells without legacy summaries", () => {
     // Given a completed fixture.
     // When every execution step is inspected.
