@@ -10,7 +10,7 @@
 
 ## 1. Atmosphere & Identity
 
-A calm forensic workspace that feels precise without feeling like a laboratory instrument. Information is dense only where the run is technical; the final response and browser remain easy to read. The signature is a physical browser sheet recessed into a warm-gray well, paired with a quiet execution rail whose selected step is marked by a narrow indigo edge. Hierarchy comes from alignment, luminance, and native content rather than decorative cards or motion.
+A quiet, near-neutral light productivity workspace for reviewing a recorded browser run. Information is dense only where the run is technical; the final response and browser remain easy to read. Near-neutral gray surfaces, structural borders, and a narrow indigo selected-step edge support inspection without framing the agent as trustworthy or the task as fault-finding. Hierarchy comes from alignment, luminance, and native content rather than assistant personality, floating cards, or motion. This is a restrained visual treatment, not an empirically neutral stimulus.
 
 Design dials: variance 4, motion 2, density 7. Light mode only, explicitly chosen by the user.
 
@@ -20,31 +20,32 @@ Design dials: variance 4, motion 2, density 7. Light mode only, explicitly chose
 
 | Role | Token | Light | Usage |
 |------|-------|-------|-------|
-| Canvas | --canvas | #F5F5F1 | App background and browser well |
+| Canvas | --canvas | #F6F7F8 | App background and browser well |
 | Surface primary | --surface-primary | #FFFFFF | Chat, header, decision footer |
-| Surface secondary | --surface-secondary | #F7F7F3 | Browser chrome and code cells |
-| Surface sunken | --surface-sunken | #EFEFE9 | Recessed browser surround |
-| Surface hover | --surface-hover | #F2F2EC | Interactive row hover |
-| Surface selected | --surface-selected | #EDEDFA | Selected step background |
-| Text primary | --text-primary | #26251F | Headings and main content |
-| Text secondary | --text-secondary | #5D5C54 | Secondary copy and metadata |
-| Text tertiary | --text-tertiary | #6F6E66 | Captions and inactive labels |
-| Text disabled | --text-disabled | #8C8B83 | Disabled text only |
-| Border default | --border-default | #E5E4DD | Dividers and control outlines |
-| Border strong | --border-strong | #D2D1C8 | Browser frame and emphasized outlines |
+| Surface secondary | --surface-secondary | #F7F8FA | Browser chrome and code cells |
+| Surface sunken | --surface-sunken | #EEF0F2 | Recessed browser surround |
+| Surface hover | --surface-hover | #F0F2F5 | Interactive row hover |
+| Surface selected | --surface-selected | #F0F1FB | Selected step background |
+| Text primary | --text-primary | #25272C | Headings and main content |
+| Text secondary | --text-secondary | #555D68 | Secondary copy and metadata |
+| Text tertiary | --text-tertiary | #646D79 | Captions and inactive labels |
+| Text disabled | --text-disabled | #8B919B | Disabled text only |
+| Border default | --border-default | #DDE1E6 | Dividers and control outlines |
+| Border strong | --border-strong | #C5CBD3 | Browser frame and emphasized outlines |
 | Accent primary | --accent-primary | #5158B8 | Focus, selected controls, interactive affordance |
 | Accent hover | --accent-hover | #444BA3 | Accent hover state |
 | Accent border | --accent-border | #A9AFE6 | Selected-step edge and focus support |
 | Accent soft | --accent-soft | #E3E6FA | Subtle interactive tint |
-| Code text | --code-text | #34342C | Native REPL code |
+| Code text | --code-text | #343A46 | Native REPL code |
 | Error text | --error-text | #B42318 | Native error output with text label |
 | Error surface | --error-surface | #FFF4F2 | Inline native error background |
-| Scrim | --scrim | rgb(30 29 24 / 58%) | Reserved for future overlays |
-| Focus ring | --focus-ring | rgb(81 88 184 / 28%) | Keyboard focus halo |
+| Scrim | --scrim | rgb(24 26 32 / 58%) | Reserved for future overlays |
+| Focus ring | --focus-ring | #5158B8 | Opaque keyboard focus outline |
 
 ### Rules
 
 - Accent is reserved for interaction and current selection, never decorative washes or gradients.
+- Static brand, model icon, and both speaker avatars use neutral styling; identity text and icons remain present.
 - The fulfilment choices use identical neutral treatment. No color communicates correctness.
 - Native errors use both text and color. No run-level failure banner is allowed.
 - Every color used in CSS must reference this table.
@@ -98,10 +99,10 @@ All spacing derives from 4px.
 | --header-height | 56px | Fixed product header |
 | --tab-height | 40px | Recorded browser tab strip |
 | --agent-width | clamp(25rem, 30vw, 27rem) | Fixed, non-draggable agent track |
-| --radius-control | 8px | Buttons and inputs |
-| --radius-surface | 12px | Code cells, message bubbles, step cards |
-| --radius-panel | 14px | Browser sheet |
-| --radius-composer | 18px | Assistant composer field |
+| --radius-control | 6px | Buttons and inputs |
+| --radius-surface | 8px | Code cells, message bubbles, step cards |
+| --radius-panel | 10px | Browser sheet |
+| --radius-composer | 8px | Assistant composer field |
 | --radius-round | 50% | Circular icon controls and authoring send |
 
 ### Grid
@@ -274,12 +275,12 @@ All spacing derives from 4px.
 
 ### Strategy
 
-Mixed: structural borders and tonal shifts own normal hierarchy. Shadows are reserved for the physical browser sheet, the assistant composer, and content cards.
+Structural borders and tonal shifts own normal hierarchy. Only the recorded browser retains a small separation shadow; ordinary cards, the replay bar, and the composer are flat.
 
 | Level | Token | Value | Usage |
 |------|-------|-------|-------|
-| Browser | --shadow-browser | 0 1px 2px rgb(38 37 31 / 5%), 0 12px 32px rgb(38 37 31 / 7%) | Physical recorded-browser sheet |
-| Card | --shadow-card | 0 1px 2px rgb(38 37 31 / 4%), 0 2px 10px rgb(38 37 31 / 5%) | Content cards and assistant composer |
+| Browser | --shadow-browser | 0 1px 2px rgb(24 26 32 / 6%) | Recorded-browser separation |
+| Card | --shadow-card | none | Flat cards, replay bar, and composer |
 | Dialog | --shadow-dialog | 0 24px 80px rgb(30 29 24 / 22%), 0 4px 16px rgb(30 29 24 / 10%) | Reserved for future overlays |
 | Inset | --shadow-inset | inset 0 1px 0 rgb(255 255 255 / 70%) | Subtle browser-chrome highlight |
 | Default border | --border-ring-default | 1px solid var(--border-default) | Controls and dividers |
@@ -288,8 +289,8 @@ Mixed: structural borders and tonal shifts own normal hierarchy. Shadows are res
 ### Rules
 
 - No floating card grid, gradient mesh, glow, glassmorphism, or decorative shadow stacks.
-- Card shadow is a single low-opacity layer set, applied only to content cards and the assistant composer.
-- Browser depth supports the metaphor of a recorded physical page and must remain subtle at 1366x768.
+- The selected step uses only `inset 2px 0 0 var(--accent-primary)` plus its selected surface and text/ARIA state; never combine `none` with another shadow layer.
+- Browser separation must remain subtle at 1366x768.
 
 ## 8. Accessibility Constraints & Accepted Debt
 
@@ -298,10 +299,21 @@ Mixed: structural borders and tonal shifts own normal hierarchy. Shadows are res
 - Target WCAG 2.2 AA: 4.5:1 normal text and 3:1 large text/icon contrast.
 - The document `lang` reflects the active interface language (`zh-CN` or `en`), with logical heading order, real landmarks, native buttons/details, and useful alt text.
 - Every action is keyboard reachable with a visible focus indicator and a minimum 44px target.
+- Focus uses an opaque 3px solid `--focus-ring` outline at 2px offset, including with reduced motion. Essential enabled icons and the indicator require at least 3:1 contrast against their actual surfaces.
 - No automatic motion or timed trial progression; reduced-motion preferences are respected.
 - Selection, native errors, and decision state are never communicated through color alone.
 - Long interface text (Chinese or English), URLs, and code cannot create page-level horizontal scrolling.
 - Cognitive load is stabilized through persistent pane positions, no automatic replay, and progressive disclosure of native detail.
+
+### Study Adoption Gate
+
+- Preserve task/report text, report exposure and typography, pane geometry, disclosure defaults, decision semantics, and unfiltered screenshot assets/zoom across theme changes.
+- Give both fulfillment answers equivalent default, hover, focused, selected, and submitted treatment. Neither answer receives correctness coloring.
+- Review matched Chinese/English captures at 1280×720, 1366×768, and 1440×900 before adoption.
+- Pilot with genuinely fulfilled and unfulfilled runs and consistent practice; check replay discovery, evidence readability, historical-state understanding, and submission meaning. Collect appearance feedback after judgments.
+- Do not adopt a theme because it increases acceptance, rejection, or error detection. Freeze and identify the theme revision before the main study; hold it constant across conditions except for explicit experimental manipulations.
+- Tests and a small pilot cannot establish theme-independent judgments or eliminate aesthetic effects.
+- Implementation status: code reviewed; study-owner visual approval, pilot, and theme freeze pending. Not yet study-ready.
 
 ### Accepted Debt
 
