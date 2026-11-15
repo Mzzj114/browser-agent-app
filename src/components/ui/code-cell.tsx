@@ -6,9 +6,10 @@ import { Disclosure } from "./disclosure"
 type CodeCellProps = {
   readonly cell: PythonCell
   readonly index: number
+  readonly displayCode?: string
 }
 
-export function CodeCell({ cell, index }: CodeCellProps) {
+export function CodeCell({ cell, index, displayCode }: CodeCellProps) {
   const messages = useMessages()
   const result = cell.result
   return (
@@ -18,7 +19,7 @@ export function CodeCell({ cell, index }: CodeCellProps) {
         <span>{messages.pythonCellHeading(index)}</span>
       </div>
       <pre className="code-block">
-        <code>{cell.code}</code>
+        <code>{displayCode ?? cell.code}</code>
       </pre>
       {result ? (
         <Disclosure
