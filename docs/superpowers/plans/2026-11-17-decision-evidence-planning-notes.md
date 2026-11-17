@@ -1,6 +1,6 @@
 # Decision Evidence Frontend — Planning Notes
 
-Status: discovery in progress. This is a working record, not an approved design or implementation plan. No product changes or branch creation are authorized by this document.
+Status: design approved and implementation plan written. This is the discovery/decision record; the linked design and implementation plan are the handoff documents. Execution has not been authorized and no product changes or condition branches have been created.
 
 ## Planning checklist
 
@@ -9,8 +9,8 @@ Status: discovery in progress. This is a working record, not an approved design 
 - [x] Present viable frontend implementation approaches and obtain a choice.
 - [x] Write the proposed design, distinguishing confirmed requirements from proposals.
 - [x] Obtain a fresh builder review and resolve consequential questions.
-- [ ] Obtain the user's approval of the design.
-- [ ] Produce the implementation plan using the writing-plans workflow.
+- [x] Obtain the user's approval of the design.
+- [x] Produce the implementation plan using the writing-plans workflow.
 
 ## Research intent
 
@@ -23,7 +23,7 @@ The research question is evolving. The existing frontend is a starting point, no
 - Three frontend conditions, each ultimately on its own feature branch:
   - Baseline: execution flow, labeled action, screenshots.
   - Experiment 1: execution flow, offered options, selected options, screenshots.
-  - Experiment 2: execution flow, offered options, selected options, confidence scores, screenshots.
+  - Experiment 2: execution flow, offered options, selected options, per-candidate probabilities, screenshots.
 - Step screenshots should show the page before the action, so participants can inspect the options visible at decision time.
 - Change the response interface to support choosing a step where the participant believes the agent fails, in addition to accept/reject.
 - The selected failure step means the earliest mistaken action, not the first visible downstream symptom.
@@ -50,13 +50,13 @@ The research question is evolving. The existing frontend is a starting point, no
 - Current fixtures are synthetic and bilingual.
 - Existing untracked neutral-theme planning files are separate user work and remain untouched.
 
-## Proposals not yet confirmed
+## Defaults adopted through design approval
 
 - Use identical underlying runs, actions, screenshots, and navigation across conditions; vary only exposure of decision evidence.
 - Preserve a distinct final outcome screenshot rather than relabeling a before-action screenshot as the final state.
 - Keep candidate ordering identical between experiments 1 and 2; scores must not also introduce ranking.
 - Include terminal decisions in the replay so participants can identify premature completion.
-- Require localization (a step or "Cannot determine") for rejection; do not require it for acceptance, but allow marking a recovered earlier error. This response-gating proposal is not yet confirmed.
+- Require localization (a step or "Cannot determine") for rejection; do not require it for acceptance, but allow marking a recovered earlier error. A concrete mark requires a short explanation; an uncertainty explanation is optional.
 - Use a shared synthetic fixture set across conditions, with synthetic probability values explicitly identified as prototype data rather than measured Jev outputs.
 
 ## Delegated Jev exploration
@@ -83,12 +83,12 @@ The user requested a read-only exploration of `D:\Program\Python\try-browser-use
 - Researcher ground truth and independent outcome verification are for analysis, not participant-visible verdicts.
 - Distinguish frontend fixture/demo work from instrumentation needed to support faithful real-run replay; neither is authorized yet.
 
-## Proposed design awaiting review/approval
+## Approved design
 
 - `docs/superpowers/specs/2026-11-17-decision-evidence-frontend-design.md` records the design and separates confirmed requirements from builder calls.
-- Matching underlying runs, initial final-state view, exposure defaults, terminal episodes, response gating, exact fixture scope, and runtime fixture projection are proposed in that document for approval.
+- Matching underlying runs, initial final-state view, exposure defaults, terminal episodes, response gating, exact fixture scope, and runtime fixture projection were approved with that document.
 - A fresh builder review completed with "nothing important left"; no additional stakeholder questions arose.
-- The design is ready for user review; document approval and implementation planning are still pending.
+- The user approved the full design on 2026-11-17. The implementation plan is `docs/superpowers/plans/2026-11-17-decision-evidence-frontend.md`; product implementation still requires a separate execution decision.
 
 ## Visual exploration
 
@@ -98,6 +98,6 @@ The user requested a read-only exploration of `D:\Program\Python\try-browser-use
   - A: screenshot plus execution flow, with candidate evidence inline in the viewed step.
   - B: separate execution-flow rail, screenshot pane, and persistent selected-step inspector (chosen by the user for a stable overview).
 - Both retain human-readable labels, before-action screenshots, a separate final-state view, two-level candidate evidence, identical candidate order, and independent viewing/marking state.
-- The response preview includes accept/reject, a step or "Cannot determine", and short free text. Rejection gating and explanation requirements remain proposed rules, not confirmed requirements.
+- The response preview includes accept/reject, a step or "Cannot determine", and short free text. Rejection gating and explanation requirements were subsequently approved in the full design.
 - Mockup screenshots reuse existing synthetic assets. Candidate lists/probabilities are illustrative, not a claimed Jev recording or a complete study stimulus.
 - A local Playwright verification script checks the three conditions, invariant ordering, separate viewed/marked state, uncertainty, final/terminal views, and both layouts. This does not validate the research design or the actual app.

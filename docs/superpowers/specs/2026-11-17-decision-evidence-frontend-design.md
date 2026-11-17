@@ -1,6 +1,6 @@
 # Decision-Evidence Frontend Design
 
-**Status:** Proposed design for approval. Approach 1 and layout B are approved; this document and its remaining design calls are not yet approved. Planning only: no product implementation or condition branches have been created.
+**Status:** Approved by the user on 2026-11-17, including the proposed defaults below. Implementation planning only: no product implementation or condition branches have been created.
 
 **Builder check:** A fresh frontend reviewer found no important unanswered questions needed to plan this design. This is a completeness check, not user approval or validation of the study.
 
@@ -42,7 +42,7 @@ Throwaway visual exploration is under `.superpowers/brainstorm/778-1794956755/`.
 
 ## 3. Experimental Contract
 
-Use the **same underlying synthetic run** in every condition. This is a proposed design call to isolate evidence exposure, not a previously confirmed participant-allocation protocol.
+Use the **same underlying synthetic run** in every condition. This design call was adopted through document approval to isolate evidence exposure; it does not specify a participant-allocation protocol.
 
 | Evidence / behavior | Baseline | Candidates | Probabilities |
 | --- | --- | --- | --- |
@@ -100,7 +100,7 @@ The shell stays viewport-bounded. Execution rail, screenshot viewport, and inspe
 
 The inspector's outer dimensions do not change between conditions. Baseline displays the common action summary, marking control, and factual recorded outcome without blank candidate tables or “information hidden” placeholders.
 
-### Replay and exposure defaults — proposed calls
+### Replay and exposure defaults
 
 - Preserve the existing **final-state initial view** in all conditions.
 - Selecting an action shows its before-action screenshot and its inspector, with permitted candidate sections visible without another disclosure click.
@@ -124,7 +124,7 @@ Only one earliest action can be marked. Marking another replaces it; marking the
 
 The common form has accept/reject, localization, a short explanation, and explicit Submit. Inputs remain editable until submission.
 
-**Proposed validation rules for approval:**
+**Approved validation rules:**
 
 - Accept/reject is required.
 - Rejection requires a concrete episode or Cannot determine.
@@ -154,7 +154,7 @@ Introduce a versioned decision-replay fixture contract rather than relabeling th
 
 The authoring contract must validate unique IDs, references, chronological ordinals, selected membership, finite 0–1 probabilities, approximately normalized per-head sets, and selected argmax/tie consistency. Synthetic scores should sum to one within numerical tolerance; display raw values consistently as percentages without silent renormalization. Use one decimal place and explain possible rounding differences. Never compare scores across target heads.
 
-### Participant data projection — proposed call
+### Participant data projection
 
 Derive condition-specific runtime fixtures from one canonical fixture source. Baseline omits candidate/score fields; candidates condition omits probabilities; probabilities condition includes both levels. Runtime code imports only the permitted projection, not the full canonical source or researcher annotations.
 
@@ -224,9 +224,9 @@ Preserve existing untracked neutral-theme planning files and all unrelated user 
 
 Manual review and a usability pilot are still needed before freezing a study interface. Synthetic prototype scores, automated equivalence checks, and on-screen-only answers do not constitute a deployed or validated experiment.
 
-## 13. Decisions Still Requiring Document Approval
+## 13. Approved Builder Calls
 
-The user has approved the requirements, layout, and shared-branch approach above. These builder calls are proposed here rather than attributed to the user:
+The user approved this document, including the following builder-proposed defaults:
 
 - Identical underlying run and initial final-state view across conditions.
 - Default-expanded permitted candidate sections, fixed pane geometry, no screenshot overlays.
