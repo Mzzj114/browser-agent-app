@@ -18,8 +18,18 @@ function rootElement(): HTMLElement {
   return element
 }
 
-function baseUrl(): URL {
-  return new URL("../study/", document.baseURI)
+function applicationBaseUrl(): URL {
+  return new URL("../", document.baseURI)
+}
+
+function studyFixtureUrls(applicationBase: URL): readonly string[] {
+  return ["manifest.json", "run.en.json", "run.zh.json"]
+    .map((file) => new URL(`study/${file}`, applicationBase).href)
+    .sort()
+}
+
+function requestPathnames(calls: readonly string[]): readonly string[] {
+  return calls.map((url) => new URL(url).pathname).sort()
 }
 
 function fixtureFiles(condition: StudyCondition): FixtureFiles {
@@ -63,10 +73,14 @@ function deferred() {
   return { promise, resolve }
 }
 
-function startMount(element: HTMLElement, condition: StudyCondition): Promise<void> {
+function startMount(
+  element: HTMLElement,
+  applicationBase: URL,
+  condition: StudyCondition,
+): Promise<void> {
   let mounting: Promise<void> = Promise.resolve()
   act(() => {
-    mounting = mountStudyApp(element, baseUrl(), condition)
+    mounting = mountStudyApp(element, applicationBase, condition)
   })
   return mounting
 }
@@ -87,9 +101,10 @@ describe("participant bootstrap", () => {
       return fetcher(input)
     }) as typeof fetch)
     const element = rootElement()
+    const applicationBase = applicationBaseUrl()
 
     // When the participant app starts.
-    const mounting = startMount(element, "baseline")
+    const mounting = startMount(element, applicationBase, "baseline")
 
     // Then no workspace or raw fixture data is shown before validation.
     expect(screenText(element).trim()).toBe(zhMessages.study.loadingStudy)
@@ -108,30 +123,59 @@ describe("participant bootstrap", () => {
     expect(element).not.toHaveTextContent(zhMessages.study.loadingStudy)
   })
 
-  it("mounts App from the validated projected runs", async () => {
-    // Given English locale selection and valid baseline fixtures.
+  it("mounts from an application root base and resolves the study directory", async () => {
+    // Given English locale selection and valid baseline fixtures at the application root.
     window.history.replaceState({}, "", "/?lang=en")
     const runs = studyRuns("baseline")
+    const applicationBase = new URL("/", document.baseURI)
     const { calls, fetcher } = respondWith(fixtureFiles("baseline"))
     vi.stubGlobal("fetch", fetcher)
     const element = rootElement()
 
     // When the app finishes validation.
-    const mounting = startMount(element, "baseline")
+    const mounting = startMount(element, applicationBase, "baseline")
     await act(async () => {
       await mounting
     })
 
-    // Then the projected English run is rendered and only study fixtures were read.
+    // Then the projected English run is rendered and fixtures came from the study subdirectory.
     expect(screenText(element)).toContain(runs.en.task)
     expect(screenText(element)).toContain(runs.en.report)
     expect(element.querySelector(".page-screenshot")).toHaveAttribute(
       "src",
       "screenshots/en/08-cart.webp",
     )
-    expect(calls.sort()).toEqual(
-      ["manifest.json", "run.en.json", "run.zh.json"].map((file) => new URL(file, baseUrl()).href),
-    )
+    expect(calls.sort()).toEqual(studyFixtureUrls(applicationBase))
+    expect(requestPathnames(calls)).toEqual([
+      "/study/manifest.json",
+      "/study/run.en.json",
+      "/study/run.zh.json",
+    ])
+  })
+
+  it("resolves fixtures below a nested application deployment base", async () => {
+    // Given the app deployed under a nested path with its fixtures one level below it.
+    window.history.replaceState({}, "", "/?lang=en")
+    const runs = studyRuns("baseline")
+    const applicationBase = new URL("/nested-app/", document.baseURI)
+    const { calls, fetcher } = respondWith(fixtureFiles("baseline"))
+    vi.stubGlobal("fetch", fetcher)
+    const element = rootElement()
+
+    // When the app validates from that application base.
+    const mounting = startMount(element, applicationBase, "baseline")
+    await act(async () => {
+      await mounting
+    })
+
+    // Then both locales mount and requests point exactly at nested-app/study, not the app root.
+    expect(screenText(element)).toContain(runs.en.task)
+    expect(calls.sort()).toEqual(studyFixtureUrls(applicationBase))
+    expect(requestPathnames(calls)).toEqual([
+      "/nested-app/study/manifest.json",
+      "/nested-app/study/run.en.json",
+      "/nested-app/study/run.zh.json",
+    ])
   })
 
   it("renders a localized safe error and never falls back on a rejected fixture", async () => {
@@ -145,9 +189,10 @@ describe("participant bootstrap", () => {
     const { calls, fetcher } = respondWith(files)
     vi.stubGlobal("fetch", fetcher)
     const element = rootElement()
+    const applicationBase = applicationBaseUrl()
 
     // When validation rejects the fixture.
-    const mounting = startMount(element, "baseline")
+    const mounting = startMount(element, applicationBase, "baseline")
     await act(async () => {
       await mounting
     })
@@ -161,8 +206,7 @@ describe("participant bootstrap", () => {
     // And no stale or richer fixture was substituted.
     expect(screenText(element)).not.toContain(studyRuns("baseline").en.task)
     expect(screenText(element)).not.toContain(agentRun.final.text)
-    expect(calls).toHaveLength(3)
-    expect(calls.every((url) => url.startsWith(baseUrl().href))).toBe(true)
+    expect(calls.sort()).toEqual(studyFixtureUrls(applicationBase))
   })
 })
 

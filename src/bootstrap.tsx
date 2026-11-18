@@ -46,7 +46,8 @@ export async function mountStudyApp(
   )
 
   try {
-    const runs = await loadStudyRuns(baseUrl, condition)
+    const fixtureBaseUrl = new URL("study/", baseUrl)
+    const runs = await loadStudyRuns(fixtureBaseUrl, condition)
     root.render(
       <StrictMode>
         <App runs={runs} />
