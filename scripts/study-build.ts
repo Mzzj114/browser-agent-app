@@ -35,19 +35,29 @@ const canonicalFixtureNames = new Set([
   "agent-run.json",
 ])
 
-const binaryExtensions = new Set([
+const rootFiles = new Set(["index.html", "favicon.svg"])
+
+const assetExtensions = new Set([
   ".avif",
+  ".css",
+  ".eot",
   ".gif",
   ".ico",
   ".jpeg",
   ".jpg",
+  ".js",
+  ".otf",
   ".png",
+  ".svg",
+  ".ttf",
   ".webp",
   ".woff",
   ".woff2",
 ])
 
-const textExtensions = new Set([".css", ".html", ".js", ".json", ".mjs", ".svg", ".txt", ".xml"])
+const screenshotPattern = /^screenshots\/(?:en\/)?[a-z0-9-]+\.webp$/
+
+const textExtensions = new Set([".css", ".html", ".js", ".json", ".svg"])
 
 type LegacySentinel = {
   readonly label: string
@@ -100,6 +110,24 @@ function messageOf(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
 }
 
+function extensionOf(basename: string): string {
+  const index = basename.lastIndexOf(".")
+  return index <= 0 ? "" : basename.slice(index).toLowerCase()
+}
+
+function isPermittedArtifact(
+  lowerPath: string,
+  segments: readonly string[],
+  basename: string,
+): boolean {
+  if (rootFiles.has(lowerPath)) return true
+  if (allowedJsonFiles.has(lowerPath)) return true
+  if (segments.length === 2 && segments[0] === "assets") {
+    return assetExtensions.has(extensionOf(basename))
+  }
+  return screenshotPattern.test(lowerPath)
+}
+
 async function collectFiles(directory: string): Promise<readonly BuildFile[]> {
   const files: BuildFile[] = []
 
@@ -130,7 +158,7 @@ function assertPermittedPath(buildDirectory: string, file: BuildFile): void {
   const segments = lowerPath.split("/")
   const basename = segments.at(-1) ?? ""
 
-  if (basename === "showcase.html" || /^showcase.*\.html$/.test(basename)) {
+  if (segments.some((segment) => segment.startsWith("showcase"))) {
     throw new Error(
       `Study build ${buildDirectory}: developer showcase page emitted at ${file.relativePath}`,
     )
@@ -170,15 +198,9 @@ function assertPermittedPath(buildDirectory: string, file: BuildFile): void {
     )
   }
 
-  if (basename.endsWith(".json") && !allowedJsonFiles.has(file.relativePath)) {
+  if (!isPermittedArtifact(lowerPath, segments, basename)) {
     throw new Error(
-      `Study build ${buildDirectory}: unexpected JSON artifact emitted at ${file.relativePath}`,
-    )
-  }
-
-  if (basename.endsWith(".html") && basename !== "index.html") {
-    throw new Error(
-      `Study build ${buildDirectory}: unexpected HTML page emitted at ${file.relativePath}`,
+      `Study build ${buildDirectory}: unexpected build artifact emitted at ${file.relativePath}`,
     )
   }
 }
@@ -312,8 +334,8 @@ export async function verifyStudyBuild(
   for (const file of files) {
     assertPermittedPath(buildDirectory, file)
 
-    const extension = file.relativePath.slice(file.relativePath.lastIndexOf(".")).toLowerCase()
-    if (binaryExtensions.has(extension) || !textExtensions.has(extension)) continue
+    const extension = extensionOf(file.relativePath)
+    if (!textExtensions.has(extension)) continue
 
     const contents = await readFile(file.absolute, "utf8")
     assertNoLegacySentinels(buildDirectory, file, contents)

@@ -1,5 +1,5 @@
-import { readFile, rm, unlink, writeFile } from "node:fs/promises"
-import { join } from "node:path"
+import { mkdir, readFile, rm, unlink, writeFile } from "node:fs/promises"
+import { dirname, join } from "node:path"
 import { afterEach, describe, expect, it } from "vitest"
 import { type BuildReport, verifyStudyBuild } from "../scripts/study-build.ts"
 import { studyConditions } from "../src/domain/study-condition.ts"
@@ -154,6 +154,37 @@ describe("study build verification", () => {
 
     await expect(verifyStudyBuild(directory, "baseline")).rejects.toThrow(/json|unexpected/i)
   })
+
+  it.each([
+    "assets/transcript.md",
+    "assets/events.jsonl",
+    "assets/data.csv",
+    "assets/sources.zip",
+    "assets/Component.jsx",
+  ])("rejects an unpermitted %s payload", async (relativePath) => {
+    const directory = await build("baseline")
+    const outputPath = join(directory, relativePath)
+    await mkdir(dirname(outputPath), { recursive: true })
+    await writeFile(outputPath, "researcher payload\n", "utf8")
+
+    await expect(verifyStudyBuild(directory, "baseline")).rejects.toThrow(
+      /unexpected|artifact|extension|path/i,
+    )
+  })
+
+  it.each(["showcase/index.html", "demo/index.html"])(
+    "rejects a nested participant page at %s",
+    async (relativePath) => {
+      const directory = await build("baseline")
+      const outputPath = join(directory, relativePath)
+      await mkdir(dirname(outputPath), { recursive: true })
+      await writeFile(outputPath, "<!doctype html><title>nested</title>\n", "utf8")
+
+      await expect(verifyStudyBuild(directory, "baseline")).rejects.toThrow(
+        /showcase|unexpected|html/i,
+      )
+    },
+  )
 
   it("rejects a run with an extra exposure key", async () => {
     const directory = await build("baseline")
