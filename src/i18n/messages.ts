@@ -1,4 +1,5 @@
 import type { Locale } from "./locale"
+import { enStudyMessages, type StudyMessages, zhStudyMessages } from "./study-messages"
 
 export type Messages = {
   readonly appTitle: string
@@ -66,6 +67,7 @@ export type Messages = {
   readonly promptPlaceholder: string
   readonly promptNote: string
   readonly sendPrompt: string
+  readonly study: StudyMessages
 }
 
 export const zhMessages = {
@@ -137,6 +139,7 @@ export const zhMessages = {
   promptPlaceholder: "继续向 Agent 提问",
   promptNote: "回放中 · 输入已禁用",
   sendPrompt: "发送指令",
+  study: zhStudyMessages,
 } satisfies Messages
 
 export const enMessages = {
@@ -212,6 +215,7 @@ export const enMessages = {
   promptPlaceholder: "Continue asking the Agent",
   promptNote: "Replay · Input disabled",
   sendPrompt: "Send prompt",
+  study: enStudyMessages,
 } satisfies Messages
 
 const messagesByLocale: Record<Locale, Messages> = {

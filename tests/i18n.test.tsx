@@ -3,7 +3,14 @@ import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 import { App } from "../src/App"
 import { agentRuns } from "../src/data/agent-run"
-import { detectLocale, initialLocale, LOCALE_STORAGE_KEY, zhMessages } from "../src/i18n"
+import {
+  detectLocale,
+  enMessages,
+  initialLocale,
+  LOCALE_STORAGE_KEY,
+  zhMessages,
+} from "../src/i18n"
+import { enStudyMessages, zhStudyMessages } from "../src/i18n/study-messages"
 
 describe("locale detection", () => {
   it("prefers the query parameter, then stored choice, then browser language", () => {
@@ -117,5 +124,55 @@ describe("bilingual workspace", () => {
     // Then the document language and title follow the interface.
     expect(document.documentElement.lang).toBe("zh-CN")
     expect(document.title).toBe(zhMessages.appTitle)
+  })
+})
+
+describe("study copy", () => {
+  it("uses the approved bilingual localization prompt", () => {
+    expect(enStudyMessages.localizationPrompt).toBe(
+      "Which step contains the agent's earliest mistaken action?",
+    )
+    expect(zhStudyMessages.localizationPrompt).toBe("哪一步包含 Agent 最早的错误操作？")
+  })
+
+  it("exposes the study copy through the shared message contract", () => {
+    expect(enMessages.study).toBe(enStudyMessages)
+    expect(zhMessages.study).toBe(zhStudyMessages)
+  })
+
+  it("provides the complete bilingual study vocabulary", () => {
+    for (const messages of [enStudyMessages, zhStudyMessages]) {
+      expect(messages.executionOverview).not.toBe("")
+      expect(messages.viewedStep(4)).toContain("4")
+      expect(messages.viewedStepTag).not.toBe("")
+      expect(messages.stepLabel(4)).toContain("4")
+      expect(messages.originalTask).not.toBe("")
+      expect(messages.agentReportedResult).not.toBe("")
+      expect(messages.beforeStepCaption(4, 8)).toContain("4")
+      expect(messages.beforeStepCaption(4, 8)).toContain("8")
+      expect(messages.finalStateHeading).not.toBe("")
+      expect(messages.finalStateExplanation).not.toBe("")
+      expect(messages.recordedOutcome).not.toBe("")
+      expect(messages.enteredText).not.toBe("")
+      expect(messages.enteredTextNote).not.toBe("")
+      expect(messages.offeredOperations).not.toBe("")
+      expect(messages.offeredTargets).not.toBe("")
+      expect(messages.candidateColumn).not.toBe("")
+      expect(messages.contextColumn).not.toBe("")
+      expect(messages.probabilityColumn).not.toBe("")
+      expect(messages.selected).not.toBe("")
+      expect(messages.noTargetRequired).not.toBe("")
+      expect(messages.markEarliestMistake).not.toBe("")
+      expect(messages.clearMark).not.toBe("")
+      expect(messages.yourMark).not.toBe("")
+      expect(messages.syntheticProvenance).not.toBe("")
+      expect(messages.conditionalScoreExplanation).not.toBe("")
+      expect(messages.roundingCaveat).not.toBe("")
+    }
+  })
+
+  it("renders the approved before-step captions", () => {
+    expect(enStudyMessages.beforeStepCaption(4, 8)).toBe("Before step 4 of 8")
+    expect(zhStudyMessages.beforeStepCaption(4, 8)).toBe("第 4 步操作前 · 共 8 步")
   })
 })
