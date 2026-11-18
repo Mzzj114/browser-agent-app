@@ -209,6 +209,26 @@ describe("study run schema", () => {
     expect(studyRunSchema.safeParse(forged).success).toBe(false)
   })
 
+  it.each([
+    ["candidates", "episode-01", "TYPE_TEXT"],
+    ["candidates", "episode-04", "CLICK"],
+    ["candidates", "episode-05", "SELECT"],
+    ["probabilities", "episode-01", "TYPE_TEXT"],
+    ["probabilities", "episode-04", "CLICK"],
+    ["probabilities", "episode-05", "SELECT"],
+  ] as const)(
+    "rejects a %s %s operation without target evidence",
+    (condition, episodeId, operation) => {
+      const forged = structuredClone(projected(condition)) as unknown as Record<string, unknown>
+      const episodes = forged["episodes"] as Record<string, unknown>[]
+      const episode = episodes.find((candidate) => candidate["id"] === episodeId)
+      if (!episode) throw new Error(`Expected ${episodeId}`)
+      expect(episode["operation"]).toBe(operation)
+      episode["targetHead"] = null
+      expect(studyRunSchema.safeParse(forged).success).toBe(false)
+    },
+  )
+
   it("rejects unexpected key surfaces", () => {
     const forged = structuredClone(projected("baseline")) as unknown as Record<string, unknown>
     forged["annotations"] = []

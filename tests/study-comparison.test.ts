@@ -176,6 +176,24 @@ describe("cross-condition study comparison", () => {
     await expect(compareStudyBuilds(builds)).rejects.toThrow(/bound|pane|geometry|tolerance/i)
   })
 
+  it("rejects a pairwise one-pixel overshoot between the two experimental conditions", async () => {
+    const builds = await buildAll()
+    await updateReport(builds.candidates, "en", 0, (report) => {
+      const panes = report["panes"] as Record<string, Record<string, number>>
+      const inspector = panes["inspector"]
+      if (!inspector) throw new Error("Missing inspector bounds")
+      inspector["x"] = (inspector["x"] ?? 0) + 1
+    })
+    await updateReport(builds.probabilities, "en", 0, (report) => {
+      const panes = report["panes"] as Record<string, Record<string, number>>
+      const inspector = panes["inspector"]
+      if (!inspector) throw new Error("Missing inspector bounds")
+      inspector["x"] = (inspector["x"] ?? 0) - 1
+    })
+
+    await expect(compareStudyBuilds(builds)).rejects.toThrow(/differ|tolerance|pairwise/i)
+  })
+
   it("rejects report fields that could expose inspector scroll or participant answers", async () => {
     const builds = await buildAll()
     await updateReport(builds.candidates, "zh", 2, (report) => {

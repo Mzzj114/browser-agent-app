@@ -3,20 +3,13 @@ import { LOCALES, type Locale } from "../i18n/locale.ts"
 import {
   decisionOperations,
   type EpisodeCore,
+  isTargetlessOperation,
   type Observation,
   type Operation,
 } from "./decision-run-schema.ts"
 import { studyConditions } from "./study-condition.ts"
 
 const scoreTolerance = 1e-6
-
-const targetlessOperations = new Set<Operation>([
-  "SCROLL_DOWN",
-  "SCROLL_UP",
-  "WAIT",
-  "DONE",
-  "BLOCKED",
-])
 
 const screenshotSchema = z
   .strictObject({
@@ -336,8 +329,12 @@ function validateExperimentRun(
     }
     validateHead(episode.operationHead, scored, [...path, "operationHead"], context)
 
-    if (targetlessOperations.has(episode.operation) && episode.targetHead !== null) {
-      addIssue(context, [...path, "targetHead"], `${episode.operation} requires no target head`)
+    if (isTargetlessOperation(episode.operation)) {
+      if (episode.targetHead !== null) {
+        addIssue(context, [...path, "targetHead"], `${episode.operation} requires no target head`)
+      }
+    } else if (episode.targetHead === null) {
+      addIssue(context, [...path, "targetHead"], `${episode.operation} requires a target head`)
     }
 
     if (episode.targetHead) {

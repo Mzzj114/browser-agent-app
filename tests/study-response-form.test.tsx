@@ -159,6 +159,38 @@ describe("study response form", () => {
     expect(select).not.toHaveAttribute("aria-invalid")
   })
 
+  it("focuses the error summary on invalid submit without stealing typing focus", async () => {
+    const user = userEvent.setup()
+    const onResponse = vi.fn()
+    render(<Harness onResponse={onResponse} />)
+
+    await user.click(screen.getByRole("button", { name: "Does not fulfill the request" }))
+    await user.selectOptions(screen.getByRole("combobox"), "episode-04")
+
+    // When an invalid attempt is submitted.
+    await user.click(submitButton())
+
+    // Then the inserted summary receives focus and the submit is rejected.
+    expect(onResponse).not.toHaveBeenCalledWith({ type: "submit" })
+    expect(screen.getByRole("alert")).toHaveFocus()
+
+    // When the participant resumes typing in the explanation.
+    const explanation = screen.getByRole("textbox")
+    await user.click(explanation)
+    await user.type(explanation, "The cart step did not add the selected shoe.")
+    expect(explanation).toHaveFocus()
+    expect(explanation).toHaveValue("The cart step did not add the selected shoe.")
+
+    // When the field becomes invalid again without a submit, focus is not stolen.
+    await user.clear(explanation)
+    expect(explanation).toHaveFocus()
+
+    // Then another invalid attempt remains reachable and refocuses the summary.
+    await user.click(submitButton())
+    expect(screen.getByRole("alert")).toHaveFocus()
+    expect(onResponse).not.toHaveBeenCalledWith({ type: "submit" })
+  })
+
   it("requires a marked explanation for a rejection and then submits it", async () => {
     const user = userEvent.setup()
     const onResponse = vi.fn()

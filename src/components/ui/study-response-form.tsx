@@ -1,5 +1,5 @@
 import type * as React from "react"
-import { useId, useState } from "react"
+import { useEffect, useId, useRef, useState } from "react"
 import type { EpisodeCore } from "../../domain/decision-run-schema"
 import {
   type ResponseAction,
@@ -32,11 +32,20 @@ export function StudyResponseForm({
   const messages = useMessages()
   const idPrefix = useId()
   const [submitAttempted, setSubmitAttempted] = useState(false)
+  const [invalidSubmitCount, setInvalidSubmitCount] = useState(0)
+  const summaryRef = useRef<HTMLDivElement>(null)
+  const lastFocusedInvalidSubmit = useRef(0)
   const episodeIds = episodes.map((episode) => episode.id)
   const errors = responseErrors(state, episodeIds)
   const submitted = state.status === "submitted"
   const showErrors = submitAttempted && !submitted && errors.length > 0
   const hasError = (error: ResponseError) => showErrors && errors.includes(error)
+
+  useEffect(() => {
+    if (invalidSubmitCount === lastFocusedInvalidSubmit.current) return
+    lastFocusedInvalidSubmit.current = invalidSubmitCount
+    if (showErrors) summaryRef.current?.focus()
+  }, [invalidSubmitCount, showErrors])
 
   const questionId = `${idPrefix}-question`
   const localizationId = `${idPrefix}-localization`
@@ -92,7 +101,11 @@ export function StudyResponseForm({
     if (submitted) return
 
     setSubmitAttempted(true)
-    if (errors.length === 0) onResponse({ type: "submit" })
+    if (errors.length === 0) {
+      onResponse({ type: "submit" })
+    } else {
+      setInvalidSubmitCount((count) => count + 1)
+    }
   }
 
   return (
@@ -135,6 +148,7 @@ export function StudyResponseForm({
 
       {showErrors ? (
         <div
+          ref={summaryRef}
           className="study-response-errors"
           role="alert"
           aria-labelledby={errorsId}

@@ -1,4 +1,4 @@
-import type { Candidate, ScoredCandidate } from "../domain/decision-run-schema.ts"
+import type { Candidate, Observation, ScoredCandidate } from "../domain/decision-run-schema.ts"
 import type { StudyCondition } from "../domain/study-condition.ts"
 import {
   type StudyEpisode,
@@ -43,6 +43,16 @@ function headStructure(head: {
   }
 }
 
+function screenshotStructure(screenshot: Observation["screenshot"]) {
+  if (!screenshot) return null
+
+  return {
+    basename: screenshot.path.split("/").at(-1) ?? null,
+    width: screenshot.width,
+    height: screenshot.height,
+  }
+}
+
 function episodeStructure(episode: StudyEpisode) {
   const operationHead = "operationHead" in episode ? episode.operationHead : null
   const targetHead = "targetHead" in episode ? episode.targetHead : null
@@ -53,6 +63,8 @@ function episodeStructure(episode: StudyEpisode) {
     operation: episode.operation,
     beforeObservationId: episode.beforeObservationId,
     afterObservationId: episode.afterObservationId,
+    outcomeKind: episode.outcome?.kind ?? null,
+    hasEnteredText: episode.enteredText !== null,
     operationHead: operationHead ? headStructure(operationHead) : null,
     targetHead: targetHead
       ? {
@@ -67,7 +79,10 @@ function runStructure(run: StudyRun) {
   return {
     initialObservationId: run.initialObservationId,
     finalObservationId: run.finalObservationId,
-    observations: run.observations.map((observation) => observation.id),
+    observations: run.observations.map((observation) => ({
+      id: observation.id,
+      screenshot: screenshotStructure(observation.screenshot),
+    })),
     episodes: run.episodes.map(episodeStructure),
   }
 }
@@ -75,6 +90,21 @@ function runStructure(run: StudyRun) {
 function assertMatchingStructure(zh: StudyRun, en: StudyRun): void {
   if (JSON.stringify(runStructure(zh)) !== JSON.stringify(runStructure(en))) {
     throw new Error("Study fixture structure mismatch between zh and en")
+  }
+}
+
+function assertLocaleScreenshotDirectories(run: StudyRun): void {
+  for (const observation of run.observations) {
+    const screenshot = observation.screenshot
+    if (!screenshot) continue
+
+    const inEnglishDirectory = screenshot.path.startsWith("screenshots/en/")
+    const matchesLocale = run.locale === "en" ? inEnglishDirectory : !inEnglishDirectory
+    if (!matchesLocale) {
+      throw new Error(
+        `Study fixture screenshot locale mismatch for ${run.locale}: ${screenshot.path}`,
+      )
+    }
   }
 }
 
@@ -137,6 +167,8 @@ export async function loadStudyRuns(
 
   assertRunMatchesManifest(zh, "zh", expectedCondition, manifest)
   assertRunMatchesManifest(en, "en", expectedCondition, manifest)
+  assertLocaleScreenshotDirectories(zh)
+  assertLocaleScreenshotDirectories(en)
   assertMatchingStructure(zh, en)
 
   return { zh, en }

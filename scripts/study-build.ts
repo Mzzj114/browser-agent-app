@@ -810,15 +810,22 @@ export async function compareStudyBuilds(
     }
   }
 
+  const conditionPairs = [
+    ["baseline", "candidates"],
+    ["baseline", "probabilities"],
+    ["candidates", "probabilities"],
+  ] as const satisfies readonly (readonly [StudyCondition, StudyCondition])[]
+
   for (const locale of LOCALES) {
     for (const viewport of comparisonViewports) {
       const name = comparisonReportName(locale, viewport)
-      const reference = verified.baseline.reports.get(name)
-      if (!reference) throw new Error(`Study comparison: missing report ${name}`)
-      for (const condition of conditions.slice(1)) {
-        const actual = verified[condition].reports.get(name)
-        if (!actual) throw new Error(`Study comparison: missing ${condition} report ${name}`)
-        assertReportsMatch("baseline", reference, condition, actual)
+      for (const [referenceLabel, actualLabel] of conditionPairs) {
+        const reference = verified[referenceLabel].reports.get(name)
+        const actual = verified[actualLabel].reports.get(name)
+        if (!reference)
+          throw new Error(`Study comparison: missing ${referenceLabel} report ${name}`)
+        if (!actual) throw new Error(`Study comparison: missing ${actualLabel} report ${name}`)
+        assertReportsMatch(referenceLabel, reference, actualLabel, actual)
       }
     }
   }

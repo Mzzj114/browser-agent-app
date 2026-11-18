@@ -277,7 +277,7 @@ describe("decision inspector", () => {
     expect(within(targetTable).getByText("27.0%")).toBeVisible()
     expect(
       screen.getByText(
-        "Probabilities apply within each operation or target list only; they are not overall action scores.",
+        "Probability values are synthetic authored examples, not captured Jev model output or correctness estimates; they apply within each operation or target list only and are not overall action scores.",
       ),
     ).toBeVisible()
     expect(
@@ -306,6 +306,29 @@ describe("decision inspector", () => {
     expect(screen.getAllByRole("table")).toHaveLength(1)
     expect(screen.getByText("No target required.")).toBeVisible()
   })
+
+  it.each(["candidates", "probabilities"] as const)(
+    "shows neutral missing-target evidence for a malformed %s targeted episode",
+    (condition) => {
+      // Given a targeted operation whose runtime target evidence is defensively null.
+      const run = studyRuns(condition).en
+      if (run.condition === "baseline") throw new Error("Expected an experimental run")
+      const malformed = {
+        ...run,
+        episodes: run.episodes.map((episode) =>
+          episode.id === "episode-04" ? { ...episode, targetHead: null } : episode,
+        ),
+      } as StudyRun
+
+      // When the malformed episode is rendered.
+      renderInspector(malformed, { kind: "episode", episodeId: "episode-04" })
+
+      // Then missing evidence is not presented as inapplicable.
+      expect(screen.getAllByRole("table")).toHaveLength(1)
+      expect(screen.queryByText("No target required.")).toBeNull()
+      expect(screen.getByText("Target evidence is missing for this operation.")).toBeVisible()
+    },
+  )
 
   it("keeps every native-select option as a separate contextual row", () => {
     const run = studyRuns("candidates").en

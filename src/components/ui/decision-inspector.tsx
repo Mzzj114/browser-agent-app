@@ -2,6 +2,7 @@ import type * as React from "react"
 import { assertNever } from "../../domain/assert-never"
 import type { ViewedSelection } from "../../domain/decision-replay"
 import type { EpisodeCore } from "../../domain/decision-run-schema"
+import { isTargetlessOperation } from "../../domain/decision-run-schema"
 import type { ResponseAction, StudyResponse } from "../../domain/study-response"
 import type { StudyRun } from "../../domain/study-run-schema"
 import { useMessages } from "../../i18n"
@@ -126,8 +127,10 @@ export function DecisionInspector({
                   head={episode.targetHead}
                   caption={messages.study.offeredTargets}
                 />
-              ) : (
+              ) : isTargetlessOperation(episode.operation) ? (
                 <p className="decision-inspector-note">{messages.study.noTargetRequired}</p>
+              ) : (
+                <p className="decision-inspector-note">{messages.study.missingTargetEvidence}</p>
               )}
             </>
           }
@@ -156,8 +159,10 @@ export function DecisionInspector({
                   head={episode.targetHead}
                   caption={messages.study.offeredTargets}
                 />
-              ) : (
+              ) : isTargetlessOperation(episode.operation) ? (
                 <p className="decision-inspector-note">{messages.study.noTargetRequired}</p>
+              ) : (
+                <p className="decision-inspector-note">{messages.study.missingTargetEvidence}</p>
               )}
               <p className="decision-inspector-note">
                 {messages.study.conditionalScoreExplanation}

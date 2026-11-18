@@ -58,10 +58,14 @@ function runStructure(run: DecisionRun) {
   return {
     observations: run.observations.map((observation) => ({
       id: observation.id,
-      file: observation.screenshot?.path.split("/").at(-1) ?? null,
-      width: observation.screenshot?.width ?? null,
-      height: observation.screenshot?.height ?? null,
-      source: observation.screenshot?.source ?? null,
+      screenshot: observation.screenshot
+        ? {
+            basename: observation.screenshot.path.split("/").at(-1) ?? null,
+            width: observation.screenshot.width,
+            height: observation.screenshot.height,
+            source: observation.screenshot.source,
+          }
+        : null,
     })),
     initialObservationId: run.initialObservationId,
     finalObservationId: run.finalObservationId,
@@ -72,6 +76,7 @@ function runStructure(run: DecisionRun) {
       executedAt: episode.executedAt,
       beforeObservationId: episode.beforeObservationId,
       afterObservationId: episode.afterObservationId,
+      outcomeKind: episode.outcome?.kind ?? null,
       hasEnteredText: episode.enteredText !== null,
       operationHead: headSignature(episode.operationHead),
       targetHead: episode.targetHead
@@ -169,6 +174,24 @@ describe.each(locales)("canonical decision run (%s)", (locale) => {
       expect(screenshot.width).toBe(1200)
       expect(screenshot.height).toBe(800)
       expect(existsSync(resolve("public", screenshot.path))).toBe(true)
+    }
+  })
+
+  it("keeps screenshot evidence in the locale-appropriate directory", () => {
+    // Given the canonical fixture for this locale.
+    const run = canonicalRun(locale)
+
+    // When every observation screenshot path is inspected.
+    // Then the zh assets live at the root and the en assets live under screenshots/en.
+    for (const observation of run.observations) {
+      const screenshot = observation.screenshot
+      if (!screenshot) continue
+      if (locale === "en") {
+        expect(screenshot.path).toMatch(/^screenshots\/en\//)
+      } else {
+        expect(screenshot.path).toMatch(/^screenshots\//)
+        expect(screenshot.path.startsWith("screenshots/en/")).toBe(false)
+      }
     }
   })
 
@@ -470,6 +493,23 @@ describe("canonical decision schema rejection", () => {
 
     // When the run is validated.
     // Then the non-argmax target selection is rejected.
+    expect(decisionRunSchema.safeParse({ ...run, episodes }).success).toBe(false)
+  })
+
+  it.each([
+    ["episode-01", "TYPE_TEXT"],
+    ["episode-04", "CLICK"],
+    ["episode-05", "SELECT"],
+  ] as const)("rejects %s (%s) without a required target head", (episodeId, operation) => {
+    // Given a target-capable operation whose target evidence is missing.
+    const run = canonicalRun("en")
+    expect(episodeFor(run, episodeId).operation).toBe(operation)
+    const episodes = run.episodes.map((episode) =>
+      episode.id === episodeId ? { ...episode, targetHead: null } : episode,
+    )
+
+    // When the run is validated.
+    // Then the missing target evidence is rejected.
     expect(decisionRunSchema.safeParse({ ...run, episodes }).success).toBe(false)
   })
 

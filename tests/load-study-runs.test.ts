@@ -167,6 +167,84 @@ describe("study run loading", () => {
     await expect(loadStudyRuns(baseUrl(), "baseline", fetcher)).rejects.toThrow(/structure/i)
   })
 
+  it("rejects a mismatched outcome presence between locales", async () => {
+    const files = fixtureFiles("baseline")
+    episodeRecord(record(files["run.en.json"]), 1)["outcome"] = {
+      kind: "observation",
+      text: "Locale-specific wording that is not compared.",
+    }
+    const { fetcher } = respondWith(files)
+
+    await expect(loadStudyRuns(baseUrl(), "baseline", fetcher)).rejects.toThrow(/structure/i)
+  })
+
+  it("rejects a mismatched outcome kind between locales", async () => {
+    const files = fixtureFiles("baseline")
+    for (const locale of ["zh", "en"] as const) {
+      episodeRecord(record(files[`run.${locale}.json`]), 1)["outcome"] = {
+        kind: locale === "en" ? "execution-error" : "observation",
+        text: "Locale-specific wording that is not compared.",
+      }
+    }
+    const { fetcher } = respondWith(files)
+
+    await expect(loadStudyRuns(baseUrl(), "baseline", fetcher)).rejects.toThrow(/structure/i)
+  })
+
+  it("rejects a mismatched entered-text presence between locales", async () => {
+    const files = fixtureFiles("baseline")
+    episodeRecord(record(files["run.en.json"]), 0)["enteredText"] = null
+    const { fetcher } = respondWith(files)
+
+    await expect(loadStudyRuns(baseUrl(), "baseline", fetcher)).rejects.toThrow(/structure/i)
+  })
+
+  it("rejects mismatched screenshot dimensions between locales", async () => {
+    const files = fixtureFiles("baseline")
+    const observations = record(files["run.en.json"])["observations"]
+    if (!Array.isArray(observations)) throw new Error("Expected observations")
+    const screenshot = record(observations[0])["screenshot"]
+    record(screenshot)["width"] = 1199
+    const { fetcher } = respondWith(files)
+
+    await expect(loadStudyRuns(baseUrl(), "baseline", fetcher)).rejects.toThrow(/structure/i)
+  })
+
+  it.each([
+    ["en", "run.en.json", "screenshots/01-home.webp"],
+    ["zh", "run.zh.json", "screenshots/en/01-home.webp"],
+  ] as const)(
+    "rejects a %s run whose screenshot is in the wrong locale directory",
+    async (locale, fileName, path) => {
+      const files = fixtureFiles("baseline")
+      const observations = record(files[fileName])["observations"]
+      if (!Array.isArray(observations)) throw new Error("Expected observations")
+      const screenshot = record(observations[0])["screenshot"]
+      record(screenshot)["path"] = path
+      const { fetcher } = respondWith(files)
+
+      await expect(loadStudyRuns(baseUrl(), "baseline", fetcher)).rejects.toThrow(
+        new RegExp(`screenshot.*${locale}|${locale}.*screenshot`, "i"),
+      )
+    },
+  )
+
+  it("does not compare localized action, outcome, or entered-text contents", async () => {
+    const files = fixtureFiles("baseline")
+    for (const locale of ["zh", "en"] as const) {
+      const episode = episodeRecord(record(files[`run.${locale}.json`]), 0)
+      episode["action"] = `Localized action (${locale})`
+      episode["enteredText"] = `Localized input (${locale})`
+      episode["outcome"] = {
+        kind: "observation",
+        text: `Localized outcome (${locale})`,
+      }
+    }
+    const { fetcher } = respondWith(files)
+
+    await expect(loadStudyRuns(baseUrl(), "baseline", fetcher)).resolves.toBeDefined()
+  })
+
   it("rejects mismatched candidate structures between locales", async () => {
     const files = fixtureFiles("candidates")
     const episode = episodeRecord(record(files["run.en.json"]))

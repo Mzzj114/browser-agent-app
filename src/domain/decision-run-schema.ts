@@ -23,6 +23,10 @@ const targetlessOperations = new Set<Operation>([
   "BLOCKED",
 ])
 
+export function isTargetlessOperation(operation: Operation): boolean {
+  return targetlessOperations.has(operation)
+}
+
 const screenshotSchema = z
   .strictObject({
     path: z.string().regex(/^screenshots\/(?:en\/)?[a-z0-9-]+\.webp$/),
@@ -296,11 +300,19 @@ export const decisionRunSchema = z
       }
       validateScoredHead(episode.operationHead, ["episodes", index, "operationHead"], context)
 
-      if (targetlessOperations.has(episode.operation) && episode.targetHead !== null) {
+      if (isTargetlessOperation(episode.operation)) {
+        if (episode.targetHead !== null) {
+          addIssue(
+            context,
+            ["episodes", index, "targetHead"],
+            `${episode.operation} requires no target head`,
+          )
+        }
+      } else if (episode.targetHead === null) {
         addIssue(
           context,
           ["episodes", index, "targetHead"],
-          `${episode.operation} requires no target head`,
+          `${episode.operation} requires a target head`,
         )
       }
 

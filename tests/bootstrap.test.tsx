@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest"
 import { mountStudyApp } from "../src/bootstrap"
 import { agentRun } from "../src/data/agent-run"
 import type { StudyCondition } from "../src/domain/study-condition"
-import { enMessages, zhMessages } from "../src/i18n"
+import { enMessages, HTML_LANG, zhMessages } from "../src/i18n"
 import { studyRuns } from "./fixtures/decision-runs.ts"
 
 type FixtureFile = "manifest.json" | "run.en.json" | "run.zh.json"
@@ -110,6 +110,8 @@ describe("participant bootstrap", () => {
     expect(screenText(element).trim()).toBe(zhMessages.study.loadingStudy)
     expect(element.querySelector(".app-shell")).toBeNull()
     expect(screenText(element)).not.toContain(studyRuns("baseline").zh.task)
+    expect(document.documentElement.lang).toBe(HTML_LANG.zh)
+    expect(document.title).toBe(zhMessages.appTitle)
 
     // When validation finishes.
     await act(async () => {
@@ -121,6 +123,39 @@ describe("participant bootstrap", () => {
     expect(element.querySelector(".study-shell")).not.toBeNull()
     expect(screenText(element)).toContain(studyRuns("baseline").zh.task)
     expect(element).not.toHaveTextContent(zhMessages.study.loadingStudy)
+  })
+
+  it("sets the document language and title for an English loading notice", async () => {
+    // Given English locale selection and fixture requests that have not completed.
+    window.history.replaceState({}, "", "/?lang=en")
+    const files = fixtureFiles("baseline")
+    const gate = deferred()
+    const { fetcher } = respondWith(files)
+    vi.stubGlobal("fetch", (async (input: RequestInfo | URL) => {
+      await gate.promise
+      return fetcher(input)
+    }) as typeof fetch)
+    const element = rootElement()
+    const applicationBase = applicationBaseUrl()
+
+    // When the participant app starts.
+    const mounting = startMount(element, applicationBase, "baseline")
+
+    // Then the English startup copy is paired with an English document.
+    expect(screenText(element).trim()).toBe(enMessages.study.loadingStudy)
+    expect(document.documentElement.lang).toBe(HTML_LANG.en)
+    expect(document.title).toBe(enMessages.appTitle)
+
+    // When validation finishes.
+    await act(async () => {
+      gate.resolve()
+      await mounting
+    })
+
+    // Then the English workspace still matches the document language.
+    expect(element.querySelector(".study-shell")).not.toBeNull()
+    expect(document.documentElement.lang).toBe(HTML_LANG.en)
+    expect(document.title).toBe(enMessages.appTitle)
   })
 
   it("mounts from an application root base and resolves the study directory", async () => {
@@ -200,6 +235,8 @@ describe("participant bootstrap", () => {
     // Then only localized safe error copy is rendered.
     expect(screenText(element)).toContain(enMessages.study.loadErrorTitle)
     expect(screenText(element)).toContain(enMessages.study.loadErrorHint)
+    expect(document.documentElement.lang).toBe(HTML_LANG.en)
+    expect(document.title).toBe(enMessages.appTitle)
     expect(element.querySelector(".app-shell")).toBeNull()
     expect(screenText(element)).not.toMatch(/condition|HTTP|Zod|Failed to load|fixture/i)
 

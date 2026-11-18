@@ -180,6 +180,21 @@ describe("study copy", () => {
     }
   })
 
+  it("labels probability values as synthetic authored examples rather than measurements", () => {
+    expect(enStudyMessages.conditionalScoreExplanation).toMatch(
+      /synthetic authored examples.*not captured Jev model output.*correctness estimates/i,
+    )
+    expect(enStudyMessages.conditionalScoreExplanation).toMatch(
+      /within each operation or target list/i,
+    )
+    expect(enStudyMessages.conditionalScoreExplanation).toMatch(/not overall action scores/i)
+    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/合成的编写示例/)
+    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/并非采集的 Jev 模型输出/)
+    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/不代表正确性估计/)
+    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/同一操作或同一目标列表内部/)
+    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/不代表整体操作得分/)
+  })
+
   it("renders the approved before-step captions", () => {
     expect(enStudyMessages.beforeStepCaption(4, 8)).toBe("Before step 4 of 8")
     expect(zhStudyMessages.beforeStepCaption(4, 8)).toBe("第 4 步操作前 · 共 8 步")

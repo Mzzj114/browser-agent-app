@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client"
 import { App } from "./App"
 import { loadStudyRuns } from "./data/load-study-runs"
 import type { StudyCondition } from "./domain/study-condition"
-import { initialLocale, messagesFor } from "./i18n"
+import { HTML_LANG, initialLocale, messagesFor } from "./i18n"
 
 type BootstrapNoticeProps = {
   readonly text: string
@@ -37,7 +37,12 @@ export async function mountStudyApp(
   condition: StudyCondition,
 ): Promise<void> {
   const root = createRoot(element)
-  const messages = messagesFor(initialLocale()).study
+  const locale = initialLocale()
+  const localizedMessages = messagesFor(locale)
+  const messages = localizedMessages.study
+
+  document.documentElement.lang = HTML_LANG[locale]
+  document.title = localizedMessages.appTitle
 
   root.render(
     <StrictMode>

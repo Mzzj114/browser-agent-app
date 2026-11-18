@@ -20,6 +20,7 @@ export type StudyMessages = {
   readonly probabilityColumn: string
   readonly selected: string
   readonly noTargetRequired: string
+  readonly missingTargetEvidence: string
   readonly markEarliestMistake: string
   readonly clearMark: string
   readonly yourMark: string
@@ -66,11 +67,13 @@ export const zhStudyMessages = {
   probabilityColumn: "概率",
   selected: "已选择",
   noTargetRequired: "无需选择目标。",
+  missingTargetEvidence: "此操作缺少目标证据。",
   markEarliestMistake: "标记为最早错误操作",
   clearMark: "清除标记",
   yourMark: "你的标记",
   syntheticProvenance: "合成的决策回放。运行记录与页面状态为编写示例，并非采集的模型输出。",
-  conditionalScoreExplanation: "概率仅适用于同一操作或同一目标列表内部，不代表整体操作得分。",
+  conditionalScoreExplanation:
+    "概率数值为合成的编写示例，并非采集的 Jev 模型输出，也不代表正确性估计；概率仅适用于同一操作或同一目标列表内部，不代表整体操作得分。",
   roundingCaveat: "百分比四舍五入保留一位小数，合计可能不等于 100%。",
   localizationPrompt: "哪一步包含 Agent 最早的错误操作？",
   localizationPlaceholder: "请选择步骤或“无法判断”",
@@ -119,13 +122,14 @@ export const enStudyMessages = {
   probabilityColumn: "Probability",
   selected: "Selected",
   noTargetRequired: "No target required.",
+  missingTargetEvidence: "Target evidence is missing for this operation.",
   markEarliestMistake: "Mark as earliest mistake",
   clearMark: "Clear mark",
   yourMark: "Your mark",
   syntheticProvenance:
     "Synthetic decision replay. The run and its page states are authored examples, not captured model output.",
   conditionalScoreExplanation:
-    "Probabilities apply within each operation or target list only; they are not overall action scores.",
+    "Probability values are synthetic authored examples, not captured Jev model output or correctness estimates; they apply within each operation or target list only and are not overall action scores.",
   roundingCaveat:
     "Percentages are rounded to one decimal place and may not add up to exactly 100%.",
   localizationPrompt: "Which step contains the agent's earliest mistaken action?",
