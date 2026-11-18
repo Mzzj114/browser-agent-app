@@ -4,10 +4,11 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host 127.0.0.1",
-    "build": "tsc --noEmit && vite build",
+    "dev": "node scripts/prepare-study.ts && vite --host 127.0.0.1",
+    "build": "node scripts/prepare-study.ts && tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
     "screenshots": "node scripts/generate-screenshots.ts",
+    "prepare:study": "node scripts/prepare-study.ts",
     "typecheck": "tsc --noEmit",
     "lint": "biome check .",
     "format": "biome format --write .",

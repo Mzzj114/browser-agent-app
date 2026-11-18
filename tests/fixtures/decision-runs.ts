@@ -6,6 +6,9 @@ import {
   type Operation,
   type ScoredCandidate,
 } from "../../src/domain/decision-run-schema.ts"
+import { projectRun } from "../../src/domain/project-run.ts"
+import type { StudyCondition } from "../../src/domain/study-condition.ts"
+import type { StudyRuns } from "../../src/domain/study-run-schema.ts"
 import type { Locale } from "../../src/i18n/locale.ts"
 
 const canonicalRuns = {
@@ -302,4 +305,13 @@ export function edgeRun(kind: EdgeRunKind): DecisionRun {
 
 function assertEdgeKind(kind: never): never {
   throw new Error(`Unsupported edge run: ${String(kind)}`)
+}
+
+const studyFixtureRevision = "0".repeat(64)
+
+export function studyRuns(condition: StudyCondition): StudyRuns {
+  return {
+    zh: projectRun(canonicalRun("zh"), condition, studyFixtureRevision),
+    en: projectRun(canonicalRun("en"), condition, studyFixtureRevision),
+  }
 }
