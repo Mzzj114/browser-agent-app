@@ -44,17 +44,17 @@ Throwaway visual exploration is under `.superpowers/brainstorm/778-1794956755/`.
 
 Use the **same underlying synthetic run** in every condition. This design call was adopted through document approval to isolate evidence exposure; it does not specify a participant-allocation protocol.
 
-| Evidence / behavior | Baseline | Candidates | Probabilities |
-| --- | --- | --- | --- |
-| Task and agent-reported result | Same | Same | Same |
-| Chronological action labels and factual outcomes/errors | Same | Same | Same |
-| Before-action screenshots and separate final page state | Same | Same | Same |
-| Replay, zoom, navigation, viewing/marking, response form | Same | Same | Same |
-| Offered operations and selected operation | No | Yes | Yes |
-| Offered targets for selected operation and selected target | No | Yes | Yes |
-| Per-candidate operation and target probabilities | No | No | Yes |
-| Raw code, thinking, payload viewers | No | No | No |
-| Undocumented confidence fields / correctness verdicts | No | No | No |
+| Evidence / behavior                                        | Baseline | Candidates | Probabilities |
+| ---------------------------------------------------------- | -------- | ---------- | ------------- |
+| Task and agent-reported result                             | Same     | Same       | Same          |
+| Chronological action labels and factual outcomes/errors    | Same     | Same       | Same          |
+| Before-action screenshots and separate final page state    | Same     | Same       | Same          |
+| Replay, zoom, navigation, viewing/marking, response form   | Same     | Same       | Same          |
+| Offered operations and selected operation                  | No       | Yes        | Yes           |
+| Offered targets for selected operation and selected target | No       | Yes        | Yes           |
+| Per-candidate operation and target probabilities           | No       | No         | Yes           |
+| Raw code, thinking, payload viewers                        | No       | No         | No            |
+| Undocumented confidence fields / correctness verdicts      | No       | No         | No            |
 
 The baseline's action label necessarily names the executed action; it does not gain a separate offered-candidate list. Candidate information supplements labels rather than replacing them.
 

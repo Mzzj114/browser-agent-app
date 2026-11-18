@@ -40,24 +40,24 @@
 
 ## File Structure and Boundaries
 
-| Files | Responsibility |
-| --- | --- |
-| `fixtures/decision-runs/shopping.{zh,en}.json` | Canonical synthetic authoring data, never browser-imported |
-| `tests/fixtures/shopping.ground-truth.json` | Researcher-only earliest-error annotation, not runtime data |
-| `src/domain/decision-run-schema.ts` | Canonical episode/observation schema and types |
-| `src/domain/study-condition.ts`, `src/study-condition.ts` | Condition type and the branch's fixed condition |
-| `src/domain/study-run-schema.ts`, `src/domain/project-run.ts` | Strict projected schemas and deterministic evidence projection |
-| `scripts/study-fixtures.ts`, `scripts/prepare-study.ts` | Generate only the pinned runtime fixture set |
-| `public/study/` (generated, ignored) | Manifest and permitted locale JSON; copied by Vite to `dist/study/` |
-| `src/data/load-study-runs.ts` | Validate manifest/files/condition/locale identity before mounting |
-| `src/domain/decision-replay.ts`, `src/domain/study-response.ts` | Pure replay transitions and response validation/reducer |
-| `src/components/ui/{execution-rail,candidate-table,decision-inspector,study-response-form}.tsx` | New focused participant components |
-| `src/i18n/study-messages.ts` | Typed bilingual study copy, attached to existing `Messages.study` |
-| `src/bootstrap.tsx`, `src/App.tsx` | Loading/error boundary at startup, then common workspace composition |
-| `src/components/ui/{browser-frame,replay-controls}.tsx` | Retained screenshot/replay primitives with structural input types |
-| `src/styles/study.css` | New bounded layout/scroll rules, using existing tokens |
-| `scripts/study-build.ts`, `scripts/{verify,compare}-study-builds.ts` | Production artifact and cross-branch equivalence checks |
-| `tests/`, `e2e/` | Unit/component, production-browser, and artifact safeguards |
+| Files                                                                                           | Responsibility                                                       |
+| ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| `fixtures/decision-runs/shopping.{zh,en}.json`                                                  | Canonical synthetic authoring data, never browser-imported           |
+| `tests/fixtures/shopping.ground-truth.json`                                                     | Researcher-only earliest-error annotation, not runtime data          |
+| `src/domain/decision-run-schema.ts`                                                             | Canonical episode/observation schema and types                       |
+| `src/domain/study-condition.ts`, `src/study-condition.ts`                                       | Condition type and the branch's fixed condition                      |
+| `src/domain/study-run-schema.ts`, `src/domain/project-run.ts`                                   | Strict projected schemas and deterministic evidence projection       |
+| `scripts/study-fixtures.ts`, `scripts/prepare-study.ts`                                         | Generate only the pinned runtime fixture set                         |
+| `public/study/` (generated, ignored)                                                            | Manifest and permitted locale JSON; copied by Vite to `dist/study/`  |
+| `src/data/load-study-runs.ts`                                                                   | Validate manifest/files/condition/locale identity before mounting    |
+| `src/domain/decision-replay.ts`, `src/domain/study-response.ts`                                 | Pure replay transitions and response validation/reducer              |
+| `src/components/ui/{execution-rail,candidate-table,decision-inspector,study-response-form}.tsx` | New focused participant components                                   |
+| `src/i18n/study-messages.ts`                                                                    | Typed bilingual study copy, attached to existing `Messages.study`    |
+| `src/bootstrap.tsx`, `src/App.tsx`                                                              | Loading/error boundary at startup, then common workspace composition |
+| `src/components/ui/{browser-frame,replay-controls}.tsx`                                         | Retained screenshot/replay primitives with structural input types    |
+| `src/styles/study.css`                                                                          | New bounded layout/scroll rules, using existing tokens               |
+| `scripts/study-build.ts`, `scripts/{verify,compare}-study-builds.ts`                            | Production artifact and cross-branch equivalence checks              |
+| `tests/`, `e2e/`                                                                                | Unit/component, production-browser, and artifact safeguards          |
 
 Keep the old `run-schema.ts`, `replay.ts`, fixture loader, and technical primitives for legacy showcase/unit coverage during migration. Do not import the old fixture loader from the new app entry. The existing `showcase.html` remains developer-only; do not add it as a production build input. This avoids destabilizing unrelated primitives while replacing the participant workspace.
 

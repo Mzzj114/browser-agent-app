@@ -34,12 +34,14 @@
 ### Task 1: Action labels and technical-code sanitation
 
 **Files:**
+
 - Modify: `src/domain/run-schema.ts`
 - Modify: `src/data/agent-run.json`, `src/data/agent-run.en.json`
 - Create: `src/domain/technical-details.ts`
 - Test: `tests/fixture.test.ts`, `tests/technical-details.test.ts`
 
 **Interfaces:**
+
 - Produces: `AgentStep["action"]: string`
 - Produces: `sanitizeTechnicalCode(code: string, placeholder: string): string`
 
@@ -53,10 +55,12 @@
 ### Task 2: Two-phase decision state
 
 **Files:**
+
 - Modify: `src/domain/replay.ts`
 - Test: `tests/replay.test.ts`
 
 **Interfaces:**
+
 - Produces: `DecisionState = { status: "pending" | "submitted"; choice: DecisionChoice | null; reason: string; revisions: number }`
 - Produces: `DecisionAction = {type:"select",choice} | {type:"reason",reason} | {type:"submit"}`
 - Produces: `initialDecisionState(): DecisionState`
@@ -69,6 +73,7 @@
 ### Task 3: Bilingual copy catalogue
 
 **Files:**
+
 - Modify: `src/i18n/messages.ts`
 - Test: `tests/i18n.test.tsx` (compile-level coverage)
 
@@ -80,6 +85,7 @@
 ### Task 4: Action-first StepCard with technical details
 
 **Files:**
+
 - Modify: `src/components/ui/step-card.tsx`
 - Modify: `src/components/ui/code-cell.tsx` (accept display code)
 - Modify: `src/styles/execution.css`
@@ -93,6 +99,7 @@
 ### Task 5: Evidence identity, replay bar, step jump
 
 **Files:**
+
 - Modify: `src/components/ui/browser-frame.tsx`
 - Modify: `src/components/ui/replay-controls.tsx`
 - Modify: `src/App.tsx`
@@ -109,6 +116,7 @@
 ### Task 6: Enlarged viewer keeps task, identity, and navigation
 
 **Files:**
+
 - Modify: `src/components/ui/screenshot-dialog.tsx`
 - Modify: `src/styles/browser.css`
 - Test: `tests/primitives.test.tsx`
@@ -121,6 +129,7 @@
 ### Task 7: Tentative selection, explicit submission, optional reason
 
 **Files:**
+
 - Modify: `src/components/ui/decision-footer.tsx`
 - Modify: `src/styles/controls.css`
 - Modify: `src/App.tsx`
@@ -136,6 +145,7 @@
 ### Task 8: Workspace wiring, inspection hint, visual polish
 
 **Files:**
+
 - Modify: `src/App.tsx`, `src/showcase.tsx`
 - Modify: `src/styles/workspace.css`, `src/styles/execution.css`, `src/styles/controls.css`
 - Test: `tests/workspace.test.tsx`
@@ -148,6 +158,7 @@
 ### Task 9: End-to-end and build verification
 
 **Files:**
+
 - Modify: `e2e/workspace.e2e.ts`
 
 - [x] Update e2e selectors for action labels, replay bar, tentative/submitted decisions, and viewer navigation.
