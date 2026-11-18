@@ -147,6 +147,12 @@ for (const locale of ["zh", "en"] as const) {
       const initialImage = page.locator(".page-screenshot")
       await expect(initialImage).toBeVisible()
       const initialReference = await screenshotReference(initialImage)
+      await expect(page.locator(".study-context-panel").nth(0).locator("p")).toHaveText(
+        runs[locale].task,
+      )
+      await expect(page.locator(".study-context-panel").nth(1).locator("p").first()).toHaveText(
+        runs[locale].report,
+      )
       await capture(page, locale, viewport, "initial")
 
       // The long context is scrollable without stretching the shell.
@@ -186,6 +192,10 @@ for (const locale of ["zh", "en"] as const) {
           page.getByRole("table", { name: text.offeredTargets }).locator("tbody tr"),
         ).toHaveCount(250)
         await expect(page.getByRole("table").locator("tbody button")).toHaveCount(0)
+        await expect(page.getByRole("table").locator("tbody a")).toHaveCount(0)
+        await expect(
+          page.getByRole("table").locator("tbody input, tbody textarea, tbody select"),
+        ).toHaveCount(0)
       }
 
       const mark = page.getByRole("button", { name: text.mark, exact: true })
