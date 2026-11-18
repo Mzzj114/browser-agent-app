@@ -1,51 +1,45 @@
-import { ArrowDown, ListTree } from "lucide-react"
-import { useCallback, useEffect, useReducer, useRef, useState } from "react"
+import { ListTree } from "lucide-react"
+import { useReducer, useState } from "react"
+import { BrowserFrame } from "./components/ui/browser-frame"
+import { BrandMark, StatusBadge } from "./components/ui/buttons"
+import { DecisionInspector } from "./components/ui/decision-inspector"
+import { DesktopOnlyMessage } from "./components/ui/desktop-only"
+import { ExecutionRail } from "./components/ui/execution-rail"
+import { LanguageToggle } from "./components/ui/language-toggle"
+import { ReplayControls } from "./components/ui/replay-controls"
+import { StudyResponseForm } from "./components/ui/study-response-form"
 import {
-  AgentPrompt,
-  BrandMark,
-  BrowserFrame,
-  DecisionFooter,
-  DesktopOnlyMessage,
-  IconButton,
-  LanguageToggle,
-  MessageBlock,
-  ReplayControls,
-  StatusBadge,
-  StepCard,
-} from "./components/ui"
-import { agentRuns } from "./data/agent-run"
-import type { ReplaySelection } from "./domain/replay"
+  initialViewedSelection,
+  nextViewedSelection,
+  normalizeViewedSelection,
+  previousViewedSelection,
+  type ViewedSelection,
+  viewedObservation,
+} from "./domain/decision-replay"
 import {
-  clampReplaySelection,
-  finalReplaySelection,
-  initialDecisionState,
-  initialReplaySelection,
-  nextReplaySelection,
-  previousReplaySelection,
-  stepReplaySelection,
-  updateDecision,
-} from "./domain/replay"
-import type { AgentRun, PageState } from "./domain/run-schema"
+  initialStudyResponse,
+  type ResponseAction,
+  type StudyResponse,
+  updateStudyResponse,
+} from "./domain/study-response"
+import type { StudyRun, StudyRuns } from "./domain/study-run-schema"
 import type { Locale } from "./i18n"
 import { LocaleProvider, useLocale } from "./i18n"
 
-class InvalidReplayIndexError extends Error {
-  public readonly index: number
-
-  public constructor(index: number) {
-    super("Replay index is outside the recorded run")
-    this.name = "InvalidReplayIndexError"
-    this.index = index
-  }
+type AppProps = {
+  readonly runs: StudyRuns
 }
 
-function viewedPageState(run: AgentRun, selection: ReplaySelection): PageState {
-  const index = selection.kind === "final" ? run.steps.length - 1 : selection.stepIndex
-  const step = run.steps[index]
-  if (step === undefined) {
-    throw new InvalidReplayIndexError(index)
-  }
-  return step.pageState
+type ViewedEpisode = {
+  readonly index: number
+  readonly episode: StudyRun["episodes"][number]
+}
+
+function selectedEpisode(run: StudyRun, viewed: ViewedSelection): ViewedEpisode | null {
+  if (viewed.kind === "final") return null
+  const index = run.episodes.findIndex((episode) => episode.id === viewed.episodeId)
+  const episode = run.episodes[index]
+  return index < 0 || episode === undefined ? null : { index, episode }
 }
 
 function formatCapturedAt(iso: string, locale: Locale): string {
@@ -57,96 +51,101 @@ function formatCapturedAt(iso: string, locale: Locale): string {
   }).format(date)
 }
 
-export function App() {
+export function App({ runs }: AppProps): React.JSX.Element {
   return (
     <LocaleProvider>
-      <Workspace />
+      <StudyWorkspace runs={runs} />
     </LocaleProvider>
   )
 }
 
-function Workspace() {
+function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
   const { locale, messages } = useLocale()
-  const run = agentRuns[locale]
-  const [selection, setSelection] = useState<ReplaySelection>(initialReplaySelection)
-  const activeSelection = clampReplaySelection(selection, run.steps.length)
-  const [decision, dispatchDecision] = useReducer(updateDecision, null, () =>
-    initialDecisionState(),
+  const run = runs[locale]
+  const episodeIds = run.episodes.map((episode) => episode.id)
+  const [viewed, setViewed] = useState<ViewedSelection>(initialViewedSelection)
+  const activeViewed = normalizeViewedSelection(viewed, episodeIds)
+  const viewedEpisode = selectedEpisode(run, activeViewed)
+  const observation = viewedObservation(run, activeViewed)
+  const [response, dispatchResponse] = useReducer(
+    (state: StudyResponse, action: ResponseAction) =>
+      updateStudyResponse(state, action, episodeIds),
+    initialStudyResponse(),
   )
-  const chatScrollRef = useRef<HTMLDivElement>(null)
-  const [showJump, setShowJump] = useState(false)
-  const syncJump = useCallback(() => {
-    const scroller = chatScrollRef.current
-    if (scroller === null) return
-    const distanceFromBottom = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight
-    setShowJump(distanceFromBottom > 24)
-  }, [])
-  useEffect(() => {
-    const scroller = chatScrollRef.current
-    if (scroller === null) return
-    syncJump()
-    if (typeof ResizeObserver === "undefined") return
-    const observer = new ResizeObserver(syncJump)
-    for (const child of scroller.children) {
-      observer.observe(child)
-    }
-    return () => observer.disconnect()
-  }, [syncJump])
-  const jumpToLatest = () => {
-    const scroller = chatScrollRef.current
-    if (scroller === null) return
-    scroller.scrollTo({ top: scroller.scrollHeight, behavior: "smooth" })
-  }
-  const pageState = viewedPageState(run, activeSelection)
-  const selectedStepIndex = activeSelection.kind === "step" ? activeSelection.stepIndex : null
-  const selectedStep = selectedStepIndex === null ? null : (run.steps[selectedStepIndex] ?? null)
+
   const stateLabel =
-    selectedStep === null
+    viewedEpisode === null
       ? messages.lastRecordedState
-      : messages.stepRecordedAfter(selectedStep.ordinal, run.steps.length)
-  const stateNote = selectedStep === null ? messages.lastRecordedStateNote : null
-  const actionLabel = selectedStep?.action ?? null
-  const capturedAtLabel = messages.capturedAt(formatCapturedAt(pageState.capturedAt, locale))
-  const stepCount = run.steps.length
-  const goToStep = (stepIndex: number) => setSelection(stepReplaySelection(stepIndex))
-  const goPrevious = () => setSelection(previousReplaySelection(activeSelection, stepCount))
-  const goNext = () => setSelection(nextReplaySelection(activeSelection, stepCount))
-  const goFinal = () => setSelection(finalReplaySelection())
+      : messages.study.beforeStepCaption(viewedEpisode.episode.ordinal, run.episodes.length)
+  const stateNote = viewedEpisode === null ? messages.lastRecordedStateNote : null
+  const actionLabel = viewedEpisode?.episode.action ?? null
+  const capturedAtLabel = messages.capturedAt(formatCapturedAt(observation.capturedAt, locale))
+
+  const viewEpisode = (episodeId: string) => {
+    setViewed({ kind: "episode", episodeId })
+  }
+  const goToStep = (stepIndex: number) => {
+    const episode = run.episodes[stepIndex]
+    if (episode) viewEpisode(episode.id)
+  }
+  const goPrevious = () => {
+    setViewed((current) => previousViewedSelection(current, episodeIds))
+  }
+  const goNext = () => {
+    setViewed((current) => nextViewedSelection(current, episodeIds))
+  }
+  const goFinal = () => {
+    setViewed(initialViewedSelection())
+  }
 
   return (
     <>
-      <div className="app-shell">
+      <div className="app-shell study-shell">
         <h1 className="sr-only">{messages.workspaceHeading}</h1>
         <header className="product-header">
           <BrandMark />
           <div className="product-header-actions">
-            <StatusBadge label={messages.stepCountBadge(run.steps.length)} icon={<ListTree />} />
+            <StatusBadge label={messages.stepCountBadge(run.episodes.length)} icon={<ListTree />} />
             <LanguageToggle />
           </div>
         </header>
-        <main className="workspace">
-          <section className="browser-panel" aria-labelledby="browser-heading">
-            <h2 id="browser-heading" className="sr-only">
+
+        <section className="study-context" aria-label={messages.study.originalTask}>
+          <article className="study-context-panel" aria-labelledby="study-task-heading">
+            <h2 id="study-task-heading">{messages.study.originalTask}</h2>
+            <p>{run.task}</p>
+          </article>
+          <article className="study-context-panel" aria-labelledby="study-report-heading">
+            <h2 id="study-report-heading">{messages.study.agentReportedResult}</h2>
+            <p>{run.report}</p>
+            <p className="study-context-note">{messages.study.syntheticProvenance}</p>
+          </article>
+        </section>
+
+        <main className="study-main">
+          <ExecutionRail
+            episodes={run.episodes}
+            viewed={activeViewed}
+            localization={response.localization}
+            onView={viewEpisode}
+          />
+
+          <section className="study-page" aria-labelledby="study-page-heading">
+            <h2 id="study-page-heading" className="sr-only">
               {messages.pageResultHeading}
             </h2>
             <BrowserFrame
-              pageState={pageState}
-              stepCount={stepCount}
+              pageState={observation}
+              stepCount={run.episodes.length}
               stateLabel={stateLabel}
               stateNote={stateNote}
               actionLabel={actionLabel}
               capturedAtLabel={capturedAtLabel}
             />
-            <div className="replay-bar">
-              <div className="replay-bar-heading">
-                <span className="replay-bar-label">{messages.replayBarLabel}</span>
-                <span className="replay-bar-count">
-                  {messages.executionStepCount(run.steps.length)}
-                </span>
-              </div>
+            <div className="study-replay-bar">
               <ReplayControls
-                currentStep={selectedStepIndex}
-                steps={run.steps}
+                currentStep={viewedEpisode?.index ?? null}
+                steps={run.episodes}
                 onPrevious={goPrevious}
                 onNext={goNext}
                 onFinal={goFinal}
@@ -154,53 +153,24 @@ function Workspace() {
               />
             </div>
           </section>
-          <aside className="agent-panel" aria-label={messages.agentRecordLabel}>
-            <div className="chat-shell">
-              <div className="chat-scroll" ref={chatScrollRef} onScroll={syncJump}>
-                <div className="chat-messages">
-                  <MessageBlock name={messages.userSpeaker} speaker="user">
-                    {run.task}
-                  </MessageBlock>
-                  <MessageBlock name={messages.agentSpeaker} speaker="assistant">
-                    {run.final.text}
-                  </MessageBlock>
-                  <DecisionFooter state={decision} onDecision={dispatchDecision} />
-                </div>
-                <section className="execution-history" aria-labelledby="execution-heading">
-                  <div className="execution-heading">
-                    <h2 id="execution-heading">{messages.executionHistory}</h2>
-                    <span>{messages.executionStepCount(run.steps.length)}</span>
-                  </div>
-                  <p className="inspection-hint">
-                    <strong>{messages.inspectionHintLabel}</strong>
-                    {messages.inspectionHint}
-                  </p>
-                  <div className="step-list">
-                    {run.steps.map((step, index) => (
-                      <StepCard
-                        key={step.id}
-                        step={step}
-                        selected={selectedStepIndex === index}
-                        onSelect={() => goToStep(index)}
-                      />
-                    ))}
-                  </div>
-                </section>
-              </div>
-              {showJump ? (
-                <IconButton
-                  className="chat-jump"
-                  label={messages.jumpToLatest}
-                  variant="outlined"
-                  onClick={jumpToLatest}
-                >
-                  <ArrowDown />
-                </IconButton>
-              ) : null}
-            </div>
-            <AgentPrompt model={run.engine.model} />
+
+          <aside className="study-inspector-panel">
+            <DecisionInspector
+              run={run}
+              viewed={activeViewed}
+              response={response}
+              onResponse={dispatchResponse}
+            />
           </aside>
         </main>
+
+        <section className="study-response" aria-label={messages.decisionQuestion}>
+          <StudyResponseForm
+            episodes={run.episodes}
+            state={response}
+            onResponse={dispatchResponse}
+          />
+        </section>
       </div>
       <DesktopOnlyMessage />
     </>

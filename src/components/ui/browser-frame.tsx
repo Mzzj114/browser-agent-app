@@ -1,10 +1,20 @@
 import { Globe2, ImageOff, LockKeyhole } from "lucide-react"
 import { useState } from "react"
-import type { PageState } from "../../domain/run-schema"
 import { useMessages } from "../../i18n"
 
+export type BrowserFramePageState = {
+  readonly url: string
+  readonly title: string
+  readonly capturedAt: string
+  readonly screenshot: {
+    readonly path: string
+    readonly width: number
+    readonly height: number
+  } | null
+}
+
 type BrowserFrameProps = {
-  readonly pageState: PageState
+  readonly pageState: BrowserFramePageState
   readonly stepCount: number
   readonly stateLabel: string
   readonly stateNote: string | null
@@ -23,11 +33,18 @@ export function BrowserFrame({
   const messages = useMessages()
   const screenshot = pageState.screenshot
   const [zoomedPath, setZoomedPath] = useState<string | null>(null)
-  const isZoomed = screenshot !== null && zoomedPath === screenshot.path
+  const [failedPath, setFailedPath] = useState<string | null>(null)
+  const hasScreenshot = screenshot !== null && failedPath !== screenshot.path
+  const isZoomed = hasScreenshot && zoomedPath === screenshot.path
   const toggleZoom = () => {
-    if (screenshot === null) return
+    if (!hasScreenshot) return
     setZoomedPath((current) => (current === screenshot.path ? null : screenshot.path))
   }
+  const markMissing = () => {
+    if (screenshot === null) return
+    setFailedPath(screenshot.path)
+  }
+
   return (
     <section className="browser-frame" aria-label={messages.browserLabel}>
       <div className="browser-tabs">
@@ -54,7 +71,7 @@ export function BrowserFrame({
         {stateNote === null ? null : <span className="browser-state-badge">{stateNote}</span>}
       </div>
       <div className="browser-viewport">
-        {screenshot ? (
+        {hasScreenshot ? (
           <button
             type="button"
             className="screenshot-trigger"
@@ -70,6 +87,7 @@ export function BrowserFrame({
               alt={messages.screenshotAlt(pageState.title)}
               decoding="async"
               fetchPriority="high"
+              onError={markMissing}
             />
           </button>
         ) : (

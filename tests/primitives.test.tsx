@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { ZoomIn } from "lucide-react"
 import type { ReactElement } from "react"
@@ -115,6 +115,41 @@ describe("primitive controls", () => {
     expect(screen.getByText("此步骤没有可用截图")).toBeInTheDocument()
     expect(screen.getByText("录制执行 · 8 步")).toBeInTheDocument()
     expect(screen.queryByRole("img")).not.toBeInTheDocument()
+  })
+
+  it("treats a failed image request as missing evidence and recovers on another path", () => {
+    // Given a structural recorded page whose screenshot fails to decode.
+    const brokenState = {
+      url: "https://mall.example/checkout",
+      title: "Checkout | Cloud Mall",
+      capturedAt: samplePage.capturedAt,
+      screenshot: { path: "screenshots/broken.webp", width: 1200, height: 800 },
+    }
+    const view = renderWithLocale(<BrowserFrame {...browserProps} pageState={brokenState} />)
+    fireEvent.error(screen.getByRole("img"))
+
+    // Then missing evidence is explicit while URL, title, and caption stay visible.
+    expect(screen.getByText("此步骤没有可用截图")).toBeVisible()
+    expect(screen.getByText("https://mall.example/checkout")).toBeVisible()
+    expect(screen.getByText("Checkout | Cloud Mall")).toBeVisible()
+    expect(screen.getByText("步骤 2 / 8 · 此步之后录制")).toBeVisible()
+    expect(screen.queryByRole("img")).toBeNull()
+
+    // When another healthy path is viewed, the image is restored without an after-frame.
+    const healthyState = {
+      ...brokenState,
+      screenshot: { ...brokenState.screenshot, path: "screenshots/05-product.webp" },
+    }
+    view.rerender(
+      <LocaleProvider initialLocale="zh" syncDocument={false}>
+        <BrowserFrame {...browserProps} pageState={healthyState} />
+      </LocaleProvider>,
+    )
+    const image = screen.getByRole("img")
+    expect(image).toHaveAttribute("src", "screenshots/05-product.webp")
+    expect(image).toHaveAttribute("width", "1200")
+    expect(image).toHaveAttribute("height", "800")
+    expect(screen.queryByText("此步骤没有可用截图")).toBeNull()
   })
 
   it("labels the recorded state and toggles the screenshot between fit and actual size", async () => {

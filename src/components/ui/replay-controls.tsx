@@ -1,11 +1,16 @@
 import { ChevronLeft, ChevronRight, RotateCcw } from "lucide-react"
-import type { AgentStep } from "../../domain/run-schema"
 import { useMessages } from "../../i18n"
 import { ActionButton, IconButton } from "./buttons"
 
+export type ReplayStep = {
+  readonly id: string
+  readonly ordinal: number
+  readonly action: string
+}
+
 type ReplayControlsProps = {
   readonly currentStep: number | null
-  readonly steps: readonly AgentStep[]
+  readonly steps: readonly ReplayStep[]
   readonly onPrevious: () => void
   readonly onNext: () => void
   readonly onFinal: () => void

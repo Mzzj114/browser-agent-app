@@ -41,6 +41,9 @@ export type StudyMessages = {
   readonly responseErrorMessages: Readonly<Record<ResponseError, string>>
   readonly onScreenOnly: string
   readonly responseSubmittedStatus: string
+  readonly loadingStudy: string
+  readonly loadErrorTitle: string
+  readonly loadErrorHint: string
 }
 
 export const zhStudyMessages = {
@@ -90,6 +93,9 @@ export const zhStudyMessages = {
   },
   onScreenOnly: "评估仅显示在本页，刷新后将清除。",
   responseSubmittedStatus: "评估仅记录在本页。",
+  loadingStudy: "正在加载研究材料…",
+  loadErrorTitle: "无法加载研究材料",
+  loadErrorHint: "请刷新页面重试。如果问题持续出现，请联系研究人员。",
 } satisfies StudyMessages
 
 export const enStudyMessages = {
@@ -145,4 +151,7 @@ export const enStudyMessages = {
   },
   onScreenOnly: "Shown on this page only. Reloading clears your response.",
   responseSubmittedStatus: "Response recorded on this page only.",
+  loadingStudy: "Loading study materials…",
+  loadErrorTitle: "Unable to load the study materials",
+  loadErrorHint: "Refresh the page to try again. If the problem continues, contact the researcher.",
 } satisfies StudyMessages

@@ -2,7 +2,6 @@ import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 import { App } from "../src/App"
-import { agentRuns } from "../src/data/agent-run"
 import {
   detectLocale,
   enMessages,
@@ -11,6 +10,7 @@ import {
   zhMessages,
 } from "../src/i18n"
 import { enStudyMessages, zhStudyMessages } from "../src/i18n/study-messages"
+import { studyRuns } from "./fixtures/decision-runs.ts"
 
 describe("locale detection", () => {
   it("prefers the query parameter, then stored choice, then browser language", () => {
@@ -59,15 +59,17 @@ describe("locale persistence", () => {
 })
 
 describe("bilingual workspace", () => {
-  it("renders the English interface and fixture when English is selected", () => {
-    window.localStorage.setItem(LOCALE_STORAGE_KEY, "en")
+  it("renders the English interface around the same projected run", () => {
+    window.history.replaceState({}, "", "/?lang=en")
+    const runs = studyRuns("baseline")
 
-    render(<App />)
+    render(<App runs={runs} />)
 
-    expect(screen.getByText(agentRuns.en.final.text)).toBeInTheDocument()
-    const browser = screen.getByRole("region", { name: "Agent browser" })
-    expect(browser).toBeInTheDocument()
+    expect(screen.getByText(runs.en.task)).toBeVisible()
+    expect(screen.getByText(runs.en.report)).toBeVisible()
+    expect(screen.getByRole("region", { name: "Agent browser" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Fulfills the request" })).toBeInTheDocument()
+    const browser = screen.getByRole("region", { name: "Agent browser" })
     expect(within(browser).getByText("Last recorded state")).toBeVisible()
     expect(document.documentElement.lang).toBe("en")
     expect(document.title).toBe("Browser Assistant")
@@ -75,11 +77,12 @@ describe("bilingual workspace", () => {
 
   it("switches language from the header and remembers the choice", async () => {
     const user = userEvent.setup()
+    const runs = studyRuns("baseline")
 
-    render(<App />)
+    render(<App runs={runs} />)
     await user.click(screen.getByRole("button", { name: "English" }))
 
-    expect(screen.getByText(agentRuns.en.final.text)).toBeInTheDocument()
+    expect(screen.getByText(runs.en.task)).toBeVisible()
     expect(screen.getByRole("button", { name: "Fulfills the request" })).toBeInTheDocument()
     expect(window.localStorage.getItem(LOCALE_STORAGE_KEY)).toBe("en")
     expect(document.documentElement.lang).toBe("en")
@@ -90,34 +93,37 @@ describe("bilingual workspace", () => {
     window.history.replaceState(null, "", "/?lang=en")
     window.localStorage.setItem(LOCALE_STORAGE_KEY, "zh")
     const user = userEvent.setup()
+    const runs = studyRuns("baseline")
     // When the workspace renders in English and the Chinese option is clicked.
-    render(<App />)
-    expect(screen.getByText(agentRuns.en.final.text)).toBeInTheDocument()
+    render(<App runs={runs} />)
+    expect(screen.getByText(runs.en.task)).toBeVisible()
     await user.click(screen.getByRole("button", { name: "中文" }))
-    // Then the query, storage, document language, and fixture all follow the click.
+    // Then the query, storage, document language, and run all follow the click.
     expect(window.location.search).toBe("?lang=zh")
     expect(window.localStorage.getItem(LOCALE_STORAGE_KEY)).toBe("zh")
     expect(document.documentElement.lang).toBe("zh-CN")
-    expect(screen.getByText(agentRuns.zh.final.text)).toBeInTheDocument()
+    expect(screen.getByText(runs.zh.task)).toBeVisible()
   })
 
-  it("keeps the recorded decision when the language changes", async () => {
-    // Given a Chinese workspace.
+  it("keeps the recorded response when the language changes", async () => {
+    // Given a Chinese workspace with a submitted acceptance.
     const user = userEvent.setup()
-    render(<App />)
-    // When a choice is submitted and English is then selected.
+    render(<App runs={studyRuns("probabilities")} />)
     await user.click(screen.getByRole("button", { name: "符合原始任务" }))
     await user.click(screen.getByRole("button", { name: "提交评估" }))
+    // When English is then selected.
     await user.click(screen.getByRole("button", { name: "English" }))
-    // Then the submitted decision stays locked and its status is translated.
-    expect(screen.getByRole("button", { name: "Fulfills the request" })).toBeDisabled()
-    expect(screen.getByText("Submitted: fulfills the request.")).toBeInTheDocument()
+    // Then the submitted response stays locked and its status is translated.
+    const accepted = screen.getByRole("button", { name: "Fulfills the request" })
+    expect(accepted).toBeDisabled()
+    expect(accepted).toHaveAttribute("aria-pressed", "true")
+    expect(screen.getByText("Response recorded on this page only.")).toBeVisible()
   })
 
   it("restores the Chinese document metadata when switching back", async () => {
     // Given a Chinese workspace.
     const user = userEvent.setup()
-    render(<App />)
+    render(<App runs={studyRuns("baseline")} />)
     // When English is selected and then Chinese again.
     await user.click(screen.getByRole("button", { name: "English" }))
     await user.click(screen.getByRole("button", { name: "中文" }))
@@ -168,6 +174,9 @@ describe("study copy", () => {
       expect(messages.syntheticProvenance).not.toBe("")
       expect(messages.conditionalScoreExplanation).not.toBe("")
       expect(messages.roundingCaveat).not.toBe("")
+      expect(messages.loadingStudy).not.toBe("")
+      expect(messages.loadErrorTitle).not.toBe("")
+      expect(messages.loadErrorHint).not.toBe("")
     }
   })
 

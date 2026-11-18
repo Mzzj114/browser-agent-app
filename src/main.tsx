@@ -1,7 +1,6 @@
 import "@fontsource-variable/inter"
-import { StrictMode } from "react"
-import { createRoot } from "react-dom/client"
-import { App } from "./App"
+import { mountStudyApp } from "./bootstrap"
+import { studyCondition } from "./study-condition"
 import "./styles/index.css"
 
 class MissingRootElementError extends Error {
@@ -16,8 +15,4 @@ if (!(rootElement instanceof HTMLElement)) {
   throw new MissingRootElementError()
 }
 
-createRoot(rootElement).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+void mountStudyApp(rootElement, new URL(import.meta.env.BASE_URL, document.baseURI), studyCondition)
