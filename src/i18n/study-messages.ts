@@ -1,3 +1,5 @@
+import type { ResponseError } from "../domain/study-response"
+
 export type StudyMessages = {
   readonly executionOverview: string
   readonly viewedStep: (ordinal: number) => string
@@ -25,6 +27,20 @@ export type StudyMessages = {
   readonly conditionalScoreExplanation: string
   readonly roundingCaveat: string
   readonly localizationPrompt: string
+  readonly localizationPlaceholder: string
+  readonly cannotDetermine: string
+  readonly uncertaintyHelper: string
+  readonly explanationHeading: string
+  readonly explanationPlaceholder: string
+  readonly explanationOptional: string
+  readonly explanationRequired: string
+  readonly explanationOptionalHelper: string
+  readonly explanationCannotDetermineHelper: string
+  readonly explanationRequiredHelper: string
+  readonly errorSummaryHeading: string
+  readonly responseErrorMessages: Readonly<Record<ResponseError, string>>
+  readonly onScreenOnly: string
+  readonly responseSubmittedStatus: string
 }
 
 export const zhStudyMessages = {
@@ -54,6 +70,26 @@ export const zhStudyMessages = {
   conditionalScoreExplanation: "概率仅适用于同一操作或同一目标列表内部，不代表整体操作得分。",
   roundingCaveat: "百分比四舍五入保留一位小数，合计可能不等于 100%。",
   localizationPrompt: "哪一步包含 Agent 最早的错误操作？",
+  localizationPlaceholder: "请选择步骤或“无法判断”",
+  cannotDetermine: "无法判断",
+  uncertaintyHelper: "如果证据无法确定最早的错误操作，请选择“无法判断”。选择此项时说明为可选项。",
+  explanationHeading: "简短说明",
+  explanationPlaceholder: "简要说明你核对过的证据或判断依据。",
+  explanationOptional: "可选",
+  explanationRequired: "必填",
+  explanationOptionalHelper: "除非你标记具体步骤，否则说明为可选项。",
+  explanationCannotDetermineHelper: "选择“无法判断”时，说明为可选项。",
+  explanationRequiredHelper: "标记具体步骤时必填（两种判断均需说明）。请说明支持该步骤的证据。",
+  errorSummaryHeading: "请检查你的评估。",
+  responseErrorMessages: {
+    "verdict-required": "请选择这次记录的执行是否符合原始任务。",
+    "localization-required": "请选择最早的错误步骤或“无法判断”。",
+    "unknown-episode": "所选步骤不属于本次回放。请选择一个可用步骤。",
+    "explanation-required": "请为标记的步骤填写简短说明。",
+    "explanation-too-long": "请将说明缩短至 500 个字符以内。",
+  },
+  onScreenOnly: "评估仅显示在本页，刷新后将清除。",
+  responseSubmittedStatus: "评估仅记录在本页。",
 } satisfies StudyMessages
 
 export const enStudyMessages = {
@@ -87,4 +123,26 @@ export const enStudyMessages = {
   roundingCaveat:
     "Percentages are rounded to one decimal place and may not add up to exactly 100%.",
   localizationPrompt: "Which step contains the agent's earliest mistaken action?",
+  localizationPlaceholder: "Select a step or Cannot determine",
+  cannotDetermine: "Cannot determine",
+  uncertaintyHelper:
+    "If the evidence does not identify a clear earliest mistaken action, choose Cannot determine. The explanation is optional for that answer.",
+  explanationHeading: "Short explanation",
+  explanationPlaceholder: "Briefly describe the evidence you checked.",
+  explanationOptional: "Optional",
+  explanationRequired: "Required",
+  explanationOptionalHelper: "Optional unless you mark a specific step.",
+  explanationCannotDetermineHelper: "Optional when you choose Cannot determine.",
+  explanationRequiredHelper:
+    "Required for a marked step with either judgment. Describe the evidence for that step.",
+  errorSummaryHeading: "Please check your response.",
+  responseErrorMessages: {
+    "verdict-required": "Choose whether the recorded work fulfills the original request.",
+    "localization-required": "Select the earliest mistaken step or Cannot determine.",
+    "unknown-episode": "The selected step is not part of this replay. Select an available step.",
+    "explanation-required": "Add a short explanation for the marked step.",
+    "explanation-too-long": "Shorten the explanation to 500 characters or fewer.",
+  },
+  onScreenOnly: "Shown on this page only. Reloading clears your response.",
+  responseSubmittedStatus: "Response recorded on this page only.",
 } satisfies StudyMessages
