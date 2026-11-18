@@ -48,6 +48,35 @@ async function updateReport(
   await writeFile(path, `${JSON.stringify(report, null, 2)}\n`, "utf8")
 }
 
+async function rewriteEveryReport(
+  root: string,
+  update: (report: Record<string, unknown>) => void,
+): Promise<void> {
+  for (const locale of ["zh", "en"] as const) {
+    for (const viewport of comparisonViewports) {
+      const path = comparisonReportPath(root, locale, viewport)
+      const report = JSON.parse(await readFile(path, "utf8")) as Record<string, unknown>
+      update(report)
+      await writeFile(path, `${JSON.stringify(report, null, 2)}\n`, "utf8")
+    }
+  }
+}
+
+async function copyOneReportUnderEveryName(
+  root: string,
+  sourceLocale: "zh" | "en",
+  sourceViewportIndex: number,
+): Promise<void> {
+  const sourceViewport = comparisonViewports[sourceViewportIndex]
+  if (!sourceViewport) throw new Error(`Missing viewport ${sourceViewportIndex}`)
+  const source = await readFile(comparisonReportPath(root, sourceLocale, sourceViewport), "utf8")
+  for (const locale of ["zh", "en"] as const) {
+    for (const viewport of comparisonViewports) {
+      await writeFile(comparisonReportPath(root, locale, viewport), source, "utf8")
+    }
+  }
+}
+
 async function updateRun(
   root: string,
   locale: "zh" | "en",
@@ -110,6 +139,29 @@ describe("cross-condition study comparison", () => {
     await unlink(comparisonReportPath(builds.probabilities, "zh", viewport))
 
     await expect(compareStudyBuilds(builds)).rejects.toThrow(/missing|report/i)
+  })
+
+  it("rejects reports copied from one locale/size under every filename, even when consistent across conditions", async () => {
+    const builds = await buildAll()
+    for (const condition of studyConditions) {
+      await copyOneReportUnderEveryName(builds[condition], "en", 0)
+    }
+
+    await expect(compareStudyBuilds(builds)).rejects.toThrow(/locale|viewport|metadata|filename/i)
+  })
+
+  it("rejects consistently mislabeled locale metadata under the correct filenames", async () => {
+    const builds = await buildAll()
+    for (const condition of studyConditions) {
+      await rewriteEveryReport(builds[condition], (report) => {
+        const viewport = report["viewport"] as Record<string, unknown>
+        if (report["locale"] === "zh" && viewport["width"] === 1280 && viewport["height"] === 720) {
+          report["locale"] = "en"
+        }
+      })
+    }
+
+    await expect(compareStudyBuilds(builds)).rejects.toThrow(/locale|metadata|filename/i)
   })
 
   it("rejects a pane bound outside the one-pixel tolerance", async () => {

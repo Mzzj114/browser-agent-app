@@ -505,6 +505,22 @@ function expectedComparisonReportNames(): readonly string[] {
   ).sort()
 }
 
+function expectedComparisonReports(): ReadonlyMap<
+  string,
+  {
+    readonly locale: Locale
+    readonly viewport: { readonly width: number; readonly height: number }
+  }
+> {
+  return new Map(
+    LOCALES.flatMap((locale) =>
+      comparisonViewports.map(
+        (viewport) => [comparisonReportName(locale, viewport), { locale, viewport }] as const,
+      ),
+    ),
+  )
+}
+
 async function readComparisonReports(
   root: string,
   condition: StudyCondition,
@@ -512,6 +528,7 @@ async function readComparisonReports(
   const directory = join(root, "test-results", "study-equivalence")
   const names = (await readdir(directory)).sort()
   const expected = expectedComparisonReportNames()
+  const expectedByName = expectedComparisonReports()
   if (JSON.stringify(names) !== JSON.stringify(expected)) {
     const missing = expected.filter((name) => !names.includes(name))
     const unexpected = names.filter((name) => !expected.includes(name))
@@ -546,6 +563,25 @@ async function readComparisonReports(
         `Study comparison ${root}: report ${name} claims condition ${report.condition}, expected ${condition}`,
       )
     }
+
+    const filenameMetadata = expectedByName.get(name)
+    if (!filenameMetadata) {
+      throw new Error(`Study comparison ${root}: no expected filename metadata for ${name}`)
+    }
+    if (report.locale !== filenameMetadata.locale) {
+      throw new Error(
+        `Study comparison ${root}: report ${name} locale metadata ${report.locale} does not match filename locale ${filenameMetadata.locale}`,
+      )
+    }
+    if (
+      report.viewport.width !== filenameMetadata.viewport.width ||
+      report.viewport.height !== filenameMetadata.viewport.height
+    ) {
+      throw new Error(
+        `Study comparison ${root}: report ${name} viewport metadata ${report.viewport.width}x${report.viewport.height} does not match filename viewport ${filenameMetadata.viewport.width}x${filenameMetadata.viewport.height}`,
+      )
+    }
+
     reports.set(name, report)
   }
 
@@ -587,6 +623,15 @@ function assertReportsMatch(
   actualLabel: string,
   actual: ComparisonReport,
 ): void {
+  if (
+    reference.locale !== actual.locale ||
+    reference.viewport.width !== actual.viewport.width ||
+    reference.viewport.height !== actual.viewport.height
+  ) {
+    throw new Error(
+      `Study comparison: report locale/viewport metadata differs between ${referenceLabel} and ${actualLabel}`,
+    )
+  }
   if (JSON.stringify(reference.screenshots) !== JSON.stringify(actual.screenshots)) {
     throw new Error(
       `Study comparison: screenshot references differ between ${referenceLabel} and ${actualLabel}`,

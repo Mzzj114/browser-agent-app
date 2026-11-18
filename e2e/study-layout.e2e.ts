@@ -12,6 +12,11 @@ const viewports = [
   { width: 1440, height: 900 },
 ] as const
 
+const expectedFinalScreenshot = {
+  zh: { path: "screenshots/08-cart.webp", width: 1200, height: 800 },
+  en: { path: "screenshots/en/08-cart.webp", width: 1200, height: 800 },
+} as const
+
 const copy = {
   zh: {
     url: "/?lang=zh",
@@ -146,7 +151,12 @@ for (const locale of ["zh", "en"] as const) {
 
       const initialImage = page.locator(".page-screenshot")
       await expect(initialImage).toBeVisible()
+      const expectedFinal = expectedFinalScreenshot[locale]
+      await expect(initialImage).toHaveAttribute("src", expectedFinal.path)
+      await expect(initialImage).toHaveAttribute("width", String(expectedFinal.width))
+      await expect(initialImage).toHaveAttribute("height", String(expectedFinal.height))
       const initialReference = await screenshotReference(initialImage)
+      expect(initialReference).toEqual(expectedFinal)
       await expect(page.locator(".study-context-panel").nth(0).locator("p")).toHaveText(
         runs[locale].task,
       )
@@ -197,6 +207,19 @@ for (const locale of ["zh", "en"] as const) {
           page.getByRole("table").locator("tbody input, tbody textarea, tbody select"),
         ).toHaveCount(0)
       }
+
+      // Re-observe the restored final state after episode navigation before recording it.
+      await page.getByRole("button", { name: text.returnToFinal, exact: true }).click()
+      await expect(page.getByRole("heading", { name: text.finalState })).toBeVisible()
+      await expect(page.locator(".browser-state-label")).toHaveText(text.lastRecordedState)
+      const restoredFinalImage = page.locator(".page-screenshot")
+      await expect(restoredFinalImage).toHaveAttribute("src", expectedFinal.path)
+      await expect(restoredFinalImage).toHaveAttribute("width", String(expectedFinal.width))
+      await expect(restoredFinalImage).toHaveAttribute("height", String(expectedFinal.height))
+      const finalReference = await screenshotReference(restoredFinalImage)
+      expect(finalReference).toEqual(initialReference)
+      await jump.selectOption("3")
+      await expect(page.getByText(text.beforeStep4)).toBeVisible()
 
       const mark = page.getByRole("button", { name: text.mark, exact: true })
       const markControl = page.locator(".decision-inspector > .action-button")
@@ -300,7 +323,7 @@ for (const locale of ["zh", "en"] as const) {
         viewport,
         screenshots: {
           initial: initialReference,
-          final: initialReference,
+          final: finalReference,
           episode04: episode04Reference,
         },
         panes,
