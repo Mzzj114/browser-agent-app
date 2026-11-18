@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/prepare-study.ts && vite --host 127.0.0.1",
-    "build": "node scripts/prepare-study.ts && tsc --noEmit && vite build",
-    "preview": "vite preview --host 127.0.0.1",
+    "build": "node scripts/prepare-study.ts && tsc --noEmit && vite build && node scripts/verify-study-builds.ts",
+    "preview": "node scripts/verify-study-builds.ts && vite preview --host 127.0.0.1",
     "screenshots": "node scripts/generate-screenshots.ts",
     "prepare:study": "node scripts/prepare-study.ts",
     "typecheck": "tsc --noEmit",
