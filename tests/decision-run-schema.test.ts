@@ -531,17 +531,52 @@ describe("edge decision fixtures", () => {
     expect(decisionRunSchema.safeParse(run).success).toBe(true)
   })
 
-  it("models an operation error as a factual execution outcome", () => {
-    expect(episodeFor(edgeRun("operation-error"), "episode-04").outcome?.kind).toBe(
-      "execution-error",
+  it("keeps an operation error on the observation it actually produced", () => {
+    // Given the operation-error fixture.
+    const run = edgeRun("operation-error")
+    const failedIndex = run.episodes.findIndex(
+      (episode) => episode.outcome?.kind === "execution-error",
     )
+    const failed = run.episodes[failedIndex]
+
+    // When the failed step is compared with its linked observations.
+    // Then a non-navigating error leaves the before and after pages identical.
+    expect(failedIndex).toBeGreaterThan(-1)
+    if (!failed) throw new Error("Missing failed episode")
+    const before = observationFor(run, failed.beforeObservationId)
+    const after = observationFor(run, failed.afterObservationId)
+    expect(failed.action).toContain("Attempted")
+    expect(after.url).toBe(before.url)
+    expect(after.title).toBe(before.title)
+    expect(after.screenshot?.path).toBe(before.screenshot?.path)
+
+    // And the next step successfully reaches the product page.
+    const recovery = run.episodes[failedIndex + 1]
+    expect(recovery?.outcome).toBeNull()
+    expect(recovery?.afterObservationId).toBe("obs-04")
+    expect(observationFor(run, "obs-04").url).toContain("cloud-walk-red")
+    expect(run.report).toBe(canonicalRun("en").report)
   })
 
-  it("models a terminal BLOCKED operation without a target", () => {
+  it("links terminal BLOCKED to the blocking observation and a matching report", () => {
+    // Given the blocked fixture.
     const run = edgeRun("blocked")
     const terminal = run.episodes.at(-1)
-    expect(terminal?.operation).toBe("BLOCKED")
-    expect(terminal?.targetHead).toBeNull()
+    if (!terminal) throw new Error("Missing terminal episode")
+
+    // When the terminal episode and final observation are inspected.
+    // Then the run stops on the sign-in gate instead of claiming a successful cart.
+    const final = observationFor(run, run.finalObservationId)
+    expect(terminal.operation).toBe("BLOCKED")
+    expect(terminal.targetHead).toBeNull()
+    expect(terminal.afterObservationId).toBe(run.finalObservationId)
+    expect(final.url).toContain("sign-in")
+    expect(final.title.toLowerCase()).toContain("sign in")
+    expect(final.screenshot).toBeNull()
+    expect(terminal.outcome?.text.toLowerCase()).toContain("sign-in")
+    expect(run.report).not.toBe(canonicalRun("en").report)
+    expect(run.report.toLowerCase()).not.toContain("added the best-selling")
+    expect(run.report.toLowerCase()).toContain("couldn't")
   })
 
   it("models WAIT and scroll controls without target heads", () => {

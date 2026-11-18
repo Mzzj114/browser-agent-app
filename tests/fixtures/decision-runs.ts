@@ -63,17 +63,63 @@ function withEpisode(
 }
 
 function operationErrorRun(): DecisionRun {
-  return withEpisode(canonicalRun("en"), "episode-04", (episode) => ({
-    ...episode,
-    outcome: {
-      kind: "execution-error",
-      text: "The product click did not navigate to the product page.",
-    },
-  }))
+  const run = canonicalRun("en")
+  const sortedResults = run.observations.find((observation) => observation.id === "obs-03")
+  if (!sortedResults) throw new Error("Missing sorted results observation")
+
+  const observations = run.observations.flatMap((observation) =>
+    observation.id === "obs-03"
+      ? [
+          observation,
+          {
+            ...observation,
+            id: "obs-09",
+            capturedAt: "2026-11-11T09:00:25.000Z",
+          },
+        ]
+      : [observation],
+  )
+
+  const [first, second, third, fourth, fifth, sixth, seventh, eighth] = run.episodes
+  if (!first || !second || !third || !fourth || !fifth || !sixth || !seventh || !eighth) {
+    throw new Error("Canonical fixture must contain eight episodes")
+  }
+
+  return {
+    ...run,
+    observations,
+    episodes: [
+      first,
+      second,
+      third,
+      {
+        ...fourth,
+        action: "Attempted to open “Cloud Walk Red Sneakers”",
+        afterObservationId: "obs-09",
+        outcome: {
+          kind: "execution-error",
+          text: "The product click did not navigate to the product page.",
+        },
+      },
+      {
+        ...fourth,
+        id: "episode-05",
+        ordinal: 5,
+        action: "Opened “Cloud Walk Red Sneakers”",
+        executedAt: "2026-11-11T09:00:27.000Z",
+        beforeObservationId: "obs-09",
+        outcome: null,
+      },
+      { ...fifth, id: "episode-06", ordinal: 6 },
+      { ...sixth, id: "episode-07", ordinal: 7 },
+      { ...seventh, id: "episode-08", ordinal: 8 },
+      { ...eighth, id: "episode-09", ordinal: 9 },
+    ],
+  }
 }
 
 function blockedRun(): DecisionRun {
-  return withEpisode(canonicalRun("en"), "episode-08", (episode) => ({
+  const run = withEpisode(canonicalRun("en"), "episode-08", (episode) => ({
     ...episode,
     action: "Stopped at the sign-in gate",
     operation: "BLOCKED",
@@ -86,7 +132,27 @@ function blockedRun(): DecisionRun {
       selectedId: "BLOCKED",
     },
     targetHead: null,
+    outcome: {
+      kind: "observation",
+      text: "Checkout required sign-in before it could continue.",
+    },
   }))
+
+  return {
+    ...run,
+    report:
+      "I couldn't complete the request because the store required sign-in before checkout. The cart contains Cloud Walk Red Sneakers, size 42.",
+    observations: run.observations.map((observation) =>
+      observation.id === "obs-08"
+        ? {
+            ...observation,
+            url: "https://mall.example/sign-in",
+            title: "Sign in Required | Cloud Mall",
+            screenshot: null,
+          }
+        : observation,
+    ),
+  }
 }
 
 function controlsRun(): DecisionRun {
