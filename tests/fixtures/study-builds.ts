@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, readFile, writeFile } from "node:fs/promises"
+import { mkdir, mkdtemp, readFile, rename, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
 import { writeStudyFixtures } from "../../scripts/study-fixtures.ts"
@@ -33,6 +33,146 @@ async function referencedScreenshots(studyDirectory: string): Promise<readonly s
   )
 
   return [...screenshots].sort()
+}
+
+export const comparisonLocales = LOCALES
+export const comparisonViewports = [
+  { width: 1280, height: 720 },
+  { width: 1366, height: 768 },
+  { width: 1440, height: 900 },
+] as const
+
+export type ComparisonBounds = {
+  readonly x: number
+  readonly y: number
+  readonly width: number
+  readonly height: number
+}
+
+export type ComparisonScreenshot = {
+  readonly path: string
+  readonly width: number
+  readonly height: number
+}
+
+export type StudyEquivalenceReport = {
+  readonly schemaVersion: "study-equivalence/1"
+  readonly condition: StudyCondition
+  readonly locale: Locale
+  readonly viewport: { readonly width: number; readonly height: number }
+  readonly screenshots: {
+    readonly initial: ComparisonScreenshot
+    readonly final: ComparisonScreenshot
+    readonly episode04: ComparisonScreenshot
+  }
+  readonly panes: Readonly<Record<string, ComparisonBounds>>
+  readonly controls: Readonly<Record<string, ComparisonBounds>>
+  readonly actionOrder: readonly string[]
+}
+
+function comparisonBounds(offset: number): ComparisonBounds {
+  return {
+    x: 16 + offset,
+    y: 72 + offset,
+    width: 320 - offset,
+    height: 240 - offset,
+  }
+}
+
+export function studyEquivalenceReport(
+  condition: StudyCondition,
+  locale: Locale,
+  viewport: { readonly width: number; readonly height: number },
+): StudyEquivalenceReport {
+  const prefix = locale === "en" ? "screenshots/en/" : "screenshots/"
+  const screenshot = (name: string, width: number, height: number): ComparisonScreenshot => ({
+    path: `${prefix}${name}.webp`,
+    width,
+    height,
+  })
+
+  return {
+    schemaVersion: "study-equivalence/1",
+    condition,
+    locale,
+    viewport,
+    screenshots: {
+      initial: screenshot("08-cart", 1202, 802),
+      final: screenshot("08-cart", 1202, 802),
+      episode04: screenshot("04-sorted", 1202, 802),
+    },
+    panes: {
+      context: comparisonBounds(0),
+      rail: comparisonBounds(1),
+      page: comparisonBounds(2),
+      inspector: comparisonBounds(3),
+      response: comparisonBounds(4),
+    },
+    controls: {
+      jump: comparisonBounds(5),
+      previous: comparisonBounds(6),
+      next: comparisonBounds(7),
+      final: comparisonBounds(8),
+      mark: comparisonBounds(9),
+      accept: comparisonBounds(10),
+      reject: comparisonBounds(11),
+      localization: comparisonBounds(12),
+      explanation: comparisonBounds(13),
+      submit: comparisonBounds(14),
+    },
+    actionOrder: [
+      "Typed “red running shoes”",
+      "Submitted the search",
+      "Clicked Best selling",
+      "Opened “Cloud Walk Red Sneakers”",
+      "Selected size 42",
+      "Added to cart",
+      "Opened cart",
+      "Reported task completion",
+    ],
+  }
+}
+
+export function comparisonReportPath(
+  root: string,
+  locale: Locale,
+  viewport: { readonly width: number; readonly height: number },
+): string {
+  return join(
+    root,
+    "test-results",
+    "study-equivalence",
+    `${locale}-${viewport.width}x${viewport.height}.json`,
+  )
+}
+
+export async function writeEquivalenceReports(
+  root: string,
+  condition: StudyCondition,
+  mutate: (report: StudyEquivalenceReport) => StudyEquivalenceReport = (report) => report,
+): Promise<void> {
+  await Promise.all(
+    LOCALES.flatMap((locale) =>
+      comparisonViewports.map(async (viewport) => {
+        const outputPath = comparisonReportPath(root, locale, viewport)
+        await mkdir(dirname(outputPath), { recursive: true })
+        await writeFile(
+          outputPath,
+          `${JSON.stringify(mutate(studyEquivalenceReport(condition, locale, viewport)), null, 2)}\n`,
+          "utf8",
+        )
+      }),
+    ),
+  )
+}
+
+export async function writeComparisonWorktree(condition: StudyCondition): Promise<string> {
+  await mkdir(temporaryRoot, { recursive: true })
+  const root = await mkdtemp(join(temporaryRoot, "study-worktree-"))
+  const build = await writeBuildFixture(condition)
+  await rename(build, join(root, "dist"))
+  await writeEquivalenceReports(root, condition)
+  return root
 }
 
 export async function writeBuildFixture(condition: StudyCondition): Promise<string> {

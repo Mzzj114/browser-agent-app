@@ -3,7 +3,8 @@ import { defineConfig } from "@playwright/test"
 export default defineConfig({
   testDir: "./e2e",
   testMatch: "**/*.e2e.ts",
-  fullyParallel: true,
+  fullyParallel: false,
+  workers: 1,
   reporter: "list",
   use: {
     baseURL: "http://127.0.0.1:4173",
@@ -13,8 +14,9 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   webServer: {
-    command: "bun run dev --port 4173 --strictPort",
+    command: "bun run build && bun run preview --port 4173 --strictPort",
     url: "http://127.0.0.1:4173",
-    reuseExistingServer: true,
+    reuseExistingServer: false,
+    timeout: 180_000,
   },
 })

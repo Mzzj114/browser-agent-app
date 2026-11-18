@@ -107,22 +107,70 @@ All spacing derives from 4px.
 
 ### Grid
 
-- App shell: one fixed header row and one bounded `minmax(0, 1fr)` workspace row, using `100dvh` and `100dvb`.
-- Workspace: `grid-template-columns: var(--agent-width) minmax(0, 1fr)` with a 1px structural divider.
-- Agent panel: grid rows `auto minmax(0, 1fr) auto`; only the chat/history body scrolls.
-- Browser panel: grid rows `auto auto minmax(0, 1fr) auto`; only the screenshot viewport scrolls.
-- Supported viewport: 1280x720 minimum; designed at 1366x768 and 1440x900.
+- App shell: one fixed header row, a bounded task/report context strip, a bounded three-pane workspace row, and a bounded response row, using `100dvh` and `100dvb`.
+- Study context strip: two equal task/report panels, capped at `clamp(6rem, 18dvh, 9rem)` with internal scrolling.
+- Main workspace: `clamp(12rem, 16vw, 14rem) minmax(0, 1fr) clamp(19rem, 25vw, 22rem)` for the execution rail, recorded page, and inspector.
+- Response region: a separate shell row capped at `clamp(10rem, 26dvh, 14rem)`; its controls stay reachable while long copy scrolls internally.
+- Supported viewport: 1280x720 minimum; designed at 1366x768 and 1440x900 in both locales.
 - Below the minimum width or height, replace the workspace with the approved desktop requirement message.
+- Dimensions and default replay state must not depend on the evidence condition. `--agent-width` is retained only for the legacy developer showcase.
 
 ### Scroll Ownership
 
-- Product header, browser chrome, replay toolbar, and decision footer stay fixed.
-- `.chat-scroll` owns agent-content scrolling.
-- `.browser-viewport` owns screenshot scrolling.
-- `.code-block` owns optional horizontal code scrolling.
-- Every scroll region has `min-block-size: 0` and `min-inline-size: 0`.
+- Product header, task/report context, rail heading, replay toolbar, and response controls stay fixed.
+- `.study-context-panel` owns task/report overflow.
+- `.execution-rail-list` owns chronological action scrolling.
+- `.browser-viewport` owns fitted and actual-size screenshot scrolling.
+- `.study-inspector-panel` owns viewed-step evidence scrolling, including long candidate lists.
+- `.study-response` owns response-form overflow when dense.
+- Every scroll region has `min-block-size: 0` and `min-inline-size: 0`; no region may create page-level shell overflow or cover another pane's controls.
 
 ## 5. Components
+
+### Participant decision-evidence workspace
+
+The production entry composes these components. Legacy chat/transcript components remain developer-showcase-only.
+
+#### ExecutionRail
+
+- Structure: navigation landmark with a chronological ordered list of native buttons, one per episode. Each row shows step number, human-readable actual action, and separate viewed/marked labels.
+- Variants: default, viewed, marked, viewed-and-marked.
+- States: hover, focus-visible, `aria-current="step"` for viewed, text label for marked.
+- Accessibility: viewing and marking are distinct textual states; the mark is never color-only.
+- Layout: `.execution-rail-list` owns vertical scrolling; the rail does not stretch the shell.
+
+#### CandidateTable
+
+- Structure: read-only table with caption, candidate/context headings, selected marker, and an optional probability column only in the probabilities condition.
+- Variants: unscored candidates, scored probabilities.
+- States: selected row; no sorting, filtering, coloring, bars, or click-to-act rows.
+- Accessibility: native table headings, row headers, and explicit “Selected” text; repeated labels stay distinct through contextual cells and stable IDs.
+- Layout: rows wrap and the inspector owns vertical scrolling; a 250-row illustrative test list must not widen the shell.
+
+#### DecisionInspector
+
+- Structure: final-state explanation, or viewed episode summary, factual outcome, entered text, mark/clear control, and permitted candidate evidence.
+- Variants: final state, baseline episode, candidates episode, probabilities episode, operation-only/no-target terminal.
+- States: unmarked, marked, cleared, submitted-disabled marking.
+- Accessibility: final state exposes no marking control; viewed and marked semantics remain separate; terminal DONE/BLOCKED and control operations show “No target required.”
+- Layout: inspector outer dimensions are condition-independent; long evidence scrolls inside `.study-inspector-panel`.
+
+#### StudyResponseForm
+
+- Structure: equal accept/reject choices, stable-ID localization select with Cannot determine, persistent 500-character explanation, explicit Submit, validation summary, consequence copy, and neutral on-screen status.
+- Variants: unanswered, tentative accept/reject, concrete marked step, Cannot determine, submitted.
+- States: editable, error-visible, submitted-locked.
+- Accessibility: native controls, visible focus, per-field `aria-invalid`/`aria-describedby`, polite status announcements, and no correctness feedback.
+- Layout: bounded response row with internal overflow; all controls remain keyboard reachable at 1280×720 with long Chinese text and evidence lists.
+
+#### BrowserFrame participant contract
+
+- Structure: recorded tab, read-only address, recorded-execution count, before/current-state caption, recorded action and capture time, and a screenshot whose trigger toggles fit/actual size.
+- Variants: explicit final observation, viewed historical step, missing screenshot, fitted, actual size.
+- States: final, historical, missing evidence, zoomed.
+- Accessibility: read-only text is not presented as editable; alt text names the recorded page; the trigger names the current fit/actual-size action.
+- Layout: bounded viewport with two-axis scrolling at actual size; images keep intrinsic dimensions and unfiltered opacity.
+- Failure: a real image error shows missing evidence while keeping URL/title/action. Moving to a healthy path recovers the image; the renderer never substitutes an after-state and labels it “before.”
 
 ### BrandMark
 
@@ -180,15 +228,13 @@ All spacing derives from 4px.
 - Accessibility: native keyboard behavior and expanded semantics.
 - Motion: no height animation; state change is immediate and stable.
 
-### StepCard
+### StepCard (legacy developer showcase only)
 
-- Structure: article with a full-width step-selection button whose primary text is the recorded action label, followed by one “Technical details” disclosure containing thinking and native cells.
+- Structure: article with a full-width step-selection button and an optional technical-details disclosure containing thinking and native cells.
 - Variants: default, selected, missing screenshot, contains native error.
-- Spacing: space-3 cell gaps and space-4 padding.
-- States: default, hover, active, focus-visible, selected, technical details closed/open.
-- Accessibility: selected state uses `aria-pressed`; selection is text and border plus accent, not accent alone; the action label is the accessible selection name.
-- Motion: 120ms color and active scale on the selection button only.
-- Layout: vertical execution rail; article itself does not scroll; technical details stay collapsed until requested.
+- States: default, hover, focus-visible, selected, technical details closed/open.
+- Accessibility: showcase-only legacy behavior; selection uses `aria-pressed`.
+- Layout: used only by the developer showcase, not the participant workspace or production build input. Participant actions are labeled by ExecutionRail.
 
 ### CodeCell
 
@@ -201,13 +247,14 @@ All spacing derives from 4px.
 
 ### BrowserFrame
 
-- Structure: recorded tab, read-only address, recorded-execution count, evidence caption (state label, end-of-run badge, recorded action, capture time), and a screenshot well whose image toggles between fit and actual size.
-- Variants: last recorded state, selected historical state, missing screenshot, fitted screenshot, actual-size screenshot.
+- Structure: recorded tab, read-only address, recorded-execution count, evidence caption (before/final label, recorded action, capture time), and a screenshot well whose image toggles between fit and actual size.
+- Variants: explicit final observation, selected historical before-state, missing screenshot, fitted, actual-size.
 - Spacing: tab-height, space-3 chrome padding, no extra well padding.
-- States: default, historical selection, last recorded state, empty screenshot, fitted, actual size.
-- Accessibility: read-only text is not disguised as editable input; screenshots have state-specific alt text; the caption announces the selected state; the image is a native button whose accessible name describes the current fit/actual-size action.
+- States: final selection, historical selection, empty screenshot, fitted, actual size.
+- Accessibility: read-only text is not disguised as editable input; screenshots have state-specific alt text; the caption announces the selected state; the image trigger describes the current fit/actual-size action.
 - Depth: border-strong plus the subtle browser shadow token.
 - Layout: bounded grid; `.browser-viewport` owns screenshot scrolling; the default image fits the panel width, and clicking switches to native pixel size with two-axis scrolling.
+- Failure: a failed image request shows the explicit missing-evidence state while keeping URL/title/action; a healthy path recovers without an after-image fallback.
 
 ### ReplayControls
 
@@ -218,14 +265,14 @@ All spacing derives from 4px.
 - Accessibility: disabled arrows at boundaries, current position announced as text, the menu names each recorded action.
 - Layout: a separate replay bar below the browser frame; it never sits inside browser decoration.
 
-### DecisionFooter
+### DecisionFooter (legacy developer showcase only)
 
 - Structure: fulfilment question, equal tentative-choice pair, explicit submit action with its consequence line, neutral status, optional reason disclosure, and a revision note.
 - Variants: no selection, tentative selection, submitted accepted, submitted rejected.
 - Spacing: space-4 padding and space-3 button gap.
 - States: default, hover, active, focus-visible, choice-selected, submitted-disabled.
-- Accessibility: immediate tentative/submitted state announced with `aria-live="polite"`; no correctness message; choice changes are recorded; the consequence line is linked to the submit action with `aria-describedby` rather than sitting above the choices.
-- Layout: closes the final response inside the scrollable transcript, directly after the assistant message.
+- Accessibility: showcase-only legacy behavior; the participant response contract is StudyResponseForm.
+- Layout: used only by the developer showcase; the participant response is a separate bounded shell row.
 
 ### InspectionHint
 
@@ -236,13 +283,13 @@ All spacing derives from 4px.
 - Accessibility: plain text, no auto-advance and no task-specific hint.
 - Layout: above the step list; never obscures evidence.
 
-### AgentPrompt
+### AgentPrompt (legacy developer showcase only)
 
 - Structure: disabled prompt field, recorded model label, read-only note, and disabled send IconButton.
 - Variants: replay-only read-only composer.
 - States: disabled input and disabled send action.
-- Accessibility: labelled fieldset group; the prompt textarea and send control stay visibly disabled.
-- Layout: fixed final row of the agent panel; the model name comes from the run metadata (`engine.model`).
+- Accessibility: showcase-only legacy behavior; the participant workspace uniformly removes the composer.
+- Layout: developer showcase only; not rendered by the participant entry.
 
 ### DesktopOnlyMessage
 
@@ -304,6 +351,16 @@ Structural borders and tonal shifts own normal hierarchy. Only the recorded brow
 - Selection, native errors, and decision state are never communicated through color alone.
 - Long interface text (Chinese or English), URLs, and code cannot create page-level horizontal scrolling.
 - Cognitive load is stabilized through persistent pane positions, no automatic replay, and progressive disclosure of native detail.
+
+### Decision-Evidence Contract
+
+- The participant entry is one shared three-pane replay workspace. The checked-in condition at `src/study-condition.ts` determines whether offered candidates and synthetic probabilities are projected; no URL, query, storage, or runtime selector changes it.
+- Initial view is the explicit final observation. Episode selection shows the before-action screenshot. Final and terminal episode states remain semantically distinct even when the screenshot pixels match.
+- Viewed selection and the participant mark are independent. The rail shows separate “Viewed” and “Your mark” text. Cannot determine clears the mark without moving the replay.
+- Baseline has no candidate tables, placeholders, hidden score nodes, or technical disclosure. Experimental conditions add read-only, source-ordered candidate tables without score-based styling.
+- Responses are on-screen only: no export, backend, telemetry, or judgment storage. Reload clears the response but leaves the fixed run and locale preference behavior unchanged.
+- `scripts/verify-study-builds.ts` verifies the emitted condition, fixture revision, permitted study assets, and screenshots. `scripts/compare-study-builds.ts` compares semantic core digests, unscored candidate order/selection, and six browser geometry reports within 1px.
+- Browser E2E runs against the production build and preview on port 4173. The synthetic run is not a study-ready stimulus set or a real Jev recording.
 
 ### Study Adoption Gate
 

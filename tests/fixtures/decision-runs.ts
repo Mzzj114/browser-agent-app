@@ -1,5 +1,5 @@
-import rawEn from "../../fixtures/decision-runs/shopping.en.json"
-import rawZh from "../../fixtures/decision-runs/shopping.zh.json"
+import rawEn from "../../fixtures/decision-runs/shopping.en.json" with { type: "json" }
+import rawZh from "../../fixtures/decision-runs/shopping.zh.json" with { type: "json" }
 import {
   type DecisionRun,
   decisionRunSchema,

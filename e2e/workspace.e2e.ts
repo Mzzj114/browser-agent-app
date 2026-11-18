@@ -3,118 +3,141 @@ import { expect, test } from "@playwright/test"
 test("offers an English interface backed by the English run", async ({ page }) => {
   await page.goto("/?lang=en")
 
-  await expect(
-    page.getByRole("button", { name: "Fulfills the request", exact: true }),
-  ).toBeVisible()
-  await expect(page.getByRole("region", { name: "Agent browser" })).toContainText(
-    "Cart | Cloud Mall",
-  )
+  await expect(page.getByRole("heading", { name: "Final state" })).toBeVisible()
+  await expect(page.locator(".study-context")).toContainText("Original task")
+  await expect(page.locator(".study-context")).toContainText("Agent-reported result")
+  await expect(page.locator(".browser-state-label")).toHaveText("Last recorded state")
   await expect(page.locator(".page-screenshot")).toHaveAttribute(
     "src",
     "screenshots/en/08-cart.webp",
   )
   await expect(
-    page.getByRole("button", { name: "Step 3, Submitted the search: view page" }),
+    page
+      .getByRole("navigation", { name: "Execution overview" })
+      .getByText("Reported task completion"),
   ).toBeVisible()
   await expect(page.getByText("Recorded execution · 8 steps")).toBeVisible()
 
   await page.getByRole("button", { name: "中文" }).click()
-  await expect(page.getByRole("button", { name: "符合原始任务", exact: true })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "最终状态" })).toBeVisible()
 })
 
-test("inspects a historical step and returns to the last recorded state", async ({ page }) => {
-  await page.goto("/")
-  await expect(
-    page.locator('.message-block[data-speaker="assistant"] .message-content'),
-  ).toContainText("已为你将最畅销的红色跑鞋加入购物车")
-  await expect(page.getByRole("region", { name: "Agent 浏览器" })).toContainText("购物车｜云朵商城")
+test("shows the before-image for a historical step and returns to the final state", async ({
+  page,
+}) => {
+  await page.goto("/?lang=en")
+  await expect(page.locator(".page-screenshot")).toHaveAttribute(
+    "src",
+    "screenshots/en/08-cart.webp",
+  )
 
-  await page.getByRole("button", { name: "步骤 3，提交搜索：查看页面" }).click()
-  const browser = page.getByRole("region", { name: "Agent 浏览器" })
-  await expect(browser).toContainText("红色跑鞋－商品搜索")
-  await expect(browser).toContainText("步骤 3 / 8 · 此步之后录制")
-  await expect(
-    page.getByRole("button", { name: "步骤 3，提交搜索：正在查看页面" }),
-  ).toHaveAttribute("aria-pressed", "true")
-  await expect(page.getByText("步骤 3 / 8", { exact: true })).toBeVisible()
+  await page.getByRole("combobox", { name: "Jump to step" }).selectOption("3")
+  const browser = page.getByRole("region", { name: "Agent browser" })
+  await expect(browser).toContainText("Cloud Walk Red Sneakers")
+  await expect(page.getByText("Before step 4 of 8")).toBeVisible()
+  await expect(page.locator(".page-screenshot")).toHaveAttribute(
+    "src",
+    "screenshots/en/04-sorted.webp",
+  )
+  await expect(page.locator('.execution-rail-item[data-viewed="true"]')).toContainText(
+    "Opened “Cloud Walk Red Sneakers”",
+  )
+  await expect(page.getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
 
-  await page.getByRole("button", { name: "返回最后录制状态" }).click()
-  await expect(browser).toContainText("最后一次录制的状态")
-  await expect(page.getByRole("button", { name: "下一步" })).toBeDisabled()
+  await page.getByRole("button", { name: "Return to last recorded state" }).click()
+  await expect(page.locator(".browser-state-label")).toHaveText("Last recorded state")
+  await expect(page.getByRole("heading", { name: "Final state" })).toBeVisible()
+  await expect(page.getByRole("button", { name: "Next step" })).toBeDisabled()
 })
 
-test("keeps Python behind technical details", async ({ page }) => {
-  await page.goto("/")
-  const firstStep = page.getByRole("article", { name: "步骤 1" })
-  const code = firstStep.getByText('new_tab("https://mall.example/")')
-  await expect(code).toBeHidden()
+test("removes technical disclosure and the disabled composer from the participant workspace", async ({
+  page,
+}) => {
+  await page.goto("/?lang=en")
 
-  await firstStep.getByText("技术细节 · 1 个 Python 单元").click()
-  await expect(code).toBeVisible()
+  await expect(page.locator("details")).toHaveCount(0)
+  await expect(page.locator(".step-card")).toHaveCount(0)
+  await expect(page.locator(".agent-prompt")).toHaveCount(0)
+  await expect(page.locator(".chat-scroll")).toHaveCount(0)
+  await expect(page.getByText(/Technical details/)).toHaveCount(0)
+  await expect(page.getByText("No mistaken action")).toHaveCount(0)
 })
 
-test("jumps directly to a recorded step", async ({ page }) => {
-  await page.goto("/")
-  await page.getByRole("combobox", { name: "跳转步骤" }).selectOption("4")
+test("keeps the step menu, execution rail, and arrows on the same viewed ID", async ({ page }) => {
+  await page.goto("/?lang=en")
+  const menu = page.getByRole("combobox", { name: "Jump to step" })
 
-  await expect(
-    page.getByRole("button", { name: "步骤 5，打开「云漫步红色休闲鞋」：正在查看页面" }),
-  ).toHaveAttribute("aria-pressed", "true")
-  await expect(page.getByText("步骤 5 / 8", { exact: true })).toBeVisible()
+  await menu.selectOption("3")
+  await expect(menu).toHaveValue("3")
+  await expect(page.getByText("Before step 4 of 8")).toBeVisible()
+  await expect(page.getByRole("button", { name: "Previous step" })).toBeEnabled()
+  await expect(page.getByRole("button", { name: "Next step" })).toBeEnabled()
+
+  await page.getByRole("button", { name: "Next step" }).click()
+  await expect(menu).toHaveValue("4")
+  await expect(page.getByText("Before step 5 of 8")).toBeVisible()
+  await expect(page.locator(".page-screenshot")).toHaveAttribute(
+    "src",
+    "screenshots/en/05-product.webp",
+  )
+
+  await page
+    .getByRole("navigation", { name: "Execution overview" })
+    .getByRole("button", { name: /Step 2.*Submitted the search/ })
+    .click()
+  await expect(menu).toHaveValue("1")
+  await expect(page.getByText("Before step 2 of 8")).toBeVisible()
+  await expect(page.locator(".page-screenshot")).toHaveAttribute(
+    "src",
+    "screenshots/en/02-search-filled.webp",
+  )
 })
 
-test("keeps a decision tentative until submission and then locks it", async ({ page }) => {
-  await page.goto("/")
-  const accepted = page.getByRole("button", { name: "符合原始任务", exact: true })
-  const rejected = page.getByRole("button", { name: "不符合原始任务", exact: true })
-  const submit = page.getByRole("button", { name: "提交评估" })
+test("keeps a response tentative until submission and then locks judgments but not replay", async ({
+  page,
+}) => {
+  await page.goto("/?lang=en")
+  const accepted = page.getByRole("button", { name: "Fulfills the request", exact: true })
+  const rejected = page.getByRole("button", { name: "Does not fulfill the request", exact: true })
+  const submit = page.getByRole("button", { name: "Submit assessment", exact: true })
+  const menu = page.getByRole("combobox", { name: "Jump to step" })
 
+  await expect(submit).toBeDisabled()
   await rejected.click()
   await expect(accepted).toBeEnabled()
   await expect(rejected).toBeEnabled()
   await expect(submit).toBeEnabled()
-  await expect(page.getByText(/已选择：不符合原始任务。提交前仍可更改。/)).toBeVisible()
-
   await accepted.click()
-  await expect(page.getByText(/已选择：符合原始任务。提交前仍可更改。/)).toBeVisible()
-  await expect(page.getByText("提交前已更改选择 1 次。")).toBeVisible()
-
+  await expect(accepted).toHaveAttribute("aria-pressed", "true")
   await submit.click()
+
   await expect(accepted).toBeDisabled()
   await expect(rejected).toBeDisabled()
   await expect(submit).toBeDisabled()
-  await expect(page.getByText(/已提交：符合原始任务。/)).toBeVisible()
-  await expect(page.locator(".decision-footer")).not.toContainText(/正确|错误/)
-})
+  await expect(page.getByText("Response recorded on this page only.")).toBeVisible()
+  await expect(page.locator(".study-response")).not.toContainText(/correct|incorrect|错误/)
 
-test("keeps the decision in the transcript and jumps to the latest content", async ({ page }) => {
-  await page.goto("/")
-  const scroll = page.locator(".chat-scroll")
-  await expect(scroll.locator(".decision-footer")).toBeVisible()
-  await expect(page.locator(".agent-prompt textarea")).toBeDisabled()
-  await expect(page.locator(".agent-prompt")).toContainText("synthetic-model")
-
-  const jump = page.getByRole("button", { name: "跳到最新内容" })
-  await expect(jump).toBeVisible()
-  await jump.click()
-  await expect
-    .poll(() =>
-      scroll.evaluate(
-        (element) =>
-          Math.ceil(element.scrollTop + element.clientHeight) >= element.scrollHeight - 1,
-      ),
-    )
-    .toBe(true)
-  await expect(jump).toBeHidden()
+  await menu.selectOption("3")
+  await expect(page.getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
+  await expect(page.getByText("Before step 4 of 8")).toBeVisible()
+  await expect(page.locator(".page-screenshot")).toHaveAttribute(
+    "src",
+    "screenshots/en/04-sorted.webp",
+  )
+  await expect(page.getByRole("button", { name: "Next step" })).toBeEnabled()
 })
 
 test("fits the screenshot by default and toggles to actual size on click", async ({ page }) => {
-  await page.goto("/")
+  await page.goto("/?lang=en")
   const viewport = page.locator(".browser-viewport")
   const trigger = page.locator(".screenshot-trigger")
   const image = page.locator(".page-screenshot")
 
   await expect(image).toBeVisible()
+  await expect(image).toHaveAttribute("width", "1200")
+  await expect(image).toHaveAttribute("height", "800")
+  await expect(image).toHaveCSS("filter", "none")
+  await expect(image).toHaveCSS("opacity", "1")
   await expect(trigger).toHaveAttribute("data-zoomed", "false")
   await expect(trigger).toHaveCSS("cursor", "zoom-in")
   await expect
@@ -148,7 +171,7 @@ test("fits the screenshot by default and toggles to actual size on click", async
 })
 
 test("enforces the desktop minimum without page-level overflow", async ({ page }) => {
-  await page.goto("/")
+  await page.goto("/?lang=zh")
   await page.setViewportSize({ width: 1279, height: 720 })
   await expect(page.getByRole("heading", { name: "请在桌面窗口中使用浏览助手" })).toBeVisible()
   await expect(page.locator(".app-shell")).toBeHidden()
