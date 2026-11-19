@@ -8,10 +8,11 @@ An HCI research prototype for reviewing a recorded browser-agent run and judging
 
 - One shared three-pane workspace: execution rail, recorded-page pane, and viewed-step inspector. The original task, the agent-reported result, and the on-screen response form are separate shell regions.
 - All conditions keep the same action labels, screenshots, rail order, task/report text, geometry, and replay behavior.
-- The replay menu, rail, and Previous/Next arrows select the same stable episode ID. The initial view is the explicit final observation. Final state is not a numbered step and cannot be marked.
+- The compact layout reserves the independently scrolling inspector for evidence and keeps the assessment visible below the workspace. Browser metadata uses two compact rows; the screenshot fits both available dimensions without cropping or normal image-well scrolling. Click it for scrollable native-pixel inspection.
+- The execution rail is the only replay navigation. **Final state** is its last item, in the same scrolling list and with the same selection styling as the steps. The initial view is the explicit final observation; it is not a numbered action and cannot be marked.
 - Selecting an episode shows the page **before** that action. A missing image is reported as missing evidence; the after-state is never substituted.
 - Screenshots keep their intrinsic dimensions and fit/actual-size zoom behavior in every condition.
-- **Mark as earliest mistake** is independent of the viewed page and of accept/reject. A participant can mark at most one episode. Cannot determine clears a concrete mark without moving the replay.
+- The assessment's **earliest mistaken action** select is the only marking control, independent of the viewed page and of accept/reject. A participant can mark at most one episode. Cannot determine or clearing the select removes a concrete mark without moving the replay.
 - The response form requires accept/reject, requires a concrete episode or Cannot determine for rejection, and requires a nonblank explanation for a marked episode. The explanation limit is 500 characters. Submission is on-screen only; reload clears the judgment, and there is no export, backend, telemetry, or response persistence.
 - Locale switching keeps the stable viewed episode, mark, verdict, and participant-authored explanation.
 - The pinned condition is checked in at `src/study-condition.ts`; it cannot be selected from a URL, query string, or browser storage.

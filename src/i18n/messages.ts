@@ -25,6 +25,7 @@ export type Messages = {
   readonly stepRecordedAfter: (ordinal: number, total: number) => string
   readonly lastRecordedState: string
   readonly lastRecordedStateNote: string
+  readonly recordedNotLive: string
   readonly capturedAt: (time: string) => string
   readonly zoomScreenshot: string
   readonly fitScreenshot: string
@@ -94,6 +95,7 @@ export const zhMessages = {
   stepRecordedAfter: (ordinal, total) => `步骤 ${ordinal} / ${total} · 此步之后录制`,
   lastRecordedState: "最后一次录制的状态",
   lastRecordedStateNote: "运行结束时录制 · 非实时",
+  recordedNotLive: "录制 · 非实时",
   capturedAt: (time) => `录制于 ${time}`,
   zoomScreenshot: "放大截图至实际大小",
   fitScreenshot: "缩放截图以适应面板",
@@ -167,6 +169,7 @@ export const enMessages = {
   stepRecordedAfter: (ordinal, total) => `Step ${ordinal} / ${total} · recorded after this step`,
   lastRecordedState: "Last recorded state",
   lastRecordedStateNote: "End of run · not live",
+  recordedNotLive: "Recorded · not live",
   capturedAt: (time) => `Captured ${time}`,
   zoomScreenshot: "Zoom screenshot to actual size",
   fitScreenshot: "Fit screenshot to panel",
@@ -180,7 +183,7 @@ export const enMessages = {
   technicalDetails: (cellCount) =>
     `Technical details · ${cellCount} Python ${cellCount === 1 ? "cell" : "cells"}`,
   technicalFinalReportRedacted: "[final response shown in the conversation]",
-  decisionQuestion: "Does the recorded work fulfill the original request?",
+  decisionQuestion: "Did the recorded run fulfill the request?",
   decisionExplanation: "Submitting does not place an order, rerun the agent, or trigger a repair.",
   acceptResult: "Fulfills the request",
   rejectResult: "Does not fulfill the request",

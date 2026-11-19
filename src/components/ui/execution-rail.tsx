@@ -9,6 +9,7 @@ type ExecutionRailProps = {
   readonly viewed: ViewedSelection
   readonly localization: Localization
   readonly onView: (episodeId: string) => void
+  readonly onFinal: () => void
 }
 
 export function ExecutionRail({
@@ -16,8 +17,10 @@ export function ExecutionRail({
   viewed,
   localization,
   onView,
+  onFinal,
 }: ExecutionRailProps): React.JSX.Element {
   const messages = useMessages()
+  const isFinalViewed = viewed.kind === "final"
 
   return (
     <nav className="execution-rail" aria-label={messages.study.executionOverview}>
@@ -55,6 +58,23 @@ export function ExecutionRail({
             </li>
           )
         })}
+        <li>
+          <button
+            type="button"
+            className="execution-rail-item"
+            data-viewed={isFinalViewed}
+            data-marked={false}
+            aria-current={isFinalViewed ? "step" : undefined}
+            onClick={onFinal}
+          >
+            <span className="execution-rail-action">{messages.study.finalStateHeading}</span>
+            <span className="execution-rail-state">
+              {isFinalViewed ? (
+                <span className="execution-rail-viewed">{messages.study.viewedStepTag}</span>
+              ) : null}
+            </span>
+          </button>
+        </li>
       </ol>
     </nav>
   )

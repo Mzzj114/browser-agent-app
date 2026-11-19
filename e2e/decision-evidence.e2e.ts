@@ -2,8 +2,6 @@ import { expect, test } from "@playwright/test"
 import { studyCondition } from "../src/study-condition.ts"
 
 const en = {
-  jumpToStep: "Jump to step",
-  mark: "Mark as earliest mistake",
   localizationPrompt: /earliest mistaken action/,
   explanation: /short explanation/i,
   accept: "Fulfills the request",
@@ -22,8 +20,6 @@ const en = {
 } as const
 
 const zh = {
-  jumpToStep: "跳转步骤",
-  mark: "标记为最早错误操作",
   localizationPrompt: /最早的错误操作/,
   explanation: /简短说明/,
   accept: "符合原始任务",
@@ -55,7 +51,7 @@ test("loads the pinned condition without a URL override and exposes no technical
     await expect(page.getByRole("table")).toHaveCount(0)
     expect(body).not.toMatch(/probability|offered operations|offered targets/i)
   } else {
-    await page.getByRole("combobox", { name: en.jumpToStep }).selectOption("3")
+    await page.locator(".execution-rail-item").nth(3).click()
     await expect(page.getByRole("table", { name: en.offeredOperations })).toBeVisible()
     await expect(page.getByRole("table", { name: en.offeredTargets })).toBeVisible()
   }
@@ -65,10 +61,10 @@ test("shows both heads for a target action and no target head for a terminal act
   page,
 }) => {
   await page.goto("/?lang=en")
-  const jump = page.getByRole("combobox", { name: en.jumpToStep })
-  await jump.selectOption("7")
+  const items = page.locator(".execution-rail-list .execution-rail-item")
+  await items.nth(7).click()
   await expect(page.getByText(en.beforeStep8)).toBeVisible()
-  await expect(page.getByRole("button", { name: en.mark, exact: true })).toBeEnabled()
+  await expect(page.getByRole("combobox", { name: en.localizationPrompt })).toBeEnabled()
 
   if (studyCondition === "baseline") {
     await expect(page.getByRole("table")).toHaveCount(0)
@@ -76,12 +72,12 @@ test("shows both heads for a target action and no target head for a terminal act
     await expect(page.getByRole("table", { name: en.offeredOperations })).toBeVisible()
     await expect(page.getByRole("table", { name: en.offeredTargets })).toHaveCount(0)
     await expect(page.getByText(en.noTargetRequired)).toBeVisible()
-    await jump.selectOption("3")
+    await items.nth(3).click()
     await expect(page.getByRole("table", { name: en.offeredOperations })).toBeVisible()
     await expect(page.getByRole("table", { name: en.offeredTargets })).toBeVisible()
   }
 
-  await page.getByRole("button", { name: "Return to last recorded state", exact: true }).click()
+  await items.last().click()
   await expect(page.getByRole("heading", { name: en.finalState })).toBeVisible()
   await expect(
     page.getByRole("button", { name: /Mark as earliest mistake|Clear mark/ }),
@@ -90,9 +86,9 @@ test("shows both heads for a target action and no target head for a terminal act
 
 test("viewing another action never moves the participant's mark", async ({ page }) => {
   await page.goto("/?lang=en")
-  await page.getByRole("combobox", { name: en.jumpToStep }).selectOption("3")
-  await page.getByRole("button", { name: en.mark, exact: true }).click()
-  await page.getByRole("button", { name: "Next step", exact: true }).click()
+  await page.locator(".execution-rail-item").nth(3).click()
+  await page.getByRole("combobox", { name: en.localizationPrompt }).selectOption("episode-04")
+  await page.locator(".execution-rail-item").nth(4).click()
   await expect(page.getByRole("combobox", { name: /earliest mistaken action/i })).toHaveValue(
     "episode-04",
   )
@@ -105,7 +101,7 @@ test("viewing another action never moves the participant's mark", async ({ page 
   await expect(page.getByRole("combobox", { name: /earliest mistaken action/i })).toHaveValue(
     "episode-04",
   )
-  await page.getByRole("button", { name: "Return to last recorded state", exact: true }).click()
+  await page.locator(".execution-rail-item").last().click()
   await expect(page.getByRole("combobox", { name: /earliest mistaken action/i })).toHaveValue(
     "episode-04",
   )
@@ -115,8 +111,8 @@ test("validates a concrete rejection and accepts uncertainty without inventing a
   page,
 }) => {
   await page.goto("/?lang=en")
-  await page.getByRole("combobox", { name: en.jumpToStep }).selectOption("3")
-  await page.getByRole("button", { name: en.mark, exact: true }).click()
+  await page.locator(".execution-rail-item").nth(3).click()
+  await page.getByRole("combobox", { name: en.localizationPrompt }).selectOption("episode-04")
   await page.getByRole("button", { name: en.reject, exact: true }).click()
   const submit = page.getByRole("button", { name: en.submit, exact: true })
 
@@ -155,8 +151,8 @@ test("validates a concrete rejection and accepts uncertainty without inventing a
 test("locale switches preserve a marked draft and a submitted response", async ({ page }) => {
   const explanation = "  Keep this participant text exactly.\nSecond line.  "
   await page.goto("/?lang=zh")
-  await page.getByRole("combobox", { name: zh.jumpToStep }).selectOption("3")
-  await page.getByRole("button", { name: zh.mark, exact: true }).click()
+  await page.locator(".execution-rail-item").nth(3).click()
+  await page.getByRole("combobox", { name: zh.localizationPrompt }).selectOption("episode-04")
   await page.getByRole("textbox", { name: zh.explanation }).fill(explanation)
   await page.getByRole("button", { name: zh.reject, exact: true }).click()
 
@@ -214,18 +210,18 @@ test("a real missing screenshot shows evidence failure without substituting an a
   await page.route("**/screenshots/en/04-sorted.webp", async (route) => {
     await route.fulfill({ status: 404, contentType: "text/plain", body: "not found" })
   })
-  const jump = page.getByRole("combobox", { name: en.jumpToStep })
-  await jump.selectOption("3")
+  const items = page.locator(".execution-rail-list .execution-rail-item")
+  await items.nth(3).click()
   await expect(page.getByText(en.beforeStep4)).toBeVisible()
   await expect(page.getByText(en.missingScreenshot)).toBeVisible()
   await expect(page.locator(".page-screenshot")).toHaveCount(0)
-  await expect(page.locator(".browser-state-action")).toContainText(
+  await expect(page.locator(".decision-inspector-action")).toContainText(
     "Opened “Cloud Walk Red Sneakers”",
   )
 
-  await jump.selectOption("4")
+  await items.nth(4).click()
   await expect(page.getByText("Before step 5 of 8")).toBeVisible()
   await expect(page.locator(".page-screenshot")).toBeVisible()
-  await jump.selectOption("2")
+  await items.nth(2).click()
   await expect(page.locator(".page-screenshot")).toBeVisible()
 })

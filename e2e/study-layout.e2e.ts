@@ -21,12 +21,6 @@ const copy = {
   zh: {
     url: "/?lang=zh",
     executionOverview: "执行概览",
-    jumpToStep: "跳转步骤",
-    previousStep: "上一步",
-    nextStep: "下一步",
-    returnToFinal: "返回最后录制状态",
-    mark: "标记为最早错误操作",
-    clearMark: "清除标记",
     accept: "符合原始任务",
     reject: "不符合原始任务",
     submit: "提交评估",
@@ -46,12 +40,6 @@ const copy = {
   en: {
     url: "/?lang=en",
     executionOverview: "Execution overview",
-    jumpToStep: "Jump to step",
-    previousStep: "Previous step",
-    nextStep: "Next step",
-    returnToFinal: "Return to last recorded state",
-    mark: "Mark as earliest mistake",
-    clearMark: "Clear mark",
     accept: "Fulfills the request",
     reject: "Does not fulfill the request",
     submit: "Submit assessment",
@@ -157,30 +145,31 @@ for (const locale of ["zh", "en"] as const) {
       await expect(initialImage).toHaveAttribute("height", String(expectedFinal.height))
       const initialReference = await screenshotReference(initialImage)
       expect(initialReference).toEqual(expectedFinal)
-      await expect(page.locator(".study-context-panel").nth(0).locator("p")).toHaveText(
-        runs[locale].task,
-      )
-      await expect(page.locator(".study-context-panel").nth(1).locator("p").first()).toHaveText(
-        runs[locale].report,
-      )
+      await expect(
+        page.locator(".study-context-panel").nth(0).getByText(runs[locale].task, { exact: true }),
+      ).toHaveText(runs[locale].task)
+      await expect(
+        page.locator(".study-context-panel").nth(1).getByText(runs[locale].report, { exact: true }),
+      ).toHaveText(runs[locale].report)
       await capture(page, locale, viewport, "initial")
 
       // The long context is scrollable without stretching the shell.
       const context = page.locator(".study-context")
       await expect(context).toHaveCSS("overflow", "visible")
-      await expect(page.locator(".study-context-panel").first()).toHaveCSS("overflow-y", "auto")
+      await expect(page.locator(".study-context-scroll").first()).toHaveCSS("overflow-y", "auto")
 
-      const jump = page.getByRole("combobox", { name: text.jumpToStep })
-      await tabUntilFocused(page, jump)
-      await expect(jump).toBeFocused()
-      await expect(jump).toHaveCSS("outline-style", "solid")
+      const items = page.locator(".execution-rail-list .execution-rail-item")
+      const viewedStep = items.nth(3)
+      await tabUntilFocused(page, viewedStep)
+      await expect(viewedStep).toBeFocused()
+      await expect(viewedStep).toHaveCSS("outline-style", "solid")
 
       // A real 404 shows missing evidence; another healthy path recovers without an after-image.
-      await jump.selectOption("4")
+      await items.nth(4).click()
       await expect(page.getByText(text.beforeStep5)).toBeVisible()
       await expect(page.getByText(text.missingScreenshot)).toBeVisible()
       await expect(page.locator(".page-screenshot")).toHaveCount(0)
-      await jump.selectOption("3")
+      await viewedStep.click()
       await expect(page.getByText(text.beforeStep4)).toBeVisible()
       await expect(page.locator(".page-screenshot")).toHaveAttribute(
         "src",
@@ -209,7 +198,7 @@ for (const locale of ["zh", "en"] as const) {
       }
 
       // Re-observe the restored final state after episode navigation before recording it.
-      await page.getByRole("button", { name: text.returnToFinal, exact: true }).click()
+      await items.last().click()
       await expect(page.getByRole("heading", { name: text.finalState })).toBeVisible()
       await expect(page.locator(".browser-state-label")).toHaveText(text.lastRecordedState)
       const restoredFinalImage = page.locator(".page-screenshot")
@@ -218,11 +207,10 @@ for (const locale of ["zh", "en"] as const) {
       await expect(restoredFinalImage).toHaveAttribute("height", String(expectedFinal.height))
       const finalReference = await screenshotReference(restoredFinalImage)
       expect(finalReference).toEqual(initialReference)
-      await jump.selectOption("3")
+      await viewedStep.click()
       await expect(page.getByText(text.beforeStep4)).toBeVisible()
 
-      const mark = page.getByRole("button", { name: text.mark, exact: true })
-      const markControl = page.locator(".decision-inspector > .action-button")
+      const mark = page.getByRole("combobox", { name: text.localizationPrompt })
       await tabUntilFocused(page, mark)
       await expect(mark).toBeFocused()
       await expect(mark).toHaveCSS("outline-style", "solid")
@@ -232,7 +220,9 @@ for (const locale of ["zh", "en"] as const) {
       const viewer = page.locator(".browser-viewport")
       await expect(rail).toHaveCSS("overflow-y", "auto")
       await expect(inspector).toHaveCSS("overflow-y", "auto")
-      await expect(viewer).toHaveCSS("overflow", "auto")
+      await expect
+        .poll(() => viewer.evaluate((element) => element.scrollHeight > element.clientHeight))
+        .toBe(false)
       await rail.evaluate((element) => {
         element.scrollTop = element.scrollHeight
       })
@@ -256,7 +246,7 @@ for (const locale of ["zh", "en"] as const) {
         )
         .toBe(0)
 
-      await mark.click()
+      await mark.selectOption("episode-04")
       await expect(page.getByRole("combobox", { name: text.localizationPrompt })).toHaveValue(
         "episode-04",
       )
@@ -287,11 +277,8 @@ for (const locale of ["zh", "en"] as const) {
       await capture(page, locale, viewport, "uncertainty")
 
       const controls = {
-        jump: await box(jump),
-        previous: await box(page.getByRole("button", { name: text.previousStep, exact: true })),
-        next: await box(page.getByRole("button", { name: text.nextStep, exact: true })),
-        final: await box(page.getByRole("button", { name: text.returnToFinal, exact: true })),
-        mark: await box(markControl),
+        viewedStep: await box(viewedStep),
+        final: await box(items.last()),
         accept: await box(page.getByRole("button", { name: text.accept, exact: true })),
         reject: await box(page.getByRole("button", { name: text.reject, exact: true })),
         localization: await box(page.getByRole("combobox", { name: text.localizationPrompt })),
@@ -305,7 +292,9 @@ for (const locale of ["zh", "en"] as const) {
         inspector: await box(inspector),
         response: await box(page.locator(".study-response")),
       }
-      const actionOrder = await page.locator(".execution-rail-action").allTextContents()
+      const actionOrder = await page
+        .locator(".execution-rail-list > li:not(:last-child) .execution-rail-action")
+        .allTextContents()
 
       await page.getByRole("button", { name: text.reject, exact: true }).click()
       await page.getByRole("button", { name: text.submit, exact: true }).click()

@@ -78,7 +78,7 @@ export const zhStudyMessages = {
   localizationPrompt: "哪一步包含 Agent 最早的错误操作？",
   localizationPlaceholder: "请选择步骤或“无法判断”",
   cannotDetermine: "无法判断",
-  uncertaintyHelper: "如果证据无法确定最早的错误操作，请选择“无法判断”。选择此项时说明为可选项。",
+  uncertaintyHelper: "证据不明确时可选择“无法判断”。",
   explanationHeading: "简短说明",
   explanationPlaceholder: "简要说明你核对过的证据或判断依据。",
   explanationOptional: "可选",
@@ -135,8 +135,7 @@ export const enStudyMessages = {
   localizationPrompt: "Which step contains the agent's earliest mistaken action?",
   localizationPlaceholder: "Select a step or Cannot determine",
   cannotDetermine: "Cannot determine",
-  uncertaintyHelper:
-    "If the evidence does not identify a clear earliest mistaken action, choose Cannot determine. The explanation is optional for that answer.",
+  uncertaintyHelper: "Choose Cannot determine if the evidence is unclear.",
   explanationHeading: "Short explanation",
   explanationPlaceholder: "Briefly describe the evidence you checked.",
   explanationOptional: "Optional",

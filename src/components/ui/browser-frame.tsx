@@ -15,19 +15,15 @@ export type BrowserFramePageState = {
 
 type BrowserFrameProps = {
   readonly pageState: BrowserFramePageState
-  readonly stepCount: number
   readonly stateLabel: string
   readonly stateNote: string | null
-  readonly actionLabel: string | null
   readonly capturedAtLabel: string
 }
 
 export function BrowserFrame({
   pageState,
-  stepCount,
   stateLabel,
   stateNote,
-  actionLabel,
   capturedAtLabel,
 }: BrowserFrameProps) {
   const messages = useMessages()
@@ -47,30 +43,30 @@ export function BrowserFrame({
 
   return (
     <section className="browser-frame" aria-label={messages.browserLabel}>
-      <div className="browser-tabs">
+      <div className="browser-meta">
         <div className="browser-tab">
           <Globe2 aria-hidden="true" />
-          <span>{pageState.title}</span>
+          <span className="browser-tab-title" title={pageState.title}>
+            {pageState.title}
+          </span>
         </div>
-        <span className="browser-agent-label">{messages.recordedExecution(stepCount)}</span>
-      </div>
-      <div className="browser-address-row">
         <div className="browser-address">
           <LockKeyhole aria-hidden="true" />
-          <span>{pageState.url}</span>
+          <span className="browser-address-text" title={pageState.url}>
+            {pageState.url}
+          </span>
         </div>
       </div>
       <div className="browser-evidence-caption">
-        <span className="browser-state-label" aria-live="polite">
+        <span className="browser-state-label" aria-live="polite" title={stateLabel}>
           {stateLabel}
         </span>
-        {actionLabel === null ? null : <span className="browser-state-action">{actionLabel}</span>}
         <time className="browser-state-time" dateTime={pageState.capturedAt}>
           {capturedAtLabel}
         </time>
         {stateNote === null ? null : <span className="browser-state-badge">{stateNote}</span>}
       </div>
-      <div className="browser-viewport">
+      <div className="browser-viewport" data-zoomed={isZoomed}>
         {hasScreenshot ? (
           <button
             type="button"

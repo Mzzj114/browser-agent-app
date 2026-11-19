@@ -1,6 +1,11 @@
 # Compact Replay Layout
 
-**Status:** Approach A selected by the user. Short design awaiting approval.
+**Status:** Approach A approved by the user's 2026-11-18 implementation request.
+
+**Follow-up:** The inspector replay/marking controls described below are superseded by
+[`2026-11-18-evidence-first-inspector-design.md`](2026-11-18-evidence-first-inspector-design.md).
+Navigation now lives only in the rail, including Final state last in the same scrolling
+list; marking lives only in the assessment select. The compact viewer and form remain.
 
 ## Intent
 

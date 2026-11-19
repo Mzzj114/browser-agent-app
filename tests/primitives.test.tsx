@@ -40,10 +40,8 @@ function renderWithLocale(ui: ReactElement) {
 
 const browserProps = {
   pageState: samplePage,
-  stepCount: agentRun.steps.length,
   stateLabel: "步骤 2 / 8 · 此步之后录制",
-  stateNote: null,
-  actionLabel: sampleStep.action,
+  stateNote: "录制 · 非实时",
   capturedAtLabel: "录制于 17:00",
 }
 
@@ -111,9 +109,10 @@ describe("primitive controls", () => {
     const pageState = { ...samplePage, screenshot: null }
     // When the browser frame is rendered.
     renderWithLocale(<BrowserFrame {...browserProps} pageState={pageState} />)
-    // Then a textual fallback replaces the image and the execution count stays visible.
+    // Then a textual fallback replaces the image while the compact metadata stays visible.
     expect(screen.getByText("此步骤没有可用截图")).toBeInTheDocument()
-    expect(screen.getByText("录制执行 · 8 步")).toBeInTheDocument()
+    expect(screen.getByText(samplePage.title)).toBeVisible()
+    expect(screen.getByText(samplePage.url)).toBeVisible()
     expect(screen.queryByRole("img")).not.toBeInTheDocument()
   })
 
@@ -156,10 +155,13 @@ describe("primitive controls", () => {
     // Given a historical frame with a screenshot.
     const user = userEvent.setup()
     renderWithLocale(<BrowserFrame {...browserProps} />)
-    // Then the step identity, action, and capture time are present.
+    // Then the compact metadata keeps the full page title, URL, state, and capture time.
     expect(screen.getByText("步骤 2 / 8 · 此步之后录制")).toBeVisible()
-    expect(screen.getByText(sampleStep.action)).toBeVisible()
+    expect(screen.getByText("录制 · 非实时")).toBeVisible()
     expect(screen.getByText("录制于 17:00")).toBeVisible()
+    expect(screen.getByText(samplePage.title)).toHaveAttribute("title", samplePage.title)
+    expect(screen.getByText(samplePage.url)).toHaveAttribute("title", samplePage.url)
+    expect(screen.queryByText(sampleStep.action)).toBeNull()
     // And the image keeps its recorded pixel dimensions for inspectable scaling.
     const image = screen.getByRole("img")
     expect(image).toHaveAttribute("width", "1200")

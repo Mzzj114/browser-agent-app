@@ -16,7 +16,7 @@ test("offers an English interface backed by the English run", async ({ page }) =
       .getByRole("navigation", { name: "Execution overview" })
       .getByText("Reported task completion"),
   ).toBeVisible()
-  await expect(page.getByText("Recorded execution · 8 steps")).toBeVisible()
+  await expect(page.locator(".product-header").getByText("8 steps", { exact: true })).toBeVisible()
 
   await page.getByRole("button", { name: "中文" }).click()
   await expect(page.getByRole("heading", { name: "最终状态" })).toBeVisible()
@@ -31,9 +31,10 @@ test("shows the before-image for a historical step and returns to the final stat
     "screenshots/en/08-cart.webp",
   )
 
-  await page.getByRole("combobox", { name: "Jump to step" }).selectOption("3")
-  const browser = page.getByRole("region", { name: "Agent browser" })
-  await expect(browser).toContainText("Cloud Walk Red Sneakers")
+  await page.locator(".execution-rail-item").nth(3).click()
+  await expect(page.locator(".decision-inspector-action")).toHaveText(
+    "Opened “Cloud Walk Red Sneakers”",
+  )
   await expect(page.getByText("Before step 4 of 8")).toBeVisible()
   await expect(page.locator(".page-screenshot")).toHaveAttribute(
     "src",
@@ -44,10 +45,10 @@ test("shows the before-image for a historical step and returns to the final stat
   )
   await expect(page.getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
 
-  await page.getByRole("button", { name: "Return to last recorded state" }).click()
+  await page.locator(".execution-rail-item").last().click()
   await expect(page.locator(".browser-state-label")).toHaveText("Last recorded state")
   await expect(page.getByRole("heading", { name: "Final state" })).toBeVisible()
-  await expect(page.getByRole("button", { name: "Next step" })).toBeDisabled()
+  await expect(page.locator(".execution-rail-item").last()).toHaveAttribute("aria-current", "step")
 })
 
 test("removes technical disclosure and the disabled composer from the participant workspace", async ({
@@ -63,18 +64,16 @@ test("removes technical disclosure and the disabled composer from the participan
   await expect(page.getByText("No mistaken action")).toHaveCount(0)
 })
 
-test("keeps the step menu, execution rail, and arrows on the same viewed ID", async ({ page }) => {
+test("navigates historical steps and final state through the execution rail", async ({ page }) => {
   await page.goto("/?lang=en")
-  const menu = page.getByRole("combobox", { name: "Jump to step" })
+  const items = page.locator(".execution-rail-list .execution-rail-item")
 
-  await menu.selectOption("3")
-  await expect(menu).toHaveValue("3")
+  await items.nth(3).click()
+  await expect(items.nth(3)).toHaveAttribute("aria-current", "step")
   await expect(page.getByText("Before step 4 of 8")).toBeVisible()
-  await expect(page.getByRole("button", { name: "Previous step" })).toBeEnabled()
-  await expect(page.getByRole("button", { name: "Next step" })).toBeEnabled()
 
-  await page.getByRole("button", { name: "Next step" }).click()
-  await expect(menu).toHaveValue("4")
+  await items.nth(4).click()
+  await expect(items.nth(4)).toHaveAttribute("aria-current", "step")
   await expect(page.getByText("Before step 5 of 8")).toBeVisible()
   await expect(page.locator(".page-screenshot")).toHaveAttribute(
     "src",
@@ -85,12 +84,16 @@ test("keeps the step menu, execution rail, and arrows on the same viewed ID", as
     .getByRole("navigation", { name: "Execution overview" })
     .getByRole("button", { name: /Step 2.*Submitted the search/ })
     .click()
-  await expect(menu).toHaveValue("1")
+  await expect(items.nth(1)).toHaveAttribute("aria-current", "step")
   await expect(page.getByText("Before step 2 of 8")).toBeVisible()
   await expect(page.locator(".page-screenshot")).toHaveAttribute(
     "src",
     "screenshots/en/02-search-filled.webp",
   )
+  await items.last().click()
+  await expect(items.last()).toContainText("Final state")
+  await expect(items.last()).toHaveAttribute("aria-current", "step")
+  await expect(page.getByRole("heading", { name: "Final state" })).toBeVisible()
 })
 
 test("keeps a response tentative until submission and then locks judgments but not replay", async ({
@@ -100,7 +103,7 @@ test("keeps a response tentative until submission and then locks judgments but n
   const accepted = page.getByRole("button", { name: "Fulfills the request", exact: true })
   const rejected = page.getByRole("button", { name: "Does not fulfill the request", exact: true })
   const submit = page.getByRole("button", { name: "Submit assessment", exact: true })
-  const menu = page.getByRole("combobox", { name: "Jump to step" })
+  const items = page.locator(".execution-rail-list .execution-rail-item")
 
   await expect(submit).toBeDisabled()
   await rejected.click()
@@ -117,14 +120,14 @@ test("keeps a response tentative until submission and then locks judgments but n
   await expect(page.getByText("Response recorded on this page only.")).toBeVisible()
   await expect(page.locator(".study-response")).not.toContainText(/correct|incorrect|错误/)
 
-  await menu.selectOption("3")
+  await items.nth(3).click()
   await expect(page.getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
   await expect(page.getByText("Before step 4 of 8")).toBeVisible()
   await expect(page.locator(".page-screenshot")).toHaveAttribute(
     "src",
     "screenshots/en/04-sorted.webp",
   )
-  await expect(page.getByRole("button", { name: "Next step" })).toBeEnabled()
+  await expect(items.last()).toBeEnabled()
 })
 
 test("fits the screenshot by default and toggles to actual size on click", async ({ page }) => {
@@ -143,6 +146,9 @@ test("fits the screenshot by default and toggles to actual size on click", async
   await expect
     .poll(() => viewport.evaluate((element) => element.scrollWidth > element.clientWidth))
     .toBe(false)
+  await expect
+    .poll(() => viewport.evaluate((element) => element.scrollHeight > element.clientHeight))
+    .toBe(false)
 
   await trigger.click()
   await expect(trigger).toHaveAttribute("data-zoomed", "true")
@@ -151,10 +157,22 @@ test("fits the screenshot by default and toggles to actual size on click", async
     .poll(() =>
       image.evaluate((element) => {
         const rect = element.getBoundingClientRect()
-        return `${Math.round(rect.width)}x${Math.round(rect.height)}`
+        const style = getComputedStyle(element)
+        return {
+          width: Math.round(
+            rect.width -
+              Number.parseFloat(style.borderLeftWidth) -
+              Number.parseFloat(style.borderRightWidth),
+          ),
+          height: Math.round(
+            rect.height -
+              Number.parseFloat(style.borderTopWidth) -
+              Number.parseFloat(style.borderBottomWidth),
+          ),
+        }
       }),
     )
-    .toBe("1202x802")
+    .toEqual({ width: 1200, height: 800 })
   await expect
     .poll(() => viewport.evaluate((element) => element.scrollWidth > element.clientWidth))
     .toBe(true)
@@ -167,6 +185,9 @@ test("fits the screenshot by default and toggles to actual size on click", async
   await expect(trigger).toHaveCSS("cursor", "zoom-in")
   await expect
     .poll(() => viewport.evaluate((element) => element.scrollWidth > element.clientWidth))
+    .toBe(false)
+  await expect
+    .poll(() => viewport.evaluate((element) => element.scrollHeight > element.clientHeight))
     .toBe(false)
 })
 

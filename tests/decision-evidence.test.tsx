@@ -8,11 +8,6 @@ import { ExecutionRail } from "../src/components/ui/execution-rail"
 import type { ViewedSelection } from "../src/domain/decision-replay.ts"
 import { projectRun } from "../src/domain/project-run.ts"
 import { studyConditions } from "../src/domain/study-condition.ts"
-import {
-  initialStudyResponse,
-  type ResponseAction,
-  type StudyResponse,
-} from "../src/domain/study-response.ts"
 import type { StudyRun } from "../src/domain/study-run-schema.ts"
 import { LocaleProvider } from "../src/i18n"
 import { edgeRun, studyRuns } from "./fixtures/decision-runs.ts"
@@ -27,21 +22,8 @@ function renderEnglish(element: ReactElement) {
   )
 }
 
-function renderInspector(
-  run: StudyRun,
-  viewed: ViewedSelection,
-  response: StudyResponse = initialStudyResponse(),
-  onResponse: (action: ResponseAction) => void = vi.fn(),
-) {
-  return renderEnglish(
-    <DecisionInspector run={run} viewed={viewed} response={response} onResponse={onResponse} />,
-  )
-}
-
-function episodeById(run: StudyRun, episodeId: string): StudyRun["episodes"][number] {
-  const episode = run.episodes.find((item) => item.id === episodeId)
-  if (!episode) throw new Error(`Missing episode ${episodeId}`)
-  return episode
+function renderInspector(run: StudyRun, viewed: ViewedSelection) {
+  return renderEnglish(<DecisionInspector run={run} viewed={viewed} />)
 }
 
 function rowIds(table: HTMLElement): readonly (string | null)[] {
@@ -142,11 +124,15 @@ describe("execution rail", () => {
         viewed={{ kind: "final" }}
         localization={{ kind: "unanswered" }}
         onView={vi.fn()}
+        onFinal={vi.fn()}
       />,
     )
 
     const buttons = screen.getAllByRole("button")
-    expect(buttons).toHaveLength(8)
+    expect(buttons).toHaveLength(9)
+    expect(buttons.at(-1)).toHaveTextContent("Final state")
+    expect(buttons.at(-1)).toHaveAttribute("aria-current", "step")
+    expect(document.querySelectorAll('[aria-current="step"]')).toHaveLength(1)
     expect(screen.getByText("Typed “red running shoes”")).toBeVisible()
     expect(screen.getByText("Opened “Cloud Walk Red Sneakers”")).toBeVisible()
     expect(screen.getByText("Reported task completion")).toBeVisible()
@@ -161,23 +147,30 @@ describe("execution rail", () => {
         viewed={{ kind: "episode", episodeId: "episode-04" }}
         localization={{ kind: "episode", episodeId: "episode-02" }}
         onView={vi.fn()}
+        onFinal={vi.fn()}
       />,
     )
 
     const buttons = screen.getAllByRole("button")
     const viewedButton = buttons[3]
     const markedButton = buttons[1]
-    if (!viewedButton || !markedButton) throw new Error("Expected eight rail buttons")
+    const finalButton = buttons[8]
+    if (!viewedButton || !markedButton || !finalButton) {
+      throw new Error("Expected nine rail buttons")
+    }
 
     expect(within(viewedButton).getByText("Viewed step 4")).toBeVisible()
     expect(within(viewedButton).queryByText("Your mark")).toBeNull()
     expect(within(markedButton).getByText("Your mark")).toBeVisible()
     expect(within(markedButton).queryByText("Viewed step 4")).toBeNull()
+    expect(finalButton).toHaveAttribute("data-marked", "false")
+    expect(finalButton).not.toHaveAttribute("aria-current", "step")
   })
 
   it("reports the stable episode ID when a viewed item is chosen", async () => {
     const user = userEvent.setup()
     const onView = vi.fn()
+    const onFinal = vi.fn()
     const run = studyRuns("probabilities").en
     renderEnglish(
       <ExecutionRail
@@ -185,11 +178,46 @@ describe("execution rail", () => {
         viewed={{ kind: "final" }}
         localization={{ kind: "unanswered" }}
         onView={onView}
+        onFinal={onFinal}
       />,
     )
 
     await user.click(screen.getByRole("button", { name: /Selected size 42/ }))
     expect(onView).toHaveBeenCalledWith("episode-05")
+    expect(onFinal).not.toHaveBeenCalled()
+  })
+
+  it("appends final state last in the same list and reports its selection", async () => {
+    const user = userEvent.setup()
+    const onView = vi.fn()
+    const onFinal = vi.fn()
+    const run = studyRuns("candidates").en
+    renderEnglish(
+      <ExecutionRail
+        episodes={run.episodes}
+        viewed={{ kind: "episode", episodeId: "episode-08" }}
+        localization={{ kind: "unanswered" }}
+        onView={onView}
+        onFinal={onFinal}
+      />,
+    )
+
+    // Then the final state shares the list and its item treatment.
+    const items = screen.getAllByRole("listitem")
+    expect(items).toHaveLength(9)
+    const finalItem = items[8]
+    if (!finalItem) throw new Error("Missing final rail item")
+    expect(finalItem).toHaveTextContent("Final state")
+    expect(finalItem.querySelector(".execution-rail-item")).not.toBeNull()
+    const finalButton = within(finalItem).getByRole("button")
+    expect(finalButton).toHaveAttribute("data-marked", "false")
+
+    // When the final item is chosen.
+    await user.click(finalButton)
+
+    // Then it reports only the final view.
+    expect(onFinal).toHaveBeenCalledTimes(1)
+    expect(onView).not.toHaveBeenCalled()
   })
 })
 
@@ -211,7 +239,9 @@ describe("decision inspector", () => {
     expect(container.querySelector("[aria-labelledby]")).toBeNull()
     expect(container.querySelector("[hidden]")).toBeNull()
     expect(container.innerHTML).not.toMatch(/candidate|probability/i)
-    expect(screen.getByRole("button", { name: "Mark as earliest mistake" })).toBeEnabled()
+    expect(within(container).queryByRole("button")).toBeNull()
+    expect(within(container).queryByRole("combobox")).toBeNull()
+    expect(within(container).queryByRole("textbox")).toBeNull()
   })
 
   it.each(studyConditions)("shows the same action and outcome in %s", (condition) => {
@@ -389,82 +419,23 @@ describe("decision inspector", () => {
       ),
     ).toBeVisible()
     expect(screen.queryByRole("button")).toBeNull()
+    expect(screen.queryByRole("combobox")).toBeNull()
+    expect(screen.queryByRole("textbox")).toBeNull()
     expect(screen.queryByRole("table")).toBeNull()
   })
 
-  it("marks and clears the viewed episode through response actions", async () => {
-    const user = userEvent.setup()
-    const onResponse = vi.fn()
-    const run = studyRuns("baseline").en
-    const viewed = { kind: "episode", episodeId: "episode-04" } as const
-    const view = renderEnglish(
-      <DecisionInspector
-        run={run}
-        viewed={viewed}
-        response={initialStudyResponse()}
-        onResponse={onResponse}
-      />,
-    )
-
-    await user.click(screen.getByRole("button", { name: "Mark as earliest mistake" }))
-    expect(onResponse).toHaveBeenCalledWith({ type: "mark", episodeId: "episode-04" })
-
-    view.rerender(
-      <LocaleProvider initialLocale="en" syncDocument={false}>
-        <DecisionInspector
-          run={run}
-          viewed={viewed}
-          response={{
-            ...initialStudyResponse(),
-            status: "pending",
-            verdict: "accepted",
-            localization: { kind: "episode", episodeId: "episode-04" },
-          }}
-          onResponse={onResponse}
-        />
-      </LocaleProvider>,
-    )
-
-    await user.click(screen.getByRole("button", { name: "Clear mark" }))
-    expect(onResponse).toHaveBeenLastCalledWith({ type: "mark", episodeId: "episode-04" })
-  })
-
-  it("disables marking but not rail viewing after submission", async () => {
-    const user = userEvent.setup()
+  it("renders the viewed episode as read-only evidence", () => {
     const run = studyRuns("candidates").en
-    const onView = vi.fn()
-    const onResponse = vi.fn()
-    const response: StudyResponse = {
-      status: "submitted",
-      verdict: "accepted",
-      localization: { kind: "episode", episodeId: "episode-04" },
-      explanation: "The earliest mistake was opening the wrong product.",
-    }
+    const { container } = renderInspector(run, { kind: "episode", episodeId: "episode-04" })
 
-    renderEnglish(
-      <>
-        <ExecutionRail
-          episodes={run.episodes}
-          viewed={{ kind: "episode", episodeId: "episode-04" }}
-          localization={response.localization}
-          onView={onView}
-        />
-        <DecisionInspector
-          run={run}
-          viewed={{ kind: "episode", episodeId: "episode-04" }}
-          response={response}
-          onResponse={onResponse}
-        />
-      </>,
-    )
-
-    expect(screen.getByRole("button", { name: "Clear mark" })).toBeDisabled()
-    const railButton = screen.getByRole("button", { name: /Selected size 42/ })
-    expect(railButton).toBeEnabled()
-    await user.click(railButton)
-    expect(onView).toHaveBeenCalledWith("episode-05")
-    expect(onResponse).not.toHaveBeenCalled()
-    expect(screen.getAllByRole("table")).toHaveLength(2)
-    expect(episodeById(run, "episode-04").action).toBe("Opened “Cloud Walk Red Sneakers”")
+    // Then the authored evidence remains, without any participant navigation or marking.
+    expect(screen.getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
+    expect(screen.getByText("Opened “Cloud Walk Red Sneakers”")).toBeVisible()
+    expect(screen.getByRole("table", { name: "Offered operations" })).toBeVisible()
+    expect(screen.getByRole("table", { name: "Offered targets" })).toBeVisible()
+    expect(within(container).queryByRole("button")).toBeNull()
+    expect(within(container).queryByRole("combobox")).toBeNull()
+    expect(within(container).queryByRole("textbox")).toBeNull()
+    expect(within(container).queryByText("Your mark")).toBeNull()
   })
 })

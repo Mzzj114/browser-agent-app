@@ -1,6 +1,6 @@
 .browser-frame {
   display: grid;
-  grid-template-rows: var(--tab-height) auto auto minmax(0, 1fr);
+  grid-template-rows: 30px 32px minmax(0, 1fr);
   min-inline-size: 0;
   min-block-size: 0;
   overflow: hidden;
@@ -10,12 +10,13 @@
   box-shadow: var(--shadow-browser), var(--shadow-inset);
 }
 
-.browser-tabs {
+.browser-meta {
   display: flex;
   min-inline-size: 0;
   align-items: center;
   gap: var(--space-3);
   padding-inline: var(--space-3);
+  overflow: hidden;
   border-block-end: 1px solid var(--border-default);
   background: var(--surface-secondary);
 }
@@ -23,67 +24,38 @@
 .browser-tab {
   display: flex;
   min-inline-size: 0;
+  max-inline-size: 45%;
   align-items: center;
-  gap: var(--space-2);
-  align-self: stretch;
-  padding-inline: var(--space-3);
-  border-inline: 1px solid var(--border-default);
-  background: var(--surface-primary);
+  gap: var(--space-1);
   color: var(--text-secondary);
   font-size: 12px;
   line-height: 1.45;
-}
-
-.browser-tab span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .browser-tab svg,
-.browser-agent-label {
-  color: var(--text-tertiary);
-}
-
-.browser-tab svg {
-  inline-size: 14px;
-  block-size: 14px;
-}
-
-.browser-agent-label {
-  margin-inline-start: auto;
-  font-size: 12px;
-  font-weight: 510;
-  white-space: nowrap;
-}
-
-.browser-address-row {
-  padding: var(--space-2) var(--space-3);
-  border-block-end: 1px solid var(--border-default);
-  background: var(--surface-secondary);
-}
-
-.browser-address {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-block-size: 32px;
-  padding-inline: var(--space-3);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-control);
-  background: var(--surface-primary);
-  color: var(--text-secondary);
-  font-size: 12px;
-  line-height: 1.45;
-}
-
 .browser-address svg {
   inline-size: 13px;
   block-size: 13px;
   color: var(--text-tertiary);
 }
 
-.browser-address span {
+.browser-tab-title {
+  font-weight: 510;
+}
+
+.browser-address {
+  display: flex;
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.browser-tab-title,
+.browser-address-text {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -92,28 +64,26 @@
 .browser-evidence-caption {
   display: flex;
   min-inline-size: 0;
-  align-items: baseline;
-  flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-1) var(--space-3);
-  padding: var(--space-2) var(--space-3);
+  padding-inline: var(--space-3);
+  overflow: hidden;
   border-block-end: 1px solid var(--border-default);
   background: var(--surface-primary);
+  white-space: nowrap;
 }
 
 .browser-state-label {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-size: 13px;
   font-weight: 590;
   line-height: 1.5;
 }
 
-.browser-state-action {
-  color: var(--text-secondary);
-  font-size: 13px;
-  line-height: 1.5;
-}
-
 .browser-state-badge {
-  align-self: center;
+  flex: 0 0 auto;
   padding: 0 var(--space-2);
   border: 1px solid var(--border-default);
   border-radius: var(--radius-control);
@@ -125,6 +95,7 @@
 }
 
 .browser-state-time {
+  flex: 0 0 auto;
   margin-inline-start: auto;
   color: var(--text-tertiary);
   font-size: 12px;
@@ -132,17 +103,21 @@
 }
 
 .browser-viewport {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   min-inline-size: 0;
   min-block-size: 0;
-  overflow: auto;
-  overscroll-behavior: contain;
-  /* padding: var(--space-4); */
+  overflow: hidden;
   background: var(--surface-sunken);
 }
 
 .screenshot-trigger {
   display: block;
   inline-size: 100%;
+  block-size: 100%;
+  min-inline-size: 0;
+  min-block-size: 0;
   padding: 0;
   border: 0;
   background: transparent;
@@ -152,21 +127,33 @@
 
 .screenshot-trigger[data-zoomed="true"] {
   inline-size: fit-content;
+  block-size: auto;
   cursor: zoom-out;
 }
 
 .page-screenshot {
   display: block;
   inline-size: 100%;
-  max-inline-size: none;
-  block-size: auto;
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-surface);
-  background: var(--surface-primary);
+  block-size: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
 }
 
 .screenshot-trigger[data-zoomed="true"] .page-screenshot {
   inline-size: auto;
+  block-size: auto;
+  max-inline-size: none;
+  max-block-size: none;
+  object-fit: none;
+}
+
+.browser-viewport[data-zoomed="true"] {
+  grid-template-columns: min-content;
+  grid-template-rows: min-content;
+  place-content: start;
+  overflow: auto;
+  overscroll-behavior: contain;
 }
 
 .missing-screenshot {
@@ -227,17 +214,14 @@
 }
 
 .replay-controls {
-  display: flex;
+  display: grid;
+  grid-template-rows: auto auto;
   min-inline-size: 0;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-2);
   margin: 0;
-  padding: var(--space-2) var(--space-3);
-  border-block-start: 1px solid var(--border-default);
-  border-block-end: 0;
-  border-inline: 0;
-  background: var(--surface-primary);
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 
 .replay-bar .replay-controls {
@@ -247,11 +231,17 @@
   background: transparent;
 }
 
-.replay-jump {
-  display: flex;
+.replay-navigation {
+  display: grid;
+  grid-template-columns: var(--control-height) minmax(0, 1fr) var(--control-height);
   min-inline-size: 0;
   align-items: center;
   gap: var(--space-2);
+}
+
+.replay-jump {
+  display: grid;
+  min-inline-size: 0;
   color: var(--text-tertiary);
   font-size: 12px;
 }
@@ -261,8 +251,9 @@
 }
 
 .replay-select {
-  min-inline-size: 8.5rem;
-  max-inline-size: 17rem;
+  inline-size: 100%;
+  min-inline-size: 0;
+  max-inline-size: none;
   min-block-size: var(--control-height);
   padding: 0 var(--space-2);
   border: 1px solid var(--border-default);
@@ -271,12 +262,6 @@
   color: var(--text-primary);
   font-size: 13px;
   text-overflow: ellipsis;
-}
-
-.replay-navigation {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
 }
 
 .replay-position {
@@ -288,7 +273,13 @@
   font-variant-numeric: tabular-nums;
 }
 
-.replay-controls > .action-button {
+.replay-controls > .replay-position {
+  min-inline-size: 0;
+}
+
+.replay-controls > .action-button,
+.replay-final {
+  inline-size: 100%;
   font-size: 14px;
 }
 

@@ -163,7 +163,7 @@ export function StudyResponseForm({
         </div>
       ) : null}
 
-      <div className="study-response-field">
+      <div className="study-response-field study-response-localization">
         <label htmlFor={localizationId}>{messages.study.localizationPrompt}</label>
         <select
           id={localizationId}
@@ -201,7 +201,7 @@ export function StudyResponseForm({
         ) : null}
       </div>
 
-      <div className="study-response-field">
+      <div className="study-response-field study-response-explanation">
         <label htmlFor={explanationId}>
           {messages.study.explanationHeading}{" "}
           <span className="study-response-indicator">
@@ -214,7 +214,7 @@ export function StudyResponseForm({
           id={explanationId}
           name="explanation"
           value={state.explanation}
-          rows={4}
+          rows={2}
           maxLength={500}
           disabled={submitted}
           aria-required={explanationRequired}
@@ -253,15 +253,17 @@ export function StudyResponseForm({
         <span className="study-response-count">{state.explanation.length}/500</span>
       </div>
 
-      <p id={consequenceId} className="study-response-consequence">
-        {messages.decisionExplanation}
-      </p>
-      <p id={onScreenOnlyId} className="study-response-on-screen-only">
-        {messages.study.onScreenOnly}
-      </p>
-      <p className="study-response-status" role="status" aria-live="polite">
-        {submitted ? messages.study.responseSubmittedStatus : ""}
-      </p>
+      <div className="study-response-notices">
+        <p id={consequenceId} className="study-response-consequence">
+          {messages.decisionExplanation}
+        </p>
+        <p id={onScreenOnlyId} className="study-response-on-screen-only">
+          {messages.study.onScreenOnly}
+        </p>
+        <p className="study-response-status" role="status" aria-live="polite">
+          {submitted ? messages.study.responseSubmittedStatus : ""}
+        </p>
+      </div>
     </form>
   )
 }

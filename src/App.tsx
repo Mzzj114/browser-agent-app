@@ -6,13 +6,10 @@ import { DecisionInspector } from "./components/ui/decision-inspector"
 import { DesktopOnlyMessage } from "./components/ui/desktop-only"
 import { ExecutionRail } from "./components/ui/execution-rail"
 import { LanguageToggle } from "./components/ui/language-toggle"
-import { ReplayControls } from "./components/ui/replay-controls"
 import { StudyResponseForm } from "./components/ui/study-response-form"
 import {
   initialViewedSelection,
-  nextViewedSelection,
   normalizeViewedSelection,
-  previousViewedSelection,
   type ViewedSelection,
   viewedObservation,
 } from "./domain/decision-replay"
@@ -77,22 +74,12 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
     viewedEpisode === null
       ? messages.lastRecordedState
       : messages.study.beforeStepCaption(viewedEpisode.episode.ordinal, run.episodes.length)
-  const stateNote = viewedEpisode === null ? messages.lastRecordedStateNote : null
-  const actionLabel = viewedEpisode?.episode.action ?? null
+  const stateNote =
+    viewedEpisode === null ? messages.lastRecordedStateNote : messages.recordedNotLive
   const capturedAtLabel = messages.capturedAt(formatCapturedAt(observation.capturedAt, locale))
 
   const viewEpisode = (episodeId: string) => {
     setViewed({ kind: "episode", episodeId })
-  }
-  const goToStep = (stepIndex: number) => {
-    const episode = run.episodes[stepIndex]
-    if (episode) viewEpisode(episode.id)
-  }
-  const goPrevious = () => {
-    setViewed((current) => previousViewedSelection(current, episodeIds))
-  }
-  const goNext = () => {
-    setViewed((current) => nextViewedSelection(current, episodeIds))
   }
   const goFinal = () => {
     setViewed(initialViewedSelection())
@@ -113,11 +100,15 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
         <section className="study-context" aria-label={messages.study.originalTask}>
           <article className="study-context-panel" aria-labelledby="study-task-heading">
             <h2 id="study-task-heading">{messages.study.originalTask}</h2>
-            <p>{run.task}</p>
+            <div className="study-context-scroll">
+              <p>{run.task}</p>
+            </div>
           </article>
           <article className="study-context-panel" aria-labelledby="study-report-heading">
             <h2 id="study-report-heading">{messages.study.agentReportedResult}</h2>
-            <p>{run.report}</p>
+            <div className="study-context-scroll">
+              <p>{run.report}</p>
+            </div>
             <p className="study-context-note">{messages.study.syntheticProvenance}</p>
           </article>
         </section>
@@ -128,6 +119,7 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
             viewed={activeViewed}
             localization={response.localization}
             onView={viewEpisode}
+            onFinal={goFinal}
           />
 
           <section className="study-page" aria-labelledby="study-page-heading">
@@ -136,31 +128,16 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
             </h2>
             <BrowserFrame
               pageState={observation}
-              stepCount={run.episodes.length}
               stateLabel={stateLabel}
               stateNote={stateNote}
-              actionLabel={actionLabel}
               capturedAtLabel={capturedAtLabel}
             />
-            <div className="study-replay-bar">
-              <ReplayControls
-                currentStep={viewedEpisode?.index ?? null}
-                steps={run.episodes}
-                onPrevious={goPrevious}
-                onNext={goNext}
-                onFinal={goFinal}
-                onJump={goToStep}
-              />
-            </div>
           </section>
 
-          <aside className="study-inspector-panel">
-            <DecisionInspector
-              run={run}
-              viewed={activeViewed}
-              response={response}
-              onResponse={dispatchResponse}
-            />
+          <aside className="study-inspector">
+            <div className="study-inspector-panel">
+              <DecisionInspector run={run} viewed={activeViewed} />
+            </div>
           </aside>
         </main>
 

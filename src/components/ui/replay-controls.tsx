@@ -42,9 +42,28 @@ export function ReplayControls({
         >
           <ChevronLeft />
         </IconButton>
-        <span className="replay-position" aria-live="polite">
-          {position}
-        </span>
+        <label className="replay-jump">
+          <span className="sr-only">{messages.jumpToStep}</span>
+          <select
+            className="replay-select"
+            aria-label={messages.jumpToStep}
+            value={currentStep === null ? "final" : String(currentStep)}
+            onChange={(event) => {
+              if (event.target.value === "final") {
+                onFinal()
+              } else {
+                onJump(Number(event.target.value))
+              }
+            }}
+          >
+            {steps.map((step, index) => (
+              <option key={step.id} value={index}>
+                {messages.stepOption(step.ordinal, step.action)}
+              </option>
+            ))}
+            <option value="final">{messages.lastRecordedState}</option>
+          </select>
+        </label>
         <IconButton
           label={messages.nextStep}
           variant="outlined"
@@ -54,29 +73,15 @@ export function ReplayControls({
           <ChevronRight />
         </IconButton>
       </div>
-      <label className="replay-jump">
-        <span>{messages.jumpToStep}</span>
-        <select
-          className="replay-select"
-          aria-label={messages.jumpToStep}
-          value={currentStep === null ? "final" : String(currentStep)}
-          onChange={(event) => {
-            if (event.target.value === "final") {
-              onFinal()
-            } else {
-              onJump(Number(event.target.value))
-            }
-          }}
-        >
-          {steps.map((step, index) => (
-            <option key={step.id} value={index}>
-              {messages.stepOption(step.ordinal, step.action)}
-            </option>
-          ))}
-          <option value="final">{messages.lastRecordedState}</option>
-        </select>
-      </label>
-      <ActionButton icon={<RotateCcw />} onClick={onFinal} disabled={currentStep === null}>
+      <span className="replay-position sr-only" aria-live="polite">
+        {position}
+      </span>
+      <ActionButton
+        className="replay-final"
+        icon={<RotateCcw />}
+        onClick={onFinal}
+        disabled={currentStep === null}
+      >
         {messages.returnToFinal}
       </ActionButton>
     </fieldset>

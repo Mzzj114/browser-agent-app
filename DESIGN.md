@@ -108,19 +108,20 @@ All spacing derives from 4px.
 ### Grid
 
 - App shell: one fixed header row, a bounded task/report context strip, a bounded three-pane workspace row, and a bounded response row, using `100dvh` and `100dvb`.
-- Study context strip: two equal task/report panels, capped at `clamp(6rem, 18dvh, 9rem)` with internal scrolling.
+- Study context strip: two equal task/report panels in a compact 104px row. Long fixture text scrolls internally; authored-synthetic provenance stays visible.
 - Main workspace: `clamp(12rem, 16vw, 14rem) minmax(0, 1fr) clamp(19rem, 25vw, 22rem)` for the execution rail, recorded page, and inspector.
-- Response region: a separate shell row capped at `clamp(10rem, 26dvh, 14rem)`; its controls stay reachable while long copy scrolls internally.
+- Response region: a separate 156px shell row with stable verdict/localization/explanation/submit columns and a compact notice group. Normal controls remain visible; validation and enlarged explanations scroll internally.
+- Browser metadata: two compact rows (roughly 62px total), merging title and read-only URL above state/capture/recorded-not-live context. Navigation lives only in the execution rail; the inspector has no replay header.
 - Supported viewport: 1280x720 minimum; designed at 1366x768 and 1440x900 in both locales.
 - Below the minimum width or height, replace the workspace with the approved desktop requirement message.
 - Dimensions and default replay state must not depend on the evidence condition. `--agent-width` is retained only for the legacy developer showcase.
 
 ### Scroll Ownership
 
-- Product header, task/report context, rail heading, replay toolbar, and response controls stay fixed.
-- `.study-context-panel` owns task/report overflow.
-- `.execution-rail-list` owns chronological action scrolling.
-- `.browser-viewport` owns fitted and actual-size screenshot scrolling.
+- Product header, task/report context, rail heading, and response controls stay fixed.
+- Task/report text regions own context overflow without scrolling away the synthetic provenance notice.
+- `.execution-rail-list` owns chronological action scrolling, including Final state as the last item; there is no fixed final-state footer.
+- `.browser-viewport` has no overflow in fit mode: the complete image is aspect-preserving and centered within both available dimensions. Only actual-size inspection owns two-axis image scrolling.
 - `.study-inspector-panel` owns viewed-step evidence scrolling, including long candidate lists.
 - `.study-response` owns response-form overflow when dense.
 - Every scroll region has `min-block-size: 0` and `min-inline-size: 0`; no region may create page-level shell overflow or cover another pane's controls.
@@ -133,10 +134,10 @@ The production entry composes these components. Legacy chat/transcript component
 
 #### ExecutionRail
 
-- Structure: navigation landmark with a chronological ordered list of native buttons, one per episode. Each row shows step number, human-readable actual action, and separate viewed/marked labels.
+- Structure: navigation landmark with a chronological ordered list of native buttons, one per episode followed by Final state. Episode rows show step number, human-readable actual action, and separate viewed/marked labels. Final state uses the same item and selection styling, without an episode number or mark.
 - Variants: default, viewed, marked, viewed-and-marked.
 - States: hover, focus-visible, `aria-current="step"` for viewed, text label for marked.
-- Accessibility: viewing and marking are distinct textual states; the mark is never color-only.
+- Accessibility: viewing and marking are distinct textual states; the mark is never color-only. Final state is view-only and remains navigable after response submission.
 - Layout: `.execution-rail-list` owns vertical scrolling; the rail does not stretch the shell.
 
 #### CandidateTable
@@ -149,28 +150,28 @@ The production entry composes these components. Legacy chat/transcript component
 
 #### DecisionInspector
 
-- Structure: final-state explanation, or viewed episode summary, factual outcome, entered text, mark/clear control, and permitted candidate evidence.
+- Structure: read-only final-state explanation, or viewed episode summary, factual outcome, entered text, and permitted candidate evidence. No navigation or marking controls.
 - Variants: final state, baseline episode, candidates episode, probabilities episode, operation-only/no-target terminal.
-- States: unmarked, marked, cleared, submitted-disabled marking.
+- States: final observation or viewed episode; independent of editable/submitted assessment state.
 - Accessibility: final state exposes no marking control; viewed and marked semantics remain separate; terminal DONE/BLOCKED and control operations show “No target required.”
 - Layout: inspector outer dimensions are condition-independent; long evidence scrolls inside `.study-inspector-panel`.
 
 #### StudyResponseForm
 
-- Structure: equal accept/reject choices, stable-ID localization select with Cannot determine, persistent 500-character explanation, explicit Submit, validation summary, consequence copy, and neutral on-screen status.
+- Structure: equal accept/reject choices, stable-ID localization select with Cannot determine, persistent 500-character explanation, explicit Submit, validation summary, consequence copy, and neutral on-screen status. The localization select is the only marking surface; it excludes Final state.
 - Variants: unanswered, tentative accept/reject, concrete marked step, Cannot determine, submitted.
 - States: editable, error-visible, submitted-locked.
 - Accessibility: native controls, visible focus, per-field `aria-invalid`/`aria-describedby`, polite status announcements, and no correctness feedback.
-- Layout: bounded response row with internal overflow; all controls remain keyboard reachable at 1280×720 with long Chinese text and evidence lists.
+- Layout: compact four-column response row with grouped notices, no empty status row, and bounded internal overflow; all controls remain keyboard reachable at 1280×720 with long Chinese text and evidence lists.
 
 #### BrowserFrame participant contract
 
-- Structure: recorded tab, read-only address, recorded-execution count, before/current-state caption, recorded action and capture time, and a screenshot whose trigger toggles fit/actual size.
+- Structure: a combined title/read-only-address row, a before/final-state/capture/recorded-not-live row, and a screenshot whose trigger toggles fit/actual size. The product header supplies step count; the inspector supplies the action label.
 - Variants: explicit final observation, viewed historical step, missing screenshot, fitted, actual size.
 - States: final, historical, missing evidence, zoomed.
 - Accessibility: read-only text is not presented as editable; alt text names the recorded page; the trigger names the current fit/actual-size action.
-- Layout: bounded viewport with two-axis scrolling at actual size; images keep intrinsic dimensions and unfiltered opacity.
-- Failure: a real image error shows missing evidence while keeping URL/title/action. Moving to a healthy path recovers the image; the renderer never substitutes an after-state and labels it “before.”
+- Layout: the complete image fits both available dimensions, preserving aspect ratio and centering unused space without cropping or scrolling. Native-pixel inspection enables two-axis scrolling; returning to fit shows all edges again. Images keep intrinsic dimensions and unfiltered opacity.
+- Failure: a real image error shows missing evidence while keeping URL/title and the inspector action. Moving to a healthy path recovers the image; the renderer never substitutes an after-state and labels it “before.”
 
 ### BrandMark
 

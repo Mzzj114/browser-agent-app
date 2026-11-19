@@ -3,7 +3,6 @@ import { expect, type Locator, type Page, test } from "@playwright/test"
 const localeCopy = {
   zh: {
     url: "/?lang=zh",
-    jumpToStep: "跳转步骤",
     accept: "符合原始任务",
     reject: "不符合原始任务",
     submit: "提交评估",
@@ -12,7 +11,6 @@ const localeCopy = {
   },
   en: {
     url: "/?lang=en",
-    jumpToStep: "Jump to step",
     accept: "Fulfills the request",
     reject: "Does not fulfill the request",
     submit: "Submit assessment",
@@ -259,7 +257,7 @@ test("uses neutral static identity styling", async ({ page }) => {
 
   await expect(page.locator(".brand-icon")).toHaveCSS("color", "rgb(85, 93, 104)")
   await expect(page.locator(".status-badge")).toHaveCSS("background-color", "rgb(247, 248, 250)")
-  await expect(page.locator(".study-replay-bar")).toHaveCSS("box-shadow", "none")
+  await expect(page.locator(".study-inspector")).toHaveCSS("box-shadow", "none")
   await expect(page.locator(".execution-rail-item").first()).toHaveCSS("box-shadow", "none")
   await expect(page.locator(".study-context-panel").first()).toHaveCSS("box-shadow", "none")
 })
@@ -268,14 +266,15 @@ test("removes card elevation without losing historical selection", async ({ page
   await page.goto("/?lang=en")
   await page.evaluate(() => document.fonts.ready)
 
-  await page.getByRole("combobox", { name: "Jump to step" }).selectOption("2")
+  await page.locator(".execution-rail-item").nth(2).click()
   const item = page.locator('.execution-rail-item[data-viewed="true"]')
   await expect(item).toHaveCount(1)
   await expect(item).toHaveCSS("background-color", "rgb(240, 241, 251)")
   await expect(item).toHaveCSS("box-shadow", /rgb\(81, 88, 184\) 2px 0px 0px 0px inset/)
 
-  await page.getByRole("combobox", { name: "Jump to step" }).selectOption("final")
-  await expect(page.locator('.execution-rail-item[data-viewed="true"]')).toHaveCount(0)
+  await page.locator(".execution-rail-item").last().click()
+  await expect(page.locator('.execution-rail-item[data-viewed="true"]')).toHaveCount(1)
+  await expect(page.locator(".execution-rail-item").last()).toHaveAttribute("data-viewed", "true")
   await expect(page.locator(".execution-rail-item").first()).toHaveCSS("box-shadow", "none")
 })
 
@@ -296,16 +295,15 @@ test("keeps keyboard focus visible on replay and response controls", async ({ pa
     await page.goto("/?lang=en")
     await page.evaluate(() => document.fonts.ready)
 
-    const replaySelect = page.getByRole("combobox", { name: "Jump to step" })
-    await tabUntilFocused(page, replaySelect)
-    await expectVisibleFocusRing(replaySelect)
+    const railStep = page.locator(".execution-rail-item").nth(3)
+    await tabUntilFocused(page, railStep)
+    await expectVisibleFocusRing(railStep)
 
     const assessment = page.getByRole("button", { name: "Fulfills the request", exact: true })
     await tabUntilFocused(page, assessment)
     await expectVisibleFocusRing(assessment)
 
-    await page.getByRole("combobox", { name: "Jump to step" }).selectOption("3")
-    const mark = page.getByRole("button", { name: "Mark as earliest mistake", exact: true })
+    const mark = page.getByRole("combobox", { name: /earliest mistaken action/i })
     await tabUntilFocused(page, mark)
     await expectVisibleFocusRing(mark)
   }

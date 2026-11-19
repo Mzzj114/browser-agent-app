@@ -133,18 +133,14 @@ function Showcase() {
                 <div className="specimen-columns">
                   <BrowserFrame
                     pageState={selectedStep.pageState}
-                    stepCount={agentRun.steps.length}
                     stateLabel="Step 2 / 8 · recorded after this step"
-                    stateNote={null}
-                    actionLabel={selectedStep.action}
+                    stateNote="Recorded · not live"
                     capturedAtLabel="Captured 09:00"
                   />
                   <BrowserFrame
                     pageState={missingPage}
-                    stepCount={agentRun.steps.length}
                     stateLabel="Last recorded state"
                     stateNote="Captured at the end of this run; not a new live check."
-                    actionLabel={null}
                     capturedAtLabel="Captured 09:00"
                   />
                 </div>

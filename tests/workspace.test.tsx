@@ -15,6 +15,16 @@ function railButtons(): readonly HTMLElement[] {
   )
 }
 
+function rail(): HTMLElement {
+  return screen.getByRole("navigation", { name: "Execution overview" })
+}
+
+function inspectorPanel(): HTMLElement {
+  const panel = document.querySelector(".study-inspector-panel")
+  if (!(panel instanceof HTMLElement)) throw new Error("Missing inspector panel")
+  return panel
+}
+
 function localizationSelect(): HTMLElement {
   return screen.getByRole("combobox", { name: /earliest mistaken action/i })
 }
@@ -51,7 +61,7 @@ describe("decision evidence workspace", () => {
       "src",
       "screenshots/en/08-cart.webp",
     )
-    expect(screen.getByText("Final state")).toBeVisible()
+    expect(screen.getByRole("heading", { name: "Final state" })).toBeVisible()
     expect(screen.queryByRole("button", { name: "Mark as earliest mistake" })).toBeNull()
 
     const rail = screen.getByRole("navigation", { name: "Execution overview" })
@@ -59,6 +69,64 @@ describe("decision evidence workspace", () => {
       expect(within(rail).getByText(episode.action)).toBeVisible()
     }
   })
+
+  it.each(studyConditions)(
+    "keeps final state last in the same rail list and preserves the form mark in %s",
+    async (condition) => {
+      // Given the initial final view and a mark set through the sole form control.
+      useEnglish()
+      const user = userEvent.setup()
+      const runs = studyRuns(condition)
+      const run = runs.en
+      const finalObservation = run.observations.find(
+        (observation) => observation.id === run.finalObservationId,
+      )
+      if (!finalObservation?.screenshot) throw new Error("Missing final observation screenshot")
+      render(<App runs={runs} />)
+
+      // Then final state is the last item of the same chronological list.
+      const navigation = rail()
+      const items = within(navigation).getAllByRole("listitem")
+      expect(items).toHaveLength(9)
+      const firstItem = items[0] ?? document.body
+      const lastEpisodeItem = items[7] ?? document.body
+      const finalItem = items[8] ?? document.body
+      expect(within(firstItem).getByText(run.episodes[0]?.action ?? "")).toBeVisible()
+      expect(within(lastEpisodeItem).getByText(run.episodes[7]?.action ?? "")).toBeVisible()
+      expect(within(finalItem).getByText("Final state")).toBeVisible()
+      const finalButton = within(finalItem).getByRole("button")
+      expect(finalButton).toHaveAttribute("aria-current", "step")
+      expect(finalButton).toHaveAttribute("data-viewed", "true")
+      expect(finalButton).not.toHaveAttribute("data-marked", "true")
+
+      // And the participant inspector has no navigation or marking controls.
+      const panel = inspectorPanel()
+      expect(within(panel).queryByRole("button")).toBeNull()
+      expect(within(panel).queryByRole("combobox")).toBeNull()
+      expect(within(panel).queryByRole("group", { name: "Page replay controls" })).toBeNull()
+
+      // When episode four is marked through the form without navigating.
+      await user.selectOptions(localizationSelect(), "episode-04")
+      expect(localizationSelect()).toHaveValue("episode-04")
+      expect(finalButton).toHaveAttribute("aria-current", "step")
+
+      // And episode four is viewed through the rail.
+      await user.click(railButtons()[3] ?? document.body)
+      expect(within(panel).getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
+      expect(within(panel).queryByRole("button")).toBeNull()
+
+      // Then the last rail item restores the final observation without moving the mark.
+      await user.click(within(finalItem).getByRole("button"))
+      expect(within(panel).getByRole("heading", { name: "Final state" })).toBeVisible()
+      expect(finalButton).toHaveAttribute("aria-current", "step")
+      expect(localizationSelect()).toHaveValue("episode-04")
+      expect(within(navigation).getByText("Your mark")).toBeVisible()
+      expect(document.querySelector(".page-screenshot")).toHaveAttribute(
+        "src",
+        finalObservation.screenshot.path,
+      )
+    },
+  )
 
   it.each(studyConditions)(
     "shows the before-image rather than the result of the selected action in %s",
@@ -73,8 +141,8 @@ describe("decision evidence workspace", () => {
       if (!beforeEpisodeFour) throw new Error("Missing episode-four before observation")
       render(<App runs={runs} />)
 
-      // When the fourth episode is chosen from the step menu.
-      await user.selectOptions(screen.getByRole("combobox", { name: "Jump to step" }), "3")
+      // When the fourth episode is chosen from the execution rail.
+      await user.click(railButtons()[3] ?? document.body)
 
       // Then the page before that action is shown, not its sorted or product result.
       expect(screen.getByText("Before step 4 of 8")).toBeVisible()
@@ -85,27 +153,56 @@ describe("decision evidence workspace", () => {
       const browser = screen.getByRole("region", { name: "Agent browser" })
       expect(within(browser).getByText(beforeEpisodeFour.title)).toBeVisible()
       expect(within(browser).getByText(beforeEpisodeFour.url)).toBeVisible()
-      expect(within(browser).getByText("Opened “Cloud Walk Red Sneakers”")).toBeVisible()
+      expect(within(browser).getByText("Recorded · not live")).toBeVisible()
       expect(screen.getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
     },
   )
 
-  it("keeps the step menu, execution rail, and arrows on the same viewed ID", async () => {
+  it("keeps the action in an inspector free of navigation and marking controls", async () => {
+    // Given the final view.
+    useEnglish()
+    const user = userEvent.setup()
+    const run = studyRuns("candidates").en
+    const episode = run.episodes[3]
+    if (!episode) throw new Error("Missing episode four")
+    const { container } = render(<App runs={studyRuns("candidates")} />)
+
+    // When episode four is viewed through the rail.
+    await user.click(railButtons()[3] ?? document.body)
+
+    // Then the inspector holds the evidence body without a replay header or marking control.
+    const inspector = container.querySelector(".study-inspector")
+    const panel = inspectorPanel()
+    expect(inspector).not.toBeNull()
+    expect(container.querySelector(".study-inspector-header")).toBeNull()
+    expect(within(panel).queryByRole("group", { name: "Page replay controls" })).toBeNull()
+    expect(within(panel).queryByRole("combobox")).toBeNull()
+    expect(within(panel).queryByRole("button")).toBeNull()
+
+    // And the action lives in the inspector rather than the compact browser metadata.
+    const browser = screen.getByRole("region", { name: "Agent browser" })
+    expect(within(browser).queryByText(episode.action)).toBeNull()
+    expect(within(panel).getByText(episode.action)).toBeVisible()
+    expect(within(browser).getByText("Recorded · not live")).toBeVisible()
+  })
+
+  it("keeps rail navigation on the same viewed ID and before-image", async () => {
     // Given the initial final state.
     useEnglish()
     const user = userEvent.setup()
-    render(<App runs={studyRuns("candidates")} />)
-    const menu = screen.getByRole("combobox", { name: "Jump to step" })
+    const { container } = render(<App runs={studyRuns("candidates")} />)
 
-    // When the menu chooses episode four.
-    await user.selectOptions(menu, "3")
-    expect(menu).toHaveValue("3")
+    // When the rail chooses episode four.
+    await user.click(railButtons()[3] ?? document.body)
     expect(railButtons()[3]).toHaveAttribute("aria-current", "step")
     expect(screen.getByText("Before step 4 of 8")).toBeVisible()
+    expect(document.querySelector(".page-screenshot")).toHaveAttribute(
+      "src",
+      "screenshots/en/04-sorted.webp",
+    )
 
-    // When the next arrow advances.
-    await user.click(screen.getByRole("button", { name: "Next step" }))
-    expect(menu).toHaveValue("4")
+    // When another rail item selects episode five.
+    await user.click(railButtons()[4] ?? document.body)
     expect(within(railButtons()[4] ?? document.body).getByText("Viewed step 5")).toBeVisible()
     expect(screen.getByText("Before step 5 of 8")).toBeVisible()
     expect(document.querySelector(".page-screenshot")).toHaveAttribute(
@@ -115,20 +212,21 @@ describe("decision evidence workspace", () => {
 
     // When a rail item selects episode two directly.
     await user.click(railButtons()[1] ?? document.body)
-    expect(menu).toHaveValue("1")
     expect(screen.getByText("Before step 2 of 8")).toBeVisible()
     expect(document.querySelector(".page-screenshot")).toHaveAttribute(
       "src",
       "screenshots/en/02-search-filled.webp",
     )
 
-    // When the previous arrow moves back.
-    await user.click(screen.getByRole("button", { name: "Previous step" }))
-    expect(menu).toHaveValue("0")
-    expect(screen.getByText("Before step 1 of 8")).toBeVisible()
+    // When the final rail item restores the last recorded state.
+    const finalItem = container.querySelector(".execution-rail-list li:last-child")
+    if (!(finalItem instanceof HTMLElement)) throw new Error("Missing final rail item")
+    await user.click(within(finalItem).getByRole("button"))
+    expect(screen.getByRole("heading", { name: "Final state" })).toBeVisible()
+    expect(screen.getByText("Last recorded state")).toBeVisible()
     expect(document.querySelector(".page-screenshot")).toHaveAttribute(
       "src",
-      "screenshots/en/01-home.webp",
+      "screenshots/en/08-cart.webp",
     )
   })
 
@@ -139,13 +237,13 @@ describe("decision evidence workspace", () => {
       useEnglish()
       const user = userEvent.setup()
       render(<App runs={studyRuns(condition)} />)
-      await user.selectOptions(screen.getByRole("combobox", { name: "Jump to step" }), "3")
-      await user.click(screen.getByRole("button", { name: "Mark as earliest mistake" }))
+      await user.click(railButtons()[3] ?? document.body)
+      await user.selectOptions(localizationSelect(), "episode-04")
       expect(localizationSelect()).toHaveValue("episode-04")
 
       // When the verdict changes and another episode is viewed.
       await user.click(screen.getByRole("button", { name: "Does not fulfill the request" }))
-      await user.click(screen.getByRole("button", { name: "Next step" }))
+      await user.click(railButtons()[4] ?? document.body)
 
       // Then viewing and verdict change without moving the mark.
       expect(screen.getByRole("heading", { name: "Viewed step 5" })).toBeVisible()
@@ -162,20 +260,23 @@ describe("decision evidence workspace", () => {
       // Given the eighth, terminal episode.
       useEnglish()
       const user = userEvent.setup()
-      render(<App runs={studyRuns(condition)} />)
-      await user.selectOptions(screen.getByRole("combobox", { name: "Jump to step" }), "7")
+      const { container } = render(<App runs={studyRuns(condition)} />)
+      await user.click(railButtons()[7] ?? document.body)
       expect(screen.getByText("Before step 8 of 8")).toBeVisible()
 
       // When it is marked.
-      await user.click(screen.getByRole("button", { name: "Mark as earliest mistake" }))
+      await user.selectOptions(localizationSelect(), "episode-08")
       expect(localizationSelect()).toHaveValue("episode-08")
 
-      // Then the separate final state has no marking control and does not move the mark.
-      await user.click(screen.getByRole("button", { name: "Return to last recorded state" }))
-      expect(screen.getByText("Final state")).toBeVisible()
+      // Then the final state remains an unmarkable observation and does not move the mark.
+      const finalItem = container.querySelector(".execution-rail-list li:last-child")
+      if (!(finalItem instanceof HTMLElement)) throw new Error("Missing final rail item")
+      await user.click(within(finalItem).getByRole("button"))
+      expect(screen.getByRole("heading", { name: "Final state" })).toBeVisible()
       expect(
         screen.queryByRole("button", { name: /Mark as earliest mistake|Clear mark/ }),
       ).toBeNull()
+      expect(within(inspectorPanel()).queryByRole("button")).toBeNull()
       expect(localizationSelect()).toHaveValue("episode-08")
     },
   )
@@ -188,8 +289,8 @@ describe("decision evidence workspace", () => {
       const user = userEvent.setup()
       const explanation = "The cart shows a different product from the report."
       render(<App runs={studyRuns(condition)} />)
-      await user.selectOptions(screen.getByRole("combobox", { name: "Jump to step" }), "3")
-      await user.click(screen.getByRole("button", { name: "Mark as earliest mistake" }))
+      await user.click(railButtons()[3] ?? document.body)
+      await user.selectOptions(localizationSelect(), "episode-04")
       await user.type(explanationBox(), explanation)
       await user.click(screen.getByRole("button", { name: "Does not fulfill the request" }))
       await user.click(screen.getByRole("button", { name: "Submit assessment" }))
@@ -198,14 +299,14 @@ describe("decision evidence workspace", () => {
       expect(screen.getByRole("button", { name: "Fulfills the request" })).toBeDisabled()
       expect(screen.getByRole("button", { name: "Does not fulfill the request" })).toBeDisabled()
       expect(localizationSelect()).toBeDisabled()
+      expect(localizationSelect()).toHaveValue("episode-04")
       expect(explanationBox()).toBeDisabled()
       expect(explanationBox()).toHaveValue(explanation)
-      expect(screen.getByRole("button", { name: "Clear mark" })).toBeDisabled()
       expect(screen.getByRole("button", { name: "Submit assessment" })).toBeDisabled()
       expect(screen.getByText("Response recorded on this page only.")).toBeVisible()
 
-      // When the replay controls are used after submission.
-      await user.selectOptions(screen.getByRole("combobox", { name: "Jump to step" }), "4")
+      // When the execution rail is used after submission.
+      await user.click(railButtons()[4] ?? document.body)
 
       // Then navigation still changes the viewed page and screenshots.
       expect(screen.getByRole("heading", { name: "Viewed step 5" })).toBeVisible()
@@ -216,13 +317,38 @@ describe("decision evidence workspace", () => {
       )
       expect(localizationSelect()).toHaveValue("episode-04")
 
-      // And arrows and the execution rail remain usable too.
-      await user.click(screen.getByRole("button", { name: "Next step" }))
-      expect(screen.getByText("Before step 6 of 8")).toBeVisible()
+      // And the rail remains usable back to the first episode.
       await user.click(railButtons()[0] ?? document.body)
       expect(screen.getByText("Before step 1 of 8")).toBeVisible()
       expect(screen.getByRole("heading", { name: "Viewed step 1" })).toBeVisible()
       expect(localizationSelect()).toHaveValue("episode-04")
+    },
+  )
+
+  it.each(studyConditions)(
+    "clears the mark and chooses uncertainty without navigating in %s",
+    async (condition) => {
+      // Given episode three viewed and episode four marked from the form.
+      useEnglish()
+      const user = userEvent.setup()
+      render(<App runs={studyRuns(condition)} />)
+      await user.click(railButtons()[2] ?? document.body)
+      expect(screen.getByText("Before step 3 of 8")).toBeVisible()
+      await user.selectOptions(localizationSelect(), "episode-04")
+      expect(within(railButtons()[3] ?? document.body).getByText("Your mark")).toBeVisible()
+
+      // When the form select clears the mark.
+      await user.selectOptions(localizationSelect(), "")
+      expect(localizationSelect()).toHaveValue("")
+      expect(within(railButtons()[3] ?? document.body).queryByText("Your mark")).toBeNull()
+
+      // And when it records uncertainty.
+      await user.selectOptions(localizationSelect(), "cannot-determine")
+      expect(localizationSelect()).toHaveValue("cannot-determine")
+
+      // Then viewing stayed on episode three throughout.
+      expect(screen.getByText("Before step 3 of 8")).toBeVisible()
+      expect(screen.getByRole("heading", { name: "Viewed step 3" })).toBeVisible()
     },
   )
 
@@ -251,13 +377,13 @@ describe("decision evidence workspace", () => {
       const user = userEvent.setup()
       const explanation = "  Keep this participant text exactly.\nSecond line.  "
       render(<App runs={runs} />)
-      await user.selectOptions(screen.getByRole("combobox", { name: "跳转步骤" }), "3")
-      await user.click(screen.getByRole("button", { name: "标记为最早错误操作" }))
+      const rail = screen.getByRole("navigation", { name: "执行概览" })
+      await user.click(within(rail).getAllByRole("button")[3] ?? document.body)
+      await user.selectOptions(screen.getByRole("combobox"), "episode-04")
       fireEvent.change(screen.getByRole("textbox", { name: /简短说明/ }), {
         target: { value: explanation },
       })
       await user.click(screen.getByRole("button", { name: "不符合原始任务" }))
-      const rail = screen.getByRole("navigation", { name: "执行概览" })
 
       // When English is selected without remounting the workspace.
       await user.click(screen.getByRole("button", { name: "English" }))
@@ -289,8 +415,9 @@ describe("decision evidence workspace", () => {
       const user = userEvent.setup()
       const explanation = "  Exactly authored participant explanation.  "
       render(<App runs={runs} />)
-      await user.selectOptions(screen.getByRole("combobox", { name: "跳转步骤" }), "3")
-      await user.click(screen.getByRole("button", { name: "标记为最早错误操作" }))
+      const rail = screen.getByRole("navigation", { name: "执行概览" })
+      await user.click(within(rail).getAllByRole("button")[3] ?? document.body)
+      await user.selectOptions(screen.getByRole("combobox"), "episode-04")
       fireEvent.change(screen.getByRole("textbox", { name: /简短说明/ }), {
         target: { value: explanation },
       })
@@ -309,7 +436,6 @@ describe("decision evidence workspace", () => {
       expect(localizationSelect()).toBeDisabled()
       expect(explanationBox()).toHaveValue(explanation)
       expect(explanationBox()).toBeDisabled()
-      expect(screen.getByRole("button", { name: "Clear mark" })).toBeDisabled()
       expect(screen.getByText("Response recorded on this page only.")).toBeVisible()
       expect(within(railButtons()[3] ?? document.body).getByText("Your mark")).toBeVisible()
     },
