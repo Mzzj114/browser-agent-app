@@ -15,7 +15,7 @@ An HCI research prototype for reviewing a recorded browser-agent run and judging
 - The assessment's **earliest mistaken action** select is the only marking control, independent of the viewed page and of accept/reject. A participant can mark at most one episode. Cannot determine or clearing the select removes a concrete mark without moving the replay.
 - The response form requires accept/reject, requires a concrete episode or Cannot determine for rejection, and requires a nonblank explanation for a marked episode. The explanation limit is 500 characters. Submission is on-screen only; reload clears the judgment, and there is no export, backend, telemetry, or response persistence.
 - Locale switching keeps the stable viewed episode, mark, verdict, and participant-authored explanation.
-- The pinned condition is checked in at `src/study-condition.ts`; it cannot be selected from a URL, query string, or browser storage.
+- The condition is inlined at build time from `VITE_STUDY_CONDITION` (default `baseline`); it cannot be selected from a URL, query string, or browser storage.
 
 ## Conditions
 
@@ -30,7 +30,7 @@ Experiment 2 additionally exposes per-candidate probabilities at both levels. Th
 ## Fixtures and provenance
 
 - Canonical bilingual authoring data lives in `fixtures/decision-runs/shopping.{zh,en}.json` and is never imported by the participant entry.
-- `bun run prepare:study` projects only the pinned condition into `public/study/` (`manifest.json`, `run.zh.json`, `run.en.json`). `public/study/` is generated and ignored by Git.
+- `bun run prepare:study` projects the selected condition into `public/study/` (`manifest.json`, `run.zh.json`, `run.en.json`). `public/study/` is generated and ignored by Git.
 - The loader validates the manifest condition, both locales, the fixture revision, strict key surfaces, and zh/en structural parity before mounting. Missing, malformed, stale, or richer fixtures fail closed; there is no legacy/richer fallback.
 - The one shipped synthetic shopping run is an interface-development example. It is **not** a study-ready stimulus set, a real Jev recording, or measured model output. The probabilities are synthetic.
 
@@ -43,12 +43,23 @@ bun install
 bun run dev        # prepares the pinned fixtures, then http://127.0.0.1:5173
 ```
 
+## Deploying the study sites
+
+`bun run build:sites` builds the same source three times, once per condition, into `dist/baseline/`, `dist/candidates/`, and `dist/probabilities/`, verifies each build, and writes a root condition picker plus `robots.txt`. `vercel.json` sets `trailingSlash` so relative asset and fixture URLs resolve inside each condition directory, and marks every response `noindex`.
+
+The linked Vercel project serves:
+
+- `/baseline/`
+- `/candidates/`
+- `/probabilities/`
+
 ## Scripts
 
 | Command                                                                        | Purpose                                                                              |
 | ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
 | `bun run dev`                                                                  | Prepare the pinned fixture projection and start Vite                                 |
 | `bun run build`                                                                | Prepare fixtures, typecheck, build, and verify the emitted participant artifacts     |
+| `bun run build:sites`                                                          | Build and verify all three condition sites into `dist/<condition>/`                  |
 | `bun run preview`                                                              | Verify the build and serve it with Vite preview                                      |
 | `bun run prepare:study`                                                        | Project the checked-in condition into `public/study/`                                |
 | `bun run screenshots`                                                          | Regenerate Chinese and English fixture screenshots                                   |

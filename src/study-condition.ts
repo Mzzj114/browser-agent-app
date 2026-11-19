@@ -1,3 +1,9 @@
-import type { StudyCondition } from "./domain/study-condition.ts"
+import { type StudyCondition, studyConditionSchema } from "./domain/study-condition.ts"
 
-export const studyCondition: StudyCondition = "baseline"
+/**
+ * The condition is inlined by Vite at build time. It is intentionally not
+ * readable from the URL, query string, or browser storage.
+ */
+export const studyCondition: StudyCondition = studyConditionSchema.parse(
+  import.meta.env.VITE_STUDY_CONDITION ?? "baseline",
+)

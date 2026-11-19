@@ -1,13 +1,15 @@
 import { resolve } from "node:path"
 import { studyConditionSchema } from "../src/domain/study-condition.ts"
-import { studyCondition } from "../src/study-condition.ts"
 import { verifyStudyBuild } from "./study-build.ts"
+import { studyConditionFromEnvironment } from "./study-condition.ts"
 
 async function main(): Promise<void> {
   const directory = resolve(process.argv[2] ?? "dist")
   const conditionArgument = process.argv[3]
   const expectedCondition =
-    conditionArgument === undefined ? studyCondition : studyConditionSchema.parse(conditionArgument)
+    conditionArgument === undefined
+      ? studyConditionFromEnvironment()
+      : studyConditionSchema.parse(conditionArgument)
 
   const report = await verifyStudyBuild(directory, expectedCondition)
   console.log(

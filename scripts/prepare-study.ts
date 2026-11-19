@@ -1,10 +1,10 @@
 import { resolve } from "node:path"
-import { studyCondition } from "../src/study-condition.ts"
+import { studyConditionFromEnvironment } from "./study-condition.ts"
 import { writeStudyFixtures } from "./study-fixtures.ts"
 
 async function main(): Promise<void> {
   const manifest = await writeStudyFixtures({
-    condition: studyCondition,
+    condition: studyConditionFromEnvironment(),
     outputDir: resolve("public", "study"),
   })
   console.log(
