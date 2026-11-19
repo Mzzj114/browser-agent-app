@@ -107,19 +107,20 @@ All spacing derives from 4px.
 
 ### Grid
 
-- App shell: one fixed header row, a bounded task/report context strip, a bounded three-pane workspace row, and a bounded response row, using `100dvh` and `100dvb`.
-- Study context strip: two equal task/report panels in a compact 104px row. Long fixture text scrolls internally; authored-synthetic provenance stays visible.
+- App shell: one fixed header row, a bounded task context strip, a bounded three-pane workspace row, and a bounded response row, using `100dvh` and `100dvb`.
+- Study context strip: one full-width original-task panel in a compact 104px row. Long fixture text scrolls internally; the recorded-run provenance note stays visible.
 - Main workspace: `clamp(12rem, 16vw, 14rem) minmax(0, 1fr) clamp(19rem, 25vw, 22rem)` for the execution rail, recorded page, and inspector.
 - Response region: a separate 156px shell row with stable verdict/localization/explanation/submit columns and a compact notice group. Normal controls remain visible; validation and enlarged explanations scroll internally.
 - Browser metadata: two compact rows (roughly 62px total), merging title and read-only URL above state/capture/recorded-not-live context. Navigation lives only in the execution rail; the inspector has no replay header.
+- Home picker: the same fixed header above a bounded, two-column run list at 960px maximum width; one column below 800px. It is not part of the evidence workspace and has no score, condition, or trial-role metadata.
 - Supported viewport: 1280x720 minimum; designed at 1366x768 and 1440x900 in both locales.
 - Below the minimum width or height, replace the workspace with the approved desktop requirement message.
 - Dimensions and default replay state must not depend on the evidence condition. `--agent-width` is retained only for the legacy developer showcase.
 
 ### Scroll Ownership
 
-- Product header, task/report context, rail heading, and response controls stay fixed.
-- Task/report text regions own context overflow without scrolling away the synthetic provenance notice.
+- Product header, task context, rail heading, and response controls stay fixed.
+- Task text owns context overflow without scrolling away the recorded-run provenance note.
 - `.execution-rail-list` owns chronological action scrolling, including Final state as the last item; there is no fixed final-state footer.
 - `.browser-viewport` has no overflow in fit mode: the complete image is aspect-preserving and centered within both available dimensions. Only actual-size inspection owns two-axis image scrolling.
 - `.study-inspector-panel` owns viewed-step evidence scrolling, including long candidate lists.
@@ -172,6 +173,14 @@ The production entry composes these components. Legacy chat/transcript component
 - Accessibility: read-only text is not presented as editable; alt text names the recorded page; the trigger names the current fit/actual-size action.
 - Layout: the complete image fits both available dimensions, preserving aspect ratio and centering unused space without cropping or scrolling. Native-pixel inspection enables two-axis scrolling; returning to fit shows all edges again. Images keep intrinsic dimensions and unfiltered opacity.
 - Failure: a real image error shows missing evidence while keeping URL/title and the inspector action. Moving to a healthy path recovers the image; the renderer never substitutes an after-state and labels it “before.”
+
+#### RunPicker
+
+- Structure: one navigation landmark listing recorded runs as native links. Each link shows a neutral ordinal, the localized task title, the step count, and a one-line note that page content is English.
+- Variants: default; unknown-run alert above an intact list.
+- States: hover, focus-visible; no selected state on the home list.
+- Accessibility: real links, a named navigation landmark, visible focus, 44px targets, and no condition, score, family, or trial-role text.
+- Layout: two columns at 960px maximum width, one column below 800px; the list owns vertical scrolling while the header stays fixed.
 
 ### BrandMark
 
@@ -355,17 +364,18 @@ Structural borders and tonal shifts own normal hierarchy. Only the recorded brow
 
 ### Decision-Evidence Contract
 
-- The participant entry is one shared three-pane replay workspace. The checked-in condition at `src/study-condition.ts` determines whether offered candidates and synthetic probabilities are projected; no URL, query, storage, or runtime selector changes it.
+- The participant entry is one shared three-pane replay workspace selected from a neutral home picker. The checked-in condition at `src/study-condition.ts` determines whether offered candidates and recorded probabilities are projected; no URL, query, storage, or runtime selector changes it. `?run=<id>` selects a run only.
+- The recorded decision-model agent writes no final answer, so there is no agent-report panel. The original task is the only context strip; the final observation is the completion evidence.
 - Initial view is the explicit final observation. Episode selection shows the before-action screenshot. Final and terminal episode states remain semantically distinct even when the screenshot pixels match.
 - Viewed selection and the participant mark are independent. The rail shows separate “Viewed” and “Your mark” text. Cannot determine clears the mark without moving the replay.
 - Baseline has no candidate tables, placeholders, hidden score nodes, or technical disclosure. Experimental conditions add read-only, source-ordered candidate tables without score-based styling.
 - Responses are on-screen only: no export, backend, telemetry, or judgment storage. Reload clears the response but leaves the fixed run and locale preference behavior unchanged.
-- `scripts/verify-study-builds.ts` verifies the emitted condition, fixture revision, permitted study assets, and screenshots. `scripts/compare-study-builds.ts` compares semantic core digests, unscored candidate order/selection, and six browser geometry reports within 1px.
-- Browser E2E runs against the production build and preview on port 4173. The synthetic run is not a study-ready stimulus set or a real Jev recording.
+- `scripts/verify-study-builds.ts` verifies the emitted condition, fixture revision, run index, every run, every frame, and permitted assets. `scripts/compare-study-builds.ts` compares semantic core digests across all runs, unscored candidate order/selection, and six browser geometry reports within 1px.
+- Browser E2E runs against the production build and preview on port 4173. The committed runs are recorded decision-model trajectories; they are not LLM final answers and not evaluator ground truth.
 
 ### Study Adoption Gate
 
-- Preserve task/report text, report exposure and typography, pane geometry, disclosure defaults, decision semantics, and unfiltered screenshot assets/zoom across theme changes.
+- Preserve task text, pane geometry, disclosure defaults, decision semantics, and unfiltered screenshot assets/zoom across theme changes.
 - Give both fulfillment answers equivalent default, hover, focused, selected, and submitted treatment. Neither answer receives correctness coloring.
 - Review matched Chinese/English captures at 1280×720, 1366×768, and 1440×900 before adoption.
 - Pilot with genuinely fulfilled and unfulfilled runs and consistent practice; check replay discovery, evidence readability, historical-state understanding, and submission meaning. Collect appearance feedback after judgments.
@@ -380,5 +390,8 @@ Structural borders and tonal shifts own normal hierarchy. Only the recorded brow
 | No responsive mobile or 200%-zoom workspace; the desktop-only message appears below 1280x720 CSS px | App shell | Explicit user-approved desktop-only experiment viewport and consistent evidence presentation | Revisit only if the study adds mobile or scalable-workspace requirements |
 | Raw REPL cells remain verbatim for provenance | StepCard technical details | Explicit user decision to reflect real 1.x REPL tools without generated summaries; now secondary to the action label and screenshot | Preserve native code and readable formatting; reconsider only through a new research decision |
 | Decision irreversibility lasts only for the mounted session | Decision footer | Backend and durable study flow are explicitly out of scope | Future study apparatus owns persistence |
-| Synthetic fixture is not a real recorded run | Fixture source and assets | Required to build before trial generation; source remains marked synthetic while the UI does not reveal the answer | Replace through the future exact 1.x recorder adapter |
+| Recorded evidence is English-only while the interface and narrative fields are Chinese | Run library and translation dictionary | Chinese participants are expected to read English page content, and English screenshots keep the evidence match visible | Add a fully localized recording only through a new research decision |
+| Literal page strings in candidate labels and observation titles stay English | Chinese run projection | Translating them would disagree with the visible page and could mislead localization judgments | Revisit if the study separates evidence reading from interface language |
+| About 36 MB of JPEG evidence is committed to Git | `fixtures/agent-runs/*/frames` | Keeps the deploy static, reproducible, and free of an external asset dependency | Move to versioned object storage only if the library grows substantially |
+| Six step-capped runs reuse the last before frame as the final observation | Run import mapping | Those runs recorded no post-run frame; the replay still needs an explicit final state | Re-record those runs if a post-run frame becomes necessary |
 | Chinese glyph appearance varies with local system fonts | All Chinese text | Avoids a multi-megabyte CJK webfont and keeps runtime assets local | Revisit if cross-platform screenshot fidelity becomes a study requirement |
