@@ -1,6 +1,6 @@
 {
   "fixtureVersion": "decision-replay/2",
-  "source": "C:\\Users\\mzzj\\Documents\\学习\\HCI Research\\research\\stimuli\\final",
+  "source": "final",
   "runs": [
     {
       "id": "F1_add_single_item_clean",

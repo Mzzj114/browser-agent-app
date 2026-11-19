@@ -1,5 +1,5 @@
 import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises"
-import { join, resolve } from "node:path"
+import { basename, join, resolve } from "node:path"
 import {
   buildCanonicalRuns,
   combinationRevision,
@@ -169,7 +169,7 @@ async function main(): Promise<void> {
 
   const provenance = {
     fixtureVersion: "decision-replay/2",
-    source,
+    source: basename(source),
     runs: built.map((run) => ({
       id: run.id,
       taskId: run.meta.task_id,
