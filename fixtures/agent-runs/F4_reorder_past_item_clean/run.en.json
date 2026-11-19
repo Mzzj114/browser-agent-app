@@ -1,0 +1,2513 @@
+{
+  "fixtureVersion": "decision-replay/2",
+  "source": "recorded",
+  "runId": "F4_reorder_past_item_clean",
+  "locale": "en",
+  "task": "Go to your order history, find the order containing \"Organic Green Tea 100-Pack\", and reorder the same product. Complete the purchase using the shipping address for Jordan Parker at 742 Evergreen Terrace and the Visa card ending in 4242.",
+  "initialObservationId": "obs-00",
+  "finalObservationId": "obs-10",
+  "observations": [
+    {
+      "id": "obs-00",
+      "url": "http://127.0.0.1:8080/env/amazon/orders?session=amazon_amazon_reorder_past_item_219750232b",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:54:47.000Z",
+      "screenshot": {
+        "path": "frames/pre_0000.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-01",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_322?session=amazon_amazon_reorder_past_item_219750232b",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:55:18.325Z",
+      "screenshot": {
+        "path": "frames/pre_0001.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-02",
+      "url": "http://127.0.0.1:8080/env/amazon/orders?session=amazon_amazon_reorder_past_item_219750232b",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:55:19.890Z",
+      "screenshot": {
+        "path": "frames/pre_0002.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-03",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_322?session=amazon_amazon_reorder_past_item_219750232b",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:55:20.894Z",
+      "screenshot": {
+        "path": "frames/pre_0003.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-04",
+      "url": "http://127.0.0.1:8080/env/amazon/orders?session=amazon_amazon_reorder_past_item_219750232b",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:55:22.382Z",
+      "screenshot": {
+        "path": "frames/pre_0004.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-05",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_322?session=amazon_amazon_reorder_past_item_219750232b",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:55:23.252Z",
+      "screenshot": {
+        "path": "frames/pre_0005.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-06",
+      "url": "http://127.0.0.1:8080/env/amazon/orders?session=amazon_amazon_reorder_past_item_219750232b",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:55:24.624Z",
+      "screenshot": {
+        "path": "frames/pre_0006.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-07",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_322?session=amazon_amazon_reorder_past_item_219750232b",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:55:25.680Z",
+      "screenshot": {
+        "path": "frames/pre_0007.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-08",
+      "url": "http://127.0.0.1:8080/env/amazon/orders?session=amazon_amazon_reorder_past_item_219750232b",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:55:27.205Z",
+      "screenshot": {
+        "path": "frames/pre_0008.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-09",
+      "url": "http://127.0.0.1:8080/env/amazon/order-confirmation/order_1?session=amazon_amazon_reorder_past_item_219750232b",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:55:28.423Z",
+      "screenshot": {
+        "path": "frames/pre_0009.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-10",
+      "url": "http://127.0.0.1:8080/env/amazon/order-confirmation/order_1?session=amazon_amazon_reorder_past_item_219750232b",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:55:33.000Z",
+      "screenshot": {
+        "path": "frames/final.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    }
+  ],
+  "episodes": [
+    {
+      "id": "episode-01",
+      "ordinal": 1,
+      "action": "Returns & Orders",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:55:02.662Z",
+      "beforeObservationId": "obs-00",
+      "afterObservationId": "obs-01",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.99
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox",
+            "probability": 0
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0.07
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0.49
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0.44
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Shop Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Audio",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Computer",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Storage",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Accessories",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Shop electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Cookware",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Drinkware",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Appliances",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Groceries",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] Shop home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] Training",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] Yoga",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Wearables",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] Vitamins",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] Shop fitness",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "37",
+            "label": "[37] Supplies",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Furniture",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "39",
+            "label": "[39] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "40",
+            "label": "[40] Bags",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "41",
+            "label": "[41] Shop office",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "42",
+            "label": "[42] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "7"
+      }
+    },
+    {
+      "id": "episode-02",
+      "ordinal": 2,
+      "action": "Organic Green Tea 100-Pack",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:55:19.107Z",
+      "beforeObservationId": "obs-01",
+      "afterObservationId": "obs-02",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.41
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.17
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.07
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.33
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox",
+            "probability": 0.02
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] View order details",
+            "context": "link",
+            "probability": 0.42
+          },
+          {
+            "id": "22",
+            "label": "[22] Organic Green Tea 100-Pack",
+            "context": "link",
+            "probability": 0.52
+          },
+          {
+            "id": "23",
+            "label": "[23] Track order order_1",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "24",
+            "label": "[24] Return item from order order_1",
+            "context": "button",
+            "probability": 0.01
+          },
+          {
+            "id": "25",
+            "label": "[25] View order details",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "26",
+            "label": "[26] Stainless Steel Butter Spreader, Butter Knife - 3 in 1 Kitchen Gadgets (1)",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Tommy Hilfiger",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "22"
+      }
+    },
+    {
+      "id": "episode-03",
+      "ordinal": 3,
+      "action": "Returns & Orders",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:55:20.392Z",
+      "beforeObservationId": "obs-02",
+      "afterObservationId": "obs-03",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.95
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.04
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox",
+            "probability": 0.01
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0.02
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0.68
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0.16
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Browse subcategory Tea",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Add Organic Green Tea 100-Pack to Cart",
+            "context": "button",
+            "probability": 0.1
+          },
+          {
+            "id": "28",
+            "label": "[28] Buy Organic Green Tea 100-Pack Now",
+            "context": "button",
+            "probability": 0.03
+          },
+          {
+            "id": "29",
+            "label": "[29] Add Organic Green Tea 100-Pack to Wishlist",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "7"
+      }
+    },
+    {
+      "id": "episode-04",
+      "ordinal": 4,
+      "action": "Organic Green Tea 100-Pack",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:55:21.638Z",
+      "beforeObservationId": "obs-03",
+      "afterObservationId": "obs-04",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.36
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.24
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.09
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.28
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox",
+            "probability": 0.03
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0.02
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] View order details",
+            "context": "link",
+            "probability": 0.36
+          },
+          {
+            "id": "22",
+            "label": "[22] Organic Green Tea 100-Pack",
+            "context": "link",
+            "probability": 0.52
+          },
+          {
+            "id": "23",
+            "label": "[23] Track order order_1",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "24",
+            "label": "[24] Return item from order order_1",
+            "context": "button",
+            "probability": 0.02
+          },
+          {
+            "id": "25",
+            "label": "[25] View order details",
+            "context": "link",
+            "probability": 0.04
+          },
+          {
+            "id": "26",
+            "label": "[26] Stainless Steel Butter Spreader, Butter Knife - 3 in 1 Kitchen Gadgets (1)",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Tommy Hilfiger",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "22"
+      }
+    },
+    {
+      "id": "episode-05",
+      "ordinal": 5,
+      "action": "Returns & Orders",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:55:22.817Z",
+      "beforeObservationId": "obs-04",
+      "afterObservationId": "obs-05",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.95
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.04
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox",
+            "probability": 0
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0.01
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0.73
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0.1
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Browse subcategory Tea",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Add Organic Green Tea 100-Pack to Cart",
+            "context": "button",
+            "probability": 0.13
+          },
+          {
+            "id": "28",
+            "label": "[28] Buy Organic Green Tea 100-Pack Now",
+            "context": "button",
+            "probability": 0.03
+          },
+          {
+            "id": "29",
+            "label": "[29] Add Organic Green Tea 100-Pack to Wishlist",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "7"
+      }
+    },
+    {
+      "id": "episode-06",
+      "ordinal": 6,
+      "action": "Organic Green Tea 100-Pack",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:55:23.938Z",
+      "beforeObservationId": "obs-05",
+      "afterObservationId": "obs-06",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.49
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.18
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.06
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.25
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox",
+            "probability": 0.02
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] View order details",
+            "context": "link",
+            "probability": 0.39
+          },
+          {
+            "id": "22",
+            "label": "[22] Organic Green Tea 100-Pack",
+            "context": "link",
+            "probability": 0.51
+          },
+          {
+            "id": "23",
+            "label": "[23] Track order order_1",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "24",
+            "label": "[24] Return item from order order_1",
+            "context": "button",
+            "probability": 0.03
+          },
+          {
+            "id": "25",
+            "label": "[25] View order details",
+            "context": "link",
+            "probability": 0.03
+          },
+          {
+            "id": "26",
+            "label": "[26] Stainless Steel Butter Spreader, Butter Knife - 3 in 1 Kitchen Gadgets (1)",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Tommy Hilfiger",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "22"
+      }
+    },
+    {
+      "id": "episode-07",
+      "ordinal": 7,
+      "action": "Returns & Orders",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:55:25.152Z",
+      "beforeObservationId": "obs-06",
+      "afterObservationId": "obs-07",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.92
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.06
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox",
+            "probability": 0
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0.01
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0.72
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0.08
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Browse subcategory Tea",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Add Organic Green Tea 100-Pack to Cart",
+            "context": "button",
+            "probability": 0.15
+          },
+          {
+            "id": "28",
+            "label": "[28] Buy Organic Green Tea 100-Pack Now",
+            "context": "button",
+            "probability": 0.04
+          },
+          {
+            "id": "29",
+            "label": "[29] Add Organic Green Tea 100-Pack to Wishlist",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "7"
+      }
+    },
+    {
+      "id": "episode-08",
+      "ordinal": 8,
+      "action": "Organic Green Tea 100-Pack",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:55:26.442Z",
+      "beforeObservationId": "obs-07",
+      "afterObservationId": "obs-08",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.44
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.24
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.06
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.24
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox",
+            "probability": 0.04
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] View order details",
+            "context": "link",
+            "probability": 0.39
+          },
+          {
+            "id": "22",
+            "label": "[22] Organic Green Tea 100-Pack",
+            "context": "link",
+            "probability": 0.51
+          },
+          {
+            "id": "23",
+            "label": "[23] Track order order_1",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "24",
+            "label": "[24] Return item from order order_1",
+            "context": "button",
+            "probability": 0.02
+          },
+          {
+            "id": "25",
+            "label": "[25] View order details",
+            "context": "link",
+            "probability": 0.02
+          },
+          {
+            "id": "26",
+            "label": "[26] Stainless Steel Butter Spreader, Butter Knife - 3 in 1 Kitchen Gadgets (1)",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Tommy Hilfiger",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "22"
+      }
+    },
+    {
+      "id": "episode-09",
+      "ordinal": 9,
+      "action": "Returns & Orders",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:55:27.814Z",
+      "beforeObservationId": "obs-08",
+      "afterObservationId": "obs-09",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.95
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.04
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox",
+            "probability": 0
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0.01
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0.76
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0.1
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Browse subcategory Tea",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Add Organic Green Tea 100-Pack to Cart",
+            "context": "button",
+            "probability": 0.11
+          },
+          {
+            "id": "28",
+            "label": "[28] Buy Organic Green Tea 100-Pack Now",
+            "context": "button",
+            "probability": 0.02
+          },
+          {
+            "id": "29",
+            "label": "[29] Add Organic Green Tea 100-Pack to Wishlist",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "7"
+      }
+    },
+    {
+      "id": "episode-10",
+      "ordinal": 10,
+      "action": "View order details",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:55:30.711Z",
+      "beforeObservationId": "obs-09",
+      "afterObservationId": "obs-10",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.36
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.24
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.07
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.32
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox",
+            "probability": 0.02
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] View order details",
+            "context": "link",
+            "probability": 0.5
+          },
+          {
+            "id": "22",
+            "label": "[22] Organic Green Tea 100-Pack",
+            "context": "link",
+            "probability": 0.38
+          },
+          {
+            "id": "23",
+            "label": "[23] Track order order_1",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "24",
+            "label": "[24] Return item from order order_1",
+            "context": "button",
+            "probability": 0.02
+          },
+          {
+            "id": "25",
+            "label": "[25] View order details",
+            "context": "link",
+            "probability": 0.06
+          },
+          {
+            "id": "26",
+            "label": "[26] Stainless Steel Butter Spreader, Butter Knife - 3 in 1 Kitchen Gadgets (1)",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Tommy Hilfiger",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "21"
+      }
+    }
+  ]
+}

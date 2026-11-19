@@ -1,47 +1,44 @@
 import { expect, test } from "@playwright/test"
+import { runFrame, runScreenshotSize, runUrl } from "./run.ts"
 
-test("offers an English interface backed by the English run", async ({ page }) => {
-  await page.goto("/?lang=en")
+test("offers both interfaces backed by the recorded run", async ({ page }) => {
+  await page.goto(runUrl("en"))
 
   await expect(page.getByRole("heading", { name: "Final state" })).toBeVisible()
   await expect(page.locator(".study-context")).toContainText("Original task")
-  await expect(page.locator(".study-context")).toContainText("Agent-reported result")
+  await expect(page.locator(".study-context")).not.toContainText("Agent-reported result")
   await expect(page.locator(".browser-state-label")).toHaveText("Last recorded state")
-  await expect(page.locator(".page-screenshot")).toHaveAttribute(
-    "src",
-    "screenshots/en/08-cart.webp",
-  )
+  await expect(page.locator(".page-screenshot")).toHaveAttribute("src", runFrame.final)
   await expect(
     page
       .getByRole("navigation", { name: "Execution overview" })
-      .getByText("Reported task completion"),
+      .getByText("Add Classic Leather Wallet to Cart"),
   ).toBeVisible()
-  await expect(page.locator(".product-header").getByText("8 steps", { exact: true })).toBeVisible()
+  await expect(page.locator(".product-header").getByText("4 steps", { exact: true })).toBeVisible()
 
   await page.getByRole("button", { name: "中文" }).click()
   await expect(page.getByRole("heading", { name: "最终状态" })).toBeVisible()
+  await expect(
+    page
+      .getByRole("navigation", { name: "执行概览" })
+      .getByText("将 Classic Leather Wallet 加入购物车"),
+  ).toBeVisible()
 })
 
 test("shows the before-image for a historical step and returns to the final state", async ({
   page,
 }) => {
-  await page.goto("/?lang=en")
-  await expect(page.locator(".page-screenshot")).toHaveAttribute(
-    "src",
-    "screenshots/en/08-cart.webp",
-  )
+  await page.goto(runUrl("en"))
+  await expect(page.locator(".page-screenshot")).toHaveAttribute("src", runFrame.final)
 
   await page.locator(".execution-rail-item").nth(3).click()
-  await expect(page.locator(".decision-inspector-action")).toHaveText(
-    "Opened “Cloud Walk Red Sneakers”",
+  await expect(page.locator(".decision-inspector-action")).toContainText(
+    "Add Classic Leather Wallet to Cart",
   )
-  await expect(page.getByText("Before step 4 of 8")).toBeVisible()
-  await expect(page.locator(".page-screenshot")).toHaveAttribute(
-    "src",
-    "screenshots/en/04-sorted.webp",
-  )
+  await expect(page.getByText("Before step 4 of 4")).toBeVisible()
+  await expect(page.locator(".page-screenshot")).toHaveAttribute("src", runFrame.step4)
   await expect(page.locator('.execution-rail-item[data-viewed="true"]')).toContainText(
-    "Opened “Cloud Walk Red Sneakers”",
+    "Add Classic Leather Wallet to Cart",
   )
   await expect(page.getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
 
@@ -51,45 +48,33 @@ test("shows the before-image for a historical step and returns to the final stat
   await expect(page.locator(".execution-rail-item").last()).toHaveAttribute("aria-current", "step")
 })
 
-test("removes technical disclosure and the disabled composer from the participant workspace", async ({
+test("removes technical disclosure, the report copy, and the disabled composer", async ({
   page,
 }) => {
-  await page.goto("/?lang=en")
+  await page.goto(runUrl("en"))
 
   await expect(page.locator("details")).toHaveCount(0)
   await expect(page.locator(".step-card")).toHaveCount(0)
   await expect(page.locator(".agent-prompt")).toHaveCount(0)
   await expect(page.locator(".chat-scroll")).toHaveCount(0)
   await expect(page.getByText(/Technical details/)).toHaveCount(0)
+  await expect(page.getByText(/Agent-reported result/)).toHaveCount(0)
   await expect(page.getByText("No mistaken action")).toHaveCount(0)
 })
 
 test("navigates historical steps and final state through the execution rail", async ({ page }) => {
-  await page.goto("/?lang=en")
+  await page.goto(runUrl("en"))
   const items = page.locator(".execution-rail-list .execution-rail-item")
 
   await items.nth(3).click()
   await expect(items.nth(3)).toHaveAttribute("aria-current", "step")
-  await expect(page.getByText("Before step 4 of 8")).toBeVisible()
+  await expect(page.getByText("Before step 4 of 4")).toBeVisible()
 
-  await items.nth(4).click()
-  await expect(items.nth(4)).toHaveAttribute("aria-current", "step")
-  await expect(page.getByText("Before step 5 of 8")).toBeVisible()
-  await expect(page.locator(".page-screenshot")).toHaveAttribute(
-    "src",
-    "screenshots/en/05-product.webp",
-  )
-
-  await page
-    .getByRole("navigation", { name: "Execution overview" })
-    .getByRole("button", { name: /Step 2.*Submitted the search/ })
-    .click()
+  await items.nth(1).click()
   await expect(items.nth(1)).toHaveAttribute("aria-current", "step")
-  await expect(page.getByText("Before step 2 of 8")).toBeVisible()
-  await expect(page.locator(".page-screenshot")).toHaveAttribute(
-    "src",
-    "screenshots/en/02-search-filled.webp",
-  )
+  await expect(page.getByText("Before step 2 of 4")).toBeVisible()
+  await expect(page.locator(".page-screenshot")).toHaveAttribute("src", runFrame.step2)
+
   await items.last().click()
   await expect(items.last()).toContainText("Final state")
   await expect(items.last()).toHaveAttribute("aria-current", "step")
@@ -99,7 +84,7 @@ test("navigates historical steps and final state through the execution rail", as
 test("keeps a response tentative until submission and then locks judgments but not replay", async ({
   page,
 }) => {
-  await page.goto("/?lang=en")
+  await page.goto(runUrl("en"))
   const accepted = page.getByRole("button", { name: "Fulfills the request", exact: true })
   const rejected = page.getByRole("button", { name: "Does not fulfill the request", exact: true })
   const submit = page.getByRole("button", { name: "Submit assessment", exact: true })
@@ -122,23 +107,20 @@ test("keeps a response tentative until submission and then locks judgments but n
 
   await items.nth(3).click()
   await expect(page.getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
-  await expect(page.getByText("Before step 4 of 8")).toBeVisible()
-  await expect(page.locator(".page-screenshot")).toHaveAttribute(
-    "src",
-    "screenshots/en/04-sorted.webp",
-  )
+  await expect(page.getByText("Before step 4 of 4")).toBeVisible()
+  await expect(page.locator(".page-screenshot")).toHaveAttribute("src", runFrame.step4)
   await expect(items.last()).toBeEnabled()
 })
 
 test("fits the screenshot by default and toggles to actual size on click", async ({ page }) => {
-  await page.goto("/?lang=en")
+  await page.goto(runUrl("en"))
   const viewport = page.locator(".browser-viewport")
   const trigger = page.locator(".screenshot-trigger")
   const image = page.locator(".page-screenshot")
 
   await expect(image).toBeVisible()
-  await expect(image).toHaveAttribute("width", "1200")
-  await expect(image).toHaveAttribute("height", "800")
+  await expect(image).toHaveAttribute("width", String(runScreenshotSize.width))
+  await expect(image).toHaveAttribute("height", String(runScreenshotSize.height))
   await expect(image).toHaveCSS("filter", "none")
   await expect(image).toHaveCSS("opacity", "1")
   await expect(trigger).toHaveAttribute("data-zoomed", "false")
@@ -172,7 +154,7 @@ test("fits the screenshot by default and toggles to actual size on click", async
         }
       }),
     )
-    .toEqual({ width: 1200, height: 800 })
+    .toEqual(runScreenshotSize)
   await expect
     .poll(() => viewport.evaluate((element) => element.scrollWidth > element.clientWidth))
     .toBe(true)
@@ -192,7 +174,7 @@ test("fits the screenshot by default and toggles to actual size on click", async
 })
 
 test("enforces the desktop minimum without page-level overflow", async ({ page }) => {
-  await page.goto("/?lang=zh")
+  await page.goto(runUrl("zh"))
   await page.setViewportSize({ width: 1279, height: 720 })
   await expect(page.getByRole("heading", { name: "请在桌面窗口中使用浏览助手" })).toBeVisible()
   await expect(page.locator(".app-shell")).toBeHidden()

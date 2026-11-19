@@ -49,9 +49,7 @@ describe("decision evidence workspace", () => {
 
     // Then the common context, final page, and final inspector are shown.
     expect(screen.getByText(run.task)).toBeVisible()
-    expect(screen.getByText(run.report)).toBeVisible()
     expect(screen.getByText("Original task")).toBeVisible()
-    expect(screen.getByText("Agent-reported result")).toBeVisible()
     const browser = screen.getByRole("region", { name: "Agent browser" })
     expect(within(browser).getByText(finalObservation.title)).toBeVisible()
     expect(within(browser).getByText(finalObservation.url)).toBeVisible()

@@ -1,10 +1,9 @@
 {
-  "fixtureVersion": "decision-replay/1",
-  "source": "synthetic",
+  "fixtureVersion": "decision-replay/2",
+  "source": "synthetic-render",
   "runId": "shopping-zh",
   "locale": "zh",
   "task": "请在这家商城帮我挑选并加入购物车一双最畅销的红色跑鞋，尺码 42。完成后告诉我商品名称和价格。",
-  "report": "已为你将最畅销的红色跑鞋加入购物车：疾风 Pro 红色跑鞋，42 码，售价 ¥399，当前数量为 1 件。商品已放入你的购物车，你可以随时前往购物车确认订单，并继续完成后续结算。",
   "initialObservationId": "obs-00",
   "finalObservationId": "obs-08",
   "observations": [
@@ -130,10 +129,30 @@
       "enteredText": "红色跑鞋",
       "operationHead": {
         "offered": [
-          { "id": "TYPE_TEXT", "label": "输入文本", "context": null, "probability": 0.82 },
-          { "id": "CLICK", "label": "点击", "context": null, "probability": 0.12 },
-          { "id": "SELECT", "label": "选择", "context": null, "probability": 0.04 },
-          { "id": "DONE", "label": "完成", "context": null, "probability": 0.02 }
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.82
+          },
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.12
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0.02
+          }
         ],
         "selectedId": "TYPE_TEXT"
       },
@@ -174,10 +193,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "CLICK", "label": "点击", "context": null, "probability": 0.76 },
-          { "id": "TYPE_TEXT", "label": "输入文本", "context": null, "probability": 0.14 },
-          { "id": "SELECT", "label": "选择", "context": null, "probability": 0.06 },
-          { "id": "DONE", "label": "完成", "context": null, "probability": 0.04 }
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.76
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.14
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0.06
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0.04
+          }
         ],
         "selectedId": "CLICK"
       },
@@ -218,10 +257,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "CLICK", "label": "点击", "context": null, "probability": 0.71 },
-          { "id": "SELECT", "label": "选择", "context": null, "probability": 0.17 },
-          { "id": "TYPE_TEXT", "label": "输入文本", "context": null, "probability": 0.08 },
-          { "id": "DONE", "label": "完成", "context": null, "probability": 0.04 }
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.71
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0.17
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.08
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0.04
+          }
         ],
         "selectedId": "CLICK"
       },
@@ -268,10 +327,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "CLICK", "label": "点击", "context": null, "probability": 0.68 },
-          { "id": "TYPE_TEXT", "label": "输入文本", "context": null, "probability": 0.14 },
-          { "id": "SELECT", "label": "选择", "context": null, "probability": 0.12 },
-          { "id": "DONE", "label": "完成", "context": null, "probability": 0.06 }
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.68
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.14
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0.12
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0.06
+          }
         ],
         "selectedId": "CLICK"
       },
@@ -318,10 +397,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "SELECT", "label": "选择", "context": null, "probability": 0.74 },
-          { "id": "CLICK", "label": "点击", "context": null, "probability": 0.16 },
-          { "id": "TYPE_TEXT", "label": "输入文本", "context": null, "probability": 0.06 },
-          { "id": "DONE", "label": "完成", "context": null, "probability": 0.04 }
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0.74
+          },
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.16
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.06
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0.04
+          }
         ],
         "selectedId": "SELECT"
       },
@@ -368,10 +467,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "CLICK", "label": "点击", "context": null, "probability": 0.7 },
-          { "id": "SELECT", "label": "选择", "context": null, "probability": 0.15 },
-          { "id": "TYPE_TEXT", "label": "输入文本", "context": null, "probability": 0.1 },
-          { "id": "DONE", "label": "完成", "context": null, "probability": 0.05 }
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.7
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0.15
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.1
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0.05
+          }
         ],
         "selectedId": "CLICK"
       },
@@ -418,10 +537,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "CLICK", "label": "点击", "context": null, "probability": 0.73 },
-          { "id": "SELECT", "label": "选择", "context": null, "probability": 0.12 },
-          { "id": "TYPE_TEXT", "label": "输入文本", "context": null, "probability": 0.09 },
-          { "id": "DONE", "label": "完成", "context": null, "probability": 0.06 }
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.73
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0.12
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.09
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0.06
+          }
         ],
         "selectedId": "CLICK"
       },
@@ -462,10 +601,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "DONE", "label": "完成", "context": null, "probability": 0.86 },
-          { "id": "CLICK", "label": "点击", "context": null, "probability": 0.08 },
-          { "id": "TYPE_TEXT", "label": "输入文本", "context": null, "probability": 0.04 },
-          { "id": "BLOCKED", "label": "受阻", "context": null, "probability": 0.02 }
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0.86
+          },
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.08
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "BLOCKED",
+            "label": "受阻",
+            "context": null,
+            "probability": 0.02
+          }
         ],
         "selectedId": "DONE"
       },

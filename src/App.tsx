@@ -103,12 +103,6 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
             <div className="study-context-scroll">
               <p>{run.task}</p>
             </div>
-          </article>
-          <article className="study-context-panel" aria-labelledby="study-report-heading">
-            <h2 id="study-report-heading">{messages.study.agentReportedResult}</h2>
-            <div className="study-context-scroll">
-              <p>{run.report}</p>
-            </div>
             <p className="study-context-note">{messages.study.syntheticProvenance}</p>
           </article>
         </section>

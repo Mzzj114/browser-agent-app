@@ -307,7 +307,7 @@ describe("decision inspector", () => {
     expect(within(targetTable).getByText("27.0%")).toBeVisible()
     expect(
       screen.getByText(
-        "Probability values are synthetic authored examples, not captured Jev model output or correctness estimates; they apply within each operation or target list only and are not overall action scores.",
+        "Probability values are recorded decision-model outputs, not synthetic examples or correctness estimates; they apply within each operation or target list only and are not overall action scores.",
       ),
     ).toBeVisible()
     expect(

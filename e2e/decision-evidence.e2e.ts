@@ -1,5 +1,8 @@
 import { expect, test } from "@playwright/test"
-import { studyCondition } from "../src/study-condition.ts"
+import { studyConditionFromEnvironment } from "../scripts/study-condition.ts"
+import { runFrame, runUrl } from "./run.ts"
+
+const studyCondition = studyConditionFromEnvironment()
 
 const en = {
   localizationPrompt: /earliest mistaken action/,
@@ -8,13 +11,11 @@ const en = {
   reject: "Does not fulfill the request",
   submit: "Submit assessment",
   cannotDetermine: "Cannot determine",
-  beforeStep4: "Before step 4 of 8",
-  beforeStep8: "Before step 8 of 8",
+  beforeStep4: "Before step 4 of 4",
   finalState: "Final state",
   lastRecordedState: "Last recorded state",
   offeredOperations: "Offered operations",
   offeredTargets: "Offered targets",
-  noTargetRequired: "No target required.",
   submitted: "Response recorded on this page only.",
   missingScreenshot: "No screenshot for this step",
 } as const
@@ -26,7 +27,7 @@ const zh = {
   reject: "不符合原始任务",
   submit: "提交评估",
   cannotDetermine: "无法判断",
-  beforeStep4: "第 4 步操作前 · 共 8 步",
+  beforeStep4: "第 4 步操作前 · 共 4 步",
   finalState: "最终状态",
   lastRecordedState: "最后一次录制的状态",
   submitted: "评估仅记录在本页。",
@@ -35,7 +36,7 @@ const zh = {
 test("loads the pinned condition without a URL override and exposes no technical evidence", async ({
   page,
 }) => {
-  await page.goto("/?lang=en&condition=probabilities")
+  await page.goto(runUrl("en"))
   await expect(page.locator(".app-shell")).toBeVisible()
   await expect(page.getByRole("heading", { name: en.finalState })).toBeVisible()
 
@@ -57,22 +58,18 @@ test("loads the pinned condition without a URL override and exposes no technical
   }
 })
 
-test("shows both heads for a target action and no target head for a terminal action", async ({
+test("shows both heads for a target action and no mark control on the final state", async ({
   page,
 }) => {
-  await page.goto("/?lang=en")
+  await page.goto(runUrl("en"))
   const items = page.locator(".execution-rail-list .execution-rail-item")
-  await items.nth(7).click()
-  await expect(page.getByText(en.beforeStep8)).toBeVisible()
+  await items.nth(3).click()
+  await expect(page.getByText(en.beforeStep4)).toBeVisible()
   await expect(page.getByRole("combobox", { name: en.localizationPrompt })).toBeEnabled()
 
   if (studyCondition === "baseline") {
     await expect(page.getByRole("table")).toHaveCount(0)
   } else {
-    await expect(page.getByRole("table", { name: en.offeredOperations })).toBeVisible()
-    await expect(page.getByRole("table", { name: en.offeredTargets })).toHaveCount(0)
-    await expect(page.getByText(en.noTargetRequired)).toBeVisible()
-    await items.nth(3).click()
     await expect(page.getByRole("table", { name: en.offeredOperations })).toBeVisible()
     await expect(page.getByRole("table", { name: en.offeredTargets })).toBeVisible()
   }
@@ -85,14 +82,14 @@ test("shows both heads for a target action and no target head for a terminal act
 })
 
 test("viewing another action never moves the participant's mark", async ({ page }) => {
-  await page.goto("/?lang=en")
+  await page.goto(runUrl("en"))
   await page.locator(".execution-rail-item").nth(3).click()
   await page.getByRole("combobox", { name: en.localizationPrompt }).selectOption("episode-04")
-  await page.locator(".execution-rail-item").nth(4).click()
+  await page.locator(".execution-rail-item").nth(1).click()
   await expect(page.getByRole("combobox", { name: /earliest mistaken action/i })).toHaveValue(
     "episode-04",
   )
-  await expect(page.getByText("Before step 5 of 8")).toBeVisible()
+  await expect(page.getByText("Before step 2 of 4")).toBeVisible()
   await expect(page.locator('.execution-rail-item[data-marked="true"]')).toHaveCount(1)
   await expect(page.locator('.execution-rail-item[data-viewed="true"]')).toHaveCount(1)
   await expect(page.getByText("Your mark")).toBeVisible()
@@ -110,7 +107,7 @@ test("viewing another action never moves the participant's mark", async ({ page 
 test("validates a concrete rejection and accepts uncertainty without inventing an action", async ({
   page,
 }) => {
-  await page.goto("/?lang=en")
+  await page.goto(runUrl("en"))
   await page.locator(".execution-rail-item").nth(3).click()
   await page.getByRole("combobox", { name: en.localizationPrompt }).selectOption("episode-04")
   await page.getByRole("button", { name: en.reject, exact: true }).click()
@@ -123,14 +120,11 @@ test("validates a concrete rejection and accepts uncertainty without inventing a
   await expect(page.getByText(en.submitted)).toHaveCount(0)
 
   const explanation = page.getByRole("textbox", { name: en.explanation })
-  await explanation.fill("The cart contains a different product from the report.")
+  await explanation.fill("The cart contains a different product from the request.")
   await page.getByRole("combobox", { name: en.localizationPrompt }).selectOption(en.cannotDetermine)
   await expect(page.locator('.execution-rail-item[data-marked="true"]')).toHaveCount(0)
-  await expect(page.locator(".page-screenshot")).toHaveAttribute(
-    "src",
-    "screenshots/en/04-sorted.webp",
-  )
-  await expect(explanation).toHaveValue("The cart contains a different product from the report.")
+  await expect(page.locator(".page-screenshot")).toHaveAttribute("src", runFrame.step4)
+  await expect(explanation).toHaveValue("The cart contains a different product from the request.")
 
   const localKeysBefore = await page.evaluate(() => Object.keys(window.localStorage).sort())
   const sessionKeysBefore = await page.evaluate(() => Object.keys(window.sessionStorage).sort())
@@ -150,7 +144,7 @@ test("validates a concrete rejection and accepts uncertainty without inventing a
 
 test("locale switches preserve a marked draft and a submitted response", async ({ page }) => {
   const explanation = "  Keep this participant text exactly.\nSecond line.  "
-  await page.goto("/?lang=zh")
+  await page.goto(runUrl("zh"))
   await page.locator(".execution-rail-item").nth(3).click()
   await page.getByRole("combobox", { name: zh.localizationPrompt }).selectOption("episode-04")
   await page.getByRole("textbox", { name: zh.explanation }).fill(explanation)
@@ -186,7 +180,7 @@ test("locale switches preserve a marked draft and a submitted response", async (
 })
 
 test("reload clears the on-screen judgment while remaining on the pinned run", async ({ page }) => {
-  await page.goto("/?lang=en")
+  await page.goto(runUrl("en"))
   await page.getByRole("button", { name: en.accept, exact: true }).click()
   await page.getByRole("button", { name: en.submit, exact: true }).click()
   await expect(page.getByText(en.submitted)).toBeVisible()
@@ -206,8 +200,8 @@ test("reload clears the on-screen judgment while remaining on the pinned run", a
 test("a real missing screenshot shows evidence failure without substituting an after-image", async ({
   page,
 }) => {
-  await page.goto("/?lang=en")
-  await page.route("**/screenshots/en/04-sorted.webp", async (route) => {
+  await page.goto(runUrl("en"))
+  await page.route(`**/${runFrame.step4}`, async (route) => {
     await route.fulfill({ status: 404, contentType: "text/plain", body: "not found" })
   })
   const items = page.locator(".execution-rail-list .execution-rail-item")
@@ -216,11 +210,11 @@ test("a real missing screenshot shows evidence failure without substituting an a
   await expect(page.getByText(en.missingScreenshot)).toBeVisible()
   await expect(page.locator(".page-screenshot")).toHaveCount(0)
   await expect(page.locator(".decision-inspector-action")).toContainText(
-    "Opened “Cloud Walk Red Sneakers”",
+    "Add Classic Leather Wallet to Cart",
   )
 
-  await items.nth(4).click()
-  await expect(page.getByText("Before step 5 of 8")).toBeVisible()
+  await items.nth(1).click()
+  await expect(page.getByText("Before step 2 of 4")).toBeVisible()
   await expect(page.locator(".page-screenshot")).toBeVisible()
   await items.nth(2).click()
   await expect(page.locator(".page-screenshot")).toBeVisible()

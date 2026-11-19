@@ -1,0 +1,991 @@
+{
+  "fixtureVersion": "decision-replay/2",
+  "source": "recorded",
+  "runId": "F5_category_exploration_clean",
+  "locale": "zh",
+  "task": "浏览三个不同的分类——\"Sports & Outdoors\"、\"Books\" 和 \"Home & Kitchen\"。从每个分类中各选一件商品加入购物车，然后使用 Jordan Parker 位于 742 Evergreen Terrace 的收货地址和尾号为 4242 的 Visa 卡完成结算。",
+  "initialObservationId": "obs-00",
+  "finalObservationId": "obs-03",
+  "observations": [
+    {
+      "id": "obs-00",
+      "url": "http://127.0.0.1:8080/env/amazon/home?session=amazon_amazon_category_exploration_50a8357146",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:17:36.000Z",
+      "screenshot": {
+        "path": "frames/pre_0000.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-01",
+      "url": "http://127.0.0.1:8080/env/amazon/home?session=amazon_amazon_category_exploration_50a8357146",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:17:37.005Z",
+      "screenshot": {
+        "path": "frames/pre_0001.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-02",
+      "url": "http://127.0.0.1:8080/env/amazon/home?session=amazon_amazon_category_exploration_50a8357146",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:17:37.530Z",
+      "screenshot": {
+        "path": "frames/pre_0002.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-03",
+      "url": "http://127.0.0.1:8080/env/amazon/home?session=amazon_amazon_category_exploration_50a8357146",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:17:47.000Z",
+      "screenshot": {
+        "path": "frames/final.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    }
+  ],
+  "episodes": [
+    {
+      "id": "episode-01",
+      "ordinal": 1,
+      "action": "打开 Search Amazon",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T22:17:36.502Z",
+      "beforeObservationId": "obs-00",
+      "afterObservationId": "obs-01",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.44
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.19
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0.35
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "向下滚动",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "等待",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "受阻",
+            "context": null,
+            "probability": 0.02
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "文本框",
+            "probability": 0.46
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "链接",
+            "probability": 0.03
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "链接",
+            "probability": 0.13
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "链接",
+            "probability": 0.11
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "链接",
+            "probability": 0.27
+          },
+          {
+            "id": "21",
+            "label": "[21] Shop Today's Deals",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Audio",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Computer",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Storage",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Accessories",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Shop electronics",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Cookware",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Drinkware",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Appliances",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Groceries",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] Shop home",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] Training",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] Yoga",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Wearables",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] Vitamins",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] Shop fitness",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "37",
+            "label": "[37] Supplies",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Furniture",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "39",
+            "label": "[39] Books",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "40",
+            "label": "[40] Bags",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "41",
+            "label": "[41] Shop office",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "42",
+            "label": "[42] Toggle BreakingWeb toolbar",
+            "context": "按钮",
+            "probability": 0
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-02",
+      "ordinal": 2,
+      "action": "打开 Search Amazon",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T22:17:37.267Z",
+      "beforeObservationId": "obs-01",
+      "afterObservationId": "obs-02",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.43
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.22
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0.33
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "向下滚动",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "等待",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "受阻",
+            "context": null,
+            "probability": 0.02
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "文本框",
+            "probability": 0.36
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "链接",
+            "probability": 0.01
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "链接",
+            "probability": 0.18
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "链接",
+            "probability": 0.15
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "链接",
+            "probability": 0.3
+          },
+          {
+            "id": "21",
+            "label": "[21] Shop Today's Deals",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Audio",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Computer",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Storage",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Accessories",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Shop electronics",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Cookware",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Drinkware",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Appliances",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Groceries",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] Shop home",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] Training",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] Yoga",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Wearables",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] Vitamins",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] Shop fitness",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "37",
+            "label": "[37] Supplies",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Furniture",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "39",
+            "label": "[39] Books",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "40",
+            "label": "[40] Bags",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "41",
+            "label": "[41] Shop office",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "42",
+            "label": "[42] Toggle BreakingWeb toolbar",
+            "context": "按钮",
+            "probability": 0
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-03",
+      "ordinal": 3,
+      "action": "打开 Search Amazon",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T22:17:42.265Z",
+      "beforeObservationId": "obs-02",
+      "afterObservationId": "obs-03",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.46
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.19
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0.33
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "向下滚动",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "等待",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "受阻",
+            "context": null,
+            "probability": 0.02
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "文本框",
+            "probability": 0.45
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "链接",
+            "probability": 0.03
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "链接",
+            "probability": 0.12
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "链接",
+            "probability": 0.11
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "链接",
+            "probability": 0.29
+          },
+          {
+            "id": "21",
+            "label": "[21] Shop Today's Deals",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Audio",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Computer",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Storage",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Accessories",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Shop electronics",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Cookware",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Drinkware",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Appliances",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Groceries",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] Shop home",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] Training",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] Yoga",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Wearables",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] Vitamins",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] Shop fitness",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "37",
+            "label": "[37] Supplies",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Furniture",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "39",
+            "label": "[39] Books",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "40",
+            "label": "[40] Bags",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "41",
+            "label": "[41] Shop office",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "42",
+            "label": "[42] Toggle BreakingWeb toolbar",
+            "context": "按钮",
+            "probability": 0
+          }
+        ],
+        "selectedId": "3"
+      }
+    }
+  ]
+}

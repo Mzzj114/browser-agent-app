@@ -73,7 +73,7 @@ export type Messages = {
 
 export const zhMessages = {
   appTitle: "浏览助手",
-  appDescription: "浏览助手任务结果核验：查看原始任务、Agent 回复、执行记录与对应网页状态。",
+  appDescription: "浏览助手任务结果核验：查看原始任务、执行记录与对应网页状态。",
   brand: "浏览助手",
   workspaceHeading: "浏览助手任务结果核验",
   pageResultHeading: "网页结果",
@@ -147,7 +147,7 @@ export const zhMessages = {
 export const enMessages = {
   appTitle: "Browser Assistant",
   appDescription:
-    "Verify browser assistant task results: review the original task, the agent response, the execution record, and the corresponding page states.",
+    "Verify browser assistant task results: review the original task, the execution record, and the corresponding page states.",
   brand: "Browser Assistant",
   workspaceHeading: "Browser assistant task verification",
   pageResultHeading: "Page result",

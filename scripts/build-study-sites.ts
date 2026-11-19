@@ -3,10 +3,10 @@ import { copyFile, rm, writeFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import { type StudyCondition, studyConditions } from "../src/domain/study-condition.ts"
 import { verifyStudyBuild } from "./study-build.ts"
-import { writeStudyFixtures } from "./study-fixtures.ts"
+import { writeRunLibrary } from "./run-library.ts"
 
 const distRoot = resolve("dist")
-const fixturesDirectory = resolve("public", "study")
+const fixturesDirectory = resolve("public", "runs")
 const indexTemplate = resolve("scripts", "study-sites-index.html")
 const viteBin = resolve("node_modules", "vite", "bin", "vite.js")
 
@@ -25,7 +25,11 @@ function run(command: string, args: readonly string[], environment: NodeJS.Proce
 }
 
 async function buildCondition(condition: StudyCondition): Promise<void> {
-  await writeStudyFixtures({ condition, outputDir: fixturesDirectory })
+  await writeRunLibrary({
+    condition,
+    sourceDir: resolve("fixtures", "agent-runs"),
+    outputDir: fixturesDirectory,
+  })
 
   const outputDirectory = resolve(distRoot, condition)
   await run(process.execPath, [viteBin, "build", "--outDir", outputDirectory, "--emptyOutDir"], {

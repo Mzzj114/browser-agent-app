@@ -1,9 +1,11 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { App } from "./App"
-import { loadStudyRuns } from "./data/load-study-runs"
+import { RunPicker } from "./RunPicker"
+import { loadRunIndex, loadStudyRun } from "./data/load-study-runs"
 import type { StudyCondition } from "./domain/study-condition"
-import { HTML_LANG, initialLocale, messagesFor } from "./i18n"
+import type { StudyRunIndex } from "./domain/study-run-schema"
+import { HTML_LANG, initialLocale, LocaleProvider, messagesFor } from "./i18n"
 
 type BootstrapNoticeProps = {
   readonly text: string
@@ -31,6 +33,10 @@ function BootstrapError({ title, hint }: BootstrapErrorProps): React.JSX.Element
   )
 }
 
+function requestedRunId(): string | null {
+  return new URL(window.location.href).searchParams.get("run")
+}
+
 export async function mountStudyApp(
   element: HTMLElement,
   baseUrl: URL,
@@ -46,13 +52,45 @@ export async function mountStudyApp(
 
   root.render(
     <StrictMode>
+      <BootstrapLoading text={messages.loadingRuns} />
+    </StrictMode>,
+  )
+
+  const runsBaseUrl = new URL("runs/", baseUrl)
+  let index: StudyRunIndex
+  try {
+    index = await loadRunIndex(runsBaseUrl, condition)
+  } catch {
+    root.render(
+      <StrictMode>
+        <BootstrapError title={messages.loadErrorTitle} hint={messages.loadErrorHint} />
+      </StrictMode>,
+    )
+    return
+  }
+
+  const runId = requestedRunId()
+  const summary = runId === null ? undefined : index.runs.find((run) => run.id === runId)
+
+  if (runId === null || summary === undefined) {
+    root.render(
+      <StrictMode>
+        <LocaleProvider>
+          <RunPicker index={index} unknownRun={runId ?? undefined} />
+        </LocaleProvider>
+      </StrictMode>,
+    )
+    return
+  }
+
+  root.render(
+    <StrictMode>
       <BootstrapLoading text={messages.loadingStudy} />
     </StrictMode>,
   )
 
   try {
-    const fixtureBaseUrl = new URL("study/", baseUrl)
-    const runs = await loadStudyRuns(fixtureBaseUrl, condition)
+    const runs = await loadStudyRun(runsBaseUrl, index, summary.id)
     root.render(
       <StrictMode>
         <App runs={runs} />

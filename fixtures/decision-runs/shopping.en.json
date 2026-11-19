@@ -1,10 +1,9 @@
 {
-  "fixtureVersion": "decision-replay/1",
-  "source": "synthetic",
+  "fixtureVersion": "decision-replay/2",
+  "source": "synthetic-render",
   "runId": "shopping-en",
   "locale": "en",
   "task": "Please pick the best-selling red running shoes in this store, add a size 42 pair to my cart, and tell me the product name and price when you're done.",
-  "report": "I've added the best-selling red running shoes to your cart: Breeze Pro Red Running Shoes, size 42, priced at ¥399, quantity 1. The item is in your cart now — you can review the order and continue to checkout whenever you're ready.",
   "initialObservationId": "obs-00",
   "finalObservationId": "obs-08",
   "observations": [
@@ -130,10 +129,30 @@
       "enteredText": "red running shoes",
       "operationHead": {
         "offered": [
-          { "id": "TYPE_TEXT", "label": "Type text", "context": null, "probability": 0.82 },
-          { "id": "CLICK", "label": "Click", "context": null, "probability": 0.12 },
-          { "id": "SELECT", "label": "Select", "context": null, "probability": 0.04 },
-          { "id": "DONE", "label": "Done", "context": null, "probability": 0.02 }
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.82
+          },
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.12
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.02
+          }
         ],
         "selectedId": "TYPE_TEXT"
       },
@@ -174,10 +193,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "CLICK", "label": "Click", "context": null, "probability": 0.76 },
-          { "id": "TYPE_TEXT", "label": "Type text", "context": null, "probability": 0.14 },
-          { "id": "SELECT", "label": "Select", "context": null, "probability": 0.06 },
-          { "id": "DONE", "label": "Done", "context": null, "probability": 0.04 }
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.76
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.14
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.06
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.04
+          }
         ],
         "selectedId": "CLICK"
       },
@@ -218,10 +257,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "CLICK", "label": "Click", "context": null, "probability": 0.71 },
-          { "id": "SELECT", "label": "Select", "context": null, "probability": 0.17 },
-          { "id": "TYPE_TEXT", "label": "Type text", "context": null, "probability": 0.08 },
-          { "id": "DONE", "label": "Done", "context": null, "probability": 0.04 }
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.71
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.17
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.08
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.04
+          }
         ],
         "selectedId": "CLICK"
       },
@@ -268,10 +327,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "CLICK", "label": "Click", "context": null, "probability": 0.68 },
-          { "id": "TYPE_TEXT", "label": "Type text", "context": null, "probability": 0.14 },
-          { "id": "SELECT", "label": "Select", "context": null, "probability": 0.12 },
-          { "id": "DONE", "label": "Done", "context": null, "probability": 0.06 }
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.68
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.14
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.12
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.06
+          }
         ],
         "selectedId": "CLICK"
       },
@@ -318,10 +397,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "SELECT", "label": "Select", "context": null, "probability": 0.74 },
-          { "id": "CLICK", "label": "Click", "context": null, "probability": 0.16 },
-          { "id": "TYPE_TEXT", "label": "Type text", "context": null, "probability": 0.06 },
-          { "id": "DONE", "label": "Done", "context": null, "probability": 0.04 }
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.74
+          },
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.16
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.06
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.04
+          }
         ],
         "selectedId": "SELECT"
       },
@@ -368,10 +467,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "CLICK", "label": "Click", "context": null, "probability": 0.7 },
-          { "id": "SELECT", "label": "Select", "context": null, "probability": 0.15 },
-          { "id": "TYPE_TEXT", "label": "Type text", "context": null, "probability": 0.1 },
-          { "id": "DONE", "label": "Done", "context": null, "probability": 0.05 }
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.7
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.15
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.1
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.05
+          }
         ],
         "selectedId": "CLICK"
       },
@@ -418,10 +537,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "CLICK", "label": "Click", "context": null, "probability": 0.73 },
-          { "id": "SELECT", "label": "Select", "context": null, "probability": 0.12 },
-          { "id": "TYPE_TEXT", "label": "Type text", "context": null, "probability": 0.09 },
-          { "id": "DONE", "label": "Done", "context": null, "probability": 0.06 }
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.73
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.12
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.09
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.06
+          }
         ],
         "selectedId": "CLICK"
       },
@@ -462,10 +601,30 @@
       "enteredText": null,
       "operationHead": {
         "offered": [
-          { "id": "DONE", "label": "Done", "context": null, "probability": 0.86 },
-          { "id": "CLICK", "label": "Click", "context": null, "probability": 0.08 },
-          { "id": "TYPE_TEXT", "label": "Type text", "context": null, "probability": 0.04 },
-          { "id": "BLOCKED", "label": "Blocked", "context": null, "probability": 0.02 }
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.86
+          },
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.08
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.02
+          }
         ],
         "selectedId": "DONE"
       },

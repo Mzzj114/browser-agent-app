@@ -2,18 +2,15 @@ import type { Candidate, Observation, ScoredCandidate } from "../domain/decision
 import type { StudyCondition } from "../domain/study-condition.ts"
 import {
   type StudyEpisode,
-  type StudyManifest,
   type StudyRun,
+  type StudyRunIndex,
   type StudyRuns,
-  studyManifestSchema,
+  type StudyRunSummary,
+  studyRunIndexSchema,
   studyRunSchema,
 } from "../domain/study-run-schema.ts"
 
 type CandidateLike = Candidate | ScoredCandidate
-
-function fixtureUrl(baseUrl: URL, file: string): URL {
-  return new URL(file, baseUrl)
-}
 
 async function readJson(response: Response, url: URL): Promise<unknown> {
   if (!response.ok) {
@@ -93,82 +90,85 @@ function assertMatchingStructure(zh: StudyRun, en: StudyRun): void {
   }
 }
 
-function assertLocaleScreenshotDirectories(run: StudyRun): void {
-  for (const observation of run.observations) {
-    const screenshot = observation.screenshot
-    if (!screenshot) continue
-
-    const inEnglishDirectory = screenshot.path.startsWith("screenshots/en/")
-    const matchesLocale = run.locale === "en" ? inEnglishDirectory : !inEnglishDirectory
-    if (!matchesLocale) {
-      throw new Error(
-        `Study fixture screenshot locale mismatch for ${run.locale}: ${screenshot.path}`,
-      )
-    }
-  }
-}
-
-function assertRunMatchesManifest(
+function assertRunMatchesIndex(
   run: StudyRun,
   locale: "zh" | "en",
-  expectedCondition: StudyCondition,
-  manifest: StudyManifest,
+  summary: StudyRunSummary,
+  index: StudyRunIndex,
 ): void {
   if (run.locale !== locale) {
     throw new Error(`Study fixture locale mismatch: expected ${locale}, received ${run.locale}`)
   }
-  if (run.condition !== expectedCondition) {
+  if (run.runId !== summary.id) {
     throw new Error(
-      `Study fixture condition mismatch: expected ${expectedCondition}, received ${run.condition}`,
+      `Study fixture run ID mismatch: expected ${summary.id}, received ${run.runId}`,
     )
   }
-  if (run.fixtureVersion !== manifest.fixtureVersion) {
+  if (run.condition !== index.condition) {
     throw new Error(
-      `Study fixture version mismatch for ${locale}: expected ${manifest.fixtureVersion}, received ${run.fixtureVersion}`,
+      `Study fixture condition mismatch: expected ${index.condition}, received ${run.condition}`,
     )
   }
-  if (run.fixtureRevision !== manifest.fixtureRevision) {
+  if (run.fixtureVersion !== index.fixtureVersion) {
     throw new Error(
-      `Study fixture revision mismatch for ${locale}: expected ${manifest.fixtureRevision}, received ${run.fixtureRevision}`,
+      `Study fixture version mismatch for ${locale}: expected ${index.fixtureVersion}, received ${run.fixtureVersion}`,
+    )
+  }
+  if (run.fixtureRevision !== index.fixtureRevision) {
+    throw new Error(
+      `Study fixture revision mismatch for ${locale}: expected ${index.fixtureRevision}, received ${run.fixtureRevision}`,
+    )
+  }
+  if (run.episodes.length !== summary.steps) {
+    throw new Error(
+      `Study fixture step count mismatch for ${summary.id}: index lists ${summary.steps}, run has ${run.episodes.length}`,
     )
   }
 }
 
-export async function loadStudyRuns(
+export async function loadRunIndex(
   baseUrl: URL,
   expectedCondition: StudyCondition,
   fetcher: typeof fetch = fetch,
+): Promise<StudyRunIndex> {
+  const indexUrl = new URL("index.json", baseUrl)
+  const indexValue = await readJson(await fetcher(indexUrl), indexUrl)
+  const index = studyRunIndexSchema.parse(indexValue)
+
+  if (index.condition !== expectedCondition) {
+    throw new Error(
+      `Study fixture condition mismatch: expected ${expectedCondition}, received ${index.condition}`,
+    )
+  }
+
+  return index
+}
+
+export async function loadStudyRun(
+  baseUrl: URL,
+  index: StudyRunIndex,
+  runId: string,
+  fetcher: typeof fetch = fetch,
 ): Promise<StudyRuns> {
-  const manifestUrl = fixtureUrl(baseUrl, "manifest.json")
-  const zhUrl = fixtureUrl(baseUrl, "run.zh.json")
-  const enUrl = fixtureUrl(baseUrl, "run.en.json")
+  const summary = index.runs.find((run) => run.id === runId)
+  if (!summary) {
+    throw new Error(`Unknown study run: ${runId}`)
+  }
 
-  const [manifestResponse, zhResponse, enResponse] = await Promise.all([
-    fetcher(manifestUrl),
-    fetcher(zhUrl),
-    fetcher(enUrl),
-  ])
+  const zhUrl = new URL(`${summary.id}/${summary.files.zh}`, baseUrl)
+  const enUrl = new URL(`${summary.id}/${summary.files.en}`, baseUrl)
+  const [zhResponse, enResponse] = await Promise.all([fetcher(zhUrl), fetcher(enUrl)])
 
-  const [manifestValue, zhValue, enValue] = await Promise.all([
-    readJson(manifestResponse, manifestUrl),
+  const [zhValue, enValue] = await Promise.all([
     readJson(zhResponse, zhUrl),
     readJson(enResponse, enUrl),
   ])
 
-  const manifest = studyManifestSchema.parse(manifestValue)
-  if (manifest.condition !== expectedCondition) {
-    throw new Error(
-      `Study fixture condition mismatch: expected ${expectedCondition}, received ${manifest.condition}`,
-    )
-  }
-
   const zh = studyRunSchema.parse(zhValue)
   const en = studyRunSchema.parse(enValue)
 
-  assertRunMatchesManifest(zh, "zh", expectedCondition, manifest)
-  assertRunMatchesManifest(en, "en", expectedCondition, manifest)
-  assertLocaleScreenshotDirectories(zh)
-  assertLocaleScreenshotDirectories(en)
+  assertRunMatchesIndex(zh, "zh", summary, index)
+  assertRunMatchesIndex(en, "en", summary, index)
   assertMatchingStructure(zh, en)
 
   return { zh, en }

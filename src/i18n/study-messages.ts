@@ -6,7 +6,6 @@ export type StudyMessages = {
   readonly viewedStepTag: string
   readonly stepLabel: (ordinal: number) => string
   readonly originalTask: string
-  readonly agentReportedResult: string
   readonly beforeStepCaption: (ordinal: number, total: number) => string
   readonly finalStateHeading: string
   readonly finalStateExplanation: string
@@ -43,8 +42,18 @@ export type StudyMessages = {
   readonly onScreenOnly: string
   readonly responseSubmittedStatus: string
   readonly loadingStudy: string
+  readonly loadingRuns: string
   readonly loadErrorTitle: string
   readonly loadErrorHint: string
+  readonly chooseRun: string
+  readonly chooseRunHint: string
+  readonly runListLabel: string
+  readonly runOrdinal: (ordinal: number) => string
+  readonly runStepCount: (count: number) => string
+  readonly englishPageNote: string
+  readonly backToRuns: string
+  readonly unknownRunTitle: string
+  readonly unknownRunHint: string
 }
 
 export const zhStudyMessages = {
@@ -53,7 +62,6 @@ export const zhStudyMessages = {
   viewedStepTag: "正在查看",
   stepLabel: (ordinal) => `第 ${ordinal} 步`,
   originalTask: "原始任务",
-  agentReportedResult: "Agent 报告的结果",
   beforeStepCaption: (ordinal, total) => `第 ${ordinal} 步操作前 · 共 ${total} 步`,
   finalStateHeading: "最终状态",
   finalStateExplanation: "此处显示最后一次记录操作后的页面。最终状态不是编号步骤，也不能被标记。",
@@ -71,9 +79,9 @@ export const zhStudyMessages = {
   markEarliestMistake: "标记为最早错误操作",
   clearMark: "清除标记",
   yourMark: "你的标记",
-  syntheticProvenance: "合成的决策回放。运行记录与页面状态为编写示例，并非采集的模型输出。",
+  syntheticProvenance: "记录的决策回放。截图来自 Agent 的英文语言会话，页面内容保持英文。",
   conditionalScoreExplanation:
-    "概率数值为合成的编写示例，并非采集的 Jev 模型输出，也不代表正确性估计；概率仅适用于同一操作或同一目标列表内部，不代表整体操作得分。",
+    "概率数值为决策模型记录的输出，并非合成示例，也不代表正确性估计；概率仅适用于同一操作或同一目标列表内部，不代表整体操作得分。",
   roundingCaveat: "百分比四舍五入保留一位小数，合计可能不等于 100%。",
   localizationPrompt: "哪一步包含 Agent 最早的错误操作？",
   localizationPlaceholder: "请选择步骤或“无法判断”",
@@ -97,8 +105,18 @@ export const zhStudyMessages = {
   onScreenOnly: "评估仅显示在本页，刷新后将清除。",
   responseSubmittedStatus: "评估仅记录在本页。",
   loadingStudy: "正在加载研究材料…",
+  loadingRuns: "正在加载执行记录…",
   loadErrorTitle: "无法加载研究材料",
   loadErrorHint: "请刷新页面重试。如果问题持续出现，请联系研究人员。",
+  chooseRun: "选择一个执行记录",
+  chooseRunHint: "选择一条记录，查看执行过程并提交你的评估。",
+  runListLabel: "执行记录列表",
+  runOrdinal: (ordinal) => `记录 ${ordinal.toString().padStart(2, "0")}`,
+  runStepCount: (count) => `${count} 步`,
+  englishPageNote: "页面内容为英文",
+  backToRuns: "返回执行记录列表",
+  unknownRunTitle: "找不到这条执行记录",
+  unknownRunHint: "请返回列表并选择一条可用的记录。",
 } satisfies StudyMessages
 
 export const enStudyMessages = {
@@ -107,7 +125,6 @@ export const enStudyMessages = {
   viewedStepTag: "Viewed",
   stepLabel: (ordinal) => `Step ${ordinal}`,
   originalTask: "Original task",
-  agentReportedResult: "Agent-reported result",
   beforeStepCaption: (ordinal, total) => `Before step ${ordinal} of ${total}`,
   finalStateHeading: "Final state",
   finalStateExplanation:
@@ -127,9 +144,9 @@ export const enStudyMessages = {
   clearMark: "Clear mark",
   yourMark: "Your mark",
   syntheticProvenance:
-    "Synthetic decision replay. The run and its page states are authored examples, not captured model output.",
+    "Recorded decision replay. Screenshots come from the agent's English-language session and remain in English.",
   conditionalScoreExplanation:
-    "Probability values are synthetic authored examples, not captured Jev model output or correctness estimates; they apply within each operation or target list only and are not overall action scores.",
+    "Probability values are recorded decision-model outputs, not synthetic examples or correctness estimates; they apply within each operation or target list only and are not overall action scores.",
   roundingCaveat:
     "Percentages are rounded to one decimal place and may not add up to exactly 100%.",
   localizationPrompt: "Which step contains the agent's earliest mistaken action?",
@@ -155,6 +172,16 @@ export const enStudyMessages = {
   onScreenOnly: "Shown on this page only. Reloading clears your response.",
   responseSubmittedStatus: "Response recorded on this page only.",
   loadingStudy: "Loading study materials…",
+  loadingRuns: "Loading recorded runs…",
   loadErrorTitle: "Unable to load the study materials",
   loadErrorHint: "Refresh the page to try again. If the problem continues, contact the researcher.",
+  chooseRun: "Choose a recorded run",
+  chooseRunHint: "Select a run to inspect its execution and submit your assessment.",
+  runListLabel: "Recorded runs",
+  runOrdinal: (ordinal) => `Run ${ordinal.toString().padStart(2, "0")}`,
+  runStepCount: (count) => `${count} ${count === 1 ? "step" : "steps"}`,
+  englishPageNote: "Page content is in English",
+  backToRuns: "Back to recorded runs",
+  unknownRunTitle: "That recorded run does not exist",
+  unknownRunHint: "Return to the list and choose an available run.",
 } satisfies StudyMessages

@@ -66,7 +66,6 @@ describe("bilingual workspace", () => {
     render(<App runs={runs} />)
 
     expect(screen.getByText(runs.en.task)).toBeVisible()
-    expect(screen.getByText(runs.en.report)).toBeVisible()
     expect(screen.getByRole("region", { name: "Agent browser" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Fulfills the request" })).toBeInTheDocument()
     const browser = screen.getByRole("region", { name: "Agent browser" })
@@ -153,7 +152,6 @@ describe("study copy", () => {
       expect(messages.viewedStepTag).not.toBe("")
       expect(messages.stepLabel(4)).toContain("4")
       expect(messages.originalTask).not.toBe("")
-      expect(messages.agentReportedResult).not.toBe("")
       expect(messages.beforeStepCaption(4, 8)).toContain("4")
       expect(messages.beforeStepCaption(4, 8)).toContain("8")
       expect(messages.finalStateHeading).not.toBe("")
@@ -180,16 +178,16 @@ describe("study copy", () => {
     }
   })
 
-  it("labels probability values as synthetic authored examples rather than measurements", () => {
+  it("labels probability values as recorded model outputs rather than measurements", () => {
     expect(enStudyMessages.conditionalScoreExplanation).toMatch(
-      /synthetic authored examples.*not captured Jev model output.*correctness estimates/i,
+      /recorded decision-model outputs.*not synthetic examples.*correctness estimates/i,
     )
     expect(enStudyMessages.conditionalScoreExplanation).toMatch(
       /within each operation or target list/i,
     )
     expect(enStudyMessages.conditionalScoreExplanation).toMatch(/not overall action scores/i)
-    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/合成的编写示例/)
-    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/并非采集的 Jev 模型输出/)
+    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/决策模型记录的输出/)
+    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/并非合成示例/)
     expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/不代表正确性估计/)
     expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/同一操作或同一目标列表内部/)
     expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/不代表整体操作得分/)

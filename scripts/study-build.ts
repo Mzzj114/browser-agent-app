@@ -3,11 +3,11 @@ import type { Dirent } from "node:fs"
 import { readdir, readFile, stat } from "node:fs/promises"
 import { isAbsolute, join, relative, resolve, sep } from "node:path"
 import { fileURLToPath, pathToFileURL } from "node:url"
-import { loadStudyRuns } from "../src/data/load-study-runs.ts"
+import { loadRunIndex, loadStudyRun } from "../src/data/load-study-runs.ts"
 import { coreView } from "../src/domain/project-run.ts"
 import type { StudyCondition } from "../src/domain/study-condition.ts"
 import { studyConditions } from "../src/domain/study-condition.ts"
-import type { StudyRun, StudyRuns } from "../src/domain/study-run-schema.ts"
+import type { StudyRun, StudyRunIndex, StudyRuns } from "../src/domain/study-run-schema.ts"
 import { LOCALES, type Locale } from "../src/i18n/locale.ts"
 
 export type BuildReport = {
@@ -16,9 +16,11 @@ export type BuildReport = {
   readonly coreDigests: Readonly<Record<Locale, string>>
 }
 
-const allowedStudyFiles = new Set(["manifest.json", "run.en.json", "run.zh.json"])
-
-const allowedJsonFiles = new Set(["study/manifest.json", "study/run.en.json", "study/run.zh.json"])
+const indexFile = "runs/index.json"
+const runJsonPattern = /^runs\/[A-Za-z0-9][A-Za-z0-9_-]*\/run\.(?:zh|en)\.json$/
+const framePattern =
+  /^runs\/[A-Za-z0-9][A-Za-z0-9_-]*\/frames\/[A-Za-z0-9_.-]+\.(?:jpe?g|png|webp)$/
+const frameExtensionPattern = /\.(?:jpe?g|png|webp)$/
 
 const forbiddenPathSegments = new Set([
   ".superpowers",
@@ -27,13 +29,6 @@ const forbiddenPathSegments = new Set([
   "fixtures",
   "scripts",
   "tests",
-])
-
-const canonicalFixtureNames = new Set([
-  "shopping.en.json",
-  "shopping.zh.json",
-  "agent-run.en.json",
-  "agent-run.json",
 ])
 
 const rootFiles = new Set(["index.html", "favicon.svg"])
@@ -55,8 +50,6 @@ const assetExtensions = new Set([
   ".woff",
   ".woff2",
 ])
-
-const screenshotPattern = /^screenshots\/(?:en\/)?[a-z0-9-]+\.webp$/
 
 const textExtensions = new Set([".css", ".html", ".js", ".json", ".svg"])
 
@@ -81,6 +74,13 @@ const legacySentinels: readonly LegacySentinel[] = [
     pattern: /["']?(?:expected_product|observed_cart_product|claimed_product)["']\s*:/,
   },
   { label: "undocumented confidence field", pattern: /["']?confidence["']\s*:/ },
+  { label: "source collection metadata", pattern: /["']?task_id["']\s*:/ },
+  { label: "source collection metadata", pattern: /["']?run_id["']\s*:/ },
+  { label: "source decision model data", pattern: /["']?raw_answers["']\s*:/ },
+  { label: "source decision model data", pattern: /["']?operation_probabilities["']\s*:/ },
+  { label: "source collection metadata", pattern: /["']?sourceCondition["']\s*:/ },
+  { label: "evaluator verdict", pattern: /["']?verdict["']\s*:/ },
+  { label: "model usage metadata", pattern: /["']?usage["']\s*:/ },
 ]
 
 type BuildFile = {
@@ -122,11 +122,13 @@ function isPermittedArtifact(
   basename: string,
 ): boolean {
   if (rootFiles.has(lowerPath)) return true
-  if (allowedJsonFiles.has(lowerPath)) return true
+  if (lowerPath === indexFile) return true
+  if (runJsonPattern.test(lowerPath)) return true
+  if (framePattern.test(lowerPath)) return true
   if (segments.length === 2 && segments[0] === "assets") {
     return assetExtensions.has(extensionOf(basename))
   }
-  return screenshotPattern.test(lowerPath)
+  return false
 }
 
 async function collectFiles(directory: string): Promise<readonly BuildFile[]> {
@@ -187,12 +189,6 @@ function assertPermittedPath(buildDirectory: string, file: BuildFile): void {
     )
   }
 
-  if (canonicalFixtureNames.has(basename)) {
-    throw new Error(
-      `Study build ${buildDirectory}: canonical authoring fixture emitted at ${file.relativePath}`,
-    )
-  }
-
   if (segments.some((segment) => forbiddenPathSegments.has(segment))) {
     throw new Error(
       `Study build ${buildDirectory}: developer artifact emitted at ${file.relativePath}`,
@@ -222,27 +218,82 @@ function assertNoLegacySentinels(buildDirectory: string, file: BuildFile, conten
   }
 }
 
-async function assertStudyDirectory(buildDirectory: string): Promise<string> {
-  const studyDirectory = join(buildDirectory, "study")
+async function assertRunsDirectory(buildDirectory: string): Promise<string> {
+  const runsDirectory = join(buildDirectory, "runs")
   let entries: Dirent[]
   try {
-    entries = await readdir(studyDirectory, { withFileTypes: true })
+    entries = await readdir(runsDirectory, { withFileTypes: true })
   } catch (error) {
     throw new Error(
-      `Study build ${buildDirectory}: missing study fixture directory (${messageOf(error)})`,
+      `Study build ${buildDirectory}: missing runs directory (${messageOf(error)})`,
       { cause: error },
     )
   }
 
+  let hasIndex = false
   for (const entry of entries) {
-    if (!entry.isFile() || !allowedStudyFiles.has(entry.name)) {
+    if (entry.isFile()) {
+      if (entry.name === "index.json") {
+        hasIndex = true
+        continue
+      }
       throw new Error(
-        `Study build ${buildDirectory}: unexpected study fixture entry "${entry.name}"`,
+        `Study build ${buildDirectory}: unexpected runs entry "${entry.name}"`,
       )
+    }
+    if (!entry.isDirectory()) {
+      throw new Error(
+        `Study build ${buildDirectory}: unexpected runs entry "${entry.name}"`,
+      )
+    }
+
+    const runDirectory = join(runsDirectory, entry.name)
+    const runEntries = await readdir(runDirectory, { withFileTypes: true })
+    const allowed = new Set(["run.en.json", "run.zh.json", "frames"])
+    for (const runEntry of runEntries) {
+      if (!allowed.has(runEntry.name)) {
+        throw new Error(
+          `Study build ${buildDirectory}: unexpected run entry "${entry.name}/${runEntry.name}"`,
+        )
+      }
+      if (runEntry.name === "frames") {
+        if (!runEntry.isDirectory()) {
+          throw new Error(
+            `Study build ${buildDirectory}: run frames entry must be a directory in ${entry.name}`,
+          )
+        }
+        continue
+      }
+      if (!runEntry.isFile()) {
+        throw new Error(
+          `Study build ${buildDirectory}: run file must be a regular file in ${entry.name}`,
+        )
+      }
+    }
+    if (runEntries.every((runEntry) => runEntry.name !== "frames")) {
+      throw new Error(`Study build ${buildDirectory}: run ${entry.name} has no frames directory`)
+    }
+    for (const required of ["run.en.json", "run.zh.json"]) {
+      if (!runEntries.some((runEntry) => runEntry.name === required)) {
+        throw new Error(`Study build ${buildDirectory}: run ${entry.name} is missing ${required}`)
+      }
+    }
+
+    const frameEntries = await readdir(join(runDirectory, "frames"), { withFileTypes: true })
+    for (const frame of frameEntries) {
+      if (!frame.isFile() || !frameExtensionPattern.test(frame.name)) {
+        throw new Error(
+          `Study build ${buildDirectory}: unexpected frame "${entry.name}/frames/${frame.name}"`,
+        )
+      }
     }
   }
 
-  return studyDirectory
+  if (!hasIndex) {
+    throw new Error(`Study build ${buildDirectory}: missing ${indexFile}`)
+  }
+
+  return runsDirectory
 }
 
 function localStudyFetcher(): typeof fetch {
@@ -261,14 +312,37 @@ function localStudyFetcher(): typeof fetch {
   }
 }
 
-async function loadValidatedRuns(
+type VerifiedRun = {
+  readonly id: string
+  readonly zh: StudyRun
+  readonly en: StudyRun
+}
+
+type VerifiedLibrary = {
+  readonly index: StudyRunIndex
+  readonly runs: readonly VerifiedRun[]
+}
+
+async function loadValidatedLibrary(
   buildDirectory: string,
-  studyDirectory: string,
+  runsDirectory: string,
   expectedCondition: StudyCondition,
-): Promise<StudyRuns> {
-  const baseUrl = pathToFileURL(`${studyDirectory}${sep}`)
+): Promise<VerifiedLibrary> {
+  const baseUrl = pathToFileURL(`${runsDirectory}${sep}`)
   try {
-    return await loadStudyRuns(baseUrl, expectedCondition, localStudyFetcher())
+    const index = await loadRunIndex(baseUrl, expectedCondition, localStudyFetcher())
+    const runs = await Promise.all(
+      index.runs.map(async (summary) => {
+        const runsForId: StudyRuns = await loadStudyRun(
+          baseUrl,
+          index,
+          summary.id,
+          localStudyFetcher(),
+        )
+        return { id: summary.id, zh: runsForId.zh, en: runsForId.en }
+      }),
+    )
+    return { index, runs }
   } catch (error) {
     throw new Error(`Study build ${buildDirectory}: invalid study fixtures (${messageOf(error)})`, {
       cause: error,
@@ -310,6 +384,9 @@ async function assertScreenshots(
 }
 
 const comparisonSchemaVersion = "study-equivalence/1"
+
+const comparisonScreenshotPattern =
+  /^(?:runs\/[A-Za-z0-9][A-Za-z0-9_-]*\/)?(?:frames\/|screenshots\/(?:en\/)?)[A-Za-z0-9_.-]+\.(?:jpe?g|png|webp)$/
 
 const comparisonViewports = [
   { width: 1280, height: 720 },
@@ -416,7 +493,7 @@ function parseComparisonScreenshot(value: unknown, label: string): ComparisonScr
   if (!isRecord(value)) throw new Error(`${label} must be an object`)
   assertExactKeys(value, comparisonScreenshotKeys, label)
   const path = value["path"]
-  if (typeof path !== "string" || !screenshotPattern.test(path)) {
+  if (typeof path !== "string" || !comparisonScreenshotPattern.test(path)) {
     throw new Error(`${label}.path must be a permitted screenshot path`)
   }
   return {
@@ -697,7 +774,7 @@ function unscoredHeads(run: StudyRun): readonly UnscoredEpisodeHeads[] {
 
 type VerifiedBuild = {
   readonly report: BuildReport
-  readonly runs: StudyRuns
+  readonly runs: readonly VerifiedRun[]
 }
 
 async function verifyStudyBuildWithRuns(
@@ -720,7 +797,7 @@ async function verifyStudyBuildWithRuns(
     )
   }
 
-  const studyDirectory = await assertStudyDirectory(buildDirectory)
+  const runsDirectory = await assertRunsDirectory(buildDirectory)
   const files = await collectFiles(buildDirectory)
 
   for (const file of files) {
@@ -733,30 +810,32 @@ async function verifyStudyBuildWithRuns(
     assertNoLegacySentinels(buildDirectory, file, contents)
   }
 
-  const runs = await loadValidatedRuns(buildDirectory, studyDirectory, expectedCondition)
+  const library = await loadValidatedLibrary(buildDirectory, runsDirectory, expectedCondition)
 
   await Promise.all(
-    LOCALES.map((locale) => assertScreenshots(buildDirectory, runs[locale], locale)),
+    library.runs.flatMap((run) =>
+      LOCALES.map((locale) => assertScreenshots(buildDirectory, run[locale], locale)),
+    ),
   )
 
-  const zh = runs.zh
-  const en = runs.en
-  if (zh.condition !== expectedCondition || en.condition !== expectedCondition) {
-    throw new Error(
-      `Study build ${buildDirectory}: condition mismatch: expected ${expectedCondition}`,
-    )
+  for (const run of library.runs) {
+    if (run.zh.condition !== expectedCondition || run.en.condition !== expectedCondition) {
+      throw new Error(
+        `Study build ${buildDirectory}: condition mismatch in ${run.id}: expected ${expectedCondition}`,
+      )
+    }
   }
 
   return {
     report: {
-      condition: zh.condition,
-      fixtureRevision: zh.fixtureRevision,
+      condition: library.index.condition,
+      fixtureRevision: library.index.fixtureRevision,
       coreDigests: {
-        zh: digest(coreView(zh)),
-        en: digest(coreView(en)),
+        zh: digest(library.runs.map((run) => ({ id: run.id, run: coreView(run.zh) }))),
+        en: digest(library.runs.map((run) => ({ id: run.id, run: coreView(run.en) }))),
       },
     },
-    runs,
+    runs: library.runs,
   }
 }
 
@@ -795,19 +874,24 @@ export async function compareStudyBuilds(
     }
     if (JSON.stringify(report.coreDigests) !== JSON.stringify(baseline.coreDigests)) {
       throw new Error(
-        `Study comparison: common core digest differs for ${condition}; common task, report, observations, or action structure changed`,
+        `Study comparison: common core digest differs for ${condition}; common task, observations, or action structure changed`,
       )
     }
   }
 
-  for (const locale of LOCALES) {
-    const candidates = unscoredHeads(verified.candidates.build.runs[locale])
-    const probabilities = unscoredHeads(verified.probabilities.build.runs[locale])
-    if (JSON.stringify(candidates) !== JSON.stringify(probabilities)) {
-      throw new Error(
-        `Study comparison: candidate order or selection differs between candidates and probabilities (${locale})`,
-      )
-    }
+  const libraryHeads = (runs: readonly VerifiedRun[]) =>
+    runs.map((run) => ({
+      id: run.id,
+      zh: unscoredHeads(run.zh),
+      en: unscoredHeads(run.en),
+    }))
+
+  const candidateHeads = libraryHeads(verified.candidates.build.runs)
+  const probabilityHeads = libraryHeads(verified.probabilities.build.runs)
+  if (JSON.stringify(candidateHeads) !== JSON.stringify(probabilityHeads)) {
+    throw new Error(
+      "Study comparison: candidate order or selection differs between candidates and probabilities",
+    )
   }
 
   const conditionPairs = [

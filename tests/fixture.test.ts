@@ -52,7 +52,7 @@ describe.each(Object.entries(agentRuns))("synthetic browser-use replay fixture (
       expect(screenshot?.width).toBe(1200)
       expect(screenshot?.height).toBe(800)
       if (screenshot) {
-        expect(existsSync(resolve("public", screenshot.path))).toBe(true)
+        expect(existsSync(resolve("tests", "fixtures", screenshot.path))).toBe(true)
       }
     }
   })

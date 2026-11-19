@@ -1,0 +1,501 @@
+{
+  "fixtureVersion": "decision-replay/2",
+  "source": "recorded",
+  "runId": "F2_cart_management_intv",
+  "locale": "en",
+  "task": "Your cart has several items. Remove the item \"Desk Lamp\" from the cart and change the quantity of \"Wireless Keyboard\" to 3.",
+  "initialObservationId": "obs-00",
+  "finalObservationId": "obs-02",
+  "observations": [
+    {
+      "id": "obs-00",
+      "url": "http://127.0.0.1:8080/env/amazon/cart?session=amazon_amazon_cart_management_56d212e00d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:22:13.000Z",
+      "screenshot": {
+        "path": "frames/pre_0000.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-01",
+      "url": "http://127.0.0.1:8080/env/amazon/cart?session=amazon_amazon_cart_management_56d212e00d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:22:15.941Z",
+      "screenshot": {
+        "path": "frames/pre_0001.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-02",
+      "url": "http://127.0.0.1:8080/env/amazon/cart?session=amazon_amazon_cart_management_56d212e00d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:22:17.000Z",
+      "screenshot": {
+        "path": "frames/final.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    }
+  ],
+  "episodes": [
+    {
+      "id": "episode-01",
+      "ordinal": 1,
+      "action": "Remove Desk Lamp from cart",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:22:14.470Z",
+      "beforeObservationId": "obs-00",
+      "afterObservationId": "obs-01",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.52
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.47
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox",
+            "probability": 0
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 4 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Laptop Stand",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Remove Laptop Stand from cart",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Wireless Keyboard",
+            "context": "link",
+            "probability": 0.02
+          },
+          {
+            "id": "26",
+            "label": "[26] Remove Wireless Keyboard from cart",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Desk Lamp",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Remove Desk Lamp from cart",
+            "context": "button",
+            "probability": 0.98
+          },
+          {
+            "id": "30",
+            "label": "[30] Proceed to checkout",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] Back to top",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "29"
+      }
+    },
+    {
+      "id": "episode-02",
+      "ordinal": 2,
+      "action": "Quantity for Wireless Keyboard → 3",
+      "operation": "SELECT",
+      "executedAt": "2026-11-17T21:22:16.470Z",
+      "beforeObservationId": "obs-01",
+      "afterObservationId": "obs-02",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.91
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.05
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0
+          }
+        ],
+        "selectedId": "SELECT"
+      },
+      "targetHead": {
+        "operation": "SELECT",
+        "offered": [
+          {
+            "id": "2:1",
+            "label": "[2:1] Search in department → Electronics",
+            "context": "combobox · current: All",
+            "probability": 0
+          },
+          {
+            "id": "2:2",
+            "label": "[2:2] Search in department → Books",
+            "context": "combobox · current: All",
+            "probability": 0
+          },
+          {
+            "id": "2:3",
+            "label": "[2:3] Search in department → Home & Kitchen",
+            "context": "combobox · current: All",
+            "probability": 0
+          },
+          {
+            "id": "2:4",
+            "label": "[2:4] Search in department → Clothing",
+            "context": "combobox · current: All",
+            "probability": 0
+          },
+          {
+            "id": "2:5",
+            "label": "[2:5] Search in department → Sports & Outdoors",
+            "context": "combobox · current: All",
+            "probability": 0
+          },
+          {
+            "id": "2:6",
+            "label": "[2:6] Search in department → Health & Beauty",
+            "context": "combobox · current: All",
+            "probability": 0
+          },
+          {
+            "id": "2:7",
+            "label": "[2:7] Search in department → Toys & Games",
+            "context": "combobox · current: All",
+            "probability": 0
+          },
+          {
+            "id": "2:8",
+            "label": "[2:8] Search in department → Office Supplies",
+            "context": "combobox · current: All",
+            "probability": 0
+          },
+          {
+            "id": "22:1",
+            "label": "[22:1] Quantity for Laptop Stand → 2",
+            "context": "combobox · current: 1",
+            "probability": 0
+          },
+          {
+            "id": "22:2",
+            "label": "[22:2] Quantity for Laptop Stand → 3",
+            "context": "combobox · current: 1",
+            "probability": 0
+          },
+          {
+            "id": "22:3",
+            "label": "[22:3] Quantity for Laptop Stand → 4",
+            "context": "combobox · current: 1",
+            "probability": 0
+          },
+          {
+            "id": "22:4",
+            "label": "[22:4] Quantity for Laptop Stand → 5",
+            "context": "combobox · current: 1",
+            "probability": 0
+          },
+          {
+            "id": "22:5",
+            "label": "[22:5] Quantity for Laptop Stand → 6",
+            "context": "combobox · current: 1",
+            "probability": 0
+          },
+          {
+            "id": "22:6",
+            "label": "[22:6] Quantity for Laptop Stand → 7",
+            "context": "combobox · current: 1",
+            "probability": 0
+          },
+          {
+            "id": "22:7",
+            "label": "[22:7] Quantity for Laptop Stand → 8",
+            "context": "combobox · current: 1",
+            "probability": 0
+          },
+          {
+            "id": "22:8",
+            "label": "[22:8] Quantity for Laptop Stand → 9",
+            "context": "combobox · current: 1",
+            "probability": 0
+          },
+          {
+            "id": "22:9",
+            "label": "[22:9] Quantity for Laptop Stand → 10",
+            "context": "combobox · current: 1",
+            "probability": 0
+          },
+          {
+            "id": "25:1",
+            "label": "[25:1] Quantity for Wireless Keyboard → 1",
+            "context": "combobox · current: 2",
+            "probability": 0
+          },
+          {
+            "id": "25:2",
+            "label": "[25:2] Quantity for Wireless Keyboard → 3",
+            "context": "combobox · current: 2",
+            "probability": 1
+          },
+          {
+            "id": "25:3",
+            "label": "[25:3] Quantity for Wireless Keyboard → 4",
+            "context": "combobox · current: 2",
+            "probability": 0
+          },
+          {
+            "id": "25:4",
+            "label": "[25:4] Quantity for Wireless Keyboard → 5",
+            "context": "combobox · current: 2",
+            "probability": 0
+          },
+          {
+            "id": "25:5",
+            "label": "[25:5] Quantity for Wireless Keyboard → 6",
+            "context": "combobox · current: 2",
+            "probability": 0
+          },
+          {
+            "id": "25:6",
+            "label": "[25:6] Quantity for Wireless Keyboard → 7",
+            "context": "combobox · current: 2",
+            "probability": 0
+          },
+          {
+            "id": "25:7",
+            "label": "[25:7] Quantity for Wireless Keyboard → 8",
+            "context": "combobox · current: 2",
+            "probability": 0
+          },
+          {
+            "id": "25:8",
+            "label": "[25:8] Quantity for Wireless Keyboard → 9",
+            "context": "combobox · current: 2",
+            "probability": 0
+          },
+          {
+            "id": "25:9",
+            "label": "[25:9] Quantity for Wireless Keyboard → 10",
+            "context": "combobox · current: 2",
+            "probability": 0
+          }
+        ],
+        "selectedId": "25:2"
+      }
+    }
+  ]
+}

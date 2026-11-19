@@ -1,0 +1,1061 @@
+{
+  "fixtureVersion": "decision-replay/2",
+  "source": "recorded",
+  "runId": "F6_review_aggregation_read_only_clean",
+  "locale": "zh",
+  "task": "你正在为办公室采购评估三款咖啡机。请浏览以下每个商品页面，以便查看它们的详细信息和评分：\"Breville BES870XL Espresso Machine\"、\"Moccamaster KBGV Select Drip Coffee Maker\"、\"OXO Brew 8-Cup Coffee Maker\"。\n不要购买任何商品，不要加入购物车或心愿单，也不要提交任何评价——你的任务是收集信息，而不是执行操作。",
+  "initialObservationId": "obs-00",
+  "finalObservationId": "obs-07",
+  "observations": [
+    {
+      "id": "obs-00",
+      "url": "http://127.0.0.1:8080/env/amazon/home?session=amazon_amazon_review_aggregation_read_only_6ae95a35f2",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:27:02.000Z",
+      "screenshot": {
+        "path": "frames/pre_0000.jpg",
+        "width": 1400,
+        "height": 975,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-01",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=Breville+BES870XL+Espresso+Machine&_t=1794972454464&session=amazon_amazon_review_aggregation_read_only_6ae95a35f2",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:27:21.678Z",
+      "screenshot": {
+        "path": "frames/pre_0001.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-02",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_322?session=amazon_amazon_review_aggregation_read_only_6ae95a35f2",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:27:23.085Z",
+      "screenshot": {
+        "path": "frames/pre_0002.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-03",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_322?session=amazon_amazon_review_aggregation_read_only_6ae95a35f2",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:27:24.734Z",
+      "screenshot": {
+        "path": "frames/pre_0003.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-04",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_322?session=amazon_amazon_review_aggregation_read_only_6ae95a35f2",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:27:26.036Z",
+      "screenshot": {
+        "path": "frames/pre_0004.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-05",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_322?session=amazon_amazon_review_aggregation_read_only_6ae95a35f2",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:27:27.371Z",
+      "screenshot": {
+        "path": "frames/pre_0005.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-06",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_322?session=amazon_amazon_review_aggregation_read_only_6ae95a35f2",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:27:28.536Z",
+      "screenshot": {
+        "path": "frames/pre_0006.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-07",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_322?session=amazon_amazon_review_aggregation_read_only_6ae95a35f2",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:27:43.000Z",
+      "screenshot": {
+        "path": "frames/final.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    }
+  ],
+  "episodes": [
+    {
+      "id": "episode-01",
+      "ordinal": 1,
+      "action": "搜索 Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T22:27:11.839Z",
+      "beforeObservationId": "obs-00",
+      "afterObservationId": "obs-01",
+      "outcome": null,
+      "enteredText": "Breville BES870XL Espresso Machine",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.17
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.83
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "向下滚动",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "等待",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "受阻",
+            "context": null,
+            "probability": 0
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "文本框",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-02",
+      "ordinal": 2,
+      "action": "提交搜索",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T22:27:22.381Z",
+      "beforeObservationId": "obs-01",
+      "afterObservationId": "obs-02",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.95
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "向下滚动",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "等待",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "受阻",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "文本框 · 当前值：Breville BES870XL Espresso Machine",
+            "probability": 0.01
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "按钮",
+            "probability": 0.99
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Shop Today's Deals",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Audio",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Computer",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Storage",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Accessories",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Shop electronics",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Cookware",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Drinkware",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Appliances",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Groceries",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] Shop home",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] Training",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] Yoga",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Wearables",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] Vitamins",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] Shop fitness",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "37",
+            "label": "[37] Supplies",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Furniture",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "39",
+            "label": "[39] Books",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "40",
+            "label": "[40] Bags",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "41",
+            "label": "[41] Shop office",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "42",
+            "label": "[42] Toggle BreakingWeb toolbar",
+            "context": "按钮",
+            "probability": 0
+          }
+        ],
+        "selectedId": "4"
+      }
+    },
+    {
+      "id": "episode-03",
+      "ordinal": 3,
+      "action": "打开 Breville BES870XL Espresso Machine",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T22:27:23.909Z",
+      "beforeObservationId": "obs-02",
+      "afterObservationId": "obs-03",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.79
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.19
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "向下滚动",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "等待",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "受阻",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "文本框 · 当前值：Breville BES870XL Espresso Machine",
+            "probability": 0.04
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] All Departments",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Books",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Clothing",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Electronics",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Health & Beauty",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Home & Kitchen",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Office Supplies",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Sports & Outdoors",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Toys & Games",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] 4 stars and up",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] 3 stars and up",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] 2 stars and up",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] 1 stars and up",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Under $25",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] $25 to $50",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] $50 to $100",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Open Breville BES870XL Espresso Machine",
+            "context": "链接",
+            "probability": 0.49
+          },
+          {
+            "id": "39",
+            "label": "[39] Open Breville BES870XL Espresso Machine product page",
+            "context": "链接",
+            "probability": 0.47
+          },
+          {
+            "id": "40",
+            "label": "[40] Toggle BreakingWeb toolbar",
+            "context": "按钮",
+            "probability": 0
+          }
+        ],
+        "selectedId": "38"
+      }
+    },
+    {
+      "id": "episode-04",
+      "ordinal": 4,
+      "action": "搜索 Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T22:27:25.385Z",
+      "beforeObservationId": "obs-03",
+      "afterObservationId": "obs-04",
+      "outcome": null,
+      "enteredText": "Breville BES870XL Espresso Machine",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.27
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.63
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "向下滚动",
+            "context": null,
+            "probability": 0.09
+          },
+          {
+            "id": "WAIT",
+            "label": "等待",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "受阻",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "文本框",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-05",
+      "ordinal": 5,
+      "action": "搜索 Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T22:27:26.703Z",
+      "beforeObservationId": "obs-04",
+      "afterObservationId": "obs-05",
+      "outcome": null,
+      "enteredText": "Breville BES870XL Espresso Machine",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.22
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.71
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "向下滚动",
+            "context": null,
+            "probability": 0.05
+          },
+          {
+            "id": "WAIT",
+            "label": "等待",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "BLOCKED",
+            "label": "受阻",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "文本框 · 当前值：Breville BES870XL Espresso Machine",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-06",
+      "ordinal": 6,
+      "action": "搜索 Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T22:27:27.953Z",
+      "beforeObservationId": "obs-05",
+      "afterObservationId": "obs-06",
+      "outcome": null,
+      "enteredText": "Breville BES870XL Espresso Machine",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.28
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.64
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "向下滚动",
+            "context": null,
+            "probability": 0.06
+          },
+          {
+            "id": "WAIT",
+            "label": "等待",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "受阻",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "文本框 · 当前值：Breville BES870XL Espresso Machine",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-07",
+      "ordinal": 7,
+      "action": "搜索 Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T22:27:35.768Z",
+      "beforeObservationId": "obs-06",
+      "afterObservationId": "obs-07",
+      "outcome": null,
+      "enteredText": "Breville BES870XL Espresso Machine",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.2
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.74
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "向下滚动",
+            "context": null,
+            "probability": 0.05
+          },
+          {
+            "id": "WAIT",
+            "label": "等待",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "受阻",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "文本框 · 当前值：Breville BES870XL Espresso Machine",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    }
+  ]
+}

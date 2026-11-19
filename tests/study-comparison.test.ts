@@ -8,6 +8,7 @@ import type { StudyRun } from "../src/domain/study-run-schema.ts"
 import {
   comparisonReportPath,
   comparisonViewports,
+  fixtureRunId,
   type StudyEquivalenceReport,
   writeComparisonWorktree,
 } from "./fixtures/study-builds.ts"
@@ -82,7 +83,7 @@ async function updateRun(
   locale: "zh" | "en",
   update: (run: StudyRun) => StudyRun,
 ): Promise<void> {
-  const path = join(root, "dist", "study", `run.${locale}.json`)
+  const path = join(root, "dist", "runs", fixtureRunId, `run.${locale}.json`)
   const run = JSON.parse(await readFile(path, "utf8")) as StudyRun
   await writeFile(path, `${JSON.stringify(update(run), null, 2)}\n`, "utf8")
 }

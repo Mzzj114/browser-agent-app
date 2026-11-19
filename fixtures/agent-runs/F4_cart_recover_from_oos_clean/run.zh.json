@@ -1,0 +1,525 @@
+{
+  "fixtureVersion": "decision-replay/2",
+  "source": "recorded",
+  "runId": "F4_cart_recover_from_oos_clean",
+  "locale": "zh",
+  "task": "你购物车中的一些商品已经缺货。找到每一件缺货商品，将其从购物车中移除，并从同一分类中添加一件有货的替代商品——确保每件被移除的商品都由恰好一件替代商品补上。",
+  "initialObservationId": "obs-00",
+  "finalObservationId": "obs-02",
+  "observations": [
+    {
+      "id": "obs-00",
+      "url": "http://127.0.0.1:8080/env/amazon/cart?session=amazon_amazon_cart_recover_from_oos_aba06a6ac9",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:56:19.000Z",
+      "screenshot": {
+        "path": "frames/pre_0000.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-01",
+      "url": "http://127.0.0.1:8080/env/amazon/cart?session=amazon_amazon_cart_recover_from_oos_aba06a6ac9",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:57:00.216Z",
+      "screenshot": {
+        "path": "frames/pre_0001.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-02",
+      "url": "http://127.0.0.1:8080/env/amazon/cart?session=amazon_amazon_cart_recover_from_oos_aba06a6ac9",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:58:17.000Z",
+      "screenshot": {
+        "path": "frames/final.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    }
+  ],
+  "episodes": [
+    {
+      "id": "episode-01",
+      "ordinal": 1,
+      "action": "将 Standing Desk Cable Tray 从购物车中移除",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:56:39.608Z",
+      "beforeObservationId": "obs-00",
+      "afterObservationId": "obs-01",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.94
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.03
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "向下滚动",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "等待",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "受阻",
+            "context": null,
+            "probability": 0.02
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "文本框",
+            "probability": 0.07
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 3 items",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Standing Desk Cable Tray",
+            "context": "链接",
+            "probability": 0.02
+          },
+          {
+            "id": "23",
+            "label": "[23] Remove Standing Desk Cable Tray from cart",
+            "context": "按钮",
+            "probability": 0.91
+          },
+          {
+            "id": "24",
+            "label": "[24] Dual Monitor Stand Riser",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Remove Dual Monitor Stand Riser from cart",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Whiteboard Magnetic Markers",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Remove Whiteboard Magnetic Markers from cart",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Proceed to checkout",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] Toggle BreakingWeb toolbar",
+            "context": "按钮",
+            "probability": 0
+          }
+        ],
+        "selectedId": "23"
+      }
+    },
+    {
+      "id": "episode-02",
+      "ordinal": 2,
+      "action": "将 Dual Monitor Stand Riser 从购物车中移除",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:57:38.608Z",
+      "beforeObservationId": "obs-01",
+      "afterObservationId": "obs-02",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "点击",
+            "context": null,
+            "probability": 0.94
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "输入文本",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SELECT",
+            "label": "选择",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "向下滚动",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "等待",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "完成",
+            "context": null,
+            "probability": 0.03
+          },
+          {
+            "id": "BLOCKED",
+            "label": "受阻",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "文本框",
+            "probability": 0.03
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 2 items",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "链接",
+            "probability": 0.01
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Dual Monitor Stand Riser",
+            "context": "链接",
+            "probability": 0.01
+          },
+          {
+            "id": "23",
+            "label": "[23] Remove Dual Monitor Stand Riser from cart",
+            "context": "按钮",
+            "probability": 0.95
+          },
+          {
+            "id": "24",
+            "label": "[24] Whiteboard Magnetic Markers",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Remove Whiteboard Magnetic Markers from cart",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Proceed to checkout",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Back to top",
+            "context": "按钮",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] About Amazon",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Your Orders",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] Your Wishlist",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] Your Cart",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] Today's Deals",
+            "context": "链接",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Toggle BreakingWeb toolbar",
+            "context": "按钮",
+            "probability": 0
+          }
+        ],
+        "selectedId": "23"
+      }
+    }
+  ]
+}

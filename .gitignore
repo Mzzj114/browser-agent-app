@@ -1,6 +1,6 @@
 node_modules/
 dist/
-public/study/
+public/runs/
 coverage/
 test-results/
 playwright-report/
@@ -14,3 +14,5 @@ playwright-report/
 .agents/
 .vercel
 .env*
+
+.superpowers/

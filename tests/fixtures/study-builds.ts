@@ -1,39 +1,15 @@
-import { mkdir, mkdtemp, readFile, rename, writeFile } from "node:fs/promises"
+import { mkdir, mkdtemp, rename, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
-import { dirname, join } from "node:path"
-import { writeStudyFixtures } from "../../scripts/study-fixtures.ts"
+import { dirname, join, resolve } from "node:path"
+import { writeRunLibrary } from "../../scripts/run-library.ts"
 import type { StudyCondition } from "../../src/domain/study-condition.ts"
-import { studyManifestSchema, studyRunSchema } from "../../src/domain/study-run-schema.ts"
 import { LOCALES, type Locale } from "../../src/i18n/locale.ts"
 
 // biome-ignore lint/complexity/useLiteralKeys: process.env requires bracket access under noPropertyAccessFromIndexSignature.
 const localAppData = process.env["LOCALAPPDATA"]
 const temporaryRoot = join(localAppData ?? tmpdir(), "Temp", "opencode")
 
-const minimalWebp = Buffer.from(
-  "UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA",
-  "base64",
-)
-
-async function referencedScreenshots(studyDirectory: string): Promise<readonly string[]> {
-  const manifest = studyManifestSchema.parse(
-    JSON.parse(await readFile(join(studyDirectory, "manifest.json"), "utf8")),
-  )
-
-  const screenshots = new Set<string>()
-  await Promise.all(
-    LOCALES.map(async (locale: Locale) => {
-      const run = studyRunSchema.parse(
-        JSON.parse(await readFile(join(studyDirectory, manifest.files[locale]), "utf8")),
-      )
-      for (const observation of run.observations) {
-        if (observation.screenshot) screenshots.add(observation.screenshot.path)
-      }
-    }),
-  )
-
-  return [...screenshots].sort()
-}
+export const fixtureRunId = "F1_add_single_item_clean"
 
 export const comparisonLocales = LOCALES
 export const comparisonViewports = [
@@ -178,9 +154,13 @@ export async function writeComparisonWorktree(condition: StudyCondition): Promis
 export async function writeBuildFixture(condition: StudyCondition): Promise<string> {
   await mkdir(temporaryRoot, { recursive: true })
   const directory = await mkdtemp(join(temporaryRoot, "study-build-"))
-  const studyDirectory = join(directory, "study")
 
-  await writeStudyFixtures({ condition, outputDir: studyDirectory })
+  await writeRunLibrary({
+    condition,
+    sourceDir: resolve("fixtures", "agent-runs"),
+    outputDir: join(directory, "runs"),
+    runIds: [fixtureRunId],
+  })
 
   await mkdir(join(directory, "assets"), { recursive: true })
   await Promise.all([
@@ -195,15 +175,6 @@ export async function writeBuildFixture(condition: StudyCondition): Promise<stri
       "utf8",
     ),
   ])
-
-  const screenshots = await referencedScreenshots(studyDirectory)
-  await Promise.all(
-    screenshots.map(async (screenshot) => {
-      const outputPath = join(directory, screenshot)
-      await mkdir(dirname(outputPath), { recursive: true })
-      await writeFile(outputPath, minimalWebp)
-    }),
-  )
 
   return directory
 }

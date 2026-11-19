@@ -1,0 +1,104 @@
+.picker-main {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: var(--space-5);
+  inline-size: 100%;
+  max-inline-size: 960px;
+  min-block-size: 0;
+  margin-inline: auto;
+  padding: var(--space-8) var(--space-6);
+}
+
+.picker-intro h2 {
+  font-size: 20px;
+  font-weight: 590;
+  line-height: 1.4;
+}
+
+.picker-intro p {
+  max-inline-size: 62ch;
+  margin-block-start: var(--space-1);
+  color: var(--text-secondary);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.picker-intro .picker-alert {
+  margin-block-start: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-surface);
+  background: var(--error-surface);
+  color: var(--error-text);
+  font-size: 14px;
+}
+
+.picker-list {
+  min-block-size: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.picker-list ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.picker-item {
+  display: grid;
+  gap: 2px;
+  min-block-size: var(--control-height);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-surface);
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  text-decoration: none;
+  transition:
+    background-color var(--motion-micro) ease-out,
+    border-color var(--motion-micro) ease-out;
+}
+
+.picker-item:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
+}
+
+.picker-item:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.picker-ordinal {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  font-weight: 510;
+  line-height: 1.45;
+}
+
+.picker-title {
+  font-size: 15px;
+  font-weight: 510;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.picker-meta {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 800px) {
+  .picker-main {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .picker-list ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

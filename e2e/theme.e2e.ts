@@ -1,8 +1,9 @@
 import { expect, type Locator, type Page, test } from "@playwright/test"
+import { runUrl } from "./run.ts"
 
 const localeCopy = {
   zh: {
-    url: "/?lang=zh",
+    url: runUrl("zh"),
     accept: "符合原始任务",
     reject: "不符合原始任务",
     submit: "提交评估",
@@ -10,7 +11,7 @@ const localeCopy = {
     desktopOnlyTitle: "请在桌面窗口中使用浏览助手",
   },
   en: {
-    url: "/?lang=en",
+    url: runUrl("en"),
     accept: "Fulfills the request",
     reject: "Does not fulfill the request",
     submit: "Submit assessment",
@@ -163,7 +164,7 @@ async function boundingBoxOf(locator: Locator) {
 }
 
 test("uses the proposed neutral theme tokens", async ({ page }) => {
-  await page.goto("/?lang=en")
+  await page.goto(runUrl("en"))
   const tokens = await readTokens(page, tokenNames)
 
   expect(tokens).toEqual({
@@ -197,7 +198,7 @@ test("uses the proposed neutral theme tokens", async ({ page }) => {
 })
 
 test("keeps enabled text and focus colors legible", async ({ page }) => {
-  await page.goto("/?lang=en")
+  await page.goto(runUrl("en"))
   const tokens = await readTokens(page, tokenNames)
 
   expect(contrastRatio("#000000", "#ffffff")).toBeCloseTo(21, 5)
@@ -252,7 +253,7 @@ test("keeps enabled text and focus colors legible", async ({ page }) => {
 })
 
 test("uses neutral static identity styling", async ({ page }) => {
-  await page.goto("/?lang=en")
+  await page.goto(runUrl("en"))
   await page.evaluate(() => document.fonts.ready)
 
   await expect(page.locator(".brand-icon")).toHaveCSS("color", "rgb(85, 93, 104)")
@@ -263,7 +264,7 @@ test("uses neutral static identity styling", async ({ page }) => {
 })
 
 test("removes card elevation without losing historical selection", async ({ page }) => {
-  await page.goto("/?lang=en")
+  await page.goto(runUrl("en"))
   await page.evaluate(() => document.fonts.ready)
 
   await page.locator(".execution-rail-item").nth(2).click()
@@ -292,7 +293,7 @@ test("keeps keyboard focus visible on replay and response controls", async ({ pa
 
   for (const reducedMotion of ["no-preference", "reduce"] as const) {
     await page.emulateMedia({ reducedMotion })
-    await page.goto("/?lang=en")
+    await page.goto(runUrl("en"))
     await page.evaluate(() => document.fonts.ready)
 
     const railStep = page.locator(".execution-rail-item").nth(3)

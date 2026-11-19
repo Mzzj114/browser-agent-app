@@ -173,7 +173,7 @@ describe.each(locales)("canonical decision run (%s)", (locale) => {
       expect(screenshot.source).toBe("synthetic-render")
       expect(screenshot.width).toBe(1200)
       expect(screenshot.height).toBe(800)
-      expect(existsSync(resolve("public", screenshot.path))).toBe(true)
+      expect(existsSync(resolve("tests", "fixtures", screenshot.path))).toBe(true)
     }
   })
 
@@ -195,15 +195,14 @@ describe.each(locales)("canonical decision run (%s)", (locale) => {
     }
   })
 
-  it("keeps the task and final report verbatim from the existing locale fixture", () => {
+  it("keeps the task verbatim from the existing locale fixture", () => {
     // Given the legacy fixture and the canonical fixture.
     const run = canonicalRun(locale)
     const legacy = locale === "zh" ? legacyZh : legacyEn
 
-    // When their prompts and reports are compared.
-    // Then the agent's claim is reused without an objectively verified rewrite.
+    // When their prompts are compared.
+    // Then the original request is reused without a rewrite.
     expect(run.task).toBe(legacy.task)
-    expect(run.report).toBe(legacy.final.text)
   })
 })
 
@@ -595,10 +594,9 @@ describe("edge decision fixtures", () => {
     expect(recovery?.outcome).toBeNull()
     expect(recovery?.afterObservationId).toBe("obs-04")
     expect(observationFor(run, "obs-04").url).toContain("cloud-walk-red")
-    expect(run.report).toBe(canonicalRun("en").report)
   })
 
-  it("links terminal BLOCKED to the blocking observation and a matching report", () => {
+  it("links terminal BLOCKED to the blocking observation", () => {
     // Given the blocked fixture.
     const run = edgeRun("blocked")
     const terminal = run.episodes.at(-1)
@@ -614,9 +612,6 @@ describe("edge decision fixtures", () => {
     expect(final.title.toLowerCase()).toContain("sign in")
     expect(final.screenshot).toBeNull()
     expect(terminal.outcome?.text.toLowerCase()).toContain("sign-in")
-    expect(run.report).not.toBe(canonicalRun("en").report)
-    expect(run.report.toLowerCase()).not.toContain("added the best-selling")
-    expect(run.report.toLowerCase()).toContain("couldn't")
   })
 
   it("models WAIT and scroll controls without target heads", () => {

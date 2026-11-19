@@ -13,7 +13,7 @@ try {
 
   for (const locale of fixtureLocales) {
     for (const state of fixtureStatesFor(locale)) {
-      const outputPath = resolve("public", "screenshots", state.file)
+      const outputPath = resolve("tests", "fixtures", "screenshots", state.file)
       await mkdir(dirname(outputPath), { recursive: true })
       await page.setContent(renderFixturePage(state, locale), { waitUntil: "load" })
       await page.evaluate(() => document.fonts.ready.then(() => undefined))

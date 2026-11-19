@@ -143,8 +143,6 @@ function blockedRun(): DecisionRun {
 
   return {
     ...run,
-    report:
-      "I couldn't complete the request because the store required sign-in before checkout. The cart contains Cloud Walk Red Sneakers, size 42.",
     observations: run.observations.map((observation) =>
       observation.id === "obs-08"
         ? {

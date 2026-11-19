@@ -1,0 +1,6933 @@
+{
+  "fixtureVersion": "decision-replay/2",
+  "source": "recorded",
+  "runId": "F1_spec_comparison_clean",
+  "locale": "en",
+  "task": "Compare the specifications of \"LG UltraWide Monitor 34-inch\" and \"Samsung Curved Monitor 34-inch\". View each product page to read its features and specs. Do NOT add either monitor to your cart or wishlist, and do NOT place an order — this is a research-only comparison task.",
+  "initialObservationId": "obs-00",
+  "finalObservationId": "obs-36",
+  "observations": [
+    {
+      "id": "obs-00",
+      "url": "http://127.0.0.1:8080/env/amazon/home?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:31:34.000Z",
+      "screenshot": {
+        "path": "frames/pre_0000.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-01",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch&_t=1794969105363&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:31:35.285Z",
+      "screenshot": {
+        "path": "frames/pre_0001.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-02",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_320?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:31:35.956Z",
+      "screenshot": {
+        "path": "frames/pre_0002.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-03",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_320?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:31:37.213Z",
+      "screenshot": {
+        "path": "frames/pre_0003.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-04",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=Samsung+Curved+Monitor+34-inch&_t=1794969107699&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:31:37.798Z",
+      "screenshot": {
+        "path": "frames/pre_0004.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-05",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_321?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:31:38.365Z",
+      "screenshot": {
+        "path": "frames/pre_0005.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-06",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_321?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:31:39.182Z",
+      "screenshot": {
+        "path": "frames/pre_0006.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-07",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_321?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:31:42.910Z",
+      "screenshot": {
+        "path": "frames/pre_0007.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-08",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch%2C+Samsung+Curved+Monitor+34-inch&_t=1794969113328&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:40.993Z",
+      "screenshot": {
+        "path": "frames/pre_0008.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-09",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch%2C+Samsung+Curved+Monitor+34-inch&_t=1794969113328&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:42.045Z",
+      "screenshot": {
+        "path": "frames/pre_0009.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-10",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch%2C+Samsung+Curved+Monitor+34-inch&_t=1794969172551&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:43.948Z",
+      "screenshot": {
+        "path": "frames/pre_0010.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-11",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch%2C+Samsung+Curved+Monitor+34-inch&_t=1794969174451&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:45.546Z",
+      "screenshot": {
+        "path": "frames/pre_0011.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-12",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch%2C+Samsung+Curved+Monitor+34-inch&_t=1794969174451&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:46.064Z",
+      "screenshot": {
+        "path": "frames/pre_0012.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-13",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch%2C+Samsung+Curved+Monitor+34-inch&_t=1794969174451&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:47.032Z",
+      "screenshot": {
+        "path": "frames/pre_0013.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-14",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch%2C+Samsung+Curved+Monitor+34-inch&_t=1794969177493&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:48.208Z",
+      "screenshot": {
+        "path": "frames/pre_0014.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-15",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch%2C+Samsung+Curved+Monitor+34-inch&_t=1794969177493&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:49.240Z",
+      "screenshot": {
+        "path": "frames/pre_0015.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-16",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch%2C+Samsung+Curved+Monitor+34-inch&_t=1794969177493&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:50.894Z",
+      "screenshot": {
+        "path": "frames/pre_0016.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-17",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch%2C+Samsung+Curved+Monitor+34-inch&_t=1794969177493&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:52.275Z",
+      "screenshot": {
+        "path": "frames/pre_0017.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-18",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch&_t=1794969182714&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:53.927Z",
+      "screenshot": {
+        "path": "frames/pre_0018.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-19",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_320?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:55.380Z",
+      "screenshot": {
+        "path": "frames/pre_0019.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-20",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_320?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:56.939Z",
+      "screenshot": {
+        "path": "frames/pre_0020.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-21",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=Samsung+Curved+Monitor+34-inch&_t=1794969187376&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:32:58.551Z",
+      "screenshot": {
+        "path": "frames/pre_0021.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-22",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_321?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:33:00.006Z",
+      "screenshot": {
+        "path": "frames/pre_0022.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-23",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_321?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:33:01.607Z",
+      "screenshot": {
+        "path": "frames/pre_0023.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-24",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_321?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:33:03.042Z",
+      "screenshot": {
+        "path": "frames/pre_0024.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-25",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_321?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:33:04.333Z",
+      "screenshot": {
+        "path": "frames/pre_0025.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-26",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch&_t=1794969194770&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:33:05.878Z",
+      "screenshot": {
+        "path": "frames/pre_0026.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-27",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_320?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:33:07.534Z",
+      "screenshot": {
+        "path": "frames/pre_0027.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-28",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_320?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:33:08.901Z",
+      "screenshot": {
+        "path": "frames/pre_0028.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-29",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=Samsung+Curved+Monitor+34-inch&_t=1794969199374&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:33:10.620Z",
+      "screenshot": {
+        "path": "frames/pre_0029.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-30",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_321?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:33:12.089Z",
+      "screenshot": {
+        "path": "frames/pre_0030.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-31",
+      "url": "http://127.0.0.1:8080/env/amazon/product/product_321?session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:33:17.098Z",
+      "screenshot": {
+        "path": "frames/pre_0031.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-32",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch&_t=1794969207604&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:34:19.128Z",
+      "screenshot": {
+        "path": "frames/pre_0032.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-33",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch&_t=1794969207604&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:35:22.310Z",
+      "screenshot": {
+        "path": "frames/pre_0033.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-34",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch&_t=1794969207604&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:35:45.387Z",
+      "screenshot": {
+        "path": "frames/pre_0034.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-35",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch&_t=1794969207604&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:36:05.325Z",
+      "screenshot": {
+        "path": "frames/pre_0035.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-36",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=LG+UltraWide+Monitor+34-inch&_t=1794969207604&session=amazon_amazon_spec_comparison_392c11c89d",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T21:36:15.000Z",
+      "screenshot": {
+        "path": "frames/final.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    }
+  ],
+  "episodes": [
+    {
+      "id": "episode-01",
+      "ordinal": 1,
+      "action": "Search Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T21:31:34.642Z",
+      "beforeObservationId": "obs-00",
+      "afterObservationId": "obs-01",
+      "outcome": null,
+      "enteredText": "LG UltraWide Monitor 34-inch",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.15
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.82
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.03
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "textbox",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-02",
+      "ordinal": 2,
+      "action": "Submit search",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:31:35.620Z",
+      "beforeObservationId": "obs-01",
+      "afterObservationId": "obs-02",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.93
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.05
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch",
+            "probability": 0.01
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.99
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Shop Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Audio",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Computer",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Storage",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Accessories",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Shop electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Cookware",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Drinkware",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Appliances",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Groceries",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] Shop home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] Training",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] Yoga",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Wearables",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] Vitamins",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] Shop fitness",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "37",
+            "label": "[37] Supplies",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Furniture",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "39",
+            "label": "[39] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "40",
+            "label": "[40] Bags",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "41",
+            "label": "[41] Shop office",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "42",
+            "label": "[42] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "4"
+      }
+    },
+    {
+      "id": "episode-03",
+      "ordinal": 3,
+      "action": "Open LG UltraWide Monitor 34-inch product page",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:31:36.584Z",
+      "beforeObservationId": "obs-02",
+      "afterObservationId": "obs-03",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.73
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.26
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch",
+            "probability": 0.21
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] All Departments",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Books",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Clothing",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Electronics",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Health & Beauty",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Home & Kitchen",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Office Supplies",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Sports & Outdoors",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Toys & Games",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Under $25",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] $25 to $50",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] $50 to $100",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Open LG UltraWide Monitor 34-inch",
+            "context": "link",
+            "probability": 0.35
+          },
+          {
+            "id": "39",
+            "label": "[39] Open LG UltraWide Monitor 34-inch product page",
+            "context": "link",
+            "probability": 0.44
+          },
+          {
+            "id": "40",
+            "label": "[40] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "39"
+      }
+    },
+    {
+      "id": "episode-04",
+      "ordinal": 4,
+      "action": "Search Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T21:31:37.505Z",
+      "beforeObservationId": "obs-03",
+      "afterObservationId": "obs-04",
+      "outcome": null,
+      "enteredText": "Samsung Curved Monitor 34-inch",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.27
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.65
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.07
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "textbox",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-05",
+      "ordinal": 5,
+      "action": "Submit search",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:31:38.081Z",
+      "beforeObservationId": "obs-04",
+      "afterObservationId": "obs-05",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 1
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: Samsung Curved Monitor 34-inch",
+            "probability": 0.01
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.99
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Browse subcategory Computer Monitors",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Add LG UltraWide Monitor 34-inch to Cart",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Buy LG UltraWide Monitor 34-inch Now",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Add LG UltraWide Monitor 34-inch to Wishlist",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "4"
+      }
+    },
+    {
+      "id": "episode-06",
+      "ordinal": 6,
+      "action": "Open Samsung Curved Monitor 34-inch product page",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:31:38.773Z",
+      "beforeObservationId": "obs-05",
+      "afterObservationId": "obs-06",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.99
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: Samsung Curved Monitor 34-inch",
+            "probability": 0
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] All Departments",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Books",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Clothing",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Electronics",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Health & Beauty",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Home & Kitchen",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Office Supplies",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Sports & Outdoors",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Toys & Games",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Under $25",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] $25 to $50",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] $50 to $100",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Open Samsung Curved Monitor 34-inch",
+            "context": "link",
+            "probability": 0.35
+          },
+          {
+            "id": "39",
+            "label": "[39] Open Samsung Curved Monitor 34-inch product page",
+            "context": "link",
+            "probability": 0.65
+          },
+          {
+            "id": "40",
+            "label": "[40] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "39"
+      }
+    },
+    {
+      "id": "episode-07",
+      "ordinal": 7,
+      "action": "Scroll down",
+      "operation": "SCROLL_DOWN",
+      "executedAt": "2026-11-17T21:31:41.046Z",
+      "beforeObservationId": "obs-06",
+      "afterObservationId": "obs-07",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.2
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.36
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.38
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.02
+          }
+        ],
+        "selectedId": "SCROLL_DOWN"
+      },
+      "targetHead": null
+    },
+    {
+      "id": "episode-08",
+      "ordinal": 8,
+      "action": "Search Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T21:32:11.951Z",
+      "beforeObservationId": "obs-07",
+      "afterObservationId": "obs-08",
+      "outcome": null,
+      "enteredText": "LG UltraWide Monitor 34-inch, Samsung Curved Monitor 34-inch",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.11
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.39
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.09
+          },
+          {
+            "id": "SCROLL_UP",
+            "label": "Scroll up",
+            "context": null,
+            "probability": 0.32
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.05
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.02
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "textbox",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-09",
+      "ordinal": 9,
+      "action": "Submit search",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:32:41.519Z",
+      "beforeObservationId": "obs-08",
+      "afterObservationId": "obs-09",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.91
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_UP",
+            "label": "Scroll up",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.03
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.02
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch, Samsung Curved Monitor 34-inch",
+            "probability": 0.02
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.96
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Add Samsung Curved Monitor 34-inch to Wishlist",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Write a Review",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Ask a question",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Back to top",
+            "context": "button",
+            "probability": 0.01
+          },
+          {
+            "id": "25",
+            "label": "[25] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "4"
+      }
+    },
+    {
+      "id": "episode-10",
+      "ordinal": 10,
+      "action": "Wait for the page to update",
+      "operation": "WAIT",
+      "executedAt": "2026-11-17T21:32:42.996Z",
+      "beforeObservationId": "obs-09",
+      "afterObservationId": "obs-10",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.37
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_UP",
+            "label": "Scroll up",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.52
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.03
+          }
+        ],
+        "selectedId": "WAIT"
+      },
+      "targetHead": null
+    },
+    {
+      "id": "episode-11",
+      "ordinal": 11,
+      "action": "Submit search",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:32:44.747Z",
+      "beforeObservationId": "obs-10",
+      "afterObservationId": "obs-11",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.49
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_UP",
+            "label": "Scroll up",
+            "context": null,
+            "probability": 0.1
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.25
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.1
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0.02
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch, Samsung Curved Monitor 34-inch",
+            "probability": 0.13
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.74
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0.03
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Under $25",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] $25 to $50",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] $50 to $100",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] $100 to $200",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] $200 & above",
+            "context": "button",
+            "probability": 0.01
+          },
+          {
+            "id": "30",
+            "label": "[30] Back to top",
+            "context": "button",
+            "probability": 0.06
+          },
+          {
+            "id": "31",
+            "label": "[31] About Amazon",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] Your Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] Your Wishlist",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Account Settings",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] Your Cart",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "37",
+            "label": "[37] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "4"
+      }
+    },
+    {
+      "id": "episode-12",
+      "ordinal": 12,
+      "action": "Submit search",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:32:45.805Z",
+      "beforeObservationId": "obs-11",
+      "afterObservationId": "obs-12",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.44
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_UP",
+            "label": "Scroll up",
+            "context": null,
+            "probability": 0.03
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.4
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.07
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch, Samsung Curved Monitor 34-inch",
+            "probability": 0.16
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.78
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0.02
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Under $25",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] $25 to $50",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] $50 to $100",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] $100 to $200",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] $200 & above",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Back to top",
+            "context": "button",
+            "probability": 0.03
+          },
+          {
+            "id": "31",
+            "label": "[31] About Amazon",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] Your Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] Your Wishlist",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Account Settings",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] Your Cart",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "37",
+            "label": "[37] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "4"
+      }
+    },
+    {
+      "id": "episode-13",
+      "ordinal": 13,
+      "action": "Wait for the page to update",
+      "operation": "WAIT",
+      "executedAt": "2026-11-17T21:32:46.548Z",
+      "beforeObservationId": "obs-12",
+      "afterObservationId": "obs-13",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.36
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.03
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "SCROLL_UP",
+            "label": "Scroll up",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.45
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.08
+          }
+        ],
+        "selectedId": "WAIT"
+      },
+      "targetHead": null
+    },
+    {
+      "id": "episode-14",
+      "ordinal": 14,
+      "action": "Wait for the page to update",
+      "operation": "WAIT",
+      "executedAt": "2026-11-17T21:32:47.620Z",
+      "beforeObservationId": "obs-13",
+      "afterObservationId": "obs-14",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.33
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.12
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_UP",
+            "label": "Scroll up",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.35
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.14
+          }
+        ],
+        "selectedId": "WAIT"
+      },
+      "targetHead": null
+    },
+    {
+      "id": "episode-15",
+      "ordinal": 15,
+      "action": "Submit search",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:32:48.724Z",
+      "beforeObservationId": "obs-14",
+      "afterObservationId": "obs-15",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.7
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_UP",
+            "label": "Scroll up",
+            "context": null,
+            "probability": 0.08
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.07
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.1
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch, Samsung Curved Monitor 34-inch",
+            "probability": 0.06
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.88
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0.04
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Under $25",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] $25 to $50",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] $50 to $100",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] $100 to $200",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] $200 & above",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Back to top",
+            "context": "button",
+            "probability": 0.01
+          },
+          {
+            "id": "31",
+            "label": "[31] About Amazon",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] Your Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] Your Wishlist",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Account Settings",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] Your Cart",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "37",
+            "label": "[37] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "4"
+      }
+    },
+    {
+      "id": "episode-16",
+      "ordinal": 16,
+      "action": "Wait for the page to update",
+      "operation": "WAIT",
+      "executedAt": "2026-11-17T21:32:50.067Z",
+      "beforeObservationId": "obs-15",
+      "afterObservationId": "obs-16",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.39
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_UP",
+            "label": "Scroll up",
+            "context": null,
+            "probability": 0.07
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.41
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.1
+          }
+        ],
+        "selectedId": "WAIT"
+      },
+      "targetHead": null
+    },
+    {
+      "id": "episode-17",
+      "ordinal": 17,
+      "action": "Scroll up",
+      "operation": "SCROLL_UP",
+      "executedAt": "2026-11-17T21:32:51.584Z",
+      "beforeObservationId": "obs-16",
+      "afterObservationId": "obs-17",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.26
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.03
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_UP",
+            "label": "Scroll up",
+            "context": null,
+            "probability": 0.26
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.26
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.17
+          }
+        ],
+        "selectedId": "SCROLL_UP"
+      },
+      "targetHead": null
+    },
+    {
+      "id": "episode-18",
+      "ordinal": 18,
+      "action": "Search Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T21:32:53.101Z",
+      "beforeObservationId": "obs-17",
+      "afterObservationId": "obs-18",
+      "outcome": null,
+      "enteredText": "LG UltraWide Monitor 34-inch",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.08
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.77
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.13
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch, Samsung Curved Monitor 34-inch",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-19",
+      "ordinal": 19,
+      "action": "Submit search",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:32:54.653Z",
+      "beforeObservationId": "obs-18",
+      "afterObservationId": "obs-19",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.62
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.29
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.06
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch",
+            "probability": 0.1
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.89
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] All Departments",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Books",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Clothing",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Electronics",
+            "context": "button",
+            "probability": 0.01
+          },
+          {
+            "id": "25",
+            "label": "[25] Health & Beauty",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Home & Kitchen",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Office Supplies",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Sports & Outdoors",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Toys & Games",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Under $25",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] $25 to $50",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] $50 to $100",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "4"
+      }
+    },
+    {
+      "id": "episode-20",
+      "ordinal": 20,
+      "action": "Open LG UltraWide Monitor 34-inch product page",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:32:56.159Z",
+      "beforeObservationId": "obs-19",
+      "afterObservationId": "obs-20",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.79
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.19
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch",
+            "probability": 0.14
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.01
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] All Departments",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Books",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Clothing",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Electronics",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Health & Beauty",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Home & Kitchen",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Office Supplies",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Sports & Outdoors",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Toys & Games",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Under $25",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] $25 to $50",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] $50 to $100",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Open LG UltraWide Monitor 34-inch",
+            "context": "link",
+            "probability": 0.42
+          },
+          {
+            "id": "39",
+            "label": "[39] Open LG UltraWide Monitor 34-inch product page",
+            "context": "link",
+            "probability": 0.43
+          },
+          {
+            "id": "40",
+            "label": "[40] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "39"
+      }
+    },
+    {
+      "id": "episode-21",
+      "ordinal": 21,
+      "action": "Search Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T21:32:57.745Z",
+      "beforeObservationId": "obs-20",
+      "afterObservationId": "obs-21",
+      "outcome": null,
+      "enteredText": "Samsung Curved Monitor 34-inch",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.26
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.63
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.09
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "textbox",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-22",
+      "ordinal": 22,
+      "action": "Submit search",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:32:59.278Z",
+      "beforeObservationId": "obs-21",
+      "afterObservationId": "obs-22",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.99
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: Samsung Curved Monitor 34-inch",
+            "probability": 0.01
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.99
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Browse subcategory Computer Monitors",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Add LG UltraWide Monitor 34-inch to Cart",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Buy LG UltraWide Monitor 34-inch Now",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Add LG UltraWide Monitor 34-inch to Wishlist",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "4"
+      }
+    },
+    {
+      "id": "episode-23",
+      "ordinal": 23,
+      "action": "Open Samsung Curved Monitor 34-inch product page",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:33:00.806Z",
+      "beforeObservationId": "obs-22",
+      "afterObservationId": "obs-23",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.97
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: Samsung Curved Monitor 34-inch",
+            "probability": 0
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] All Departments",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Books",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Clothing",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Electronics",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Health & Beauty",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Home & Kitchen",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Office Supplies",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Sports & Outdoors",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Toys & Games",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Under $25",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] $25 to $50",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] $50 to $100",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Open Samsung Curved Monitor 34-inch",
+            "context": "link",
+            "probability": 0.35
+          },
+          {
+            "id": "39",
+            "label": "[39] Open Samsung Curved Monitor 34-inch product page",
+            "context": "link",
+            "probability": 0.65
+          },
+          {
+            "id": "40",
+            "label": "[40] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "39"
+      }
+    },
+    {
+      "id": "episode-24",
+      "ordinal": 24,
+      "action": "Scroll down",
+      "operation": "SCROLL_DOWN",
+      "executedAt": "2026-11-17T21:33:02.324Z",
+      "beforeObservationId": "obs-23",
+      "afterObservationId": "obs-24",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.13
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.33
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.47
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.02
+          }
+        ],
+        "selectedId": "SCROLL_DOWN"
+      },
+      "targetHead": null
+    },
+    {
+      "id": "episode-25",
+      "ordinal": 25,
+      "action": "Scroll up",
+      "operation": "SCROLL_UP",
+      "executedAt": "2026-11-17T21:33:03.687Z",
+      "beforeObservationId": "obs-24",
+      "afterObservationId": "obs-25",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.06
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.15
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.29
+          },
+          {
+            "id": "SCROLL_UP",
+            "label": "Scroll up",
+            "context": null,
+            "probability": 0.37
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.07
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.03
+          }
+        ],
+        "selectedId": "SCROLL_UP"
+      },
+      "targetHead": null
+    },
+    {
+      "id": "episode-26",
+      "ordinal": 26,
+      "action": "Search Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T21:33:05.105Z",
+      "beforeObservationId": "obs-25",
+      "afterObservationId": "obs-26",
+      "outcome": null,
+      "enteredText": "LG UltraWide Monitor 34-inch",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.16
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.4
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.38
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "textbox",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-27",
+      "ordinal": 27,
+      "action": "Submit search",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:33:06.706Z",
+      "beforeObservationId": "obs-26",
+      "afterObservationId": "obs-27",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.75
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.11
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.05
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.03
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch",
+            "probability": 0.13
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.85
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Electronics",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "23",
+            "label": "[23] Browse subcategory Computer Monitors",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "24",
+            "label": "[24] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Add Samsung Curved Monitor 34-inch to Cart",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Buy Samsung Curved Monitor 34-inch Now",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Add Samsung Curved Monitor 34-inch to Wishlist",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "4"
+      }
+    },
+    {
+      "id": "episode-28",
+      "ordinal": 28,
+      "action": "Open LG UltraWide Monitor 34-inch product page",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:33:08.217Z",
+      "beforeObservationId": "obs-27",
+      "afterObservationId": "obs-28",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.97
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch",
+            "probability": 0.01
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.01
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] All Departments",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Books",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Clothing",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Electronics",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Health & Beauty",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Home & Kitchen",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Office Supplies",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Sports & Outdoors",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Toys & Games",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Under $25",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] $25 to $50",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] $50 to $100",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Open LG UltraWide Monitor 34-inch",
+            "context": "link",
+            "probability": 0.32
+          },
+          {
+            "id": "39",
+            "label": "[39] Open LG UltraWide Monitor 34-inch product page",
+            "context": "link",
+            "probability": 0.66
+          },
+          {
+            "id": "40",
+            "label": "[40] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "39"
+      }
+    },
+    {
+      "id": "episode-29",
+      "ordinal": 29,
+      "action": "Search Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T21:33:09.760Z",
+      "beforeObservationId": "obs-28",
+      "afterObservationId": "obs-29",
+      "outcome": null,
+      "enteredText": "Samsung Curved Monitor 34-inch",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.19
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.61
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.17
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "textbox",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-30",
+      "ordinal": 30,
+      "action": "Submit search",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:33:11.354Z",
+      "beforeObservationId": "obs-29",
+      "afterObservationId": "obs-30",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.9
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.05
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: Samsung Curved Monitor 34-inch",
+            "probability": 0.1
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.88
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Browse subcategory Computer Monitors",
+            "context": "link",
+            "probability": 0.02
+          },
+          {
+            "id": "24",
+            "label": "[24] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Add LG UltraWide Monitor 34-inch to Cart",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Buy LG UltraWide Monitor 34-inch Now",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Add LG UltraWide Monitor 34-inch to Wishlist",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "4"
+      }
+    },
+    {
+      "id": "episode-31",
+      "ordinal": 31,
+      "action": "Open Samsung Curved Monitor 34-inch product page",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:33:14.593Z",
+      "beforeObservationId": "obs-30",
+      "afterObservationId": "obs-31",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.96
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: Samsung Curved Monitor 34-inch",
+            "probability": 0.01
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.01
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] All Departments",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Books",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Clothing",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Electronics",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Health & Beauty",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Home & Kitchen",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Office Supplies",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Sports & Outdoors",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Toys & Games",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Under $25",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] $25 to $50",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] $50 to $100",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Open Samsung Curved Monitor 34-inch",
+            "context": "link",
+            "probability": 0.19
+          },
+          {
+            "id": "39",
+            "label": "[39] Open Samsung Curved Monitor 34-inch product page",
+            "context": "link",
+            "probability": 0.79
+          },
+          {
+            "id": "40",
+            "label": "[40] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "39"
+      }
+    },
+    {
+      "id": "episode-32",
+      "ordinal": 32,
+      "action": "Search Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T21:33:48.113Z",
+      "beforeObservationId": "obs-31",
+      "afterObservationId": "obs-32",
+      "outcome": null,
+      "enteredText": "LG UltraWide Monitor 34-inch",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.12
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.57
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.23
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.05
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.02
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "textbox",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-33",
+      "ordinal": 33,
+      "action": "Submit search",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:34:50.719Z",
+      "beforeObservationId": "obs-32",
+      "afterObservationId": "obs-33",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.87
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.03
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.04
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.02
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch",
+            "probability": 0.19
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.78
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Browse subcategory Computer Monitors",
+            "context": "link",
+            "probability": 0.02
+          },
+          {
+            "id": "24",
+            "label": "[24] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] FREE Returns",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Add Samsung Curved Monitor 34-inch to Cart",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Buy Samsung Curved Monitor 34-inch Now",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Add Samsung Curved Monitor 34-inch to Wishlist",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "4"
+      }
+    },
+    {
+      "id": "episode-34",
+      "ordinal": 34,
+      "action": "Open LG UltraWide Monitor 34-inch product page",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:35:33.848Z",
+      "beforeObservationId": "obs-33",
+      "afterObservationId": "obs-34",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.95
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.02
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch",
+            "probability": 0.01
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.01
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] All Departments",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Books",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Clothing",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Electronics",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Health & Beauty",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Home & Kitchen",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Office Supplies",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Sports & Outdoors",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Toys & Games",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Under $25",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] $25 to $50",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] $50 to $100",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Open LG UltraWide Monitor 34-inch",
+            "context": "link",
+            "probability": 0.3
+          },
+          {
+            "id": "39",
+            "label": "[39] Open LG UltraWide Monitor 34-inch product page",
+            "context": "link",
+            "probability": 0.68
+          },
+          {
+            "id": "40",
+            "label": "[40] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "39"
+      }
+    },
+    {
+      "id": "episode-35",
+      "ordinal": 35,
+      "action": "Open LG UltraWide Monitor 34-inch product page",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:35:55.356Z",
+      "beforeObservationId": "obs-34",
+      "afterObservationId": "obs-35",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.67
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.09
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.1
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.05
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.05
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.04
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch",
+            "probability": 0.21
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.03
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] All Departments",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Books",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Clothing",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Electronics",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Health & Beauty",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Home & Kitchen",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Office Supplies",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Sports & Outdoors",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Toys & Games",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Under $25",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] $25 to $50",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] $50 to $100",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Open LG UltraWide Monitor 34-inch",
+            "context": "link",
+            "probability": 0.16
+          },
+          {
+            "id": "39",
+            "label": "[39] Open LG UltraWide Monitor 34-inch product page",
+            "context": "link",
+            "probability": 0.6
+          },
+          {
+            "id": "40",
+            "label": "[40] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "39"
+      }
+    },
+    {
+      "id": "episode-36",
+      "ordinal": 36,
+      "action": "Open LG UltraWide Monitor 34-inch product page",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T21:36:10.162Z",
+      "beforeObservationId": "obs-35",
+      "afterObservationId": "obs-36",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.67
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.07
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.08
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.08
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0.06
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.04
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0.01
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: LG UltraWide Monitor 34-inch",
+            "probability": 0.18
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.02
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] All Departments",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Books",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Clothing",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Electronics",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Health & Beauty",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Home & Kitchen",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Office Supplies",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Sports & Outdoors",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Toys & Games",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Under $25",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] $25 to $50",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] $50 to $100",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Open LG UltraWide Monitor 34-inch",
+            "context": "link",
+            "probability": 0.21
+          },
+          {
+            "id": "39",
+            "label": "[39] Open LG UltraWide Monitor 34-inch product page",
+            "context": "link",
+            "probability": 0.57
+          },
+          {
+            "id": "40",
+            "label": "[40] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "39"
+      }
+    }
+  ]
+}

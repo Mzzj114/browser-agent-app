@@ -3,8 +3,8 @@ import { dirname, join } from "node:path"
 import { afterEach, describe, expect, it } from "vitest"
 import { type BuildReport, verifyStudyBuild } from "../scripts/study-build.ts"
 import { studyConditions } from "../src/domain/study-condition.ts"
-import { studyManifestSchema, studyRunSchema } from "../src/domain/study-run-schema.ts"
-import { writeBuildFixture } from "./fixtures/study-builds.ts"
+import { studyRunIndexSchema, studyRunSchema } from "../src/domain/study-run-schema.ts"
+import { fixtureRunId, writeBuildFixture } from "./fixtures/study-builds.ts"
 
 const ownedDirectories: string[] = []
 
@@ -41,12 +41,15 @@ async function updateJson(
 }
 
 async function manifest(directory: string) {
-  return studyManifestSchema.parse(await readJson(join(directory, "study", "manifest.json")))
+  return studyRunIndexSchema.parse(await readJson(join(directory, "runs", "index.json")))
+}
+
+function runPath(directory: string, locale: "zh" | "en"): string {
+  return join(directory, "runs", fixtureRunId, `run.${locale}.json`)
 }
 
 async function runFile(directory: string, locale: "zh" | "en") {
-  const parsed = await manifest(directory)
-  return studyRunSchema.parse(await readJson(join(directory, "study", parsed.files[locale])))
+  return studyRunSchema.parse(await readJson(runPath(directory, locale)))
 }
 
 describe("study build verification", () => {
@@ -82,7 +85,7 @@ describe("study build verification", () => {
 
   it("rejects a serving manifest whose condition differs from the pinned branch", async () => {
     const directory = await build("baseline")
-    await updateJson(join(directory, "study", "manifest.json"), (value) => {
+    await updateJson(join(directory, "runs", "index.json"), (value) => {
       Reflect.set(value, "condition", "probabilities")
     })
 
@@ -91,7 +94,7 @@ describe("study build verification", () => {
 
   it("rejects a manifest revision that disagrees with the emitted runs", async () => {
     const directory = await build("baseline")
-    await updateJson(join(directory, "study", "manifest.json"), (value) => {
+    await updateJson(join(directory, "runs", "index.json"), (value) => {
       Reflect.set(value, "fixtureRevision", "f".repeat(64))
     })
 
@@ -100,7 +103,7 @@ describe("study build verification", () => {
 
   it("rejects a run whose locale disagrees with its filename", async () => {
     const directory = await build("baseline")
-    await updateJson(join(directory, "study", "run.zh.json"), (value) => {
+    await updateJson(runPath(directory, "zh"), (value) => {
       Reflect.set(value, "locale", "en")
     })
 
@@ -109,7 +112,7 @@ describe("study build verification", () => {
 
   it("rejects zh and en runs whose shared structure diverges", async () => {
     const directory = await build("candidates")
-    await updateJson(join(directory, "study", "run.en.json"), (value) => {
+    await updateJson(runPath(directory, "en"), (value) => {
       const episodes = Reflect.get(value, "episodes") as Record<string, unknown>[]
       const first = episodes[0]
       if (!first) throw new Error("Expected an episode")
@@ -121,7 +124,7 @@ describe("study build verification", () => {
 
   it("rejects canonical authoring fixtures copied into the study directory", async () => {
     const directory = await build("baseline")
-    await writeFile(join(directory, "study", "shopping.en.json"), "{}\n", "utf8")
+    await writeFile(join(directory, "runs", "shopping.en.json"), "{}\n", "utf8")
 
     await expect(verifyStudyBuild(directory, "baseline")).rejects.toThrow(
       /unexpected|shopping|fixture/i,
@@ -130,7 +133,7 @@ describe("study build verification", () => {
 
   it("rejects unexpected study fixture entries", async () => {
     const directory = await build("baseline")
-    await writeFile(join(directory, "study", "notes.txt"), "extra\n", "utf8")
+    await writeFile(join(directory, "runs", "notes.txt"), "extra\n", "utf8")
 
     await expect(verifyStudyBuild(directory, "baseline")).rejects.toThrow(/unexpected|notes/i)
   })
@@ -188,7 +191,7 @@ describe("study build verification", () => {
 
   it("rejects a run with an extra exposure key", async () => {
     const directory = await build("baseline")
-    await updateJson(join(directory, "study", "run.en.json"), (value) => {
+    await updateJson(runPath(directory, "en"), (value) => {
       Reflect.set(value, "annotations", [])
     })
 

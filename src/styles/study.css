@@ -34,7 +34,7 @@
 
 .study-context {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   min-block-size: 0;
   min-inline-size: 0;
   border-block-end: 1px solid var(--border-default);
@@ -55,10 +55,6 @@
   min-block-size: 0;
   overflow-y: auto;
   overscroll-behavior: contain;
-}
-
-.study-context-panel + .study-context-panel {
-  border-inline-start: 1px solid var(--border-default);
 }
 
 .study-context-panel h2 {

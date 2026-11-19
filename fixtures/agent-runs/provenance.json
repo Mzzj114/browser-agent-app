@@ -1,0 +1,446 @@
+{
+  "fixtureVersion": "decision-replay/2",
+  "source": "C:\\Users\\mzzj\\Documents\\学习\\HCI Research\\research\\stimuli\\final",
+  "runs": [
+    {
+      "id": "F1_add_single_item_clean",
+      "taskId": "amazon_add_single_item",
+      "scenario": "F1 grounding",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:15:38",
+      "finishedAt": "2026-11-17T21:16:37",
+      "stepCount": 4
+    },
+    {
+      "id": "F1_add_single_item_intv",
+      "taskId": "amazon_add_single_item",
+      "scenario": "F1 grounding",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:16:38",
+      "finishedAt": "2026-11-17T21:16:44",
+      "stepCount": 4
+    },
+    {
+      "id": "F1_add_to_wishlist_clean",
+      "taskId": "amazon_add_to_wishlist",
+      "scenario": "F1 grounding",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:16:44",
+      "finishedAt": "2026-11-17T21:20:52",
+      "stepCount": 5
+    },
+    {
+      "id": "F1_add_to_wishlist_intv",
+      "taskId": "amazon_add_to_wishlist",
+      "scenario": "F1 grounding",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:27:31",
+      "finishedAt": "2026-11-17T21:27:47",
+      "stepCount": 4
+    },
+    {
+      "id": "F1_browse_category_clean",
+      "taskId": "amazon_browse_category",
+      "scenario": "F1 grounding",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:07:30",
+      "finishedAt": "2026-11-17T21:13:31",
+      "stepCount": 4
+    },
+    {
+      "id": "F1_browse_category_intv",
+      "taskId": "amazon_browse_category",
+      "scenario": "F1 grounding",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:13:31",
+      "finishedAt": "2026-11-17T21:15:38",
+      "stepCount": 4
+    },
+    {
+      "id": "F1_spec_comparison_clean",
+      "taskId": "amazon_spec_comparison",
+      "scenario": "F1 grounding",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:31:34",
+      "finishedAt": "2026-11-17T21:36:15",
+      "stepCount": 36
+    },
+    {
+      "id": "F1_spec_comparison_intv",
+      "taskId": "amazon_spec_comparison",
+      "scenario": "F1 grounding",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:36:16",
+      "finishedAt": "2026-11-17T21:36:42",
+      "stepCount": 6
+    },
+    {
+      "id": "F2_buy_highest_rated_clean",
+      "taskId": "amazon_buy_highest_rated",
+      "scenario": "F2 verification",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:38:19",
+      "finishedAt": "2026-11-17T21:38:31",
+      "stepCount": 7
+    },
+    {
+      "id": "F2_buy_highest_rated_intv",
+      "taskId": "amazon_buy_highest_rated",
+      "scenario": "F2 verification",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:38:32",
+      "finishedAt": "2026-11-17T21:38:49",
+      "stepCount": 9
+    },
+    {
+      "id": "F2_cart_management_clean",
+      "taskId": "amazon_cart_management",
+      "scenario": "F2 verification",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:21:42",
+      "finishedAt": "2026-11-17T21:22:13",
+      "stepCount": 2
+    },
+    {
+      "id": "F2_cart_management_intv",
+      "taskId": "amazon_cart_management",
+      "scenario": "F2 verification",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:22:13",
+      "finishedAt": "2026-11-17T21:22:17",
+      "stepCount": 2
+    },
+    {
+      "id": "F2_write_detailed_review_clean",
+      "taskId": "amazon_write_detailed_review",
+      "scenario": "F2 verification",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:22:26",
+      "finishedAt": "2026-11-17T21:22:29",
+      "stepCount": 3
+    },
+    {
+      "id": "F2_write_detailed_review_intv",
+      "taskId": "amazon_write_detailed_review",
+      "scenario": "F2 verification",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:22:30",
+      "finishedAt": "2026-11-17T21:22:39",
+      "stepCount": 3
+    },
+    {
+      "id": "F2_write_review_clean",
+      "taskId": "amazon_write_review",
+      "scenario": "F2 verification",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:36:42",
+      "finishedAt": "2026-11-17T21:38:04",
+      "stepCount": 12
+    },
+    {
+      "id": "F2_write_review_intv",
+      "taskId": "amazon_write_review",
+      "scenario": "F2 verification",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:38:04",
+      "finishedAt": "2026-11-17T21:38:18",
+      "stepCount": 9
+    },
+    {
+      "id": "F3_add_new_address_clean",
+      "taskId": "amazon_add_new_address",
+      "scenario": "F3 backtracking",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:38:49",
+      "finishedAt": "2026-11-17T21:39:09",
+      "stepCount": 10
+    },
+    {
+      "id": "F3_add_new_address_intv",
+      "taskId": "amazon_add_new_address",
+      "scenario": "F3 backtracking",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:39:09",
+      "finishedAt": "2026-11-17T21:41:45",
+      "stepCount": 10
+    },
+    {
+      "id": "F3_cancel_order_clean",
+      "taskId": "amazon_cancel_order",
+      "scenario": "F3 backtracking",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:47:21",
+      "finishedAt": "2026-11-17T21:48:30",
+      "stepCount": 12
+    },
+    {
+      "id": "F3_cancel_order_intv",
+      "taskId": "amazon_cancel_order",
+      "scenario": "F3 backtracking",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:48:30",
+      "finishedAt": "2026-11-17T21:49:23",
+      "stepCount": 12
+    },
+    {
+      "id": "F3_return_item_clean",
+      "taskId": "amazon_return_item",
+      "scenario": "F3 backtracking",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:41:46",
+      "finishedAt": "2026-11-17T21:46:54",
+      "stepCount": 3
+    },
+    {
+      "id": "F3_return_item_intv",
+      "taskId": "amazon_return_item",
+      "scenario": "F3 backtracking",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:46:54",
+      "finishedAt": "2026-11-17T21:47:21",
+      "stepCount": 5
+    },
+    {
+      "id": "F3_update_shipping_clean",
+      "taskId": "amazon_update_shipping",
+      "scenario": "F3 backtracking",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:49:23",
+      "finishedAt": "2026-11-17T21:50:58",
+      "stepCount": 17
+    },
+    {
+      "id": "F3_update_shipping_intv",
+      "taskId": "amazon_update_shipping",
+      "scenario": "F3 backtracking",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:50:58",
+      "finishedAt": "2026-11-17T21:54:16",
+      "stepCount": 5
+    },
+    {
+      "id": "F4_cart_recover_from_oos_clean",
+      "taskId": "amazon_cart_recover_from_oos",
+      "scenario": "F4 state_tracking",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:56:19",
+      "finishedAt": "2026-11-17T21:58:17",
+      "stepCount": 2
+    },
+    {
+      "id": "F4_cart_recover_from_oos_intv",
+      "taskId": "amazon_cart_recover_from_oos",
+      "scenario": "F4 state_tracking",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:58:17",
+      "finishedAt": "2026-11-17T22:02:25",
+      "stepCount": 8
+    },
+    {
+      "id": "F4_reorder_past_item_clean",
+      "taskId": "amazon_reorder_past_item",
+      "scenario": "F4 state_tracking",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:54:47",
+      "finishedAt": "2026-11-17T21:55:33",
+      "stepCount": 10
+    },
+    {
+      "id": "F4_reorder_past_item_intv",
+      "taskId": "amazon_reorder_past_item",
+      "scenario": "F4 state_tracking",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:55:33",
+      "finishedAt": "2026-11-17T21:55:37",
+      "stepCount": 3
+    },
+    {
+      "id": "F4_stale_wishlist_refresh_clean",
+      "taskId": "amazon_stale_wishlist_refresh",
+      "scenario": "F4 state_tracking",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:55:38",
+      "finishedAt": "2026-11-17T21:56:14",
+      "stepCount": 2
+    },
+    {
+      "id": "F4_stale_wishlist_refresh_intv",
+      "taskId": "amazon_stale_wishlist_refresh",
+      "scenario": "F4 state_tracking",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:56:15",
+      "finishedAt": "2026-11-17T21:56:18",
+      "stepCount": 2
+    },
+    {
+      "id": "F4_verify_order_ok_clean",
+      "taskId": "amazon_verify_order_ok",
+      "scenario": "F4 state_tracking",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:54:16",
+      "finishedAt": "2026-11-17T21:54:41",
+      "stepCount": 2
+    },
+    {
+      "id": "F4_verify_order_ok_intv",
+      "taskId": "amazon_verify_order_ok",
+      "scenario": "F4 state_tracking",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T21:54:42",
+      "finishedAt": "2026-11-17T21:54:46",
+      "stepCount": 2
+    },
+    {
+      "id": "F5_category_exploration_clean",
+      "taskId": "amazon_category_exploration",
+      "scenario": "F5 planning",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T22:17:36",
+      "finishedAt": "2026-11-17T22:17:47",
+      "stepCount": 3
+    },
+    {
+      "id": "F5_category_exploration_intv",
+      "taskId": "amazon_category_exploration",
+      "scenario": "F5 planning",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T22:17:48",
+      "finishedAt": "2026-11-17T22:20:05",
+      "stepCount": 36
+    },
+    {
+      "id": "F5_optimized_shopping_spree_clean",
+      "taskId": "amazon_optimized_shopping_spree",
+      "scenario": "F5 planning",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T22:25:00",
+      "finishedAt": "2026-11-17T22:26:27",
+      "stepCount": 25
+    },
+    {
+      "id": "F5_optimized_shopping_spree_intv",
+      "taskId": "amazon_optimized_shopping_spree",
+      "scenario": "F5 planning",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T22:26:27",
+      "finishedAt": "2026-11-17T22:27:02",
+      "stepCount": 25
+    },
+    {
+      "id": "F6_price_research_clean",
+      "taskId": "amazon_price_research",
+      "scenario": "F6 patience_exploration",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T22:28:14",
+      "finishedAt": "2026-11-17T22:29:18",
+      "stepCount": 25
+    },
+    {
+      "id": "F6_price_research_intv",
+      "taskId": "amazon_price_research",
+      "scenario": "F6 patience_exploration",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T22:29:19",
+      "finishedAt": "2026-11-17T22:29:49",
+      "stepCount": 3
+    },
+    {
+      "id": "F6_review_aggregation_clean",
+      "taskId": "amazon_review_aggregation",
+      "scenario": "F6 patience_exploration",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T22:29:49",
+      "finishedAt": "2026-11-17T22:30:36",
+      "stepCount": 25
+    },
+    {
+      "id": "F6_review_aggregation_intv",
+      "taskId": "amazon_review_aggregation",
+      "scenario": "F6 patience_exploration",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T22:30:36",
+      "finishedAt": "2026-11-17T22:31:28",
+      "stepCount": 25
+    },
+    {
+      "id": "F6_review_aggregation_read_only_clean",
+      "taskId": "amazon_review_aggregation_read_only",
+      "scenario": "F6 patience_exploration",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T22:27:02",
+      "finishedAt": "2026-11-17T22:27:43",
+      "stepCount": 7
+    },
+    {
+      "id": "F6_review_aggregation_read_only_intv",
+      "taskId": "amazon_review_aggregation_read_only",
+      "scenario": "F6 patience_exploration",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T22:27:43",
+      "finishedAt": "2026-11-17T22:28:13",
+      "stepCount": 10
+    },
+    {
+      "id": "F6_selective_reorder_clean",
+      "taskId": "amazon_selective_reorder",
+      "scenario": "F6 patience_exploration",
+      "sourceCondition": "clean",
+      "seed": 42,
+      "startedAt": "2026-11-17T22:31:29",
+      "finishedAt": "2026-11-17T22:32:15",
+      "stepCount": 25
+    },
+    {
+      "id": "F6_selective_reorder_intv",
+      "taskId": "amazon_selective_reorder",
+      "scenario": "F6 patience_exploration",
+      "sourceCondition": "intervention",
+      "seed": 42,
+      "startedAt": "2026-11-17T22:32:16",
+      "finishedAt": "2026-11-17T22:32:42",
+      "stepCount": 19
+    }
+  ]
+}

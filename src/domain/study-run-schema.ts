@@ -13,10 +13,14 @@ const scoreTolerance = 1e-6
 
 const screenshotSchema = z
   .strictObject({
-    path: z.string().regex(/^screenshots\/(?:en\/)?[a-z0-9-]+\.webp$/),
+    path: z
+      .string()
+      .regex(
+        /^(?:runs\/[A-Za-z0-9][A-Za-z0-9_-]*\/)?(?:frames\/|screenshots\/(?:en\/)?)[A-Za-z0-9_.-]+\.(?:jpe?g|png|webp)$/,
+      ),
     width: z.number().int().positive(),
     height: z.number().int().positive(),
-    source: z.literal("synthetic-render"),
+    source: z.enum(["recorded", "synthetic-render"]),
   })
   .readonly()
 
@@ -115,12 +119,11 @@ const scoredEpisodeSchema = z
   .readonly()
 
 const commonRunShape = {
-  fixtureVersion: z.literal("decision-replay/1"),
-  source: z.literal("synthetic"),
+  fixtureVersion: z.literal("decision-replay/2"),
+  source: z.enum(["recorded", "synthetic-render"]),
   runId: z.string().min(1),
   locale: z.enum(LOCALES),
   task: z.string().min(1),
-  report: z.string().min(1),
   initialObservationId: z.string().regex(/^obs-\d{2}$/),
   finalObservationId: z.string().regex(/^obs-\d{2}$/),
   observations: z.array(observationSchema).min(1).readonly(),
@@ -394,12 +397,11 @@ export type StudyRun = z.infer<typeof studyRunSchema>
 export type StudyEpisode = StudyRun["episodes"][number]
 
 export type StudyRunCore = {
-  readonly fixtureVersion: "decision-replay/1"
-  readonly source: "synthetic"
+  readonly fixtureVersion: "decision-replay/2"
+  readonly source: "recorded" | "synthetic-render"
   readonly runId: string
   readonly locale: Locale
   readonly task: string
-  readonly report: string
   readonly initialObservationId: string
   readonly finalObservationId: string
   readonly observations: readonly Observation[]
@@ -408,18 +410,61 @@ export type StudyRunCore = {
 
 export type StudyRuns = Readonly<Record<Locale, StudyRun>>
 
-export const studyManifestSchema = z
+const runIdSchema = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9_-]*$/)
+
+const runTitleSchema = z
   .strictObject({
-    fixtureVersion: z.literal("decision-replay/1"),
-    condition: z.enum(studyConditions),
-    fixtureRevision: z.string().regex(/^[0-9a-f]{64}$/),
-    files: z
-      .strictObject({
-        zh: z.literal("run.zh.json"),
-        en: z.literal("run.en.json"),
-      })
-      .readonly(),
+    zh: z.string().min(1),
+    en: z.string().min(1),
   })
   .readonly()
 
-export type StudyManifest = z.infer<typeof studyManifestSchema>
+const runFilesSchema = z
+  .strictObject({
+    zh: z.literal("run.zh.json"),
+    en: z.literal("run.en.json"),
+  })
+  .readonly()
+
+const runSummarySchema = z
+  .strictObject({
+    id: runIdSchema,
+    ordinal: z.number().int().positive(),
+    steps: z.number().int().positive(),
+    title: runTitleSchema,
+    files: runFilesSchema,
+  })
+  .readonly()
+
+export const studyRunIndexSchema = z
+  .strictObject({
+    fixtureVersion: z.literal("decision-replay/2"),
+    condition: z.enum(studyConditions),
+    fixtureRevision: z.string().regex(/^[0-9a-f]{64}$/),
+    runs: z.array(runSummarySchema).min(1).readonly(),
+  })
+  .readonly()
+  .superRefine((index, context) => {
+    const ids = new Set<string>()
+    const ordinals = new Set<number>()
+    for (const [position, run] of index.runs.entries()) {
+      if (ids.has(run.id)) {
+        addIssue(context, ["runs", position, "id"], "Run IDs must be unique")
+      }
+      ids.add(run.id)
+      if (ordinals.has(run.ordinal)) {
+        addIssue(context, ["runs", position, "ordinal"], "Run ordinals must be unique")
+      }
+      ordinals.add(run.ordinal)
+      if (run.ordinal !== position + 1) {
+        addIssue(
+          context,
+          ["runs", position, "ordinal"],
+          "Run ordinals must be chronological and one-based",
+        )
+      }
+    }
+  })
+
+export type StudyRunIndex = z.infer<typeof studyRunIndexSchema>
+export type StudyRunSummary = StudyRunIndex["runs"][number]

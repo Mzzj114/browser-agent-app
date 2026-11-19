@@ -29,10 +29,14 @@ export function isTargetlessOperation(operation: Operation): boolean {
 
 const screenshotSchema = z
   .strictObject({
-    path: z.string().regex(/^screenshots\/(?:en\/)?[a-z0-9-]+\.webp$/),
+    path: z
+      .string()
+      .regex(
+        /^(?:runs\/[A-Za-z0-9][A-Za-z0-9_-]*\/)?(?:frames\/|screenshots\/(?:en\/)?)[A-Za-z0-9_.-]+\.(?:jpe?g|png|webp)$/,
+      ),
     width: z.number().int().positive(),
     height: z.number().int().positive(),
-    source: z.literal("synthetic-render"),
+    source: z.enum(["recorded", "synthetic-render"]),
   })
   .readonly()
 
@@ -181,12 +185,11 @@ function validateScoredHead(
 
 export const decisionRunSchema = z
   .strictObject({
-    fixtureVersion: z.literal("decision-replay/1"),
-    source: z.literal("synthetic"),
+    fixtureVersion: z.literal("decision-replay/2"),
+    source: z.enum(["recorded", "synthetic-render"]),
     runId: z.string().min(1),
     locale: z.enum(["zh", "en"]),
     task: z.string().min(1),
-    report: z.string().min(1),
     initialObservationId: z.string().regex(/^obs-\d{2}$/),
     finalObservationId: z.string().regex(/^obs-\d{2}$/),
     observations: z.array(observationSchema).min(1).readonly(),

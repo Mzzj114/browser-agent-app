@@ -1,0 +1,578 @@
+{
+  "fixtureVersion": "decision-replay/2",
+  "fixtureRevision": "86f71f49546f55b51451490a31c89d896f39bb9ecbd7300de099203de9d4f230",
+  "runs": [
+    {
+      "id": "F1_add_single_item_clean",
+      "ordinal": 1,
+      "steps": 4,
+      "title": {
+        "en": "Add one item to the cart",
+        "zh": "将一件商品加入购物车"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F1_add_single_item_intv",
+      "ordinal": 2,
+      "steps": 4,
+      "title": {
+        "en": "Add one item to the cart",
+        "zh": "将一件商品加入购物车"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F1_add_to_wishlist_clean",
+      "ordinal": 3,
+      "steps": 5,
+      "title": {
+        "en": "Add an item to the wishlist",
+        "zh": "将商品加入心愿单"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F1_add_to_wishlist_intv",
+      "ordinal": 4,
+      "steps": 4,
+      "title": {
+        "en": "Add an item to the wishlist",
+        "zh": "将商品加入心愿单"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F1_browse_category_clean",
+      "ordinal": 5,
+      "steps": 4,
+      "title": {
+        "en": "Find the cheapest item in a category",
+        "zh": "在分类中查找最低价商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F1_browse_category_intv",
+      "ordinal": 6,
+      "steps": 4,
+      "title": {
+        "en": "Find the cheapest item in a category",
+        "zh": "在分类中查找最低价商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F1_spec_comparison_clean",
+      "ordinal": 7,
+      "steps": 36,
+      "title": {
+        "en": "Compare two monitors' specifications",
+        "zh": "比较两款显示器的规格"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F1_spec_comparison_intv",
+      "ordinal": 8,
+      "steps": 6,
+      "title": {
+        "en": "Compare two monitors' specifications",
+        "zh": "比较两款显示器的规格"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F2_buy_highest_rated_clean",
+      "ordinal": 9,
+      "steps": 7,
+      "title": {
+        "en": "Buy the highest-rated product in a category",
+        "zh": "购买分类中评分最高的商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F2_buy_highest_rated_intv",
+      "ordinal": 10,
+      "steps": 9,
+      "title": {
+        "en": "Buy the highest-rated product in a category",
+        "zh": "购买分类中评分最高的商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F2_cart_management_clean",
+      "ordinal": 11,
+      "steps": 2,
+      "title": {
+        "en": "Edit items in the cart",
+        "zh": "修改购物车中的商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F2_cart_management_intv",
+      "ordinal": 12,
+      "steps": 2,
+      "title": {
+        "en": "Edit items in the cart",
+        "zh": "修改购物车中的商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F2_write_detailed_review_clean",
+      "ordinal": 13,
+      "steps": 3,
+      "title": {
+        "en": "Write a detailed product review",
+        "zh": "撰写详细的商品评价"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F2_write_detailed_review_intv",
+      "ordinal": 14,
+      "steps": 3,
+      "title": {
+        "en": "Write a detailed product review",
+        "zh": "撰写详细的商品评价"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F2_write_review_clean",
+      "ordinal": 15,
+      "steps": 12,
+      "title": {
+        "en": "Write a product review",
+        "zh": "撰写商品评价"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F2_write_review_intv",
+      "ordinal": 16,
+      "steps": 9,
+      "title": {
+        "en": "Write a product review",
+        "zh": "撰写商品评价"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F3_add_new_address_clean",
+      "ordinal": 17,
+      "steps": 10,
+      "title": {
+        "en": "Add a new shipping address",
+        "zh": "添加新的收货地址"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F3_add_new_address_intv",
+      "ordinal": 18,
+      "steps": 10,
+      "title": {
+        "en": "Add a new shipping address",
+        "zh": "添加新的收货地址"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F3_cancel_order_clean",
+      "ordinal": 19,
+      "steps": 12,
+      "title": {
+        "en": "Cancel an order",
+        "zh": "取消订单"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F3_cancel_order_intv",
+      "ordinal": 20,
+      "steps": 12,
+      "title": {
+        "en": "Cancel an order",
+        "zh": "取消订单"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F3_return_item_clean",
+      "ordinal": 21,
+      "steps": 3,
+      "title": {
+        "en": "Request a return",
+        "zh": "申请退货"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F3_return_item_intv",
+      "ordinal": 22,
+      "steps": 5,
+      "title": {
+        "en": "Request a return",
+        "zh": "申请退货"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F3_update_shipping_clean",
+      "ordinal": 23,
+      "steps": 17,
+      "title": {
+        "en": "Change the default address and place an order",
+        "zh": "更改默认地址并下单"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F3_update_shipping_intv",
+      "ordinal": 24,
+      "steps": 5,
+      "title": {
+        "en": "Change the default address and place an order",
+        "zh": "更改默认地址并下单"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F4_cart_recover_from_oos_clean",
+      "ordinal": 25,
+      "steps": 2,
+      "title": {
+        "en": "Replace out-of-stock cart items",
+        "zh": "替换购物车中的缺货商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F4_cart_recover_from_oos_intv",
+      "ordinal": 26,
+      "steps": 8,
+      "title": {
+        "en": "Replace out-of-stock cart items",
+        "zh": "替换购物车中的缺货商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F4_reorder_past_item_clean",
+      "ordinal": 27,
+      "steps": 10,
+      "title": {
+        "en": "Reorder a past item",
+        "zh": "再次购买历史订单中的商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F4_reorder_past_item_intv",
+      "ordinal": 28,
+      "steps": 3,
+      "title": {
+        "en": "Reorder a past item",
+        "zh": "再次购买历史订单中的商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F4_stale_wishlist_refresh_clean",
+      "ordinal": 29,
+      "steps": 2,
+      "title": {
+        "en": "Refresh out-of-stock wishlist items",
+        "zh": "更新心愿单中的缺货商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F4_stale_wishlist_refresh_intv",
+      "ordinal": 30,
+      "steps": 2,
+      "title": {
+        "en": "Refresh out-of-stock wishlist items",
+        "zh": "更新心愿单中的缺货商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F4_verify_order_ok_clean",
+      "ordinal": 31,
+      "steps": 2,
+      "title": {
+        "en": "Verify an order's details",
+        "zh": "核对订单详情"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F4_verify_order_ok_intv",
+      "ordinal": 32,
+      "steps": 2,
+      "title": {
+        "en": "Verify an order's details",
+        "zh": "核对订单详情"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F5_category_exploration_clean",
+      "ordinal": 33,
+      "steps": 3,
+      "title": {
+        "en": "Buy items from three categories",
+        "zh": "购买三个分类中的商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F5_category_exploration_intv",
+      "ordinal": 34,
+      "steps": 36,
+      "title": {
+        "en": "Buy items from three categories",
+        "zh": "购买三个分类中的商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F5_optimized_shopping_spree_clean",
+      "ordinal": 35,
+      "steps": 25,
+      "title": {
+        "en": "Buy five category winners under budget",
+        "zh": "在预算内购买五个分类的最佳商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F5_optimized_shopping_spree_intv",
+      "ordinal": 36,
+      "steps": 25,
+      "title": {
+        "en": "Buy five category winners under budget",
+        "zh": "在预算内购买五个分类的最佳商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F6_price_research_clean",
+      "ordinal": 37,
+      "steps": 25,
+      "title": {
+        "en": "Research wireless earbuds under budget",
+        "zh": "调研预算内的无线耳机"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F6_price_research_intv",
+      "ordinal": 38,
+      "steps": 3,
+      "title": {
+        "en": "Research wireless earbuds under budget",
+        "zh": "调研预算内的无线耳机"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F6_review_aggregation_clean",
+      "ordinal": 39,
+      "steps": 25,
+      "title": {
+        "en": "Write reviews for three products",
+        "zh": "为三件商品撰写评价"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F6_review_aggregation_intv",
+      "ordinal": 40,
+      "steps": 25,
+      "title": {
+        "en": "Write reviews for three products",
+        "zh": "为三件商品撰写评价"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F6_review_aggregation_read_only_clean",
+      "ordinal": 41,
+      "steps": 7,
+      "title": {
+        "en": "Compare three coffee makers (read-only)",
+        "zh": "比较三款咖啡机（只读）"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F6_review_aggregation_read_only_intv",
+      "ordinal": 42,
+      "steps": 10,
+      "title": {
+        "en": "Compare three coffee makers (read-only)",
+        "zh": "比较三款咖啡机（只读）"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F6_selective_reorder_clean",
+      "ordinal": 43,
+      "steps": 25,
+      "title": {
+        "en": "Reorder two past items together",
+        "zh": "合并再次购买两件历史商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    },
+    {
+      "id": "F6_selective_reorder_intv",
+      "ordinal": 44,
+      "steps": 19,
+      "title": {
+        "en": "Reorder two past items together",
+        "zh": "合并再次购买两件历史商品"
+      },
+      "files": {
+        "zh": "run.zh.json",
+        "en": "run.en.json"
+      }
+    }
+  ]
+}

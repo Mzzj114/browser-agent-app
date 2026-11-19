@@ -1,10 +1,18 @@
-import { mkdir, writeFile } from "node:fs/promises"
+import { mkdir, readFile, writeFile } from "node:fs/promises"
 import { join } from "node:path"
 import { expect, type Locator, type Page, test } from "@playwright/test"
+import { studyConditionFromEnvironment } from "../scripts/study-condition.ts"
+import type { StudyRun } from "../src/domain/study-run-schema.ts"
 import type { Locale } from "../src/i18n/locale.ts"
-import { studyCondition } from "../src/study-condition.ts"
 import type { StudyEquivalenceReport } from "../tests/fixtures/study-builds.ts"
-import { injectedFixtureRevision, serveInjectedStudyRuns } from "./study-fixtures.ts"
+import {
+  representativeRunId,
+  runFrame,
+  runScreenshotSize,
+  runUrl,
+} from "./run.ts"
+
+const studyCondition = studyConditionFromEnvironment()
 
 const viewports = [
   { width: 1280, height: 720 },
@@ -12,14 +20,8 @@ const viewports = [
   { width: 1440, height: 900 },
 ] as const
 
-const expectedFinalScreenshot = {
-  zh: { path: "screenshots/08-cart.webp", width: 1200, height: 800 },
-  en: { path: "screenshots/en/08-cart.webp", width: 1200, height: 800 },
-} as const
-
 const copy = {
   zh: {
-    url: "/?lang=zh",
     executionOverview: "执行概览",
     accept: "符合原始任务",
     reject: "不符合原始任务",
@@ -27,18 +29,14 @@ const copy = {
     cannotDetermine: "无法判断",
     localizationPrompt: /最早的错误操作/,
     explanationPrompt: /简短说明/,
-    missingScreenshot: "此步骤没有可用截图",
     finalState: "最终状态",
     lastRecordedState: "最后一次录制的状态",
-    beforeStep4: "第 4 步操作前 · 共 8 步",
-    beforeStep5: "第 5 步操作前 · 共 8 步",
+    beforeStep4: "第 4 步操作前 · 共 4 步",
     offeredOperations: "候选操作",
     offeredTargets: "候选目标",
-    noTargetRequired: "无需选择目标。",
     submitted: "评估仅记录在本页。",
   },
   en: {
-    url: "/?lang=en",
     executionOverview: "Execution overview",
     accept: "Fulfills the request",
     reject: "Does not fulfill the request",
@@ -46,14 +44,11 @@ const copy = {
     cannotDetermine: "Cannot determine",
     localizationPrompt: /earliest mistaken action/,
     explanationPrompt: /short explanation/i,
-    missingScreenshot: "No screenshot for this step",
     finalState: "Final state",
     lastRecordedState: "Last recorded state",
-    beforeStep4: "Before step 4 of 8",
-    beforeStep5: "Before step 5 of 8",
+    beforeStep4: "Before step 4 of 4",
     offeredOperations: "Offered operations",
     offeredTargets: "Offered targets",
-    noTargetRequired: "No target required.",
     submitted: "Response recorded on this page only.",
   },
 } as const
@@ -118,19 +113,21 @@ async function writeReport(
   )
 }
 
+async function selectedRun(locale: Locale): Promise<StudyRun> {
+  const path = join(process.cwd(), "public", "runs", representativeRunId, `run.${locale}.json`)
+  return JSON.parse(await readFile(path, "utf8")) as StudyRun
+}
+
 for (const locale of ["zh", "en"] as const) {
   for (const viewport of viewports) {
     test(`${locale} at ${viewport.width}x${viewport.height} keeps long evidence bounded and emits an equivalence report`, async ({
       page,
     }) => {
       const text = copy[locale]
+      const run = await selectedRun(locale)
+      const expectedFinal = { path: runFrame.final, ...runScreenshotSize }
       await page.setViewportSize(viewport)
-      const runs = await serveInjectedStudyRuns(page, studyCondition)
-      await page.route("**/screenshots/**/05-product.webp", async (route) => {
-        await route.fulfill({ status: 404, contentType: "text/plain", body: "missing evidence" })
-      })
-
-      await page.goto(text.url)
+      await page.goto(runUrl(locale))
       await page.evaluate(() => document.fonts.ready)
       const shell = page.locator(".app-shell")
       await expect(shell).toBeVisible()
@@ -139,21 +136,16 @@ for (const locale of ["zh", "en"] as const) {
 
       const initialImage = page.locator(".page-screenshot")
       await expect(initialImage).toBeVisible()
-      const expectedFinal = expectedFinalScreenshot[locale]
       await expect(initialImage).toHaveAttribute("src", expectedFinal.path)
       await expect(initialImage).toHaveAttribute("width", String(expectedFinal.width))
       await expect(initialImage).toHaveAttribute("height", String(expectedFinal.height))
       const initialReference = await screenshotReference(initialImage)
       expect(initialReference).toEqual(expectedFinal)
       await expect(
-        page.locator(".study-context-panel").nth(0).getByText(runs[locale].task, { exact: true }),
-      ).toHaveText(runs[locale].task)
-      await expect(
-        page.locator(".study-context-panel").nth(1).getByText(runs[locale].report, { exact: true }),
-      ).toHaveText(runs[locale].report)
+        page.locator(".study-context-panel").getByText(run.task, { exact: true }),
+      ).toHaveText(run.task)
       await capture(page, locale, viewport, "initial")
 
-      // The long context is scrollable without stretching the shell.
       const context = page.locator(".study-context")
       await expect(context).toHaveCSS("overflow", "visible")
       await expect(page.locator(".study-context-scroll").first()).toHaveCSS("overflow-y", "auto")
@@ -164,32 +156,16 @@ for (const locale of ["zh", "en"] as const) {
       await expect(viewedStep).toBeFocused()
       await expect(viewedStep).toHaveCSS("outline-style", "solid")
 
-      // A real 404 shows missing evidence; another healthy path recovers without an after-image.
-      await items.nth(4).click()
-      await expect(page.getByText(text.beforeStep5)).toBeVisible()
-      await expect(page.getByText(text.missingScreenshot)).toBeVisible()
-      await expect(page.locator(".page-screenshot")).toHaveCount(0)
       await viewedStep.click()
       await expect(page.getByText(text.beforeStep4)).toBeVisible()
-      await expect(page.locator(".page-screenshot")).toHaveAttribute(
-        "src",
-        locale === "en" ? "screenshots/en/04-sorted.webp" : "screenshots/04-sorted.webp",
-      )
+      await expect(page.locator(".page-screenshot")).toHaveAttribute("src", runFrame.step4)
       const episode04Reference = await screenshotReference(page.locator(".page-screenshot"))
 
       if (studyCondition === "baseline") {
         await expect(page.getByRole("table")).toHaveCount(0)
       } else {
         await expect(page.getByRole("table", { name: text.offeredOperations })).toBeVisible()
-        await expect(page.getByRole("table", { name: text.offeredTargets })).toContainText(
-          locale === "en" ? "Illustrative candidate label 249" : "长候选标签示例 249",
-        )
-        await expect(
-          page.getByRole("table", { name: text.offeredOperations }).locator("tbody tr"),
-        ).toHaveCount(250)
-        await expect(
-          page.getByRole("table", { name: text.offeredTargets }).locator("tbody tr"),
-        ).toHaveCount(250)
+        await expect(page.getByRole("table", { name: text.offeredTargets })).toBeVisible()
         await expect(page.getByRole("table").locator("tbody button")).toHaveCount(0)
         await expect(page.getByRole("table").locator("tbody a")).toHaveCount(0)
         await expect(
@@ -197,7 +173,6 @@ for (const locale of ["zh", "en"] as const) {
         ).toHaveCount(0)
       }
 
-      // Re-observe the restored final state after episode navigation before recording it.
       await items.last().click()
       await expect(page.getByRole("heading", { name: text.finalState })).toBeVisible()
       await expect(page.locator(".browser-state-label")).toHaveText(text.lastRecordedState)
@@ -251,7 +226,7 @@ for (const locale of ["zh", "en"] as const) {
         "episode-04",
       )
       await expect(page.locator('.execution-rail-item[data-marked="true"]')).toHaveCount(1)
-      await expect(page.locator(`.execution-rail-item[data-marked="true"]`)).toContainText(
+      await expect(page.locator('.execution-rail-item[data-marked="true"]')).toContainText(
         locale === "en" ? "Your mark" : "你的标记",
       )
       await page.locator('.execution-rail-item[data-marked="true"]').scrollIntoViewIfNeeded()
@@ -263,16 +238,12 @@ for (const locale of ["zh", "en"] as const) {
       await expect(explanation).toHaveValue(explanationText)
       await expect(page.getByText("500/500")).toBeVisible()
 
-      // Cannot determine clears the concrete mark without changing the viewed episode or text.
       await page
         .getByRole("combobox", { name: text.localizationPrompt })
         .selectOption("cannot-determine")
       await expect(page.locator('.execution-rail-item[data-marked="true"]')).toHaveCount(0)
       await expect(page.getByText(text.beforeStep4)).toBeVisible()
-      await expect(page.locator(".page-screenshot")).toHaveAttribute(
-        "src",
-        locale === "en" ? "screenshots/en/04-sorted.webp" : "screenshots/04-sorted.webp",
-      )
+      await expect(page.locator(".page-screenshot")).toHaveAttribute("src", runFrame.step4)
       await expect(explanation).toHaveValue(explanationText)
       await capture(page, locale, viewport, "uncertainty")
 
@@ -320,8 +291,7 @@ for (const locale of ["zh", "en"] as const) {
         actionOrder,
       })
 
-      expect(actionOrder).toEqual(runs[locale].episodes.map((episode) => episode.action))
-      expect(injectedFixtureRevision).toMatch(/^[a-f]{64}$/)
+      expect(actionOrder).toEqual(run.episodes.map((episode) => episode.action))
     })
   }
 }

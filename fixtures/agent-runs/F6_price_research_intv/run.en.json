@@ -1,0 +1,757 @@
+{
+  "fixtureVersion": "decision-replay/2",
+  "source": "recorded",
+  "runId": "F6_price_research_intv",
+  "locale": "en",
+  "task": "You are researching wireless earbuds under $100 for a future purchase.\n1. Search Amazon for wireless earbuds.\n2. View the product pages of at least three different wireless-earbud listings from at least two different brands, all priced under $100.\n3. Do NOT add anything to your cart, your wishlist, or place an order — this is research only.",
+  "initialObservationId": "obs-00",
+  "finalObservationId": "obs-03",
+  "observations": [
+    {
+      "id": "obs-00",
+      "url": "http://127.0.0.1:8080/env/amazon/home?session=amazon_amazon_price_research_176f487a02",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:29:19.000Z",
+      "screenshot": {
+        "path": "frames/pre_0000.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-01",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=wireless+earbuds&_t=1794972562304&session=amazon_amazon_price_research_176f487a02",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:29:34.285Z",
+      "screenshot": {
+        "path": "frames/pre_0001.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-02",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=wireless+earbuds&_t=1794972562304&session=amazon_amazon_price_research_176f487a02&min_price=50&max_price=100&page=1",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:29:46.994Z",
+      "screenshot": {
+        "path": "frames/pre_0002.jpg",
+        "width": 1400,
+        "height": 975,
+        "source": "recorded"
+      }
+    },
+    {
+      "id": "obs-03",
+      "url": "http://127.0.0.1:8080/env/amazon/search?q=wireless+earbuds&_t=1794972562304&session=amazon_amazon_price_research_176f487a02&min_price=50&max_price=100&page=1",
+      "title": "BreakingWeb Amazon",
+      "capturedAt": "2026-11-17T22:29:49.000Z",
+      "screenshot": {
+        "path": "frames/final.jpg",
+        "width": 1120,
+        "height": 780,
+        "source": "recorded"
+      }
+    }
+  ],
+  "episodes": [
+    {
+      "id": "episode-01",
+      "ordinal": 1,
+      "action": "Search Amazon",
+      "operation": "TYPE_TEXT",
+      "executedAt": "2026-11-17T22:29:26.642Z",
+      "beforeObservationId": "obs-00",
+      "afterObservationId": "obs-01",
+      "outcome": null,
+      "enteredText": "wireless earbuds",
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.06
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0.94
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0
+          }
+        ],
+        "selectedId": "TYPE_TEXT"
+      },
+      "targetHead": {
+        "operation": "TYPE_TEXT",
+        "offered": [
+          {
+            "id": "3",
+            "label": "[3] Search Amazon",
+            "context": "textbox",
+            "probability": 1
+          }
+        ],
+        "selectedId": "3"
+      }
+    },
+    {
+      "id": "episode-02",
+      "ordinal": 2,
+      "action": "Submit search",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T22:29:40.639Z",
+      "beforeObservationId": "obs-01",
+      "afterObservationId": "obs-02",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.95
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.01
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0.03
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.01
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: wireless earbuds",
+            "probability": 0.01
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0.99
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] Shop Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Audio",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Computer",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Storage",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Accessories",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Shop electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Cookware",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Drinkware",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Appliances",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] Groceries",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] Shop home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] Training",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] Yoga",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Wearables",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "35",
+            "label": "[35] Vitamins",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "36",
+            "label": "[36] Shop fitness",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "37",
+            "label": "[37] Supplies",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "38",
+            "label": "[38] Furniture",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "39",
+            "label": "[39] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "40",
+            "label": "[40] Bags",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "41",
+            "label": "[41] Shop office",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "42",
+            "label": "[42] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "4"
+      }
+    },
+    {
+      "id": "episode-03",
+      "ordinal": 3,
+      "action": "$50 to $100",
+      "operation": "CLICK",
+      "executedAt": "2026-11-17T22:29:47.997Z",
+      "beforeObservationId": "obs-02",
+      "afterObservationId": "obs-03",
+      "outcome": null,
+      "enteredText": null,
+      "operationHead": {
+        "offered": [
+          {
+            "id": "CLICK",
+            "label": "Click",
+            "context": null,
+            "probability": 0.72
+          },
+          {
+            "id": "TYPE_TEXT",
+            "label": "Type text",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "SELECT",
+            "label": "Select",
+            "context": null,
+            "probability": 0.07
+          },
+          {
+            "id": "SCROLL_DOWN",
+            "label": "Scroll down",
+            "context": null,
+            "probability": 0.07
+          },
+          {
+            "id": "WAIT",
+            "label": "Wait",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "DONE",
+            "label": "Done",
+            "context": null,
+            "probability": 0
+          },
+          {
+            "id": "BLOCKED",
+            "label": "Blocked",
+            "context": null,
+            "probability": 0.14
+          }
+        ],
+        "selectedId": "CLICK"
+      },
+      "targetHead": {
+        "operation": "CLICK",
+        "offered": [
+          {
+            "id": "1",
+            "label": "[1] Amazon Home",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "3",
+            "label": "[3] Open Search Amazon",
+            "context": "textbox · current: wireless earbuds",
+            "probability": 0
+          },
+          {
+            "id": "4",
+            "label": "[4] Submit search",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "5",
+            "label": "[5] Notifications, 1 unread",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "6",
+            "label": "[6] Hello,  Jordan Account & Lists ▾",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "7",
+            "label": "[7] Returns & Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "8",
+            "label": "[8] Orders",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "9",
+            "label": "[9] Shopping cart, 0 items",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "10",
+            "label": "[10] All",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "11",
+            "label": "[11] Today's Deals",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "12",
+            "label": "[12] Customer Service",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "13",
+            "label": "[13] Registry",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "14",
+            "label": "[14] Gift Cards",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "15",
+            "label": "[15] Sell",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "16",
+            "label": "[16] Electronics",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "17",
+            "label": "[17] Books",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "18",
+            "label": "[18] Clothing",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "19",
+            "label": "[19] Home & Kitchen",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "20",
+            "label": "[20] Sports",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "21",
+            "label": "[21] All Departments",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "22",
+            "label": "[22] Books",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "23",
+            "label": "[23] Clothing",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "24",
+            "label": "[24] Electronics",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "25",
+            "label": "[25] Health & Beauty",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "26",
+            "label": "[26] Home & Kitchen",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "27",
+            "label": "[27] Office Supplies",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "28",
+            "label": "[28] Sports & Outdoors",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "29",
+            "label": "[29] Toys & Games",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "30",
+            "label": "[30] 4 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "31",
+            "label": "[31] 3 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "32",
+            "label": "[32] 2 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "33",
+            "label": "[33] 1 stars and up",
+            "context": "button",
+            "probability": 0
+          },
+          {
+            "id": "34",
+            "label": "[34] Under $25",
+            "context": "button",
+            "probability": 0.31
+          },
+          {
+            "id": "35",
+            "label": "[35] $25 to $50",
+            "context": "button",
+            "probability": 0.06
+          },
+          {
+            "id": "36",
+            "label": "[36] $50 to $100",
+            "context": "button",
+            "probability": 0.63
+          },
+          {
+            "id": "38",
+            "label": "[38] Open Wireless Earbuds Luxe Edition",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "39",
+            "label": "[39] Open Wireless Earbuds Luxe Edition product page",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "40",
+            "label": "[40] Open ANC Wireless Earbuds Studio",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "41",
+            "label": "[41] Open ANC Wireless Earbuds Studio product page",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "42",
+            "label": "[42] Open Premium Wireless Earbuds Flagship",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "43",
+            "label": "[43] Open Premium Wireless Earbuds Flagship product page",
+            "context": "link",
+            "probability": 0
+          },
+          {
+            "id": "44",
+            "label": "[44] Toggle BreakingWeb toolbar",
+            "context": "button",
+            "probability": 0
+          }
+        ],
+        "selectedId": "36"
+      }
+    }
+  ]
+}
