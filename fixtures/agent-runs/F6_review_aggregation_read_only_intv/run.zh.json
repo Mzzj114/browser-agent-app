@@ -196,7 +196,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "TYPE_TEXT"
+        "selectedId": "TYPE_TEXT",
+        "reportedConfidence": 0.88
       },
       "targetHead": {
         "operation": "TYPE_TEXT",
@@ -208,7 +209,8 @@
             "probability": 1
           }
         ],
-        "selectedId": "3"
+        "selectedId": "3",
+        "reportedConfidence": 1
       }
     },
     {
@@ -266,7 +268,8 @@
             "probability": 0.01
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.94
       },
       "targetHead": {
         "operation": "CLICK",
@@ -518,7 +521,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "4"
+        "selectedId": "4",
+        "reportedConfidence": 0.99
       }
     },
     {
@@ -576,7 +580,8 @@
             "probability": 0.01
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.79
       },
       "targetHead": {
         "operation": "CLICK",
@@ -810,7 +815,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "39"
+        "selectedId": "39",
+        "reportedConfidence": 0.59
       }
     },
     {
@@ -862,7 +868,8 @@
             "probability": 0.03
           }
         ],
-        "selectedId": "WAIT"
+        "selectedId": "WAIT",
+        "reportedConfidence": 0.42
       },
       "targetHead": null
     },
@@ -921,7 +928,8 @@
             "probability": 0.01
           }
         ],
-        "selectedId": "TYPE_TEXT"
+        "selectedId": "TYPE_TEXT",
+        "reportedConfidence": 0.52
       },
       "targetHead": {
         "operation": "TYPE_TEXT",
@@ -933,7 +941,8 @@
             "probability": 1
           }
         ],
-        "selectedId": "3"
+        "selectedId": "3",
+        "reportedConfidence": 1
       }
     },
     {
@@ -991,7 +1000,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 1
       },
       "targetHead": {
         "operation": "CLICK",
@@ -1165,7 +1175,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "4"
+        "selectedId": "4",
+        "reportedConfidence": 0.98
       }
     },
     {
@@ -1223,7 +1234,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.98
       },
       "targetHead": {
         "operation": "CLICK",
@@ -1457,7 +1469,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "38"
+        "selectedId": "38",
+        "reportedConfidence": 0.61
       }
     },
     {
@@ -1515,7 +1528,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "TYPE_TEXT"
+        "selectedId": "TYPE_TEXT",
+        "reportedConfidence": 0.54
       },
       "targetHead": {
         "operation": "TYPE_TEXT",
@@ -1527,7 +1541,8 @@
             "probability": 1
           }
         ],
-        "selectedId": "3"
+        "selectedId": "3",
+        "reportedConfidence": 1
       }
     },
     {
@@ -1585,7 +1600,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.99
       },
       "targetHead": {
         "operation": "CLICK",
@@ -1759,7 +1775,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "4"
+        "selectedId": "4",
+        "reportedConfidence": 0.99
       }
     },
     {
@@ -1817,7 +1834,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.95
       },
       "targetHead": {
         "operation": "CLICK",
@@ -2051,7 +2069,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "39"
+        "selectedId": "39",
+        "reportedConfidence": 0.51
       }
     }
   ]

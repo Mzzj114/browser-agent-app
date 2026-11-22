@@ -100,7 +100,8 @@
             "probability": 0.02
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.93
       },
       "targetHead": {
         "operation": "CLICK",
@@ -268,7 +269,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "23"
+        "selectedId": "23",
+        "reportedConfidence": 0.91
       }
     },
     {
@@ -326,7 +328,8 @@
             "probability": 0.01
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.93
       },
       "targetHead": {
         "operation": "CLICK",
@@ -518,7 +521,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "23"
+        "selectedId": "23",
+        "reportedConfidence": 0.95
       }
     }
   ]

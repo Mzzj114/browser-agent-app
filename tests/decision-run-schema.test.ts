@@ -540,6 +540,34 @@ describe("canonical decision schema rejection", () => {
     expect(decisionRunSchema.safeParse({ ...run, episodes }).success).toBe(false)
   })
 
+  it("rejects a recorded run whose heads omit reported confidence", () => {
+    const run = canonicalRun("en")
+
+    expect(decisionRunSchema.safeParse({ ...run, source: "recorded" }).success).toBe(false)
+  })
+
+  it("accepts recorded heads that report finite confidence", () => {
+    const run = canonicalRun("en")
+    const episodes = run.episodes.map((episode) => ({
+      ...episode,
+      operationHead: { ...episode.operationHead, reportedConfidence: 0.75 },
+      targetHead: episode.targetHead
+        ? { ...episode.targetHead, reportedConfidence: 0 }
+        : null,
+    }))
+
+    expect(
+      decisionRunSchema.safeParse({ ...run, source: "recorded", episodes }).success,
+    ).toBe(true)
+  })
+
+  it("keeps synthetic runs parseable when confidence is omitted", () => {
+    const run = canonicalRun("en")
+
+    expect(run.source).toBe("synthetic-render")
+    expect(decisionRunSchema.safeParse(run).success).toBe(true)
+  })
+
   it.each([
     "../screenshots/01-home.webp",
     "/screenshots/01-home.webp",

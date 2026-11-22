@@ -9,7 +9,7 @@ import {
 
 const translations: Translations = {
   tasks: { "Sort the results.": "对结果进行排序。" },
-  actions: { "Sort results → Price": "排序结果 → 价格" },
+  actions: { "Sort results → Price": "排序结果 → 价格", Done: "完成" },
   taskTitles: { amazon_sort: { en: "Sort results", zh: "排序结果" } },
   roles: { button: "按钮", link: "链接" },
   operations: {
@@ -50,6 +50,8 @@ function trace(overrides: Partial<SourceTrace> = {}): SourceTrace {
         pre_frame: "pre_0001.jpg",
         elapsed_ms: 1000,
         decision_index: 0,
+        confidence: 0.96,
+        target_confidence: 0.5,
       },
     ],
     decisions: [
@@ -106,6 +108,138 @@ describe("agent run import mapping", () => {
     expect(en.observations[1]?.screenshot?.path).toBe("frames/pre_0001.jpg")
     expect(en.observations[1]?.screenshot).toMatchObject({ width: 1120, height: 780 })
     expect(revision).toMatch(/^[0-9a-f]{64}$/)
+  })
+
+  it("imports reported confidence separately from the selection probabilities", () => {
+    const step = trace().steps[0]
+    const decision = trace().decisions[0]
+    if (!step || !decision) throw new Error("Expected a step and decision")
+
+    const built = buildCanonicalRuns({
+      runId: "run-1",
+      meta,
+      trace: trace({
+        steps: [{ ...step, confidence: 0.96, target_confidence: 0.5 }],
+        decisions: [
+          {
+            ...decision,
+            operation_probabilities: { CLICK: 0.97, SCROLL_DOWN: 0.01, BLOCKED: 0.02 },
+            raw_answers: {
+              click_target: { choice: "1", probabilities: { "1": 0.51, "2": 0.49 } },
+            },
+          },
+        ],
+      }),
+      translations,
+      frameSize,
+    })
+
+    for (const run of [built.en, built.zh]) {
+      const episode = run.episodes[0]
+      if (!episode) throw new Error("Expected an episode")
+      expect([
+        episode.operationHead.reportedConfidence,
+        episode.targetHead?.reportedConfidence,
+      ]).toEqual([0.96, 0.5])
+      expect(
+        episode.operationHead.offered.find((candidate) => candidate.id === "CLICK")?.probability,
+      ).toBe(0.97)
+      expect(
+        episode.targetHead?.offered.find((candidate) => candidate.id === "1")?.probability,
+      ).toBe(0.51)
+    }
+  })
+
+  it.each([
+    ["undefined", undefined],
+    ["NaN", Number.NaN],
+    ["below zero", -0.01],
+    ["above one", 1.01],
+    ["a numeric string", "0.5"],
+  ])("rejects %s as a required operation confidence", (_label, confidence) => {
+    const step = trace().steps[0]
+    if (!step) throw new Error("Expected a step")
+
+    expect(() =>
+      buildCanonicalRuns({
+        runId: "run-1",
+        meta,
+        trace: trace({
+          steps: [{ ...step, confidence: confidence as number }],
+        }),
+        translations,
+        frameSize,
+      }),
+    ).toThrow(/run-1.*step 1/i)
+  })
+
+  it.each([
+    ["undefined", undefined],
+    ["NaN", Number.NaN],
+    ["below zero", -0.01],
+    ["above one", 1.01],
+    ["a numeric string", "0.5"],
+  ])("rejects %s as a required target confidence", (_label, targetConfidence) => {
+    const step = trace().steps[0]
+    if (!step) throw new Error("Expected a step")
+
+    expect(() =>
+      buildCanonicalRuns({
+        runId: "run-1",
+        meta,
+        trace: trace({
+          steps: [{ ...step, target_confidence: targetConfidence as number }],
+        }),
+        translations,
+        frameSize,
+      }),
+    ).toThrow(/run-1.*step 1/i)
+  })
+
+  it("keeps zero confidence and leaves targetless steps without a target head", () => {
+    const step = trace().steps[0]
+    if (!step) throw new Error("Expected a step")
+
+    const zero = buildCanonicalRuns({
+      runId: "run-1",
+      meta,
+      trace: trace({
+        steps: [{ ...step, confidence: 0, target_confidence: 0 }],
+      }),
+      translations,
+      frameSize,
+    })
+    expect([
+      zero.en.episodes[0]?.operationHead.reportedConfidence,
+      zero.en.episodes[0]?.targetHead?.reportedConfidence,
+    ]).toEqual([0, 0])
+
+    const targetless = buildCanonicalRuns({
+      runId: "run-1",
+      meta,
+      trace: trace({
+        steps: [
+          {
+            ...step,
+            action: "Done",
+            operation: "DONE",
+            target: null,
+            confidence: 0,
+          },
+        ],
+        decisions: [
+          {
+            operation: "DONE",
+            target: null,
+            operation_probabilities: { DONE: 1 },
+          },
+        ],
+      }),
+      translations,
+      frameSize,
+    })
+    expect(targetless.en.episodes[0]?.operationHead.reportedConfidence).toBe(0)
+    expect(targetless.en.episodes[0]?.targetHead).toBeNull()
   })
 
   it("translates role context but keeps the literal candidate label English", () => {

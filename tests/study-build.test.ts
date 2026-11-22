@@ -222,6 +222,48 @@ describe("study build verification", () => {
     )
   })
 
+  it.each([
+    ["target confidence", "const raw = { target_confidence: 0.5 };\n"],
+    ["selected probability", "const raw = { p_selected: 0.51 };\n"],
+  ])("rejects raw %s source fields in emitted assets", async (_name, contents) => {
+    const directory = await build("baseline")
+    await writeFile(join(directory, "assets", "index.js"), contents, "utf8")
+
+    await expect(verifyStudyBuild(directory, "baseline")).rejects.toThrow(
+      /legacy|sentinel|confidence|probability|selected/i,
+    )
+  })
+
+  it("accepts the projected reported confidence in the probabilities build", async () => {
+    const directory = await build("probabilities")
+    const contents = await readFile(runPath(directory, "en"), "utf8")
+    expect(contents).toContain('"reportedConfidence"')
+
+    await expect(verifyStudyBuild(directory, "probabilities")).resolves.toMatchObject({
+      condition: "probabilities",
+    })
+  })
+
+  it.each(["baseline", "candidates"] as const)(
+    "rejects an injected reported confidence field in a %s run",
+    async (condition) => {
+      const directory = await build(condition)
+      await updateJson(runPath(directory, "en"), (value) => {
+        const episodes = Reflect.get(value, "episodes") as Record<string, unknown>[]
+        const first = episodes[0]
+        if (!first) throw new Error("Expected an episode")
+        if (condition === "baseline") {
+          Reflect.set(first, "reportedConfidence", 0.5)
+        } else {
+          const head = first["operationHead"] as Record<string, unknown>
+          Reflect.set(head, "reportedConfidence", 0.5)
+        }
+      })
+
+      await expect(verifyStudyBuild(directory, condition)).rejects.toThrow(/study build|invalid/i)
+    },
+  )
+
   it("rejects an accidentally emitted showcase page", async () => {
     const directory = await build("baseline")
     await writeFile(

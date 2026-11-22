@@ -73,7 +73,12 @@ const legacySentinels: readonly LegacySentinel[] = [
     label: "researcher ground truth",
     pattern: /["']?(?:expected_product|observed_cart_product|claimed_product)["']\s*:/,
   },
-  { label: "undocumented confidence field", pattern: /["']?confidence["']\s*:/ },
+  {
+    label: "undocumented confidence field",
+    pattern: /(?<![A-Za-z0-9])["']?confidence["']?\s*:/,
+  },
+  { label: "undocumented confidence field", pattern: /["']?target_confidence["']?\s*:/ },
+  { label: "source selection probability", pattern: /["']?p_selected["']?\s*:/ },
   { label: "source collection metadata", pattern: /["']?task_id["']\s*:/ },
   { label: "source collection metadata", pattern: /["']?run_id["']\s*:/ },
   { label: "source decision model data", pattern: /["']?raw_answers["']\s*:/ },
@@ -732,6 +737,7 @@ type UnscoredCandidate = {
 type UnscoredHead = {
   readonly offered: readonly UnscoredCandidate[]
   readonly selectedId: string
+  readonly previewIds: readonly string[]
 }
 
 type UnscoredEpisodeHeads = {
@@ -756,6 +762,7 @@ function unscoredHeads(run: StudyRun): readonly UnscoredEpisodeHeads[] {
           context: candidate.context,
         })),
         selectedId: operationHead.selectedId,
+        previewIds: operationHead.previewIds,
       },
       targetHead: targetHead
         ? {
@@ -766,6 +773,7 @@ function unscoredHeads(run: StudyRun): readonly UnscoredEpisodeHeads[] {
               context: candidate.context,
             })),
             selectedId: targetHead.selectedId,
+            previewIds: targetHead.previewIds,
           }
         : null,
     }

@@ -133,6 +133,27 @@ describe("cross-condition study comparison", () => {
     await expect(compareStudyBuilds(builds)).rejects.toThrow(/candidate order/i)
   })
 
+  it("rejects a valid but changed unscored preview order", async () => {
+    const builds = await buildAll()
+    const reorderPreviews = (run: StudyRun): StudyRun =>
+      ({
+        ...run,
+        episodes: run.episodes.map((episode) => {
+          if (!("operationHead" in episode) || episode.id !== "episode-03") return episode
+          const previewIds = episode.operationHead.previewIds
+          if (previewIds.length < 2) return episode
+          return {
+            ...episode,
+            operationHead: { ...episode.operationHead, previewIds: [...previewIds].reverse() },
+          }
+        }),
+      }) as StudyRun
+    await updateRun(builds.candidates, "en", reorderPreviews)
+    await updateRun(builds.candidates, "zh", reorderPreviews)
+
+    await expect(compareStudyBuilds(builds)).rejects.toThrow(/candidate order/i)
+  })
+
   it("rejects a missing locale/viewport report", async () => {
     const builds = await buildAll()
     const viewport = comparisonViewports[1]

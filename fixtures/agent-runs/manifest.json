@@ -1,6 +1,6 @@
 {
   "fixtureVersion": "decision-replay/2",
-  "fixtureRevision": "86f71f49546f55b51451490a31c89d896f39bb9ecbd7300de099203de9d4f230",
+  "fixtureRevision": "c44d29850bdd11b623576a55962b5c99c4c1660204ed80eb25dd47fd4d512fe4",
   "runs": [
     {
       "id": "F1_add_single_item_clean",

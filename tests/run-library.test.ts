@@ -81,6 +81,46 @@ describe("study run projection", () => {
     })
   })
 
+  it("projects identical wallet previews and imports reported confidence", async () => {
+    const directory = await fixtureDirectory()
+    const runsDirectory = join(directory, "runs")
+
+    async function readProjection(condition: StudyCondition) {
+      await writeRunLibrary({
+        condition,
+        sourceDir,
+        outputDir: runsDirectory,
+        runIds: [fixtureRunId],
+      })
+      return studyRunSchema.parse(await readJson(join(runsDirectory, fixtureRunId, "run.en.json")))
+    }
+
+    const candidates = await readProjection("candidates")
+    const probabilities = await readProjection("probabilities")
+    if (candidates.condition !== "candidates" || probabilities.condition !== "probabilities") {
+      throw new Error("Expected experimental runs")
+    }
+
+    const candidateStep = candidates.episodes[2]
+    const scoredStep = probabilities.episodes[2]
+    if (!candidateStep || !scoredStep) throw new Error("Expected wallet step 3")
+
+    expect(candidateStep.operationHead.previewIds).toEqual(["BLOCKED", "SCROLL_DOWN"])
+    expect(candidateStep.targetHead?.previewIds).toEqual(["38"])
+    expect(candidateStep.operationHead.previewIds).toEqual(scoredStep.operationHead.previewIds)
+    expect(candidateStep.targetHead?.previewIds).toEqual(scoredStep.targetHead?.previewIds)
+    expect(candidateStep.operationHead.selectedId).toBe(scoredStep.operationHead.selectedId)
+    expect(candidateStep.targetHead?.selectedId).toBe(scoredStep.targetHead?.selectedId)
+    expect([
+      scoredStep.operationHead.reportedConfidence,
+      scoredStep.targetHead?.reportedConfidence,
+    ]).toEqual([0.96, 0.5])
+    expect("reportedConfidence" in candidateStep.operationHead).toBe(false)
+    expect(
+      candidateStep.targetHead ? "reportedConfidence" in candidateStep.targetHead : false,
+    ).toBe(false)
+  })
+
   it("physically removes decision heads from baseline episodes", () => {
     const run = projected("baseline")
     if (run.condition !== "baseline") throw new Error("Expected a baseline run")
@@ -90,6 +130,10 @@ describe("study run projection", () => {
 
   it("keeps candidate rows unscored in the candidates condition", () => {
     for (const episode of experimentalEpisodes(projected("candidates"))) {
+      expect("reportedConfidence" in episode.operationHead).toBe(false)
+      if (episode.targetHead) {
+        expect("reportedConfidence" in episode.targetHead).toBe(false)
+      }
       for (const candidate of episode.operationHead.offered) {
         expect("probability" in candidate).toBe(false)
       }
@@ -110,14 +154,18 @@ describe("study run projection", () => {
     }
   })
 
-  it("never projects confidence fields or researcher annotations", () => {
-    const serialized = studyConditions
-      .map((condition) => JSON.stringify(projected(condition)))
-      .join("\n")
-    expect(serialized).not.toContain("confidence")
-    expect(serialized).not.toContain("annotations")
-    expect(serialized).not.toContain("groundTruth")
-    expect(serialized).not.toContain("earliest_mistake")
+  it("projects confidence only into the scored condition and no researcher annotations", () => {
+    const serialized = Object.fromEntries(
+      studyConditions.map((condition) => [condition, JSON.stringify(projected(condition))]),
+    )
+    expect(serialized["baseline"]).not.toContain("confidence")
+    expect(serialized["candidates"]).not.toContain("confidence")
+    expect(serialized["probabilities"]).toContain("reportedConfidence")
+    for (const contents of Object.values(serialized)) {
+      expect(contents).not.toContain("annotations")
+      expect(contents).not.toContain("groundTruth")
+      expect(contents).not.toContain("earliest_mistake")
+    }
   })
 
   it("preserves task, observations, and the fixture revision", () => {
@@ -173,6 +221,43 @@ describe("study run schema", () => {
     const targetEpisode = episodes.find((episode) => episode["targetHead"] !== null)
     if (!targetEpisode) throw new Error("Expected a target episode")
     record(targetEpisode["targetHead"])["selectedId"] = "not-offered"
+    expect(studyRunSchema.safeParse(forged).success).toBe(false)
+  })
+
+  it.each(["duplicate", "selected", "unknown"] as const)(
+    "rejects a %s preview ID",
+    (kind) => {
+      const forged = structuredClone(projected("candidates")) as unknown as Record<string, unknown>
+      const episodes = forged["episodes"] as Record<string, unknown>[]
+      const head = record(record(episodes[2])["operationHead"])
+      const previewIds = head["previewIds"]
+      const selectedId = head["selectedId"]
+      if (!Array.isArray(previewIds) || typeof selectedId !== "string") {
+        throw new Error("Expected a previewed operation head")
+      }
+      const first = previewIds[0]
+      if (typeof first !== "string") throw new Error("Expected a preview ID")
+      head["previewIds"] =
+        kind === "duplicate"
+          ? [first, first]
+          : kind === "selected"
+            ? [selectedId]
+            : ["not-offered"]
+
+      expect(studyRunSchema.safeParse(forged).success).toBe(false)
+    },
+  )
+
+  it("rejects an order that disagrees with the scored probabilities", () => {
+    const forged = structuredClone(projected("probabilities")) as unknown as Record<string, unknown>
+    const episodes = forged["episodes"] as Record<string, unknown>[]
+    const head = record(record(episodes[2])["operationHead"])
+    const previewIds = head["previewIds"]
+    if (!Array.isArray(previewIds) || previewIds.length < 2) {
+      throw new Error("Expected multiple preview IDs")
+    }
+    head["previewIds"] = [...previewIds].reverse()
+
     expect(studyRunSchema.safeParse(forged).success).toBe(false)
   })
 

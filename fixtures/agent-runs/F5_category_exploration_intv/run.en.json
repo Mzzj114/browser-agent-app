@@ -508,7 +508,8 @@
             "probability": 0.03
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.4
       },
       "targetHead": {
         "operation": "CLICK",
@@ -760,7 +761,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "20"
+        "selectedId": "20",
+        "reportedConfidence": 0.35
       }
     },
     {
@@ -818,7 +820,8 @@
             "probability": 0.08
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.46
       },
       "targetHead": {
         "operation": "CLICK",
@@ -1076,7 +1079,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "17"
+        "selectedId": "17",
+        "reportedConfidence": 0.23
       }
     },
     {
@@ -1134,7 +1138,8 @@
             "probability": 0.08
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.66
       },
       "targetHead": {
         "operation": "CLICK",
@@ -1392,7 +1397,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "29"
+        "selectedId": "29",
+        "reportedConfidence": 0.55
       }
     },
     {
@@ -1450,7 +1456,8 @@
             "probability": 0.06
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.59
       },
       "targetHead": {
         "operation": "CLICK",
@@ -1708,7 +1715,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "27"
+        "selectedId": "27",
+        "reportedConfidence": 0.2
       }
     },
     {
@@ -1766,7 +1774,8 @@
             "probability": 0.08
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.66
       },
       "targetHead": {
         "operation": "CLICK",
@@ -2024,7 +2033,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "29"
+        "selectedId": "29",
+        "reportedConfidence": 0.29
       }
     },
     {
@@ -2082,7 +2092,8 @@
             "probability": 0.08
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.48
       },
       "targetHead": {
         "operation": "CLICK",
@@ -2340,7 +2351,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "17"
+        "selectedId": "17",
+        "reportedConfidence": 0.19
       }
     },
     {
@@ -2398,7 +2410,8 @@
             "probability": 0.08
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.6
       },
       "targetHead": {
         "operation": "CLICK",
@@ -2656,7 +2669,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "29"
+        "selectedId": "29",
+        "reportedConfidence": 0.46
       }
     },
     {
@@ -2714,7 +2728,8 @@
             "probability": 0.09
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.46
       },
       "targetHead": {
         "operation": "CLICK",
@@ -2972,7 +2987,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "17"
+        "selectedId": "17",
+        "reportedConfidence": 0.18
       }
     },
     {
@@ -3030,7 +3046,8 @@
             "probability": 0.09
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.6
       },
       "targetHead": {
         "operation": "CLICK",
@@ -3288,7 +3305,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "29"
+        "selectedId": "29",
+        "reportedConfidence": 0.59
       }
     },
     {
@@ -3346,7 +3364,8 @@
             "probability": 0.1
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.48
       },
       "targetHead": {
         "operation": "CLICK",
@@ -3604,7 +3623,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "23"
+        "selectedId": "23",
+        "reportedConfidence": 0.19
       }
     },
     {
@@ -3662,7 +3682,8 @@
             "probability": 0.08
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.64
       },
       "targetHead": {
         "operation": "CLICK",
@@ -3920,7 +3941,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "29"
+        "selectedId": "29",
+        "reportedConfidence": 0.46
       }
     },
     {
@@ -3978,7 +4000,8 @@
             "probability": 0.11
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.56
       },
       "targetHead": {
         "operation": "CLICK",
@@ -4236,7 +4259,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "38"
+        "selectedId": "38",
+        "reportedConfidence": 0.17
       }
     },
     {
@@ -4294,7 +4318,8 @@
             "probability": 0.26
           }
         ],
-        "selectedId": "SELECT"
+        "selectedId": "SELECT",
+        "reportedConfidence": 0.24
       },
       "targetHead": {
         "operation": "SELECT",
@@ -4348,7 +4373,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "2:2"
+        "selectedId": "2:2",
+        "reportedConfidence": 0.62
       }
     },
     {
@@ -4406,7 +4432,8 @@
             "probability": 0.22
           }
         ],
-        "selectedId": "SELECT"
+        "selectedId": "SELECT",
+        "reportedConfidence": 0.26
       },
       "targetHead": {
         "operation": "SELECT",
@@ -4460,7 +4487,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "2:3"
+        "selectedId": "2:3",
+        "reportedConfidence": 0.65
       }
     },
     {
@@ -4518,7 +4546,8 @@
             "probability": 0.18
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.25
       },
       "targetHead": {
         "operation": "CLICK",
@@ -4674,7 +4703,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "19"
+        "selectedId": "19",
+        "reportedConfidence": 0.4
       }
     },
     {
@@ -4732,7 +4762,8 @@
             "probability": 0.08
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.73
       },
       "targetHead": {
         "operation": "CLICK",
@@ -4990,7 +5021,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "38"
+        "selectedId": "38",
+        "reportedConfidence": 0.25
       }
     },
     {
@@ -5048,7 +5080,8 @@
             "probability": 0.03
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.95
       },
       "targetHead": {
         "operation": "CLICK",
@@ -5222,7 +5255,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "27"
+        "selectedId": "27",
+        "reportedConfidence": 0.89
       }
     },
     {
@@ -5280,7 +5314,8 @@
             "probability": 0.07
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.59
       },
       "targetHead": {
         "operation": "CLICK",
@@ -5454,7 +5489,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "17"
+        "selectedId": "17",
+        "reportedConfidence": 0.29
       }
     },
     {
@@ -5512,7 +5548,8 @@
             "probability": 0.05
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.46
       },
       "targetHead": {
         "operation": "CLICK",
@@ -5770,7 +5807,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "38"
+        "selectedId": "38",
+        "reportedConfidence": 0.27
       }
     },
     {
@@ -5828,7 +5866,8 @@
             "probability": 0.05
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.86
       },
       "targetHead": {
         "operation": "CLICK",
@@ -6002,7 +6041,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "27"
+        "selectedId": "27",
+        "reportedConfidence": 0.81
       }
     },
     {
@@ -6060,7 +6100,8 @@
             "probability": 0.03
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.91
       },
       "targetHead": {
         "operation": "CLICK",
@@ -6246,7 +6287,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "21"
+        "selectedId": "21",
+        "reportedConfidence": 0.59
       }
     },
     {
@@ -6304,7 +6346,8 @@
             "probability": 0.06
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.63
       },
       "targetHead": {
         "operation": "CLICK",
@@ -6490,7 +6533,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "20"
+        "selectedId": "20",
+        "reportedConfidence": 0.57
       }
     },
     {
@@ -6548,7 +6592,8 @@
             "probability": 0.02
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.68
       },
       "targetHead": {
         "operation": "CLICK",
@@ -6806,7 +6851,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "38"
+        "selectedId": "38",
+        "reportedConfidence": 0.23
       }
     },
     {
@@ -6864,7 +6910,8 @@
             "probability": 0.24
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.37
       },
       "targetHead": {
         "operation": "CLICK",
@@ -7020,7 +7067,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "9"
+        "selectedId": "9",
+        "reportedConfidence": 0.7
       }
     },
     {
@@ -7078,7 +7126,8 @@
             "probability": 0.04
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.91
       },
       "targetHead": {
         "operation": "CLICK",
@@ -7264,7 +7313,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "24"
+        "selectedId": "24",
+        "reportedConfidence": 0.7
       }
     },
     {
@@ -7322,7 +7372,8 @@
             "probability": 0.25
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.56
       },
       "targetHead": {
         "operation": "CLICK",
@@ -7472,7 +7523,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "24"
+        "selectedId": "24",
+        "reportedConfidence": 0.73
       }
     },
     {
@@ -7524,7 +7576,8 @@
             "probability": 0.19
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.48
       },
       "targetHead": {
         "operation": "CLICK",
@@ -7692,7 +7745,8 @@
             "probability": 0.01
           }
         ],
-        "selectedId": "20"
+        "selectedId": "20",
+        "reportedConfidence": 0.2
       }
     },
     {
@@ -7750,7 +7804,8 @@
             "probability": 0.02
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.58
       },
       "targetHead": {
         "operation": "CLICK",
@@ -8008,7 +8063,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "19"
+        "selectedId": "19",
+        "reportedConfidence": 0.32
       }
     },
     {
@@ -8066,7 +8122,8 @@
             "probability": 0.03
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.71
       },
       "targetHead": {
         "operation": "CLICK",
@@ -8324,7 +8381,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "29"
+        "selectedId": "29",
+        "reportedConfidence": 0.28
       }
     },
     {
@@ -8382,7 +8440,8 @@
             "probability": 0.03
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.36
       },
       "targetHead": {
         "operation": "CLICK",
@@ -8640,7 +8699,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "23"
+        "selectedId": "23",
+        "reportedConfidence": 0.31
       }
     },
     {
@@ -8698,7 +8758,8 @@
             "probability": 0.06
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.53
       },
       "targetHead": {
         "operation": "CLICK",
@@ -8956,7 +9017,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "29"
+        "selectedId": "29",
+        "reportedConfidence": 0.27
       }
     },
     {
@@ -9014,7 +9076,8 @@
             "probability": 0.04
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.44
       },
       "targetHead": {
         "operation": "CLICK",
@@ -9272,7 +9335,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "23"
+        "selectedId": "23",
+        "reportedConfidence": 0.32
       }
     },
     {
@@ -9330,7 +9394,8 @@
             "probability": 0.05
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.53
       },
       "targetHead": {
         "operation": "CLICK",
@@ -9588,7 +9653,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "29"
+        "selectedId": "29",
+        "reportedConfidence": 0.46
       }
     },
     {
@@ -9646,7 +9712,8 @@
             "probability": 0.05
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.36
       },
       "targetHead": {
         "operation": "CLICK",
@@ -9904,7 +9971,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "3"
+        "selectedId": "3",
+        "reportedConfidence": 0.15
       }
     },
     {
@@ -9962,7 +10030,8 @@
             "probability": 0.06
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.37
       },
       "targetHead": {
         "operation": "CLICK",
@@ -10220,7 +10289,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "3"
+        "selectedId": "3",
+        "reportedConfidence": 0.18
       }
     },
     {
@@ -10278,7 +10348,8 @@
             "probability": 0.07
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.35
       },
       "targetHead": {
         "operation": "CLICK",
@@ -10536,7 +10607,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "3"
+        "selectedId": "3",
+        "reportedConfidence": 0.22
       }
     }
   ]

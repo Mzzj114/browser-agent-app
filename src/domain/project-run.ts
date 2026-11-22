@@ -1,4 +1,5 @@
 import { assertNever } from "./assert-never.ts"
+import { rankPreviewIds } from "./choice-preview.ts"
 import type {
   Candidate,
   DecisionHead,
@@ -68,6 +69,7 @@ function projectUnscoredHead(head: DecisionHead<ScoredCandidate>) {
   return {
     offered: head.offered.map(projectCandidate),
     selectedId: head.selectedId,
+    previewIds: rankPreviewIds(head),
   }
 }
 
@@ -76,6 +78,7 @@ function projectUnscoredTargetHead(head: TargetDecisionHead) {
     operation: head.operation,
     offered: head.offered.map(projectCandidate),
     selectedId: head.selectedId,
+    previewIds: rankPreviewIds(head),
   }
 }
 
@@ -83,6 +86,8 @@ function projectScoredHead(head: DecisionHead<ScoredCandidate>) {
   return {
     offered: head.offered.map(projectScoredCandidate),
     selectedId: head.selectedId,
+    previewIds: rankPreviewIds(head),
+    reportedConfidence: head.reportedConfidence ?? null,
   }
 }
 
@@ -91,6 +96,8 @@ function projectScoredTargetHead(head: TargetDecisionHead) {
     operation: head.operation,
     offered: head.offered.map(projectScoredCandidate),
     selectedId: head.selectedId,
+    previewIds: rankPreviewIds(head),
+    reportedConfidence: head.reportedConfidence ?? null,
   }
 }
 

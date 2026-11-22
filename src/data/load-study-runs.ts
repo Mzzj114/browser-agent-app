@@ -33,11 +33,17 @@ function candidateStructure(candidate: CandidateLike) {
 function headStructure(head: {
   readonly offered: readonly CandidateLike[]
   readonly selectedId: string
+  readonly previewIds?: readonly string[]
+  readonly reportedConfidence?: number | null
 }) {
-  return {
+  const structure = {
     selectedId: head.selectedId,
+    previewIds: head.previewIds ?? null,
     offered: head.offered.map(candidateStructure),
   }
+  return "reportedConfidence" in head
+    ? { ...structure, reportedConfidence: head.reportedConfidence ?? null }
+    : structure
 }
 
 function screenshotStructure(screenshot: Observation["screenshot"]) {

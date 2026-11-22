@@ -136,7 +136,8 @@
             "probability": 0.01
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.98
       },
       "targetHead": {
         "operation": "CLICK",
@@ -388,7 +389,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "7"
+        "selectedId": "7",
+        "reportedConfidence": 0.59
       }
     },
     {
@@ -446,7 +448,8 @@
             "probability": 0.01
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.98
       },
       "targetHead": {
         "operation": "CLICK",
@@ -614,7 +617,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "24"
+        "selectedId": "24",
+        "reportedConfidence": 0.98
       }
     },
     {
@@ -672,7 +676,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "SELECT"
+        "selectedId": "SELECT",
+        "reportedConfidence": 0.88
       },
       "targetHead": {
         "operation": "SELECT",
@@ -816,7 +821,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "22:1"
+        "selectedId": "22:1",
+        "reportedConfidence": 0.84
       }
     },
     {
@@ -874,7 +880,8 @@
             "probability": 0.01
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.89
       },
       "targetHead": {
         "operation": "CLICK",
@@ -1018,7 +1025,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "24"
+        "selectedId": "24",
+        "reportedConfidence": 0.96
       }
     },
     {
@@ -1076,7 +1084,8 @@
             "probability": 0.13
           }
         ],
-        "selectedId": "CLICK"
+        "selectedId": "CLICK",
+        "reportedConfidence": 0.7
       },
       "targetHead": {
         "operation": "CLICK",
@@ -1256,7 +1265,8 @@
             "probability": 0
           }
         ],
-        "selectedId": "25"
+        "selectedId": "25",
+        "reportedConfidence": 0.37
       }
     }
   ]

@@ -67,10 +67,13 @@ const scoredCandidateSchema = z
   })
   .readonly()
 
+const reportedConfidenceSchema = z.number().min(0).max(1).nullable()
+
 const operationHeadSchema = z
   .strictObject({
     offered: z.array(scoredCandidateSchema).min(1).readonly(),
     selectedId: z.string().min(1),
+    reportedConfidence: reportedConfidenceSchema.optional(),
   })
   .readonly()
 
@@ -79,6 +82,7 @@ const targetHeadSchema = z
     operation: z.enum(decisionOperations),
     offered: z.array(scoredCandidateSchema).min(1).readonly(),
     selectedId: z.string().min(1),
+    reportedConfidence: reportedConfidenceSchema.optional(),
   })
   .readonly()
 
@@ -112,6 +116,7 @@ export type ScoredCandidate = z.infer<typeof scoredCandidateSchema>
 export type DecisionHead<T> = {
   readonly offered: readonly T[]
   readonly selectedId: string
+  readonly reportedConfidence?: number | null | undefined
 }
 
 export type TargetDecisionHead = DecisionHead<ScoredCandidate> & {
@@ -180,6 +185,20 @@ function validateScoredHead(
 
   if (maximum - selected.probability > scoreTolerance) {
     addIssue(context, [...path, "selectedId"], "Selected candidate must be an argmax")
+  }
+}
+
+function validateRecordedConfidence(
+  head: DecisionHead<ScoredCandidate>,
+  path: readonly (string | number)[],
+  context: z.RefinementCtx,
+): void {
+  if (typeof head.reportedConfidence !== "number" || !Number.isFinite(head.reportedConfidence)) {
+    addIssue(
+      context,
+      [...path, "reportedConfidence"],
+      "Recorded heads must report a finite confidence",
+    )
   }
 }
 
@@ -302,6 +321,13 @@ export const decisionRunSchema = z
         )
       }
       validateScoredHead(episode.operationHead, ["episodes", index, "operationHead"], context)
+      if (run.source === "recorded") {
+        validateRecordedConfidence(
+          episode.operationHead,
+          ["episodes", index, "operationHead"],
+          context,
+        )
+      }
 
       if (isTargetlessOperation(episode.operation)) {
         if (episode.targetHead !== null) {
@@ -329,6 +355,9 @@ export const decisionRunSchema = z
           )
         }
         validateScoredHead(targetHead, ["episodes", index, "targetHead"], context)
+        if (run.source === "recorded") {
+          validateRecordedConfidence(targetHead, ["episodes", index, "targetHead"], context)
+        }
       }
     }
   })

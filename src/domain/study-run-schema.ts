@@ -1,11 +1,14 @@
 import { z } from "zod"
 import { LOCALES, type Locale } from "../i18n/locale.ts"
+import { rankPreviewIds } from "./choice-preview.ts"
 import {
   decisionOperations,
+  type DecisionHead,
   type EpisodeCore,
   isTargetlessOperation,
   type Observation,
   type Operation,
+  type ScoredCandidate,
 } from "./decision-run-schema.ts"
 import { studyConditions } from "./study-condition.ts"
 
@@ -51,10 +54,13 @@ const scoredCandidateSchema = z
   })
   .readonly()
 
+const previewIdsSchema = z.array(z.string().min(1)).max(3).readonly()
+
 const candidateHeadSchema = z
   .strictObject({
     offered: z.array(candidateSchema).min(1).readonly(),
     selectedId: z.string().min(1),
+    previewIds: previewIdsSchema,
   })
   .readonly()
 
@@ -63,6 +69,7 @@ const candidateTargetHeadSchema = z
     operation: z.enum(decisionOperations),
     offered: z.array(candidateSchema).min(1).readonly(),
     selectedId: z.string().min(1),
+    previewIds: previewIdsSchema,
   })
   .readonly()
 
@@ -70,6 +77,8 @@ const scoredHeadSchema = z
   .strictObject({
     offered: z.array(scoredCandidateSchema).min(1).readonly(),
     selectedId: z.string().min(1),
+    previewIds: previewIdsSchema,
+    reportedConfidence: z.number().min(0).max(1).nullable(),
   })
   .readonly()
 
@@ -78,6 +87,8 @@ const scoredTargetHeadSchema = z
     operation: z.enum(decisionOperations),
     offered: z.array(scoredCandidateSchema).min(1).readonly(),
     selectedId: z.string().min(1),
+    previewIds: previewIdsSchema,
+    reportedConfidence: z.number().min(0).max(1).nullable(),
   })
   .readonly()
 
@@ -145,6 +156,8 @@ type CandidateLike = {
 type HeadLike = {
   readonly offered: readonly CandidateLike[]
   readonly selectedId: string
+  readonly previewIds?: readonly string[]
+  readonly reportedConfidence?: number | null
 }
 
 type ExperimentEpisode = EpisodeCore & {
@@ -153,6 +166,7 @@ type ExperimentEpisode = EpisodeCore & {
 }
 
 type ExperimentRun = {
+  readonly source: "recorded" | "synthetic-render"
   readonly observations: readonly Observation[]
   readonly episodes: readonly ExperimentEpisode[]
   readonly initialObservationId: string
@@ -311,6 +325,52 @@ function validateHead(
   ) {
     addIssue(context, [...path, "selectedId"], "Selected candidate must be an argmax")
   }
+
+  const previewIds = head.previewIds
+  if (previewIds === undefined) {
+    addIssue(context, [...path, "previewIds"], "Preview IDs are required")
+    return
+  }
+
+  const seenPreviewIds = new Set<string>()
+  for (const [index, previewId] of previewIds.entries()) {
+    if (seenPreviewIds.has(previewId)) {
+      addIssue(context, [...path, "previewIds", index], "Preview IDs must be unique")
+    }
+    seenPreviewIds.add(previewId)
+
+    if (previewId === head.selectedId) {
+      addIssue(context, [...path, "previewIds", index], "Preview IDs must not include the selection")
+    } else if (!head.offered.some((candidate) => candidate.id === previewId)) {
+      addIssue(context, [...path, "previewIds", index], "Preview IDs must reference offered IDs")
+    }
+  }
+
+  if (scored) {
+    const expected = rankPreviewIds(head as DecisionHead<ScoredCandidate>)
+    if (JSON.stringify(previewIds) !== JSON.stringify(expected)) {
+      addIssue(
+        context,
+        [...path, "previewIds"],
+        "Preview IDs must rank the positive alternatives",
+      )
+    }
+  }
+}
+
+function validateScoredConfidence(
+  head: HeadLike,
+  path: readonly (string | number)[],
+  recorded: boolean,
+  context: z.RefinementCtx,
+): void {
+  if (head.reportedConfidence === undefined) {
+    addIssue(context, [...path, "reportedConfidence"], "Reported confidence is required")
+    return
+  }
+  if (recorded && head.reportedConfidence === null) {
+    addIssue(context, [...path, "reportedConfidence"], "Recorded heads must report confidence")
+  }
 }
 
 function validateExperimentRun(
@@ -331,6 +391,14 @@ function validateExperimentRun(
       )
     }
     validateHead(episode.operationHead, scored, [...path, "operationHead"], context)
+    if (scored) {
+      validateScoredConfidence(
+        episode.operationHead,
+        [...path, "operationHead"],
+        run.source === "recorded",
+        context,
+      )
+    }
 
     if (isTargetlessOperation(episode.operation)) {
       if (episode.targetHead !== null) {
@@ -350,6 +418,14 @@ function validateExperimentRun(
         )
       }
       validateHead(targetHead, scored, [...path, "targetHead"], context)
+      if (scored) {
+        validateScoredConfidence(
+          targetHead,
+          [...path, "targetHead"],
+          run.source === "recorded",
+          context,
+        )
+      }
     }
   })
 }

@@ -39,6 +39,8 @@ export type SourceStep = {
   readonly pre_frame: string
   readonly elapsed_ms: number
   readonly decision_index: number
+  readonly confidence?: number
+  readonly target_confidence?: number
 }
 
 type SourceCriteriaValue = {
@@ -176,11 +178,28 @@ function candidateLabel(criteria: SourceCriteriaValue | undefined, id: string): 
   return `[${id}] ${criteria?.role ?? "element"}`
 }
 
+function requiredConfidence(
+  runId: string,
+  step: SourceStep,
+  value: number | undefined,
+  field: "confidence" | "target_confidence",
+): number {
+  if (typeof value !== "number" || !Number.isFinite(value) || value < 0 || value > 1) {
+    throw new Error(`Run ${runId} step ${step.step} has an invalid ${field}`)
+  }
+  return value
+}
+
 function operationHead(
   decision: SourceDecision,
   translations: Translations,
   locale: "zh" | "en",
-): { readonly offered: readonly ScoredCandidate[]; readonly selectedId: string } {
+  reportedConfidence: number,
+): {
+  readonly offered: readonly ScoredCandidate[]
+  readonly selectedId: string
+  readonly reportedConfidence: number
+} {
   const probabilities = decision.operation_probabilities ?? {}
   const offered = decisionOperations.flatMap((operation): ScoredCandidate[] => {
     const probability = probabilities[operation]
@@ -199,7 +218,7 @@ function operationHead(
     throw new Error("Decision has no operation probabilities")
   }
 
-  return { offered, selectedId: decision.operation }
+  return { offered, selectedId: decision.operation, reportedConfidence }
 }
 
 const questionByOperation = {
@@ -213,10 +232,12 @@ function targetHead(
   decision: SourceDecision,
   translations: Translations,
   locale: "zh" | "en",
+  reportedConfidence: number,
 ): {
   readonly operation: Operation
   readonly offered: readonly ScoredCandidate[]
   readonly selectedId: string
+  readonly reportedConfidence: number
 } | null {
   if (isTargetlessOperation(step.operation)) return null
 
@@ -243,7 +264,7 @@ function targetHead(
     throw new Error(`Decision selected an unknown target for ${step.operation}`)
   }
 
-  return { operation: step.operation, offered, selectedId }
+  return { operation: step.operation, offered, selectedId, reportedConfidence }
 }
 
 function operationLabel(operation: Operation): string {
@@ -359,6 +380,11 @@ export function buildCanonicalRuns(input: {
       throw new Error(`Run ${runId} action has no translation: ${JSON.stringify(action)}`)
     }
 
+    const reportedConfidence = requiredConfidence(runId, step, step.confidence, "confidence")
+    const targetReportedConfidence = isTargetlessOperation(step.operation)
+      ? null
+      : requiredConfidence(runId, step, step.target_confidence, "target_confidence")
+
     const core = {
       id: `episode-${pad(index + 1)}`,
       ordinal: index + 1,
@@ -374,14 +400,14 @@ export function buildCanonicalRuns(input: {
       en: {
         ...core,
         action,
-        operationHead: operationHead(decision, translations, "en"),
-        targetHead: targetHead(step, decision, translations, "en"),
+        operationHead: operationHead(decision, translations, "en", reportedConfidence),
+        targetHead: targetHead(step, decision, translations, "en", targetReportedConfidence ?? 0),
       },
       zh: {
         ...core,
         action: translatedAction,
-        operationHead: operationHead(decision, translations, "zh"),
-        targetHead: targetHead(step, decision, translations, "zh"),
+        operationHead: operationHead(decision, translations, "zh", reportedConfidence),
+        targetHead: targetHead(step, decision, translations, "zh", targetReportedConfidence ?? 0),
       },
     }
   })

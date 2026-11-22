@@ -180,6 +180,33 @@ describe("run library loading", () => {
     ).rejects.toThrow(/structure/i)
   })
 
+  it("rejects a valid-looking but mismatched preview order between locales", async () => {
+    const files = fixtureFiles("candidates")
+    const episode = episodeRecord(record(files[`${runId}/run.en.json`]), 2)
+    const head = record(episode["operationHead"])
+    const previewIds = head["previewIds"]
+    if (!Array.isArray(previewIds) || previewIds.length < 2) {
+      throw new Error("Expected multiple preview IDs")
+    }
+    head["previewIds"] = [...previewIds].reverse()
+    const index = await loadRunIndex(baseUrl(), "candidates", respondWith(files).fetcher)
+
+    await expect(
+      loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher),
+    ).rejects.toThrow(/structure/i)
+  })
+
+  it("rejects a valid-looking but mismatched reported confidence between locales", async () => {
+    const files = fixtureFiles("probabilities")
+    const episode = episodeRecord(record(files[`${runId}/run.en.json`]), 0)
+    record(episode["operationHead"])["reportedConfidence"] = 0.1
+    const index = await loadRunIndex(baseUrl(), "probabilities", respondWith(files).fetcher)
+
+    await expect(
+      loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher),
+    ).rejects.toThrow(/structure/i)
+  })
+
   it("rejects a mismatched outcome presence between locales", async () => {
     const files = fixtureFiles("baseline")
     episodeRecord(record(files[`${runId}/run.en.json`]), 1)["outcome"] = {
