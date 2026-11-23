@@ -65,7 +65,7 @@ describe("bilingual workspace", () => {
 
     render(<App runs={runs} />)
 
-    expect(screen.getByText(runs.en.task)).toBeVisible()
+    expect(screen.getAllByText(runs.en.task).length).toBeGreaterThan(0)
     expect(screen.getByRole("region", { name: "Agent browser" })).toBeInTheDocument()
     expect(screen.getByRole("button", { name: "Fulfills the request" })).toBeInTheDocument()
     const browser = screen.getByRole("region", { name: "Agent browser" })
@@ -81,7 +81,7 @@ describe("bilingual workspace", () => {
     render(<App runs={runs} />)
     await user.click(screen.getByRole("button", { name: "English" }))
 
-    expect(screen.getByText(runs.en.task)).toBeVisible()
+    expect(screen.getAllByText(runs.en.task).length).toBeGreaterThan(0)
     expect(screen.getByRole("button", { name: "Fulfills the request" })).toBeInTheDocument()
     expect(window.localStorage.getItem(LOCALE_STORAGE_KEY)).toBe("en")
     expect(document.documentElement.lang).toBe("en")
@@ -95,13 +95,13 @@ describe("bilingual workspace", () => {
     const runs = studyRuns("baseline")
     // When the workspace renders in English and the Chinese option is clicked.
     render(<App runs={runs} />)
-    expect(screen.getByText(runs.en.task)).toBeVisible()
+    expect(screen.getAllByText(runs.en.task).length).toBeGreaterThan(0)
     await user.click(screen.getByRole("button", { name: "中文" }))
     // Then the query, storage, document language, and run all follow the click.
     expect(window.location.search).toBe("?lang=zh")
     expect(window.localStorage.getItem(LOCALE_STORAGE_KEY)).toBe("zh")
     expect(document.documentElement.lang).toBe("zh-CN")
-    expect(screen.getByText(runs.zh.task)).toBeVisible()
+    expect(screen.getAllByText(runs.zh.task).length).toBeGreaterThan(0)
   })
 
   it("keeps the recorded response when the language changes", async () => {
@@ -172,6 +172,7 @@ describe("study copy", () => {
       expect(messages.viewedStepTag).not.toBe("")
       expect(messages.stepLabel(4)).toContain("4")
       expect(messages.originalTask).not.toBe("")
+      expect(messages.originalTaskHint).not.toBe("")
       expect(messages.beforeStepCaption(4, 8)).toContain("4")
       expect(messages.beforeStepCaption(4, 8)).toContain("8")
       expect(messages.finalStateHeading).not.toBe("")

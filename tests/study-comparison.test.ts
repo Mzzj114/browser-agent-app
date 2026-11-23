@@ -186,40 +186,71 @@ describe("cross-condition study comparison", () => {
     await expect(compareStudyBuilds(builds)).rejects.toThrow(/locale|metadata|filename/i)
   })
 
-  it("rejects a pane bound outside the one-pixel tolerance", async () => {
+  it("rejects a browserFrame pane width outside the one-pixel tolerance", async () => {
     const builds = await buildAll()
     await updateReport(builds.baseline, "en", 0, (report) => {
       const panes = report["panes"] as Record<string, Record<string, number>>
-      const inspector = panes["inspector"]
-      if (!inspector) throw new Error("Missing inspector bounds")
-      inspector["x"] = (inspector["x"] ?? 0) + 2
+      const browserFrame = panes["browserFrame"]
+      if (!browserFrame) throw new Error("Missing browser frame bounds")
+      browserFrame["width"] = (browserFrame["width"] ?? 0) + 2
     })
 
-    await expect(compareStudyBuilds(builds)).rejects.toThrow(/bound|pane|geometry|tolerance/i)
+    await expect(compareStudyBuilds(builds)).rejects.toThrow(
+      /browserFrame|bound|geometry|tolerance/i,
+    )
   })
 
   it("rejects a pairwise one-pixel overshoot between the two experimental conditions", async () => {
     const builds = await buildAll()
     await updateReport(builds.candidates, "en", 0, (report) => {
       const panes = report["panes"] as Record<string, Record<string, number>>
-      const inspector = panes["inspector"]
-      if (!inspector) throw new Error("Missing inspector bounds")
-      inspector["x"] = (inspector["x"] ?? 0) + 1
+      const browserFrame = panes["browserFrame"]
+      if (!browserFrame) throw new Error("Missing browser frame bounds")
+      browserFrame["x"] = (browserFrame["x"] ?? 0) + 1
     })
     await updateReport(builds.probabilities, "en", 0, (report) => {
       const panes = report["panes"] as Record<string, Record<string, number>>
-      const inspector = panes["inspector"]
-      if (!inspector) throw new Error("Missing inspector bounds")
-      inspector["x"] = (inspector["x"] ?? 0) - 1
+      const browserFrame = panes["browserFrame"]
+      if (!browserFrame) throw new Error("Missing browser frame bounds")
+      browserFrame["x"] = (browserFrame["x"] ?? 0) - 1
     })
 
     await expect(compareStudyBuilds(builds)).rejects.toThrow(/differ|tolerance|pairwise/i)
   })
 
-  it("rejects report fields that could expose inspector scroll or participant answers", async () => {
+  it("rejects an obsolete study-equivalence/1 report", async () => {
+    const builds = await buildAll()
+    await updateReport(builds.probabilities, "zh", 1, (report) => {
+      report["schemaVersion"] = "study-equivalence/1"
+    })
+
+    await expect(compareStudyBuilds(builds)).rejects.toThrow(
+      /schema version|unsupported|schemaVersion/i,
+    )
+  })
+
+  it("rejects pane or control names outside the shared review contract", async () => {
+    const builds = await buildAll()
+    await updateReport(builds.candidates, "en", 2, (report) => {
+      const panes = report["panes"] as Record<string, Record<string, number>>
+      panes["cardContent"] = { x: 0, y: 0, width: 100, height: 100 }
+    })
+
+    await expect(compareStudyBuilds(builds)).rejects.toThrow(/unexpected field|cardContent/i)
+
+    const rebuilt = await buildAll()
+    await updateReport(rebuilt.candidates, "zh", 2, (report) => {
+      const controls = report["controls"] as Record<string, Record<string, number>>
+      controls["jump"] = { x: 0, y: 0, width: 100, height: 100 }
+    })
+
+    await expect(compareStudyBuilds(rebuilt)).rejects.toThrow(/unexpected field|jump/i)
+  })
+
+  it("rejects report fields that could expose review scroll or participant answers", async () => {
     const builds = await buildAll()
     await updateReport(builds.candidates, "zh", 2, (report) => {
-      report["inspectorScrollHeight"] = 480
+      report["reviewScrollHeight"] = 480
       report["participantAnswers"] = [{ episodeId: "episode-04" }]
     })
 

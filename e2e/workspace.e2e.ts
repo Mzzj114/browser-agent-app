@@ -48,12 +48,14 @@ test("shows the before-image for a historical step and returns to the final stat
   await expect(page.locator(".execution-rail-item").last()).toHaveAttribute("aria-current", "step")
 })
 
-test("removes technical disclosure, the report copy, and the disabled composer", async ({
+test("keeps only the task disclosure and removes technical, report, and composer copy", async ({
   page,
 }) => {
   await page.goto(runUrl("en"))
 
-  await expect(page.locator("details")).toHaveCount(0)
+  await expect(page.locator("details")).toHaveCount(1)
+  await expect(page.locator(".study-task-strip")).toHaveCount(1)
+  await expect(page.locator(".study-inspector")).toHaveCount(0)
   await expect(page.locator(".step-card")).toHaveCount(0)
   await expect(page.locator(".agent-prompt")).toHaveCount(0)
   await expect(page.locator(".chat-scroll")).toHaveCount(0)
@@ -156,7 +158,12 @@ test("fits the screenshot by default and toggles to actual size on click", async
     )
     .toEqual(runScreenshotSize)
   await expect
-    .poll(() => viewport.evaluate((element) => element.scrollWidth > element.clientWidth))
+    .poll(() =>
+      viewport.evaluate(
+        (element) =>
+          element.scrollWidth > element.clientWidth || element.scrollHeight > element.clientHeight,
+      ),
+    )
     .toBe(true)
   await expect
     .poll(() => viewport.evaluate((element) => element.scrollHeight > element.clientHeight))

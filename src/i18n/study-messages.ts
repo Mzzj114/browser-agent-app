@@ -6,6 +6,7 @@ export type StudyMessages = {
   readonly viewedStepTag: string
   readonly stepLabel: (ordinal: number) => string
   readonly originalTask: string
+  readonly originalTaskHint: string
   readonly beforeStepCaption: (ordinal: number, total: number) => string
   readonly finalStateHeading: string
   readonly finalStateExplanation: string
@@ -58,6 +59,7 @@ export const zhStudyMessages = {
   viewedStepTag: "正在查看",
   stepLabel: (ordinal) => `第 ${ordinal} 步`,
   originalTask: "原始任务",
+  originalTaskHint: "展开以查看完整原始任务",
   beforeStepCaption: (ordinal, total) => `第 ${ordinal} 步操作前 · 共 ${total} 步`,
   finalStateHeading: "最终状态",
   finalStateExplanation: "此处显示最后一次记录操作后的页面。最终状态不是编号步骤，也不能被标记。",
@@ -114,6 +116,7 @@ export const enStudyMessages = {
   viewedStepTag: "Viewed",
   stepLabel: (ordinal) => `Step ${ordinal}`,
   originalTask: "Original task",
+  originalTaskHint: "Expand to read the complete original task",
   beforeStepCaption: (ordinal, total) => `Before step ${ordinal} of ${total}`,
   finalStateHeading: "Final state",
   finalStateExplanation:

@@ -47,7 +47,8 @@ test("loads the pinned condition without a URL override and exposes no technical
   await expect(page.locator(".app-shell")).toBeVisible()
   await expect(page.getByRole("heading", { name: en.finalState })).toBeVisible()
 
-  await expect(page.locator("details")).toHaveCount(0)
+  await expect(page.locator(".study-task-strip")).toHaveCount(1)
+  await expect(page.locator("details:not(.study-task-strip)")).toHaveCount(0)
   await expect(page.locator(".agent-prompt")).toHaveCount(0)
   await expect(page.locator(".chat-scroll")).toHaveCount(0)
   await expect(page.locator(".code-block")).toHaveCount(0)
@@ -228,7 +229,8 @@ test("locale switches preserve an explanation draft and a submitted response", a
   )
   await expect(page.getByRole("combobox")).toHaveCount(0)
   await expect(page.locator("[data-marked]")).toHaveCount(0)
-  await expect(page.locator("details")).toHaveCount(0)
+  await expect(page.locator(".study-task-strip")).toHaveCount(1)
+  await expect(page.locator("details:not(.study-task-strip)")).toHaveCount(0)
 
   await page.getByRole("button", { name: en.submit, exact: true }).click()
   await expect(page.getByText(en.submitted)).toBeVisible()

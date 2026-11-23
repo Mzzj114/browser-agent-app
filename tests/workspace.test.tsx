@@ -19,9 +19,21 @@ function rail(): HTMLElement {
   return screen.getByRole("navigation", { name: "Execution overview" })
 }
 
-function inspectorPanel(): HTMLElement {
-  const panel = document.querySelector(".study-inspector-panel")
-  if (!(panel instanceof HTMLElement)) throw new Error("Missing inspector panel")
+function taskStrip(): HTMLDetailsElement {
+  const strip = document.querySelector(".study-task-strip")
+  if (!(strip instanceof HTMLDetailsElement)) throw new Error("Missing task strip")
+  return strip
+}
+
+function reviewPage(): HTMLElement {
+  const page = document.querySelector(".study-page")
+  if (!(page instanceof HTMLElement)) throw new Error("Missing review page")
+  return page
+}
+
+function evidencePanel(): HTMLElement {
+  const panel = document.querySelector(".decision-inspector")
+  if (!(panel instanceof HTMLElement)) throw new Error("Missing evidence panel")
   return panel
 }
 
@@ -43,8 +55,8 @@ describe("decision evidence workspace", () => {
     // When the workspace mounts.
     render(<App runs={runs} />)
 
-    // Then the common context, final page, and final inspector are shown.
-    expect(screen.getByText(run.task)).toBeVisible()
+    // Then the common context, final page, and final evidence are shown.
+    expect(within(taskStrip()).getAllByText(run.task).length).toBeGreaterThan(0)
     expect(screen.getByText("Original task")).toBeVisible()
     const browser = screen.getByRole("region", { name: "Agent browser" })
     expect(within(browser).getByText(finalObservation.title)).toBeVisible()
@@ -96,8 +108,8 @@ describe("decision evidence workspace", () => {
       expect(finalButton).not.toHaveAttribute("data-marked")
       expect(document.querySelector("[data-marked]")).toBeNull()
 
-      // And the participant inspector has no navigation or response controls.
-      const panel = inspectorPanel()
+      // And the participant evidence panel has no navigation or response controls.
+      const panel = evidencePanel()
       expect(within(panel).queryByRole("button")).toBeNull()
       expect(within(panel).queryByRole("combobox")).toBeNull()
       expect(within(panel).queryByRole("group", { name: "Page replay controls" })).toBeNull()
@@ -109,12 +121,12 @@ describe("decision evidence workspace", () => {
 
       // And episode four is viewed through the rail.
       await user.click(railButtons()[3] ?? document.body)
-      expect(within(panel).getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
-      expect(within(panel).queryByRole("button")).toBeNull()
+      expect(within(evidencePanel()).getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
+      expect(within(evidencePanel()).queryByRole("button")).toBeNull()
 
       // Then the last rail item restores the final observation without moving the draft.
       await user.click(within(finalItem).getByRole("button"))
-      expect(within(panel).getByRole("heading", { name: "Final state" })).toBeVisible()
+      expect(within(evidencePanel()).getByRole("heading", { name: "Final state" })).toBeVisible()
       expect(finalButton).toHaveAttribute("aria-current", "step")
       expect(explanationBox()).toHaveValue("  Draft explanation  ")
       expect(within(navigation).queryByText("Your mark")).toBeNull()
@@ -157,7 +169,7 @@ describe("decision evidence workspace", () => {
     },
   )
 
-  it("keeps the action in an inspector free of navigation and response controls", async () => {
+  it("puts the screenshot before the evidence inside one review column", async () => {
     // Given the final view.
     useEnglish()
     const user = userEvent.setup()
@@ -169,20 +181,85 @@ describe("decision evidence workspace", () => {
     // When episode four is viewed through the rail.
     await user.click(railButtons()[3] ?? document.body)
 
-    // Then the inspector holds the evidence body without a replay header or response control.
-    const inspector = container.querySelector(".study-inspector")
-    const panel = inspectorPanel()
-    expect(inspector).not.toBeNull()
-    expect(container.querySelector(".study-inspector-header")).toBeNull()
+    // Then the review column contains the browser frame immediately before the evidence panel.
+    const page = reviewPage()
+    const browserFrame = page.querySelector(".browser-frame")
+    const panel = evidencePanel()
+    expect(browserFrame).not.toBeNull()
+    expect(panel).not.toBeNull()
+    expect(browserFrame?.nextElementSibling).toBe(panel)
+    expect(container.querySelector(".study-inspector")).toBeNull()
+    expect(container.querySelector(".study-inspector-panel")).toBeNull()
     expect(within(panel).queryByRole("group", { name: "Page replay controls" })).toBeNull()
     expect(within(panel).queryByRole("combobox")).toBeNull()
     expect(within(panel).queryByRole("button")).toBeNull()
 
-    // And the action lives in the inspector rather than the compact browser metadata.
+    // And the action lives in the evidence panel rather than the compact browser metadata.
     const browser = screen.getByRole("region", { name: "Agent browser" })
     expect(within(browser).queryByText(episode.action)).toBeNull()
     expect(within(panel).getByText(episode.action)).toBeVisible()
     expect(within(browser).getByText("Recorded · not live")).toBeVisible()
+  })
+
+  it("expands a long bilingual task without losing the draft or viewed step", async () => {
+    // Given a long task whose final constraint must remain in the DOM.
+    useEnglish()
+    const user = userEvent.setup()
+    const runs = studyRuns("candidates")
+    const enTask = `${runs.en.task} Final constraint: include both the product name and the price in the answer.`
+    const zhTask = `${runs.zh.task} 最后要求：请在回答中同时给出商品名称和价格。`
+    const longRuns = {
+      zh: { ...runs.zh, task: zhTask },
+      en: { ...runs.en, task: enTask },
+    }
+    render(<App runs={longRuns} />)
+    const strip = taskStrip()
+    const summary = strip.querySelector("summary")
+    if (!(summary instanceof HTMLElement)) throw new Error("Missing task summary")
+
+    // Then the summary keeps the exact task text for visual clipping.
+    expect(strip.open).toBe(false)
+    expect(strip.querySelector(".study-task-excerpt")).toHaveTextContent(enTask)
+    expect(strip.querySelector(".study-task-text")).toHaveTextContent(enTask)
+
+    // When a step is viewed and a draft is written before expanding the task.
+    await user.click(railButtons()[3] ?? document.body)
+    fireEvent.change(explanationBox(), { target: { value: "Draft stays put." } })
+    await user.click(summary)
+
+    // Then the complete exact task, including its last constraint, is exposed.
+    expect(strip.open).toBe(true)
+    expect(strip.querySelector(".study-task-text")).toHaveTextContent(enTask)
+    expect(strip.querySelector(".study-task-text")).toHaveTextContent(
+      "include both the product name and the price",
+    )
+    expect(explanationBox()).toHaveValue("Draft stays put.")
+    expect(screen.getByText("Before step 4 of 8")).toBeVisible()
+
+    // And switching locale expands the exact Chinese task without changing review state.
+    await user.click(screen.getByRole("button", { name: "中文" }))
+    expect(strip.open).toBe(true)
+    expect(strip.querySelector(".study-task-text")).toHaveTextContent(zhTask)
+    expect(screen.getByRole("textbox", { name: /简短说明/ })).toHaveValue("Draft stays put.")
+    expect(screen.getByText("第 4 步操作前 · 共 8 步")).toBeVisible()
+  })
+
+  it("resets the review scroller on replay selection without moving focus", async () => {
+    // Given a scrolled review column in the final view.
+    useEnglish()
+    const user = userEvent.setup()
+    render(<App runs={studyRuns("probabilities")} />)
+    const page = reviewPage()
+    page.scrollTop = 320
+    const secondStep = railButtons()[1]
+    if (!secondStep) throw new Error("Missing second rail step")
+
+    // When the rail selects another step.
+    await user.click(secondStep)
+
+    // Then the screenshot is back at the top and the rail keeps keyboard focus.
+    expect(page.scrollTop).toBe(0)
+    expect(document.activeElement).toBe(secondStep)
   })
 
   it("keeps rail navigation on the same viewed ID and before-image", async () => {
@@ -305,8 +382,11 @@ describe("decision evidence workspace", () => {
     useEnglish()
     const { container } = render(<App runs={studyRuns("probabilities")} />)
 
-    // Then only evidence and response controls remain.
-    expect(container.querySelector("details")).toBeNull()
+    // Then the task is the only disclosure and no technical evidence remains.
+    const disclosures = container.querySelectorAll("details")
+    expect(disclosures).toHaveLength(1)
+    expect(disclosures[0]).toBe(taskStrip())
+    expect(taskStrip().tagName).toBe("DETAILS")
     expect(screen.queryByText(/Technical details/)).toBeNull()
     expect(screen.queryByText(/Python/)).toBeNull()
     expect(screen.queryByRole("textbox", { name: /Agent prompt/ })).toBeNull()
@@ -338,7 +418,7 @@ describe("decision evidence workspace", () => {
 
       // Then the same stable state is localized around untouched participant text.
       expect(screen.getByRole("navigation", { name: "Execution overview" })).toBe(rail)
-      expect(screen.getByText(runs.en.task)).toBeVisible()
+      expect(within(taskStrip()).getAllByText(runs.en.task).length).toBeGreaterThan(0)
       expect(screen.getByText("Before step 4 of 8")).toBeVisible()
       expect(screen.getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
       expect(document.querySelector(".page-screenshot")).toHaveAttribute(

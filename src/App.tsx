@@ -1,5 +1,5 @@
 import { ListTree } from "lucide-react"
-import { useReducer, useState } from "react"
+import { useEffect, useReducer, useRef, useState } from "react"
 import { BrowserFrame } from "./components/ui/browser-frame"
 import { BrandMark, StatusBadge } from "./components/ui/buttons"
 import { DecisionInspector } from "./components/ui/decision-inspector"
@@ -7,6 +7,7 @@ import { DesktopOnlyMessage } from "./components/ui/desktop-only"
 import { ExecutionRail } from "./components/ui/execution-rail"
 import { LanguageToggle } from "./components/ui/language-toggle"
 import { StudyResponseForm } from "./components/ui/study-response-form"
+import { StudyTaskStrip } from "./components/ui/study-task-strip"
 import {
   initialViewedSelection,
   normalizeViewedSelection,
@@ -68,6 +69,13 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
     (state: StudyResponse, action: ResponseAction) => updateStudyResponse(state, action),
     initialStudyResponse(),
   )
+  const reviewRef = useRef<HTMLElement>(null)
+  const viewedKey = activeViewed.kind === "final" ? "final" : activeViewed.episodeId
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: the viewed selection key controls the reset.
+  useEffect(() => {
+    if (reviewRef.current) reviewRef.current.scrollTop = 0
+  }, [viewedKey])
 
   const stateLabel =
     viewedEpisode === null
@@ -97,13 +105,7 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
         </header>
 
         <section className="study-context" aria-label={messages.study.originalTask}>
-          <article className="study-context-panel" aria-labelledby="study-task-heading">
-            <h2 id="study-task-heading">{messages.study.originalTask}</h2>
-            <div className="study-context-scroll">
-              <p>{run.task}</p>
-            </div>
-            <p className="study-context-note">{messages.study.syntheticProvenance}</p>
-          </article>
+          <StudyTaskStrip task={run.task} />
         </section>
 
         <main className="study-main">
@@ -114,7 +116,7 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
             onFinal={goFinal}
           />
 
-          <section className="study-page" aria-labelledby="study-page-heading">
+          <section ref={reviewRef} className="study-page" aria-labelledby="study-page-heading">
             <h2 id="study-page-heading" className="sr-only">
               {messages.pageResultHeading}
             </h2>
@@ -124,13 +126,8 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
               stateNote={stateNote}
               capturedAtLabel={capturedAtLabel}
             />
+            <DecisionInspector run={run} viewed={activeViewed} />
           </section>
-
-          <aside className="study-inspector">
-            <div className="study-inspector-panel">
-              <DecisionInspector run={run} viewed={activeViewed} />
-            </div>
-          </aside>
         </main>
 
         <section className="study-response" aria-label={messages.decisionQuestion}>

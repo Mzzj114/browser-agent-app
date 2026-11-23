@@ -1,7 +1,7 @@
 .study-shell {
   grid-template-rows:
     var(--header-height)
-    104px
+    auto
     minmax(0, 1fr)
     156px;
   overflow: hidden;
@@ -33,56 +33,99 @@
 }
 
 .study-context {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
   min-block-size: 0;
   min-inline-size: 0;
+  overflow: visible;
   border-block-end: 1px solid var(--border-default);
   background: var(--surface-primary);
 }
 
-.study-context-panel {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr) auto;
-  min-block-size: 0;
+.study-task-strip {
+  display: block;
   min-inline-size: 0;
-  gap: var(--space-1);
-  overflow: hidden;
+}
+
+.study-task-summary {
+  display: grid;
+  grid-template-columns: 0.9rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0 var(--space-2);
   padding: var(--space-2) var(--space-5);
+  color: var(--text-primary);
+  cursor: pointer;
+  list-style: none;
 }
 
-.study-context-scroll {
-  min-block-size: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
+.study-task-summary::-webkit-details-marker {
+  display: none;
 }
 
-.study-context-panel h2 {
+.study-task-summary::before {
+  grid-row: 1 / span 2;
+  color: var(--text-tertiary);
+  content: "▸";
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.study-task-strip[open] .study-task-summary::before {
+  content: "▾";
+}
+
+.study-task-summary:hover {
+  background: var(--surface-hover);
+}
+
+.study-task-summary-label {
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 590;
   line-height: 1.45;
 }
 
-.study-context-panel p {
+.study-task-excerpt {
+  display: -webkit-box;
+  min-inline-size: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.study-task-body {
+  display: grid;
+  max-block-size: min(12rem, 24vh);
+  min-inline-size: 0;
+  gap: var(--space-1);
+  margin-inline-start: calc(0.9rem + var(--space-2) + var(--space-5));
+  margin-inline-end: var(--space-5);
+  padding-block-end: var(--space-2);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.study-task-text {
   color: var(--text-primary);
   font-size: 14px;
   line-height: 1.55;
   overflow-wrap: anywhere;
 }
 
-.study-context-panel .study-context-note {
+.study-task-note {
   color: var(--text-tertiary);
   font-size: 12px;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .study-main {
   display: grid;
   grid-template-columns:
     clamp(12rem, 16vw, 14rem)
-    minmax(0, 1fr)
-    clamp(19rem, 25vw, 22rem);
+    minmax(0, 1fr);
   min-block-size: 0;
   min-inline-size: 0;
   background: var(--canvas);
@@ -175,32 +218,20 @@
 
 .study-page {
   display: grid;
-  grid-template-rows: minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-content: start;
   min-block-size: 0;
   min-inline-size: 0;
-  padding: var(--space-2);
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3) var(--space-4) var(--space-2);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
   background: var(--canvas);
 }
 
 .study-page > .browser-frame {
-  block-size: 100%;
-}
-
-.study-inspector {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr);
-  min-block-size: 0;
-  min-inline-size: 0;
-  border-inline-start: 1px solid var(--border-default);
-  background: var(--surface-primary);
-}
-
-.study-inspector-panel {
-  min-block-size: 0;
-  min-inline-size: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: var(--space-3) var(--space-4);
+  block-size: clamp(17rem, 44vh, 32rem);
 }
 
 .decision-inspector {
@@ -208,6 +239,13 @@
   min-inline-size: 0;
   align-content: start;
   gap: var(--space-3);
+}
+
+.study-page > .decision-inspector {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-surface);
+  background: var(--surface-primary);
 }
 
 .decision-inspector-heading {

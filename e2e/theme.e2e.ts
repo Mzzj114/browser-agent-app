@@ -256,9 +256,9 @@ test("uses neutral static identity styling", async ({ page }) => {
 
   await expect(page.locator(".brand-icon")).toHaveCSS("color", "rgb(85, 93, 104)")
   await expect(page.locator(".status-badge")).toHaveCSS("background-color", "rgb(247, 248, 250)")
-  await expect(page.locator(".study-inspector")).toHaveCSS("box-shadow", "none")
+  await expect(page.locator(".study-page")).toHaveCSS("box-shadow", "none")
   await expect(page.locator(".execution-rail-item").first()).toHaveCSS("box-shadow", "none")
-  await expect(page.locator(".study-context-panel").first()).toHaveCSS("box-shadow", "none")
+  await expect(page.locator(".study-task-strip")).toHaveCSS("box-shadow", "none")
 })
 
 test("removes card elevation without losing historical selection", async ({ page }) => {

@@ -25,7 +25,8 @@
         "noUnusedImports": "error"
       },
       "complexity": {
-        "noBannedTypes": "error"
+        "noBannedTypes": "error",
+        "useLiteralKeys": "off"
       },
       "a11y": {
         "useSemanticElements": "error"
@@ -54,6 +55,16 @@
           }
         }
       }
+    },
+    {
+      "includes": ["src/RunPicker.tsx"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noUselessFragments": "off"
+          }
+        }
+      }
     }
   ],
   "files": {
@@ -61,12 +72,15 @@
       "**",
       "!!**/node_modules",
       "!!**/dist",
+      "!!**/public/runs",
       "!!**/coverage",
       "!!**/test-results",
       "!!**/playwright-report",
       "!!**/.playwright-mcp",
       "!!**/.omo",
       "!!**/.codegraph",
+      "!!**/.agents",
+      "!!**/.superpowers",
       "!**/DESIGN.md",
       "!**/.debug-journal.md"
     ]

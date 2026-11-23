@@ -229,10 +229,9 @@ async function assertRunsDirectory(buildDirectory: string): Promise<string> {
   try {
     entries = await readdir(runsDirectory, { withFileTypes: true })
   } catch (error) {
-    throw new Error(
-      `Study build ${buildDirectory}: missing runs directory (${messageOf(error)})`,
-      { cause: error },
-    )
+    throw new Error(`Study build ${buildDirectory}: missing runs directory (${messageOf(error)})`, {
+      cause: error,
+    })
   }
 
   let hasIndex = false
@@ -242,14 +241,10 @@ async function assertRunsDirectory(buildDirectory: string): Promise<string> {
         hasIndex = true
         continue
       }
-      throw new Error(
-        `Study build ${buildDirectory}: unexpected runs entry "${entry.name}"`,
-      )
+      throw new Error(`Study build ${buildDirectory}: unexpected runs entry "${entry.name}"`)
     }
     if (!entry.isDirectory()) {
-      throw new Error(
-        `Study build ${buildDirectory}: unexpected runs entry "${entry.name}"`,
-      )
+      throw new Error(`Study build ${buildDirectory}: unexpected runs entry "${entry.name}"`)
     }
 
     const runDirectory = join(runsDirectory, entry.name)
@@ -388,7 +383,7 @@ async function assertScreenshots(
   }
 }
 
-const comparisonSchemaVersion = "study-equivalence/1"
+const comparisonSchemaVersion = "study-equivalence/2"
 
 const comparisonScreenshotPattern =
   /^(?:runs\/[A-Za-z0-9][A-Za-z0-9_-]*\/)?(?:frames\/|screenshots\/(?:en\/)?)[A-Za-z0-9_.-]+\.(?:jpe?g|png|webp)$/
@@ -441,6 +436,16 @@ const comparisonReportKeys = new Set([
 const comparisonScreenshotKeys = new Set(["path", "width", "height"])
 const comparisonBoundsKeys = new Set(["x", "y", "width", "height"])
 const comparisonScreenshotReferences = new Set(["initial", "final", "episode04"])
+const comparisonPaneKeys = new Set(["context", "rail", "review", "browserFrame", "response"])
+const comparisonControlKeys = new Set([
+  "task",
+  "viewedStep",
+  "final",
+  "accept",
+  "reject",
+  "explanation",
+  "submit",
+])
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value)
@@ -482,10 +487,14 @@ function parseComparisonBounds(value: unknown, label: string): ComparisonBounds 
   }
 }
 
-function parseComparisonBoundsMap(value: unknown, label: string): Record<string, ComparisonBounds> {
+function parseComparisonBoundsMap(
+  value: unknown,
+  label: string,
+  expectedKeys: ReadonlySet<string>,
+): Record<string, ComparisonBounds> {
   if (!isRecord(value)) throw new Error(`${label} must be an object`)
+  assertExactKeys(value, expectedKeys, label)
   const keys = Object.keys(value)
-  if (keys.length === 0) throw new Error(`${label} must not be empty`)
   if (keys.some((key) => key.trim() === "")) {
     throw new Error(`${label} has a blank bounds name`)
   }
@@ -571,8 +580,12 @@ function parseComparisonReport(value: unknown, label: string): ComparisonReport 
         `${label}.screenshots.episode04`,
       ),
     },
-    panes: parseComparisonBoundsMap(value["panes"], `${label}.panes`),
-    controls: parseComparisonBoundsMap(value["controls"], `${label}.controls`),
+    panes: parseComparisonBoundsMap(value["panes"], `${label}.panes`, comparisonPaneKeys),
+    controls: parseComparisonBoundsMap(
+      value["controls"],
+      `${label}.controls`,
+      comparisonControlKeys,
+    ),
     actionOrder,
   }
 }

@@ -5,7 +5,6 @@ import { writeRunLibrary } from "../../scripts/run-library.ts"
 import type { StudyCondition } from "../../src/domain/study-condition.ts"
 import { LOCALES, type Locale } from "../../src/i18n/locale.ts"
 
-// biome-ignore lint/complexity/useLiteralKeys: process.env requires bracket access under noPropertyAccessFromIndexSignature.
 const localAppData = process.env["LOCALAPPDATA"]
 const temporaryRoot = join(localAppData ?? tmpdir(), "Temp", "opencode")
 
@@ -31,8 +30,19 @@ export type ComparisonScreenshot = {
   readonly height: number
 }
 
+export type StudyEquivalencePane = "context" | "rail" | "review" | "browserFrame" | "response"
+
+export type StudyEquivalenceControl =
+  | "task"
+  | "viewedStep"
+  | "final"
+  | "accept"
+  | "reject"
+  | "explanation"
+  | "submit"
+
 export type StudyEquivalenceReport = {
-  readonly schemaVersion: "study-equivalence/1"
+  readonly schemaVersion: "study-equivalence/2"
   readonly condition: StudyCondition
   readonly locale: Locale
   readonly viewport: { readonly width: number; readonly height: number }
@@ -41,8 +51,8 @@ export type StudyEquivalenceReport = {
     readonly final: ComparisonScreenshot
     readonly episode04: ComparisonScreenshot
   }
-  readonly panes: Readonly<Record<string, ComparisonBounds>>
-  readonly controls: Readonly<Record<string, ComparisonBounds>>
+  readonly panes: Readonly<Record<StudyEquivalencePane, ComparisonBounds>>
+  readonly controls: Readonly<Record<StudyEquivalenceControl, ComparisonBounds>>
   readonly actionOrder: readonly string[]
 }
 
@@ -68,7 +78,7 @@ export function studyEquivalenceReport(
   })
 
   return {
-    schemaVersion: "study-equivalence/1",
+    schemaVersion: "study-equivalence/2",
     condition,
     locale,
     viewport,
@@ -80,21 +90,18 @@ export function studyEquivalenceReport(
     panes: {
       context: comparisonBounds(0),
       rail: comparisonBounds(1),
-      page: comparisonBounds(2),
-      inspector: comparisonBounds(3),
+      review: comparisonBounds(2),
+      browserFrame: comparisonBounds(3),
       response: comparisonBounds(4),
     },
     controls: {
-      jump: comparisonBounds(5),
-      previous: comparisonBounds(6),
-      next: comparisonBounds(7),
-      final: comparisonBounds(8),
-      mark: comparisonBounds(9),
-      accept: comparisonBounds(10),
-      reject: comparisonBounds(11),
-      localization: comparisonBounds(12),
-      explanation: comparisonBounds(13),
-      submit: comparisonBounds(14),
+      task: comparisonBounds(5),
+      viewedStep: comparisonBounds(6),
+      final: comparisonBounds(7),
+      accept: comparisonBounds(8),
+      reject: comparisonBounds(9),
+      explanation: comparisonBounds(10),
+      submit: comparisonBounds(11),
     },
     actionOrder: [
       "Typed “red running shoes”",

@@ -18,12 +18,14 @@ const viewports = [
 const copy = {
   zh: {
     executionOverview: "执行概览",
+    originalTask: "原始任务",
     accept: "符合原始任务",
     reject: "不符合原始任务",
     submit: "提交评估",
     explanationPrompt: /简短说明/,
     finalState: "最终状态",
     lastRecordedState: "最后一次录制的状态",
+    beforeStep3: "第 3 步操作前 · 共 4 步",
     beforeStep4: "第 4 步操作前 · 共 4 步",
     whatTheAgentDid: "Agent 执行的操作",
     whatItClicked: "Agent 点击的目标",
@@ -31,12 +33,14 @@ const copy = {
   },
   en: {
     executionOverview: "Execution overview",
+    originalTask: "Original task",
     accept: "Fulfills the request",
     reject: "Does not fulfill the request",
     submit: "Submit assessment",
     explanationPrompt: /short explanation/i,
     finalState: "Final state",
     lastRecordedState: "Last recorded state",
+    beforeStep3: "Before step 3 of 4",
     beforeStep4: "Before step 4 of 4",
     whatTheAgentDid: "What the agent did",
     whatItClicked: "What it clicked",
@@ -132,14 +136,24 @@ for (const locale of ["zh", "en"] as const) {
       await expect(initialImage).toHaveAttribute("height", String(expectedFinal.height))
       const initialReference = await screenshotReference(initialImage)
       expect(initialReference).toEqual(expectedFinal)
-      await expect(
-        page.locator(".study-context-panel").getByText(run.task, { exact: true }),
-      ).toHaveText(run.task)
+      const taskStrip = page.locator(".study-task-strip")
+      const taskSummary = taskStrip.locator("summary")
+      await expect(taskStrip).toHaveCount(1)
+      await expect(taskSummary).toContainText(text.originalTask)
+      await expect(taskStrip.locator(".study-task-excerpt")).toHaveText(run.task)
+      await expect(taskStrip.locator(".study-task-text")).toHaveText(run.task)
+      await taskSummary.click()
+      await expect(taskStrip).toHaveAttribute("open", "")
+      await expect(taskStrip.locator(".study-task-text")).toHaveText(run.task)
+      await expect
+        .poll(() => taskStrip.evaluate((element) => element.scrollWidth - element.clientWidth))
+        .toBe(0)
+      await taskSummary.click()
+      await expect(taskStrip).not.toHaveAttribute("open", "")
       await capture(page, locale, viewport, "initial")
 
       const context = page.locator(".study-context")
       await expect(context).toHaveCSS("overflow", "visible")
-      await expect(page.locator(".study-context-scroll").first()).toHaveCSS("overflow-y", "auto")
 
       const items = page.locator(".execution-rail-list .execution-rail-item")
       const viewedStep = items.nth(3)
@@ -179,6 +193,57 @@ for (const locale of ["zh", "en"] as const) {
         ).toHaveCount(0)
       }
 
+      const review = page.locator(".study-page")
+      await items.nth(2).click()
+      await expect(page.getByText(text.beforeStep3)).toBeVisible()
+
+      if (studyCondition !== "baseline") {
+        const actions = page.locator('[data-choice-kind="actions"]')
+        const things = page.locator('[data-choice-kind="things"]')
+        const actionToggle = actions.locator("button[aria-expanded]")
+        const thingToggle = things.locator("button[aria-expanded]")
+        const initialActionCards = await actions.locator('[data-choice="alternative"]').count()
+        const initialThingCards = await things.locator('[data-choice="alternative"]').count()
+        await actionToggle.click()
+        await thingToggle.click()
+        await expect(actionToggle).toHaveAttribute("aria-expanded", "true")
+        await expect(thingToggle).toHaveAttribute("aria-expanded", "true")
+        expect(await actions.locator('[data-choice="alternative"]').count()).toBeGreaterThan(
+          initialActionCards,
+        )
+        expect(await things.locator('[data-choice="alternative"]').count()).toBeGreaterThan(
+          initialThingCards,
+        )
+        await capture(page, locale, viewport, "expanded")
+
+        await review.evaluate((element) => {
+          element.scrollTop = element.scrollHeight
+        })
+        await expect(things.locator('[data-choice="alternative"]').last()).toBeInViewport()
+        await expect(page.getByRole("button", { name: text.submit, exact: true })).toBeInViewport()
+        await expect
+          .poll(() =>
+            page.evaluate(
+              () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+            ),
+          )
+          .toBe(0)
+        await capture(page, locale, viewport, "expanded-last")
+      }
+
+      await review.evaluate((element) => {
+        element.scrollTop = element.scrollHeight
+      })
+      await viewedStep.click()
+      await expect(page.getByText(text.beforeStep4)).toBeVisible()
+      await expect(viewedStep).toBeFocused()
+      await expect.poll(() => review.evaluate((element) => element.scrollTop)).toBe(0)
+      if (studyCondition !== "baseline") {
+        await expect(
+          page.locator('.decision-choice-group button[aria-expanded="true"]'),
+        ).toHaveCount(0)
+      }
+
       await items.last().click()
       await expect(page.getByRole("heading", { name: text.finalState })).toBeVisible()
       await expect(page.locator(".browser-state-label")).toHaveText(text.lastRecordedState)
@@ -198,21 +263,31 @@ for (const locale of ["zh", "en"] as const) {
       await expect(page.getByRole("combobox")).toHaveCount(0)
 
       const rail = page.locator(".execution-rail-list")
-      const inspector = page.locator(".study-inspector-panel")
       const viewer = page.locator(".browser-viewport")
       await expect(rail).toHaveCSS("overflow-y", "auto")
-      await expect(inspector).toHaveCSS("overflow-y", "auto")
+      await expect(review).toHaveCSS("overflow-y", "auto")
+      await expect(review).toHaveCSS("scrollbar-gutter", "stable")
       await expect
         .poll(() => viewer.evaluate((element) => element.scrollHeight > element.clientHeight))
         .toBe(false)
-      // Tabbing to the inline count buttons may have scrolled the evidence panel.
-      await inspector.evaluate((element) => {
+      await expect
+        .poll(() => viewer.evaluate((element) => element.scrollWidth > element.clientWidth))
+        .toBe(false)
+      await expect
+        .poll(() =>
+          page
+            .locator(".page-screenshot")
+            .evaluate((element) => getComputedStyle(element).objectFit),
+        )
+        .toBe("contain")
+      // Tabbing to the inline count buttons may have scrolled the review column.
+      await review.evaluate((element) => {
         element.scrollTop = 0
       })
       await rail.evaluate((element) => {
         element.scrollTop = element.scrollHeight
       })
-      await expect.poll(() => inspector.evaluate((element) => element.scrollTop)).toBe(0)
+      await expect.poll(() => review.evaluate((element) => element.scrollTop)).toBe(0)
       await expect.poll(() => viewer.evaluate((element) => element.scrollTop)).toBe(0)
       await rail.evaluate((element) => {
         element.scrollTop = 0
@@ -245,9 +320,22 @@ for (const locale of ["zh", "en"] as const) {
       await expect(page.locator(".page-screenshot")).toHaveAttribute("src", runFrame.step4)
       await expect(explanation).toHaveValue(explanationText)
       await expect(page.locator("[data-marked]")).toHaveCount(0)
+      await expect
+        .poll(() => taskStrip.evaluate((element) => element.hasAttribute("open")))
+        .toBe(false)
+      if (studyCondition !== "baseline") {
+        await expect(
+          page.locator('.decision-choice-group button[aria-expanded="true"]'),
+        ).toHaveCount(0)
+      }
+      await review.evaluate((element) => {
+        element.scrollTop = 0
+      })
+      await expect.poll(() => review.evaluate((element) => element.scrollTop)).toBe(0)
       await capture(page, locale, viewport, "draft")
 
       const controls = {
+        task: await box(taskSummary),
         viewedStep: await box(viewedStep),
         final: await box(items.last()),
         accept: await box(page.getByRole("button", { name: text.accept, exact: true })),
@@ -258,8 +346,8 @@ for (const locale of ["zh", "en"] as const) {
       const panes = {
         context: await box(context),
         rail: await box(page.locator(".execution-rail")),
-        page: await box(page.locator(".study-page")),
-        inspector: await box(inspector),
+        review: await box(review),
+        browserFrame: await box(page.locator(".browser-frame")),
         response: await box(page.locator(".study-response")),
       }
       const actionOrder = await page
@@ -276,7 +364,7 @@ for (const locale of ["zh", "en"] as const) {
       await capture(page, locale, viewport, "submitted")
 
       await writeReport(locale, viewport, {
-        schemaVersion: "study-equivalence/1",
+        schemaVersion: "study-equivalence/2",
         condition: studyCondition,
         locale,
         viewport,
