@@ -35,6 +35,14 @@
   gap: var(--space-3);
 }
 
+.case-progress {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
+  white-space: nowrap;
+}
+
 .language-toggle {
   display: inline-flex;
   gap: var(--space-1);

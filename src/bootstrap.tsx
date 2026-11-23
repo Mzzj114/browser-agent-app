@@ -6,6 +6,10 @@ import type { StudyCondition } from "./domain/study-condition"
 import type { StudyRunIndex } from "./domain/study-run-schema"
 import { HTML_LANG, initialLocale, LocaleProvider, messagesFor } from "./i18n"
 import { RunPicker } from "./RunPicker"
+import { caseCodes } from "./study/case-codes.ts"
+import { parseStudyLink } from "./study/case-link.ts"
+import { submissionSinkConfig } from "./study/config.ts"
+import type { StudySession } from "./study/session.ts"
 
 type BootstrapNoticeProps = {
   readonly text: string
@@ -50,6 +54,20 @@ export async function mountStudyApp(
   document.documentElement.lang = HTML_LANG[locale]
   document.title = localizedMessages.appTitle
 
+  const renderError = (title: string, hint: string): void => {
+    root.render(
+      <StrictMode>
+        <BootstrapError title={title} hint={hint} />
+      </StrictMode>,
+    )
+  }
+
+  const link = parseStudyLink(new URL(window.location.href).searchParams, caseCodes)
+  if (link.kind === "invalid") {
+    renderError(messages.invalidLinkTitle, messages.invalidLinkHint)
+    return
+  }
+
   root.render(
     <StrictMode>
       <BootstrapLoading text={messages.loadingRuns} />
@@ -61,26 +79,64 @@ export async function mountStudyApp(
   try {
     index = await loadRunIndex(runsBaseUrl, condition)
   } catch {
-    root.render(
-      <StrictMode>
-        <BootstrapError title={messages.loadErrorTitle} hint={messages.loadErrorHint} />
-      </StrictMode>,
-    )
+    renderError(messages.loadErrorTitle, messages.loadErrorHint)
     return
   }
 
-  const runId = requestedRunId()
-  const summary = runId === null ? undefined : index.runs.find((run) => run.id === runId)
+  if (link.kind === "demo") {
+    const runId = requestedRunId()
+    const summary = runId === null ? undefined : index.runs.find((run) => run.id === runId)
 
-  if (runId === null || summary === undefined) {
+    if (runId === null || summary === undefined) {
+      root.render(
+        <StrictMode>
+          <LocaleProvider>
+            <RunPicker index={index} unknownRun={runId ?? undefined} />
+          </LocaleProvider>
+        </StrictMode>,
+      )
+      return
+    }
+
     root.render(
       <StrictMode>
-        <LocaleProvider>
-          <RunPicker index={index} unknownRun={runId ?? undefined} />
-        </LocaleProvider>
+        <BootstrapLoading text={messages.loadingStudy} />
       </StrictMode>,
     )
+
+    try {
+      const runs = await loadStudyRun(runsBaseUrl, index, summary.id)
+      root.render(
+        <StrictMode>
+          <App runs={runs} />
+        </StrictMode>,
+      )
+    } catch {
+      renderError(messages.loadErrorTitle, messages.loadErrorHint)
+    }
     return
+  }
+
+  const sinkConfig = submissionSinkConfig(import.meta.env)
+  if (sinkConfig === null) {
+    renderError(messages.studyConfigErrorTitle, messages.studyConfigErrorHint)
+    return
+  }
+
+  const summary = index.runs.find((run) => run.id === link.runId)
+  if (summary === undefined) {
+    renderError(messages.invalidLinkTitle, messages.invalidLinkHint)
+    return
+  }
+
+  const session: StudySession = {
+    participantCode: link.participantCode,
+    caseOrder: link.caseOrder,
+    caseCode: link.caseCode,
+    runId: link.runId,
+    condition,
+    fixtureRevision: index.fixtureRevision,
+    appVersion: __APP_VERSION__,
   }
 
   root.render(
@@ -93,14 +149,10 @@ export async function mountStudyApp(
     const runs = await loadStudyRun(runsBaseUrl, index, summary.id)
     root.render(
       <StrictMode>
-        <App runs={runs} />
+        <App runs={runs} study={session} />
       </StrictMode>,
     )
   } catch {
-    root.render(
-      <StrictMode>
-        <BootstrapError title={messages.loadErrorTitle} hint={messages.loadErrorHint} />
-      </StrictMode>,
-    )
+    renderError(messages.loadErrorTitle, messages.loadErrorHint)
   }
 }

@@ -22,9 +22,11 @@ import {
 } from "./domain/study-response"
 import type { StudyRun, StudyRuns } from "./domain/study-run-schema"
 import { LocaleProvider, useLocale } from "./i18n"
+import type { StudySession } from "./study/session"
 
 type AppProps = {
   readonly runs: StudyRuns
+  readonly study?: StudySession | null
 }
 
 type ViewedEpisode = {
@@ -39,15 +41,15 @@ function selectedEpisode(run: StudyRun, viewed: ViewedSelection): ViewedEpisode 
   return index < 0 || episode === undefined ? null : { index, episode }
 }
 
-export function App({ runs }: AppProps): React.JSX.Element {
+export function App({ runs, study }: AppProps): React.JSX.Element {
   return (
     <LocaleProvider>
-      <StudyWorkspace runs={runs} />
+      <StudyWorkspace runs={runs} study={study ?? null} />
     </LocaleProvider>
   )
 }
 
-function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
+function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
   const { locale, messages } = useLocale()
   const run = runs[locale]
   const episodeIds = run.episodes.map((episode) => episode.id)
@@ -105,6 +107,11 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
         <header className="product-header">
           <BrandMark />
           <div className="product-header-actions">
+            {study === null || study === undefined ? null : (
+              <span className="case-progress">
+                {messages.study.caseProgress(study.caseOrder, 3)}
+              </span>
+            )}
             <StatusBadge label={messages.stepCountBadge(run.episodes.length)} icon={<ListTree />} />
             <LanguageToggle />
           </div>

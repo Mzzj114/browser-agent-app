@@ -43,6 +43,11 @@ export type StudyMessages = {
   readonly loadingRuns: string
   readonly loadErrorTitle: string
   readonly loadErrorHint: string
+  readonly invalidLinkTitle: string
+  readonly invalidLinkHint: string
+  readonly studyConfigErrorTitle: string
+  readonly studyConfigErrorHint: string
+  readonly caseProgress: (order: number, total: number) => string
   readonly chooseRun: string
   readonly chooseRunHint: string
   readonly runListLabel: string
@@ -101,6 +106,11 @@ export const zhStudyMessages = {
   loadingRuns: "正在加载执行记录…",
   loadErrorTitle: "无法加载研究材料",
   loadErrorHint: "请刷新页面重试。如果问题持续出现，请联系研究人员。",
+  invalidLinkTitle: "链接无效",
+  invalidLinkHint: "请核对研究人员提供的链接，或向研究人员索取新的链接。",
+  studyConfigErrorTitle: "研究材料暂时不可用",
+  studyConfigErrorHint: "请告知研究人员，以便恢复数据收集。",
+  caseProgress: (order, total) => `案例 ${order} / ${total}`,
   chooseRun: "选择一个执行记录",
   chooseRunHint: "选择一条记录，查看执行过程并提交你的评估。",
   runListLabel: "执行记录列表",
@@ -161,6 +171,11 @@ export const enStudyMessages = {
   loadingRuns: "Loading recorded runs…",
   loadErrorTitle: "Unable to load the study materials",
   loadErrorHint: "Refresh the page to try again. If the problem continues, contact the researcher.",
+  invalidLinkTitle: "That link is not valid",
+  invalidLinkHint: "Check the link you were given, or ask the researcher for a new one.",
+  studyConfigErrorTitle: "The study is not available right now",
+  studyConfigErrorHint: "Please tell the researcher so the setup can be fixed.",
+  caseProgress: (order, total) => `Case ${order} of ${total}`,
   chooseRun: "Choose a recorded run",
   chooseRunHint: "Select a run to inspect its execution and submit your assessment.",
   runListLabel: "Recorded runs",

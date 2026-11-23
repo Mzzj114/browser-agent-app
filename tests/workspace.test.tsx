@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 import { App } from "../src/App"
 import { studyConditions } from "../src/domain/study-condition.ts"
+import type { StudySession } from "../src/study/session.ts"
 import { studyRuns } from "./fixtures/decision-runs.ts"
 
 function useEnglish(): void {
@@ -517,5 +518,35 @@ describe("decision evidence workspace", () => {
     expect(screen.getByRole("button", { name: "Submit assessment" })).toBeDisabled()
     expect(screen.queryByRole("combobox")).toBeNull()
     expect(document.querySelector("[data-marked]")).toBeNull()
+  })
+
+  it("shows the quiet case progress label in study mode", () => {
+    // Given a researcher-built study link for the second of three cases.
+    useEnglish()
+    const study: StudySession = {
+      participantCode: "P07",
+      caseOrder: 2,
+      caseCode: "C12",
+      runId: "F2_write_review_clean",
+      condition: "baseline",
+      fixtureRevision: "decision-replay/2",
+      appVersion: "0.1.0",
+    }
+
+    // When the workspace mounts in study mode.
+    render(<App runs={studyRuns("baseline")} study={study} />)
+
+    // Then a quiet progress label sits in the header without revealing more.
+    expect(screen.getByText("Case 2 of 3")).toBeVisible()
+    expect(screen.queryByText(/condition|family|catch/i)).toBeNull()
+  })
+
+  it("keeps the demo workspace free of study progress", () => {
+    // Given a demo workspace without study parameters.
+    useEnglish()
+    render(<App runs={studyRuns("baseline")} />)
+
+    // Then no case progress label is shown.
+    expect(screen.queryByText(/^Case \d of \d$/)).toBeNull()
   })
 })

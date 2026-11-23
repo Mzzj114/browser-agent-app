@@ -250,4 +250,15 @@ describe("study copy", () => {
       "此处显示最后一次记录操作后的页面。最终状态不是编号步骤。",
     )
   })
+
+  it("provides the researcher link, configuration, and case progress copy", () => {
+    for (const messages of [enStudyMessages, zhStudyMessages]) {
+      expect(messages.invalidLinkTitle).not.toBe("")
+      expect(messages.invalidLinkHint).not.toBe("")
+      expect(messages.studyConfigErrorTitle).not.toBe("")
+      expect(messages.studyConfigErrorHint).not.toBe("")
+      expect(messages.caseProgress(2, 3)).toContain("2")
+      expect(messages.caseProgress(2, 3)).toContain("3")
+    }
+  })
 })
