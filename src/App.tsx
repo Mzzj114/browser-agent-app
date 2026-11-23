@@ -8,6 +8,7 @@ import { ExecutionRail } from "./components/ui/execution-rail"
 import { LanguageToggle } from "./components/ui/language-toggle"
 import { StudyResponseForm } from "./components/ui/study-response-form"
 import { StudyTaskStrip } from "./components/ui/study-task-strip"
+import { SubmissionSuccessDialog } from "./components/ui/submission-success-dialog"
 import {
   initialViewedSelection,
   normalizeViewedSelection,
@@ -77,6 +78,7 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
     initialStudyResponse(),
   )
   const [uploadStatus, setUploadStatus] = useState<"synced" | "retrying" | "failed" | null>(null)
+  const [successDialogDismissed, setSuccessDialogDismissed] = useState(false)
   const viewedKey = activeViewed.kind === "final" ? "final" : activeViewed.episodeId
   const mainRef = useRef<HTMLElement>(null)
   const pageRef = useRef<HTMLElement>(null)
@@ -238,6 +240,13 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
           />
         </section>
       </div>
+      {study === null || response.status !== "submitted" || successDialogDismissed ? null : (
+        <SubmissionSuccessDialog
+          open
+          uploadStatus={uploadStatus}
+          onClose={() => setSuccessDialogDismissed(true)}
+        />
+      )}
       <DesktopOnlyMessage />
     </>
   )

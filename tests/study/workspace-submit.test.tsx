@@ -83,8 +83,17 @@ describe("study submission wiring", () => {
     })
     expect(readSubmissionQueue(window.localStorage)).toEqual([])
 
+    const dialog = await screen.findByRole("dialog", { name: "Response submitted" })
+    expect(
+      within(dialog).getByText("Case submitted. Please wait for the researcher."),
+    ).toBeVisible()
+    await within(dialog).findByText("Your response was sent to the study server.")
+
+    await user.click(within(dialog).getByRole("button", { name: "Done" }))
+
+    expect(screen.queryByRole("dialog")).toBeNull()
     expect(screen.getByText("Case submitted. Please wait for the researcher.")).toBeVisible()
-    expect(screen.getByText("Your response was sent to the study server.")).toBeVisible()
+    await screen.findByText("Your response was sent to the study server.")
     expect(
       screen.queryByText("Shown on this page only. Reloading clears your response."),
     ).toBeNull()
@@ -128,7 +137,9 @@ describe("study submission wiring", () => {
 
     await waitFor(() =>
       expect(
-        screen.getByText("Your response is saved on this device and will be sent automatically."),
+        within(screen.getByRole("dialog")).getByText(
+          "Your response is saved on this device and will be sent automatically.",
+        ),
       ).toBeVisible(),
     )
     expect(readSubmissionQueue(window.localStorage)).toHaveLength(1)
@@ -150,7 +161,9 @@ describe("study submission wiring", () => {
 
     await waitFor(() =>
       expect(
-        screen.getByText("Your response is saved on this device. Please tell the researcher."),
+        within(screen.getByRole("dialog")).getByText(
+          "Your response is saved on this device. Please tell the researcher.",
+        ),
       ).toBeVisible(),
     )
     expect(readSubmissionQueue(window.localStorage)[0]?.status).toBe("failed")
@@ -169,9 +182,35 @@ describe("study submission wiring", () => {
     await user.click(screen.getByRole("button", { name: "Submit assessment" }))
     await waitFor(() => expect(sent).toHaveLength(1))
 
+    await user.click(within(screen.getByRole("dialog")).getByRole("button", { name: "Done" }))
     await user.click(screen.getByRole("button", { name: "中文" }))
 
     expect(sent).toHaveLength(1)
+  })
+
+  it("opens the dialog immediately and updates it when delivery completes", async () => {
+    useEnglish()
+    const user = userEvent.setup()
+    const delivery = Promise.withResolvers<void>()
+    const sunk: SubmissionPayload[] = []
+    const sink: SubmissionSink = async (row) => {
+      sunk.push(row)
+      await delivery.promise
+    }
+
+    render(<App runs={studyRuns("baseline")} study={runtime(sink)} />)
+    await user.click(screen.getByRole("button", { name: "Fulfills the request" }))
+    await user.click(screen.getByRole("button", { name: "Submit assessment" }))
+
+    const dialog = await screen.findByRole("dialog", { name: "Response submitted" })
+    expect(within(dialog).queryByRole("status")).toBeNull()
+
+    await waitFor(() => expect(sunk).toHaveLength(1))
+    delivery.resolve()
+
+    await waitFor(() =>
+      expect(within(dialog).getByText("Your response was sent to the study server.")).toBeVisible(),
+    )
   })
 
   it("keeps demo submissions on the page only", async () => {
@@ -182,6 +221,7 @@ describe("study submission wiring", () => {
     await user.click(screen.getByRole("button", { name: "Does not fulfill the request" }))
     await user.click(screen.getByRole("button", { name: "Submit assessment" }))
 
+    expect(screen.queryByRole("dialog")).toBeNull()
     expect(screen.getByText("Response recorded on this page only.")).toBeVisible()
     expect(screen.queryByText("Case submitted. Please wait for the researcher.")).toBeNull()
     expect(readSubmissionQueue(window.localStorage)).toEqual([])
