@@ -197,7 +197,7 @@ describe("decision evidence workspace", () => {
     // And the action lives in the evidence panel rather than the compact browser metadata.
     const browser = screen.getByRole("region", { name: "Agent browser" })
     expect(within(browser).queryByText(episode.action)).toBeNull()
-    expect(within(panel).getByText(episode.action)).toBeVisible()
+    expect(panel.querySelector(".decision-inspector-action")).toHaveTextContent(episode.action)
     expect(within(browser).getByText("Recorded · not live")).toBeVisible()
   })
 
@@ -279,7 +279,7 @@ describe("decision evidence workspace", () => {
 
     // When another rail item selects episode five.
     await user.click(railButtons()[4] ?? document.body)
-    expect(within(railButtons()[4] ?? document.body).getByText("Viewed step 5")).toBeVisible()
+    expect(railButtons()[4]).toHaveTextContent("Viewed step 5")
     expect(screen.getByText("Before step 5 of 8")).toBeVisible()
     expect(document.querySelector(".page-screenshot")).toHaveAttribute(
       "src",

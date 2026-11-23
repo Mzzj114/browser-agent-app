@@ -116,6 +116,8 @@ describe("execution rail", () => {
       />,
     )
 
+    expect(screen.getByRole("navigation", { name: "Execution overview" })).toBeInTheDocument()
+    expect(screen.getByRole("heading", { name: "Steps" })).toBeVisible()
     const buttons = screen.getAllByRole("button")
     expect(buttons).toHaveLength(9)
     expect(buttons.at(-1)).toHaveTextContent("Final state")
@@ -146,7 +148,7 @@ describe("execution rail", () => {
       throw new Error("Expected nine rail buttons")
     }
 
-    expect(within(viewedButton).getByText("Viewed step 4")).toBeVisible()
+    expect(viewedButton).toHaveTextContent("Viewed step 4")
     expect(viewedButton).toHaveAttribute("aria-current", "step")
     expect(within(otherButton).queryByText("Viewed step 4")).toBeNull()
     expect(otherButton).not.toHaveAttribute("aria-current", "step")
@@ -215,8 +217,22 @@ describe("decision choice groups", () => {
 
     const actions = groupOf("actions")
     const things = groupOf("things")
-    expect(within(actions).getByRole("heading", { name: "What the agent did" })).toBeVisible()
-    expect(within(things).getByRole("heading", { name: "What it clicked" })).toBeVisible()
+    const actionsChosen = actions.querySelector('[data-choice="chosen"]')
+    const thingsChosen = things.querySelector('[data-choice="chosen"]')
+    if (!(actionsChosen instanceof HTMLElement) || !(thingsChosen instanceof HTMLElement)) {
+      throw new Error("Missing chosen cards")
+    }
+    expect(actionsChosen).toContainElement(
+      within(actions).getByRole("heading", { name: "What the agent did" }),
+    )
+    expect(thingsChosen).toContainElement(
+      within(things).getByRole("heading", { name: "What it clicked" }),
+    )
+    expect(within(actions).getByText("Selected")).toHaveClass("sr-only")
+    const pair = document.querySelector(".decision-choice-pair")
+    if (!(pair instanceof HTMLElement)) throw new Error("Missing choice pair")
+    expect(pair).toContainElement(actions)
+    expect(pair).toContainElement(things)
 
     expect(cardIds(actions)).toEqual(["CLICK", "BLOCKED", "SCROLL_DOWN"])
     expect(alternativeIds(actions)).toEqual(["BLOCKED", "SCROLL_DOWN"])
@@ -298,7 +314,7 @@ describe("decision choice groups", () => {
 
     expect(screen.getByText("0%")).toBeVisible()
     expect(screen.queryByText("Confidence unavailable")).toBeNull()
-    expect(screen.getByText("Agent-reported confidence")).toBeVisible()
+    expect(screen.getByText("Confidence")).toBeVisible()
   })
 
   it("distinguishes unavailable confidence from zero and omits it when not supplied", () => {
@@ -319,8 +335,41 @@ describe("decision choice groups", () => {
       choiceGroupElement("actions", "What the agent did", "Other actions offered", head),
     )
     expect(screen.queryByText("Confidence unavailable")).toBeNull()
-    expect(screen.queryByText("Agent-reported confidence")).toBeNull()
+    expect(screen.queryByText(enStudyMessages.confidenceLabel)).toBeNull()
     expect(screen.queryByText(/%/)).toBeNull()
+  })
+
+  it("strips a leading raw identifier from display labels without losing the candidate ID", () => {
+    const head = {
+      selectedId: "39",
+      previewIds: ["38", "40"],
+      offered: [
+        { id: "39", label: "[39] Open Classic Leather Wallet", context: null },
+        { id: "38", label: "[38] Open Slim Card Holder", context: null },
+        { id: "40", label: "[see note] this is ordinary bracketed prose", context: null },
+        { id: "41", label: "[41] Open Travel Wallet", context: null },
+      ],
+    }
+    renderEnglish(
+      choiceGroupElement("things", "What it clicked", "Other things it could click", head),
+    )
+
+    const things = groupOf("things")
+    const chosen = things.querySelector('[data-choice="chosen"]')
+    if (!(chosen instanceof HTMLElement)) throw new Error("Missing chosen card")
+    expect(chosen).toHaveAttribute("data-candidate-id", "39")
+    expect(chosen).toHaveTextContent("Open Classic Leather Wallet")
+    expect(chosen).not.toHaveTextContent("[39]")
+    const alternative = alternativeCards(things)[0]
+    if (!alternative) throw new Error("Missing preview alternative")
+    expect(alternative).toHaveAttribute("data-candidate-id", "38")
+    expect(alternative).toHaveTextContent("Open Slim Card Holder")
+    const prose = alternativeCards(things)[1]
+    if (!prose) throw new Error("Missing prose alternative")
+    expect(prose).toHaveTextContent("[see note] this is ordinary bracketed prose")
+
+    const toggle = within(things).getByRole("button", { name: "and 1 more thing" })
+    expect(toggle).not.toHaveAttribute("aria-controls")
   })
 
   it("keeps duplicate labels as distinct cards identified by the offered ID", () => {
@@ -456,6 +505,10 @@ describe("decision choice groups", () => {
     const run = projectRun(edgeRun("controls"), "probabilities", fixtureRevision)
     renderInspector(run, { kind: "episode", episodeId: "episode-03" })
 
+    const pair = document.querySelector(".decision-choice-pair")
+    if (!(pair instanceof HTMLElement)) throw new Error("Missing choice pair")
+    expect(pair.querySelectorAll('[data-choice="chosen"]')).toHaveLength(1)
+    expect(pair.querySelector(".decision-choice-group")).not.toBeNull()
     expect(groupOf("actions")).toBeVisible()
     expect(document.querySelector('[data-choice-kind="things"]')).toBeNull()
     expect(screen.queryByRole("heading", { name: "What it clicked" })).toBeNull()
@@ -479,7 +532,8 @@ describe("decision choice groups", () => {
     })
 
     expect(screen.getByRole("heading", { name: "Viewed step 3" })).toBeVisible()
-    expect(screen.getByText("Open Classic Leather Wallet product page")).toBeVisible()
+    const action = container.querySelector(".decision-inspector-action")
+    expect(action).toHaveTextContent("Open Classic Leather Wallet product page")
     expect(within(container).queryByRole("combobox")).toBeNull()
     expect(within(container).queryByRole("textbox")).toBeNull()
     const buttons = within(container).getAllByRole("button")

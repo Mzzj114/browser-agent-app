@@ -21,7 +21,7 @@ export function ExecutionRail({
 
   return (
     <nav className="execution-rail" aria-label={messages.study.executionOverview}>
-      <h2 className="execution-rail-heading">{messages.study.executionOverview}</h2>
+      <h2 className="execution-rail-heading">{messages.study.stepsHeading}</h2>
       <ol className="execution-rail-list">
         {episodes.map((episode) => {
           const isViewed = viewed.kind === "episode" && viewed.episodeId === episode.id

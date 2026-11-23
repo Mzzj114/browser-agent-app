@@ -70,8 +70,18 @@ function EpisodePanel({ episode, evidence }: EpisodePanelProps): React.JSX.Eleme
 
   return (
     <section className="decision-inspector">
-      <h2 className="decision-inspector-heading">{messages.study.viewedStep(episode.ordinal)}</h2>
-      <p className="decision-inspector-action">{episode.action}</p>
+      <div className="decision-inspector-step-line">
+        <h2
+          className="decision-inspector-heading"
+          aria-label={messages.study.viewedStep(episode.ordinal)}
+        >
+          {messages.study.stepLabel(episode.ordinal)}
+        </h2>
+        <span className="decision-inspector-separator" aria-hidden="true">
+          ·
+        </span>
+        <p className="decision-inspector-action">{episode.action}</p>
+      </div>
       {episode.outcome ? (
         <div className="decision-inspector-outcome">
           <h3>{messages.study.recordedOutcome}</h3>
@@ -109,24 +119,25 @@ export function DecisionInspector({ run, viewed }: DecisionInspectorProps): Reac
           episode={episode}
           evidence={
             <>
-              <DecisionChoiceGroup
-                key={`${episode.id}:actions`}
-                kind="actions"
-                heading={messages.study.whatTheAgentDid}
-                otherChoicesHeading={messages.study.otherActionsOffered}
-                head={episode.operationHead}
-              />
-              {episode.targetHead ? (
+              <div className="decision-choice-pair">
                 <DecisionChoiceGroup
-                  key={`${episode.id}:things`}
-                  kind="things"
-                  heading={targetHeading(episode.operation, messages)}
-                  otherChoicesHeading={messages.study.otherThingsOffered}
-                  head={episode.targetHead}
+                  key={`${episode.id}:actions`}
+                  kind="actions"
+                  heading={messages.study.whatTheAgentDid}
+                  otherChoicesHeading={messages.study.otherActionsOffered}
+                  head={episode.operationHead}
                 />
-              ) : (
-                <MissingTargetEvidence operation={episode.operation} />
-              )}
+                {episode.targetHead ? (
+                  <DecisionChoiceGroup
+                    key={`${episode.id}:things`}
+                    kind="things"
+                    heading={targetHeading(episode.operation, messages)}
+                    otherChoicesHeading={messages.study.otherThingsOffered}
+                    head={episode.targetHead}
+                  />
+                ) : null}
+              </div>
+              {episode.targetHead ? null : <MissingTargetEvidence operation={episode.operation} />}
             </>
           }
         />
@@ -141,26 +152,27 @@ export function DecisionInspector({ run, viewed }: DecisionInspectorProps): Reac
           episode={episode}
           evidence={
             <>
-              <DecisionChoiceGroup
-                key={`${episode.id}:actions`}
-                kind="actions"
-                heading={messages.study.whatTheAgentDid}
-                otherChoicesHeading={messages.study.otherActionsOffered}
-                head={episode.operationHead}
-                reportedConfidence={episode.operationHead.reportedConfidence}
-              />
-              {episode.targetHead ? (
+              <div className="decision-choice-pair">
                 <DecisionChoiceGroup
-                  key={`${episode.id}:things`}
-                  kind="things"
-                  heading={targetHeading(episode.operation, messages)}
-                  otherChoicesHeading={messages.study.otherThingsOffered}
-                  head={episode.targetHead}
-                  reportedConfidence={episode.targetHead.reportedConfidence}
+                  key={`${episode.id}:actions`}
+                  kind="actions"
+                  heading={messages.study.whatTheAgentDid}
+                  otherChoicesHeading={messages.study.otherActionsOffered}
+                  head={episode.operationHead}
+                  reportedConfidence={episode.operationHead.reportedConfidence}
                 />
-              ) : (
-                <MissingTargetEvidence operation={episode.operation} />
-              )}
+                {episode.targetHead ? (
+                  <DecisionChoiceGroup
+                    key={`${episode.id}:things`}
+                    kind="things"
+                    heading={targetHeading(episode.operation, messages)}
+                    otherChoicesHeading={messages.study.otherThingsOffered}
+                    head={episode.targetHead}
+                    reportedConfidence={episode.targetHead.reportedConfidence}
+                  />
+                ) : null}
+              </div>
+              {episode.targetHead ? null : <MissingTargetEvidence operation={episode.operation} />}
               <p className="decision-inspector-note">{messages.study.confidenceExplanation}</p>
             </>
           }

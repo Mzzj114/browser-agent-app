@@ -168,6 +168,7 @@ describe("study copy", () => {
   it("provides the complete bilingual study vocabulary", () => {
     for (const messages of [enStudyMessages, zhStudyMessages]) {
       expect(messages.executionOverview).not.toBe("")
+      expect(messages.stepsHeading).not.toBe("")
       expect(messages.viewedStep(4)).toContain("4")
       expect(messages.viewedStepTag).not.toBe("")
       expect(messages.stepLabel(4)).toContain("4")
@@ -206,13 +207,23 @@ describe("study copy", () => {
   })
 
   it("explains confidence as agent-reported rather than a correctness check", () => {
-    expect(enStudyMessages.confidenceLabel).toBe("Agent-reported confidence")
+    expect(enStudyMessages.confidenceLabel).toBe("Confidence")
+    expect(zhStudyMessages.confidenceLabel).toBe("置信度")
     expect(enStudyMessages.confidenceExplanation).toMatch(/agent reported/i)
     expect(enStudyMessages.confidenceExplanation).toMatch(/not a check/i)
     expect(enStudyMessages.confidenceExplanation).toMatch(/correct/i)
     expect(zhStudyMessages.confidenceExplanation).toMatch(/Agent/)
     expect(zhStudyMessages.confidenceExplanation).toMatch(/报告/)
     expect(zhStudyMessages.confidenceExplanation).toMatch(/不代表/)
+  })
+
+  it("uses the compact step and alternative vocabulary", () => {
+    expect(enStudyMessages.stepsHeading).toBe("Steps")
+    expect(zhStudyMessages.stepsHeading).toBe("步骤")
+    expect(enStudyMessages.otherActionsOffered).toBe("Other actions not taken")
+    expect(zhStudyMessages.otherActionsOffered).toBe("未采取的其他操作")
+    expect(enStudyMessages.otherThingsOffered).toBe("Other things it could click")
+    expect(zhStudyMessages.otherThingsOffered).toBe("其他可点击目标")
   })
 
   it("uses singular count copy for one remaining choice", () => {

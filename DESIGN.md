@@ -107,11 +107,11 @@ All spacing derives from 4px.
 
 ### Grid
 
-- App shell: one fixed header row, a bounded task context strip, a bounded three-pane workspace row, and a bounded response row, using `100dvh` and `100dvb`.
-- Study context strip: one full-width original-task panel in a compact 104px row. Long fixture text scrolls internally; the recorded-run provenance note stays visible.
-- Main workspace: `clamp(12rem, 16vw, 14rem) minmax(0, 1fr) clamp(19rem, 25vw, 22rem)` for the execution rail, recorded page, and inspector.
-- Response region: a separate 156px shell row with stable verdict/localization/explanation/submit columns and a compact notice group. Normal controls remain visible; validation and enlarged explanations scroll internally.
-- Browser metadata: two compact rows (roughly 62px total), merging title and read-only URL above state/capture/recorded-not-live context. Navigation lives only in the execution rail; the inspector has no replay header.
+- App shell: one fixed header row, a compact task context strip, a bounded two-column workspace row, and a bounded response row, using `100dvh` and `100dvb`.
+- Study context strip: one full-width original-task disclosure whose collapsed summary is a single clipped line. The expanded body scrolls internally when long; the recorded-run provenance note stays visible.
+- Main workspace: `clamp(10.5rem, 13vw, 12rem) minmax(0, 1fr)` for the quiet step rail and the single white screenshot-first review panel, separated by a small gap on a sunken background.
+- Response region: a separate 156px shell row with stable verdict, explanation, and submit columns and a compact notice group. Normal controls remain visible; validation and enlarged explanations scroll internally. There is no localization control.
+- Browser metadata: compact quieter rows merging title and read-only URL above state/capture/recorded-not-live context. Navigation lives only in the execution rail; the review panel has no replay header.
 - Home picker: the same fixed header above a bounded, two-column run list at 960px maximum width; one column below 800px. It is not part of the evidence workspace and has no score, condition, or trial-role metadata.
 - Supported viewport: 1280x720 minimum; designed at 1366x768 and 1440x900 in both locales.
 - Below the minimum width or height, replace the workspace with the approved desktop requirement message.
@@ -119,11 +119,11 @@ All spacing derives from 4px.
 
 ### Scroll Ownership
 
-- Product header, task context, rail heading, and response controls stay fixed.
+- Product header and response controls stay fixed; the compact task strip sits above the workspace.
 - Task text owns context overflow without scrolling away the recorded-run provenance note.
 - `.execution-rail-list` owns chronological action scrolling, including Final state as the last item; there is no fixed final-state footer.
 - `.browser-viewport` has no overflow in fit mode: the complete image is aspect-preserving and centered within both available dimensions. Only actual-size inspection owns two-axis image scrolling.
-- `.study-inspector-panel` owns viewed-step evidence scrolling, including long candidate lists.
+- `.study-page` is the single normal scroll container for the screenshot and all viewed-step evidence, including long candidate chip lists. Its browser frame loses the outer card treatment so the image and evidence read as one page.
 - `.study-response` owns response-form overflow when dense.
 - Every scroll region has `min-block-size: 0` and `min-inline-size: 0`; no region may create page-level shell overflow or cover another pane's controls.
 
@@ -135,44 +135,44 @@ The production entry composes these components. Legacy chat/transcript component
 
 #### ExecutionRail
 
-- Structure: navigation landmark with a chronological ordered list of native buttons, one per episode followed by Final state. Episode rows show step number, human-readable actual action, and separate viewed/marked labels. Final state uses the same item and selection styling, without an episode number or mark.
-- Variants: default, viewed, marked, viewed-and-marked.
-- States: hover, focus-visible, `aria-current="step"` for viewed, text label for marked.
-- Accessibility: viewing and marking are distinct textual states; the mark is never color-only. Final state is view-only and remains navigable after response submission.
-- Layout: `.execution-rail-list` owns vertical scrolling; the rail does not stretch the shell.
+- Structure: white navigation card with a visible **Steps** heading and a chronological ordered list of native buttons, one per episode followed by Final state. Episode rows show a compact step number and human-readable actual action. The viewed label remains in the DOM but is visually hidden; the row is identified by `aria-current="step"` and its selected styling.
+- Variants: default, viewed.
+- States: hover, focus-visible, `aria-current="step"` for the viewed item.
+- Accessibility: the navigation landmark keeps its stable accessible name, Final state is view-only, and every step, including Final state, remains navigable after response submission.
+- Layout: roughly `clamp(10.5rem, 13vw, 12rem)` wide; `.execution-rail-list` owns vertical scrolling and the rail does not stretch the shell.
 
-#### CandidateTable
+#### DecisionChoiceGroup
 
-- Structure: read-only table with caption, candidate/context headings, selected marker, and an optional probability column only in the probabilities condition.
-- Variants: unscored candidates, scored probabilities.
-- States: selected row; no sorting, filtering, coloring, bars, or click-to-act rows.
-- Accessibility: native table headings, row headers, and explicit “Selected” text; repeated labels stay distinct through contextual cells and stable IDs.
-- Layout: rows wrap and the inspector owns vertical scrolling; a 250-row illustrative test list must not widen the shell.
+- Structure: one chosen card with its small heading inside it (`What the agent did`, `What it clicked`, `Where it typed`, or `What it selected`), the bold chosen label, and an optional right-aligned confidence block. Up to three alternative chips follow under a small group label, then the dashed count/expand chip.
+- Variants: chosen action, chosen target, with or without confidence, collapsed, expanded.
+- States: static chosen evidence; link-free alternative chips; localized expand/collapse.
+- Accessibility: the section points at its heading with `aria-labelledby`; the selected copy remains screen-reader-only; the expansion button uses `aria-expanded` and retains focus when the extra chips join the same wrapping list.
+- Layout: chosen action and target groups sit side by side in `.decision-choice-pair`; alternative chips wrap inside `min-inline-size: 0` with `overflow-wrap: anywhere`. Confidence never appears on alternatives. A leading raw identifier such as `[39] ` is removed from display text only; `data-candidate-id` and the underlying label data stay intact.
 
 #### DecisionInspector
 
-- Structure: read-only final-state explanation, or viewed episode summary, factual outcome, entered text, and permitted candidate evidence. No navigation or marking controls.
+- Structure: read-only final-state explanation, or a step line (`Step N · actual action`), compact factual outcome/entered-text rows, and permitted choice evidence directly under the screenshot. It has no outer card of its own inside `.study-page`.
 - Variants: final state, baseline episode, candidates episode, probabilities episode, operation-only/no-target terminal.
 - States: final observation or viewed episode; independent of editable/submitted assessment state.
-- Accessibility: final state exposes no marking control; viewed and marked semantics remain separate; terminal DONE/BLOCKED and control operations show “No target required.”
-- Layout: inspector outer dimensions are condition-independent; long evidence scrolls inside `.study-inspector-panel`.
+- Accessibility: the heading keeps its stable `Viewed step N` accessible name; terminal DONE/BLOCKED and control operations show “No target required.” in one column without an empty second card.
+- Layout: the step heading and action share a wrapping line; action and target groups share `.decision-choice-pair`; the confidence note remains muted below the pair. Long evidence scrolls inside `.study-page`.
 
 #### StudyResponseForm
 
-- Structure: equal accept/reject choices, stable-ID localization select with Cannot determine, persistent 500-character explanation, explicit Submit, validation summary, consequence copy, and neutral on-screen status. The localization select is the only marking surface; it excludes Final state.
-- Variants: unanswered, tentative accept/reject, concrete marked step, Cannot determine, submitted.
+- Structure: equal accept/reject choices, persistent 500-character explanation, explicit Submit, validation summary, consequence copy, and neutral on-screen status.
+- Variants: unanswered, tentative accept, tentative reject, submitted.
 - States: editable, error-visible, submitted-locked.
 - Accessibility: native controls, visible focus, per-field `aria-invalid`/`aria-describedby`, polite status announcements, and no correctness feedback.
-- Layout: compact four-column response row with grouped notices, no empty status row, and bounded internal overflow; all controls remain keyboard reachable at 1280×720 with long Chinese text and evidence lists.
+- Layout: compact verdict/explanation/submit row with grouped notices, no empty status row, and bounded internal overflow; all controls remain keyboard reachable at 1280×720 with long Chinese text and evidence lists.
 
 #### BrowserFrame participant contract
 
-- Structure: a combined title/read-only-address row, a before/final-state/capture/recorded-not-live row, and a screenshot whose trigger toggles fit/actual size. The product header supplies step count; the inspector supplies the action label.
+- Structure: a combined title/read-only-address row, a before/final-state/capture/recorded-not-live row, and a screenshot whose trigger toggles fit/actual size. The product header supplies step count; the step evidence supplies the action label. Inside `.study-page` the frame drops its outer border, radius, and shadow so the image and evidence read as one page.
 - Variants: explicit final observation, viewed historical step, missing screenshot, fitted, actual size.
 - States: final, historical, missing evidence, zoomed.
 - Accessibility: read-only text is not presented as editable; alt text names the recorded page; the trigger names the current fit/actual-size action.
-- Layout: the complete image fits both available dimensions, preserving aspect ratio and centering unused space without cropping or scrolling. Native-pixel inspection enables two-axis scrolling; returning to fit shows all edges again. Images keep intrinsic dimensions and unfiltered opacity.
-- Failure: a real image error shows missing evidence while keeping URL/title and the inspector action. Moving to a healthy path recovers the image; the renderer never substitutes an after-state and labels it “before.”
+- Layout: the complete image fits both available dimensions inside a viewport-bounded region, preserving aspect ratio and centering unused space without cropping or scrolling. Native-pixel inspection enables two-axis scrolling; returning to fit shows all edges again. Images keep intrinsic dimensions and unfiltered opacity.
+- Failure: a real image error shows missing evidence while keeping URL/title and the step action. Moving to a healthy path recovers the image; the renderer never substitutes an after-state and labels it “before.”
 
 #### RunPicker
 
@@ -364,11 +364,12 @@ Structural borders and tonal shifts own normal hierarchy. Only the recorded brow
 
 ### Decision-Evidence Contract
 
-- The participant entry is one shared three-pane replay workspace selected from a neutral home picker. The checked-in condition at `src/study-condition.ts` determines whether offered candidates and recorded probabilities are projected; no URL, query, storage, or runtime selector changes it. `?run=<id>` selects a run only.
-- The recorded decision-model agent writes no final answer, so there is no agent-report panel. The original task is the only context strip; the final observation is the completion evidence.
+- The participant entry is one shared two-column replay workspace selected from a neutral home picker: a quiet step rail and a single screenshot-first review panel. The checked-in condition at `src/study-condition.ts` determines whether offered candidates and recorded probabilities are projected; no URL, query, storage, or runtime selector changes it. `?run=<id>` selects a run only.
+- The recorded decision-model agent writes no final answer, so there is no agent-report panel. The compact original-task disclosure is the only context strip; the final observation is the completion evidence.
 - Initial view is the explicit final observation. Episode selection shows the before-action screenshot. Final and terminal episode states remain semantically distinct even when the screenshot pixels match.
-- Viewed selection and the participant mark are independent. The rail shows separate “Viewed” and “Your mark” text. Cannot determine clears the mark without moving the replay.
-- Baseline has no candidate tables, placeholders, hidden score nodes, or technical disclosure. Experimental conditions add read-only, source-ordered candidate tables without score-based styling.
+- The rail identifies the viewed step with `aria-current="step"` and a highlighted row; its viewed text stays available to assistive technology without adding a redundant visible pill.
+- Baseline has no candidate cards, placeholders, hidden score nodes, or technical disclosure. Experimental conditions add read-only chosen cards and compact alternative chips in source order, with no score-based styling.
+- Chosen action and target cards sit side by side; confidence, when present in `probabilities`, appears only on chosen cards as a right-aligned percentage with a small caption. Numeric probabilities remain hidden.
 - Responses are on-screen only: no export, backend, telemetry, or judgment storage. Reload clears the response but leaves the fixed run and locale preference behavior unchanged.
 - `scripts/verify-study-builds.ts` verifies the emitted condition, fixture revision, run index, every run, every frame, and permitted assets. `scripts/compare-study-builds.ts` compares semantic core digests across all runs, unscored candidate order/selection, and six browser geometry reports within 1px.
 - Browser E2E runs against the production build and preview on port 4173. The committed runs are recorded decision-model trajectories; they are not LLM final answers and not evaluator ground truth.

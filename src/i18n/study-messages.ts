@@ -2,6 +2,7 @@ import type { ResponseError } from "../domain/study-response"
 
 export type StudyMessages = {
   readonly executionOverview: string
+  readonly stepsHeading: string
   readonly viewedStep: (ordinal: number) => string
   readonly viewedStepTag: string
   readonly stepLabel: (ordinal: number) => string
@@ -55,6 +56,7 @@ export type StudyMessages = {
 
 export const zhStudyMessages = {
   executionOverview: "执行概览",
+  stepsHeading: "步骤",
   viewedStep: (ordinal) => `正在查看第 ${ordinal} 步`,
   viewedStepTag: "正在查看",
   stepLabel: (ordinal) => `第 ${ordinal} 步`,
@@ -70,13 +72,13 @@ export const zhStudyMessages = {
   whatItClicked: "Agent 点击的目标",
   whereItTyped: "Agent 输入的位置",
   whatItSelected: "Agent 选择的目标",
-  otherActionsOffered: "其他可选操作",
-  otherThingsOffered: "其他可选目标",
+  otherActionsOffered: "未采取的其他操作",
+  otherThingsOffered: "其他可点击目标",
   moreActions: (count) => `还有 ${count} 个操作`,
   moreThings: (count) => `还有 ${count} 个目标`,
   fewerActions: "收起其他操作",
   fewerThings: "收起其他目标",
-  confidenceLabel: "Agent 报告的置信度",
+  confidenceLabel: "置信度",
   confidenceUnavailable: "未记录置信度",
   confidenceExplanation:
     "置信度是 Agent 对其选择给出的自我报告，不代表对该选择是否正确的外部核验。",
@@ -112,6 +114,7 @@ export const zhStudyMessages = {
 
 export const enStudyMessages = {
   executionOverview: "Execution overview",
+  stepsHeading: "Steps",
   viewedStep: (ordinal) => `Viewed step ${ordinal}`,
   viewedStepTag: "Viewed",
   stepLabel: (ordinal) => `Step ${ordinal}`,
@@ -128,13 +131,13 @@ export const enStudyMessages = {
   whatItClicked: "What it clicked",
   whereItTyped: "Where it typed",
   whatItSelected: "What it selected",
-  otherActionsOffered: "Other actions offered",
-  otherThingsOffered: "Other things offered",
+  otherActionsOffered: "Other actions not taken",
+  otherThingsOffered: "Other things it could click",
   moreActions: (count) => (count === 1 ? "and 1 more action" : `and ${count} more actions`),
   moreThings: (count) => (count === 1 ? "and 1 more thing" : `and ${count} more things`),
   fewerActions: "Show fewer actions",
   fewerThings: "Show fewer things",
-  confidenceLabel: "Agent-reported confidence",
+  confidenceLabel: "Confidence",
   confidenceUnavailable: "Confidence unavailable",
   confidenceExplanation:
     "Confidence is the value the agent reported for its choice. It is not a check that the choice was correct.",

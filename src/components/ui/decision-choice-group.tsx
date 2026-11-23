@@ -12,11 +12,18 @@ export type DecisionChoiceGroupProps = {
   readonly reportedConfidence?: number | null
 }
 
+const rawIdentifierPrefix = /^\[[A-Za-z0-9:_-]+\]\s+/
+
 function formatConfidence(value: number, locale: Locale): string {
   return new Intl.NumberFormat(locale === "zh" ? "zh-CN" : "en-US", {
     style: "percent",
     maximumFractionDigits: 0,
   }).format(value)
+}
+
+function displayLabel(label: string): string {
+  const stripped = label.replace(rawIdentifierPrefix, "").trim()
+  return stripped.length > 0 ? stripped : label
 }
 
 function AlternativeCard({ candidate }: { readonly candidate: Candidate }) {
@@ -26,7 +33,7 @@ function AlternativeCard({ candidate }: { readonly candidate: Candidate }) {
       data-choice="alternative"
       data-candidate-id={candidate.id}
     >
-      <span className="decision-choice-label">{candidate.label}</span>
+      <span className="decision-choice-label">{displayLabel(candidate.label)}</span>
       {candidate.context ? (
         <span className="decision-choice-context">{candidate.context}</span>
       ) : null}
@@ -45,7 +52,6 @@ export function DecisionChoiceGroup({
   const messages = useMessages()
   const [expanded, setExpanded] = useState(false)
   const headingId = useId()
-  const listId = useId()
 
   const chosen = head.offered.find((candidate) => candidate.id === head.selectedId)
   const previews = head.previewIds.flatMap((previewId) => {
@@ -67,19 +73,21 @@ export function DecisionChoiceGroup({
 
   return (
     <section className="decision-choice-group" data-choice-kind={kind} aria-labelledby={headingId}>
-      <h3 id={headingId} className="decision-choice-heading">
-        {heading}
-      </h3>
       <div
         className="decision-choice-card decision-choice-card-chosen"
         data-choice="chosen"
         data-candidate-id={chosen.id}
       >
-        <span className="decision-choice-line">
-          <span className="decision-choice-label">{chosen.label}</span>
-          <span className="decision-choice-selected">{messages.study.selected}</span>
-        </span>
-        {chosen.context ? <span className="decision-choice-context">{chosen.context}</span> : null}
+        <div className="decision-choice-chosen-main">
+          <h3 id={headingId} className="decision-choice-heading">
+            {heading}
+          </h3>
+          <span className="decision-choice-label">{displayLabel(chosen.label)}</span>
+          <span className="decision-choice-selected sr-only">{messages.study.selected}</span>
+          {chosen.context ? (
+            <span className="decision-choice-context">{chosen.context}</span>
+          ) : null}
+        </div>
         {reportedConfidence === undefined ? null : (
           <span className="decision-choice-confidence">
             <span className="decision-choice-confidence-label">
@@ -99,7 +107,7 @@ export function DecisionChoiceGroup({
       ) : null}
 
       {previews.length > 0 || remaining.length > 0 ? (
-        <ul className="decision-choice-alternatives" id={listId}>
+        <ul className="decision-choice-alternatives">
           {previews.map((candidate) => (
             <AlternativeCard key={candidate.id} candidate={candidate} />
           ))}
@@ -109,7 +117,6 @@ export function DecisionChoiceGroup({
                 type="button"
                 className="decision-choice-toggle"
                 aria-expanded={expanded}
-                aria-controls={listId}
                 onClick={() => setExpanded((open) => !open)}
               >
                 {expanded ? fewerLabel : moreLabel}

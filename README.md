@@ -6,27 +6,28 @@ An HCI research prototype for reviewing a recorded browser-agent run and judging
 
 ## Evidence contract
 
-- One shared two-column workspace: the chronological execution rail and a single review column that holds the screenshot followed by that step's evidence. The task strip sits above the workspace; the execution rail and the on-screen response form stay outside the review scroll area.
+- One shared two-column workspace: a quiet chronological step rail beside a single white review panel that holds the screenshot followed immediately by that step's evidence. The compact task strip sits above the workspace; the response form stays below it and outside the review scroll area.
 - The agent is decision-model driven and writes no final answer. The workspace therefore has no agent-reported result panel.
 - All conditions keep the same action labels, screenshots, rail order, task text, shared geometry, and replay behavior.
-- The original task is a native disclosure. Its collapsed summary shows a visually clipped excerpt of the exact recorded task; expanding it exposes the complete task text. A long task scrolls inside the strip and is never truncated in the DOM.
-- The review column is the only normal scroll container for the screenshot and evidence, with a stable scrollbar gutter. The screenshot region has a viewport-bounded height; fit mode never crops or scrolls inside the image well, and clicking the screenshot still opens scrollable native-pixel inspection.
-- The execution rail is the only replay navigation. **Final state** is its last item, in the same scrolling list and with the same selection styling as the steps. The initial view is the explicit final observation; it is not a numbered action.
-- Selecting an episode shows the page **before** that action. Selection resets the review column to the top without moving keyboard focus from the rail. A missing image is reported as missing evidence; the after-state is never substituted.
+- The original task is a native disclosure. Its collapsed summary is one visually clipped line of the exact recorded task; expanding it exposes the complete task text. A long task scrolls inside the strip and is never truncated in the DOM.
+- The review panel is the only normal scroll container for the screenshot and evidence, with a stable scrollbar gutter. The screenshot region is viewport-bounded; fit mode never crops or scrolls inside the image well, and clicking the screenshot still opens scrollable native-pixel inspection.
+- The execution rail is the only replay navigation. It has a visible **Steps** heading, compact rows, and a subtle highlighted current row. **Final state** is its last item, in the same scrolling list and with the same selection styling as the steps. The initial view is the explicit final observation; it is not a numbered action.
+- Selecting an episode shows the page **before** that action. Selection resets the review panel to the top without moving keyboard focus from the rail. A missing image is reported as missing evidence; the after-state is never substituted.
 - Screenshots keep their intrinsic dimensions and fit/actual-size zoom behavior in every condition.
-- Choice-bearing conditions show the chosen action and, when the step has one, the chosen page element. Up to three ranked alternatives appear under each chosen card; the remaining offered options stay behind a per-group expand/collapse button. Numeric probabilities are never displayed.
-- Confidence is the value the agent reported for the chosen operation and chosen target. It appears only on chosen cards in `probabilities`, separately from selection probability, and is not a check that the choice was correct.
+- Choice-bearing conditions show the chosen action and, when the step has one, the chosen page element as two side-by-side cards under the screenshot. Each card carries a small heading and the chosen label; up to three alternatives follow as compact chips, with the remaining offered options behind a per-group dashed count/expand chip. Numeric probabilities are never displayed.
+- Display labels drop a leading raw candidate identifier such as `[39] `; the stable `data-candidate-id` and underlying label data are preserved.
+- Confidence is the value the agent reported for the chosen operation and chosen target. It appears only on chosen cards in `probabilities`, right-aligned as a large percentage with a small **Confidence** caption, separately from selection probability, and is not a check that the choice was correct.
 - The response form has **Accept**, **Reject**, an optional explanation (500 characters) for either verdict, and **Submit**. Submission is on-screen only; reload clears the judgment, and there is no export, backend, telemetry, or response persistence.
 - Locale switching keeps the stable viewed episode, verdict, and participant-authored explanation. Interface copy, tasks, actions, and role context switch; literal page text and screenshots stay English.
 - The condition is inlined at build time from `VITE_STUDY_CONDITION` (default `baseline`); it cannot be selected from a URL, query string, or browser storage.
 
 ## Conditions
 
-| Condition       | Participant evidence                                                         |
-| --------------- | ---------------------------------------------------------------------------- |
-| `baseline`      | Task, steps, screenshots, and factual action/outcome details                 |
-| `candidates`    | Baseline plus chosen action/target cards and ranked unchosen alternatives    |
-| `probabilities` | The same cards and order plus agent-reported confidence on chosen cards only |
+| Condition       | Participant evidence                                                           |
+| --------------- | ------------------------------------------------------------------------------ |
+| `baseline`      | Task, steps, screenshots, and factual action/outcome details                   |
+| `candidates`    | Baseline plus side-by-side chosen cards and compact unchosen alternative chips |
+| `probabilities` | The same cards and order plus agent-reported confidence on chosen cards only   |
 
 Selection probabilities are the decision model's recorded outputs used to rank the alternatives. They stay in the scored fixtures but are never displayed and are not correctness estimates. Confidence is a separate agent-reported value on chosen cards; it is not a probability of being right.
 

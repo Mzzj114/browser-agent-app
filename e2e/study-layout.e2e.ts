@@ -220,6 +220,17 @@ for (const locale of ["zh", "en"] as const) {
       await expect(page.getByText(text.beforeStep3)).toBeVisible()
 
       if (studyCondition !== "baseline") {
+        const actionChosen = await box(
+          page.locator('[data-choice-kind="actions"] [data-choice="chosen"]'),
+        )
+        const thingChosen = await box(
+          page.locator('[data-choice-kind="things"] [data-choice="chosen"]'),
+        )
+        expect(Math.abs(actionChosen.y - thingChosen.y)).toBeLessThanOrEqual(1)
+        expect(actionChosen.x + actionChosen.width).toBeLessThanOrEqual(thingChosen.x + 1)
+      }
+
+      if (studyCondition !== "baseline") {
         const actions = page.locator('[data-choice-kind="actions"]')
         const things = page.locator('[data-choice-kind="things"]')
         const actionToggle = actions.locator("button[aria-expanded]")
@@ -408,3 +419,19 @@ for (const locale of ["zh", "en"] as const) {
     })
   }
 }
+
+test("keeps a single chosen card for a targetless step", async ({ page }) => {
+  test.skip(studyCondition === "baseline", "baseline has no choice cards")
+  await page.setViewportSize({ width: 1280, height: 720 })
+  await page.goto("/?lang=en&run=F2_write_detailed_review_clean")
+  await page.evaluate(() => document.fonts.ready)
+
+  const items = page.locator(".execution-rail-list .execution-rail-item")
+  await items.nth(2).click()
+  await expect(page.locator(".browser-state-label")).toContainText("Before step 3")
+  await expect(page.locator(".decision-choice-pair")).toHaveCount(1)
+  await expect(page.locator('.decision-choice-pair [data-choice="chosen"]')).toHaveCount(1)
+  await expect(page.locator('[data-choice-kind="actions"] [data-choice="chosen"]')).toHaveCount(1)
+  await expect(page.locator('[data-choice-kind="things"]')).toHaveCount(0)
+  await expect(page.getByText("No target required.")).toBeVisible()
+})
