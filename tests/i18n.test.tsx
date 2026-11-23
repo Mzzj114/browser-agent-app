@@ -148,6 +148,18 @@ describe("study copy", () => {
     }
   })
 
+  it("retires the table and probability-score copy", () => {
+    for (const messages of [enStudyMessages, zhStudyMessages]) {
+      expect("offeredOperations" in messages).toBe(false)
+      expect("offeredTargets" in messages).toBe(false)
+      expect("candidateColumn" in messages).toBe(false)
+      expect("contextColumn" in messages).toBe(false)
+      expect("probabilityColumn" in messages).toBe(false)
+      expect("conditionalScoreExplanation" in messages).toBe(false)
+      expect("roundingCaveat" in messages).toBe(false)
+    }
+  })
+
   it("exposes the study copy through the shared message contract", () => {
     expect(enMessages.study).toBe(enStudyMessages)
     expect(zhMessages.study).toBe(zhStudyMessages)
@@ -167,38 +179,50 @@ describe("study copy", () => {
       expect(messages.recordedOutcome).not.toBe("")
       expect(messages.enteredText).not.toBe("")
       expect(messages.enteredTextNote).not.toBe("")
-      expect(messages.offeredOperations).not.toBe("")
-      expect(messages.offeredTargets).not.toBe("")
-      expect(messages.candidateColumn).not.toBe("")
-      expect(messages.contextColumn).not.toBe("")
-      expect(messages.probabilityColumn).not.toBe("")
+      expect(messages.whatTheAgentDid).not.toBe("")
+      expect(messages.whatItClicked).not.toBe("")
+      expect(messages.whereItTyped).not.toBe("")
+      expect(messages.whatItSelected).not.toBe("")
+      expect(messages.otherActionsOffered).not.toBe("")
+      expect(messages.otherThingsOffered).not.toBe("")
+      expect(messages.moreActions(4)).not.toBe("")
+      expect(messages.moreThings(4)).not.toBe("")
+      expect(messages.fewerActions).not.toBe("")
+      expect(messages.fewerThings).not.toBe("")
+      expect(messages.confidenceLabel).not.toBe("")
+      expect(messages.confidenceUnavailable).not.toBe("")
+      expect(messages.confidenceExplanation).not.toBe("")
       expect(messages.selected).not.toBe("")
       expect(messages.noTargetRequired).not.toBe("")
       expect(messages.explanationHeading).not.toBe("")
       expect(messages.explanationOptional).not.toBe("")
       expect(messages.explanationOptionalHelper).not.toBe("")
       expect(messages.syntheticProvenance).not.toBe("")
-      expect(messages.conditionalScoreExplanation).not.toBe("")
-      expect(messages.roundingCaveat).not.toBe("")
       expect(messages.loadingStudy).not.toBe("")
       expect(messages.loadErrorTitle).not.toBe("")
       expect(messages.loadErrorHint).not.toBe("")
     }
   })
 
-  it("labels probability values as recorded model outputs rather than measurements", () => {
-    expect(enStudyMessages.conditionalScoreExplanation).toMatch(
-      /recorded decision-model outputs.*not synthetic examples.*correctness estimates/i,
-    )
-    expect(enStudyMessages.conditionalScoreExplanation).toMatch(
-      /within each operation or target list/i,
-    )
-    expect(enStudyMessages.conditionalScoreExplanation).toMatch(/not overall action scores/i)
-    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/决策模型记录的输出/)
-    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/并非合成示例/)
-    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/不代表正确性估计/)
-    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/同一操作或同一目标列表内部/)
-    expect(zhStudyMessages.conditionalScoreExplanation).toMatch(/不代表整体操作得分/)
+  it("explains confidence as agent-reported rather than a correctness check", () => {
+    expect(enStudyMessages.confidenceLabel).toBe("Agent-reported confidence")
+    expect(enStudyMessages.confidenceExplanation).toMatch(/agent reported/i)
+    expect(enStudyMessages.confidenceExplanation).toMatch(/not a check/i)
+    expect(enStudyMessages.confidenceExplanation).toMatch(/correct/i)
+    expect(zhStudyMessages.confidenceExplanation).toMatch(/Agent/)
+    expect(zhStudyMessages.confidenceExplanation).toMatch(/报告/)
+    expect(zhStudyMessages.confidenceExplanation).toMatch(/不代表/)
+  })
+
+  it("uses singular count copy for one remaining choice", () => {
+    expect(enStudyMessages.moreActions(1)).toBe("and 1 more action")
+    expect(enStudyMessages.moreThings(1)).toBe("and 1 more thing")
+    expect(enStudyMessages.moreActions(4)).toBe("and 4 more actions")
+    expect(enStudyMessages.moreThings(36)).toBe("and 36 more things")
+    expect(enStudyMessages.fewerActions).toBe("Show fewer actions")
+    expect(enStudyMessages.fewerThings).toBe("Show fewer things")
+    expect(zhStudyMessages.moreActions(4)).toContain("4")
+    expect(zhStudyMessages.moreThings(36)).toContain("36")
   })
 
   it("renders the approved before-step captions", () => {

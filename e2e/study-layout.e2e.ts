@@ -25,8 +25,8 @@ const copy = {
     finalState: "最终状态",
     lastRecordedState: "最后一次录制的状态",
     beforeStep4: "第 4 步操作前 · 共 4 步",
-    offeredOperations: "候选操作",
-    offeredTargets: "候选目标",
+    whatTheAgentDid: "Agent 执行的操作",
+    whatItClicked: "Agent 点击的目标",
     submitted: "评估仅记录在本页。",
   },
   en: {
@@ -38,8 +38,8 @@ const copy = {
     finalState: "Final state",
     lastRecordedState: "Last recorded state",
     beforeStep4: "Before step 4 of 4",
-    offeredOperations: "Offered operations",
-    offeredTargets: "Offered targets",
+    whatTheAgentDid: "What the agent did",
+    whatItClicked: "What it clicked",
     submitted: "Response recorded on this page only.",
   },
 } as const
@@ -153,14 +153,29 @@ for (const locale of ["zh", "en"] as const) {
       const episode04Reference = await screenshotReference(page.locator(".page-screenshot"))
 
       if (studyCondition === "baseline") {
-        await expect(page.getByRole("table")).toHaveCount(0)
+        await expect(page.locator(".decision-choice-group")).toHaveCount(0)
       } else {
-        await expect(page.getByRole("table", { name: text.offeredOperations })).toBeVisible()
-        await expect(page.getByRole("table", { name: text.offeredTargets })).toBeVisible()
-        await expect(page.getByRole("table").locator("tbody button")).toHaveCount(0)
-        await expect(page.getByRole("table").locator("tbody a")).toHaveCount(0)
+        await expect(page.locator(".decision-choice-group")).toHaveCount(2)
         await expect(
-          page.getByRole("table").locator("tbody input, tbody textarea, tbody select"),
+          page.locator('[data-choice-kind="actions"]').getByRole("heading", {
+            name: text.whatTheAgentDid,
+          }),
+        ).toBeVisible()
+        await expect(
+          page.locator('[data-choice-kind="things"]').getByRole("heading", {
+            name: text.whatItClicked,
+          }),
+        ).toBeVisible()
+        await expect(
+          page.locator('[data-choice-kind="actions"] [data-choice="alternative"]'),
+        ).toHaveCount(1)
+        await expect(
+          page.locator('[data-choice-kind="things"] [data-choice="alternative"]'),
+        ).toHaveCount(0)
+        await expect(
+          page.locator(
+            '[data-choice="alternative"] button, [data-choice="alternative"] a, [data-choice="alternative"] [tabindex]',
+          ),
         ).toHaveCount(0)
       }
 
@@ -190,6 +205,10 @@ for (const locale of ["zh", "en"] as const) {
       await expect
         .poll(() => viewer.evaluate((element) => element.scrollHeight > element.clientHeight))
         .toBe(false)
+      // Tabbing to the inline count buttons may have scrolled the evidence panel.
+      await inspector.evaluate((element) => {
+        element.scrollTop = 0
+      })
       await rail.evaluate((element) => {
         element.scrollTop = element.scrollHeight
       })

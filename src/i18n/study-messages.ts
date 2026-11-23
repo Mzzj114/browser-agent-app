@@ -12,17 +12,23 @@ export type StudyMessages = {
   readonly recordedOutcome: string
   readonly enteredText: string
   readonly enteredTextNote: string
-  readonly offeredOperations: string
-  readonly offeredTargets: string
-  readonly candidateColumn: string
-  readonly contextColumn: string
-  readonly probabilityColumn: string
+  readonly whatTheAgentDid: string
+  readonly whatItClicked: string
+  readonly whereItTyped: string
+  readonly whatItSelected: string
+  readonly otherActionsOffered: string
+  readonly otherThingsOffered: string
+  readonly moreActions: (count: number) => string
+  readonly moreThings: (count: number) => string
+  readonly fewerActions: string
+  readonly fewerThings: string
+  readonly confidenceLabel: string
+  readonly confidenceUnavailable: string
+  readonly confidenceExplanation: string
   readonly selected: string
   readonly noTargetRequired: string
   readonly missingTargetEvidence: string
   readonly syntheticProvenance: string
-  readonly conditionalScoreExplanation: string
-  readonly roundingCaveat: string
   readonly explanationHeading: string
   readonly explanationPlaceholder: string
   readonly explanationOptional: string
@@ -58,18 +64,24 @@ export const zhStudyMessages = {
   recordedOutcome: "记录的结果",
   enteredText: "已输入文本",
   enteredTextNote: "实际输入的文本，不参与评分。",
-  offeredOperations: "候选操作",
-  offeredTargets: "候选目标",
-  candidateColumn: "候选项",
-  contextColumn: "上下文",
-  probabilityColumn: "概率",
+  whatTheAgentDid: "Agent 执行的操作",
+  whatItClicked: "Agent 点击的目标",
+  whereItTyped: "Agent 输入的位置",
+  whatItSelected: "Agent 选择的目标",
+  otherActionsOffered: "其他可选操作",
+  otherThingsOffered: "其他可选目标",
+  moreActions: (count) => `还有 ${count} 个操作`,
+  moreThings: (count) => `还有 ${count} 个目标`,
+  fewerActions: "收起其他操作",
+  fewerThings: "收起其他目标",
+  confidenceLabel: "Agent 报告的置信度",
+  confidenceUnavailable: "未记录置信度",
+  confidenceExplanation:
+    "置信度是 Agent 对其选择给出的自我报告，不代表对该选择是否正确的外部核验。",
   selected: "已选择",
   noTargetRequired: "无需选择目标。",
   missingTargetEvidence: "此操作缺少目标证据。",
   syntheticProvenance: "记录的决策回放。截图来自 Agent 的英文语言会话，页面内容保持英文。",
-  conditionalScoreExplanation:
-    "概率数值为决策模型记录的输出，并非合成示例，也不代表正确性估计；概率仅适用于同一操作或同一目标列表内部，不代表整体操作得分。",
-  roundingCaveat: "百分比四舍五入保留一位小数，合计可能不等于 100%。",
   explanationHeading: "简短说明",
   explanationPlaceholder: "简要说明你核对过的证据或判断依据。",
   explanationOptional: "可选",
@@ -109,20 +121,25 @@ export const enStudyMessages = {
   recordedOutcome: "Recorded outcome",
   enteredText: "Entered text",
   enteredTextNote: "Actual input; not scored.",
-  offeredOperations: "Offered operations",
-  offeredTargets: "Offered targets",
-  candidateColumn: "Candidate",
-  contextColumn: "Context",
-  probabilityColumn: "Probability",
+  whatTheAgentDid: "What the agent did",
+  whatItClicked: "What it clicked",
+  whereItTyped: "Where it typed",
+  whatItSelected: "What it selected",
+  otherActionsOffered: "Other actions offered",
+  otherThingsOffered: "Other things offered",
+  moreActions: (count) => (count === 1 ? "and 1 more action" : `and ${count} more actions`),
+  moreThings: (count) => (count === 1 ? "and 1 more thing" : `and ${count} more things`),
+  fewerActions: "Show fewer actions",
+  fewerThings: "Show fewer things",
+  confidenceLabel: "Agent-reported confidence",
+  confidenceUnavailable: "Confidence unavailable",
+  confidenceExplanation:
+    "Confidence is the value the agent reported for its choice. It is not a check that the choice was correct.",
   selected: "Selected",
   noTargetRequired: "No target required.",
   missingTargetEvidence: "Target evidence is missing for this operation.",
   syntheticProvenance:
     "Recorded decision replay. Screenshots come from the agent's English-language session and remain in English.",
-  conditionalScoreExplanation:
-    "Probability values are recorded decision-model outputs, not synthetic examples or correctness estimates; they apply within each operation or target list only and are not overall action scores.",
-  roundingCaveat:
-    "Percentages are rounded to one decimal place and may not add up to exactly 100%.",
   explanationHeading: "Short explanation",
   explanationPlaceholder: "Briefly describe the evidence you checked.",
   explanationOptional: "Optional",

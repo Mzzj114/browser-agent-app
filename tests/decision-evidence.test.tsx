@@ -2,17 +2,41 @@ import { render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import type { ReactElement } from "react"
 import { describe, expect, it, vi } from "vitest"
-import { CandidateTable } from "../src/components/ui/candidate-table"
+import rawWalletEn from "../fixtures/agent-runs/F1_add_single_item_clean/run.en.json" with {
+  type: "json",
+}
+import rawWalletZh from "../fixtures/agent-runs/F1_add_single_item_clean/run.zh.json" with {
+  type: "json",
+}
+import { App } from "../src/App"
+import { DecisionChoiceGroup } from "../src/components/ui/decision-choice-group"
 import { DecisionInspector } from "../src/components/ui/decision-inspector"
 import { ExecutionRail } from "../src/components/ui/execution-rail"
 import type { ViewedSelection } from "../src/domain/decision-replay.ts"
+import { decisionRunSchema } from "../src/domain/decision-run-schema.ts"
 import { projectRun } from "../src/domain/project-run.ts"
-import { studyConditions } from "../src/domain/study-condition.ts"
+import { type StudyCondition, studyConditions } from "../src/domain/study-condition.ts"
 import type { StudyRun } from "../src/domain/study-run-schema.ts"
-import { LocaleProvider } from "../src/i18n"
+import { LOCALE_STORAGE_KEY, LocaleProvider } from "../src/i18n"
+import { enStudyMessages } from "../src/i18n/study-messages"
 import { edgeRun, studyRuns } from "./fixtures/decision-runs.ts"
 
 const fixtureRevision = "0".repeat(64)
+const walletFixtures = {
+  en: decisionRunSchema.parse(rawWalletEn),
+  zh: decisionRunSchema.parse(rawWalletZh),
+}
+
+function walletRun(condition: StudyCondition): StudyRun {
+  return projectRun(walletFixtures.en, condition, fixtureRevision)
+}
+
+function walletRuns(condition: StudyCondition) {
+  return {
+    en: projectRun(walletFixtures.en, condition, fixtureRevision),
+    zh: projectRun(walletFixtures.zh, condition, fixtureRevision),
+  }
+}
 
 function renderEnglish(element: ReactElement) {
   return render(
@@ -26,94 +50,59 @@ function renderInspector(run: StudyRun, viewed: ViewedSelection) {
   return renderEnglish(<DecisionInspector run={run} viewed={viewed} />)
 }
 
-function rowIds(table: HTMLElement): readonly (string | null)[] {
-  return Array.from(table.querySelectorAll("tbody tr")).map((row) =>
-    row.getAttribute("data-candidate-id"),
+function groupOf(kind: "actions" | "things"): HTMLElement {
+  const group = document.querySelector<HTMLElement>(`[data-choice-kind="${kind}"]`)
+  if (!group) throw new Error(`Missing ${kind} choice group`)
+  return group
+}
+
+function cardIds(root: ParentNode): readonly (string | null)[] {
+  return Array.from(root.querySelectorAll("[data-candidate-id]")).map((card) =>
+    card.getAttribute("data-candidate-id"),
   )
 }
 
-function allRowIds(): readonly (readonly (string | null)[])[] {
-  return screen.getAllByRole("table").map((table) => rowIds(table))
+function alternativeCards(root: ParentNode): readonly HTMLElement[] {
+  return Array.from(root.querySelectorAll<HTMLElement>('[data-choice="alternative"]'))
 }
 
-describe("candidate tables", () => {
-  it("keeps same-label targets distinct without adding scores", () => {
-    const head = {
-      selectedId: "CLICK:shipping",
-      offered: [
-        { id: "CLICK:billing", label: "Edit", context: "Billing address" },
-        { id: "CLICK:shipping", label: "Edit", context: "Shipping address" },
-      ],
-    }
-    renderEnglish(<CandidateTable mode="candidates" head={head} caption="Click targets" />)
+function alternativeIds(root: ParentNode): readonly (string | null)[] {
+  return alternativeCards(root).map((card) => card.getAttribute("data-candidate-id"))
+}
 
-    expect(screen.getAllByText("Edit")).toHaveLength(2)
-    expect(screen.getByText("Shipping address")).toBeVisible()
-    expect(screen.getByText("Billing address")).toBeVisible()
-    expect(screen.queryByRole("columnheader", { name: "Probability" })).toBeNull()
-    expect(rowIds(screen.getByRole("table", { name: "Click targets" }))).toEqual([
-      "CLICK:billing",
-      "CLICK:shipping",
-    ])
-  })
+function toggleButton(root: ParentNode): HTMLElement | null {
+  return root.querySelector<HTMLElement>("button[aria-expanded]")
+}
 
-  it("renders read-only rows with a selected marker", () => {
-    const head = {
-      selectedId: "CLICK:shipping",
-      offered: [
-        { id: "CLICK:billing", label: "Edit", context: "Billing address" },
-        { id: "CLICK:shipping", label: "Edit", context: "Shipping address" },
-      ],
-    }
-    renderEnglish(<CandidateTable mode="candidates" head={head} caption="Click targets" />)
-
-    const table = screen.getByRole("table", { name: "Click targets" })
-    expect(within(table).queryAllByRole("button")).toHaveLength(0)
-    expect(within(table).queryAllByRole("link")).toHaveLength(0)
-    expect(within(table).queryAllByRole("textbox")).toHaveLength(0)
-    expect(within(table).getByText("Selected")).toBeVisible()
-    expect(
-      table.querySelector('tbody tr[data-selected="true"]')?.getAttribute("data-candidate-id"),
-    ).toBe("CLICK:shipping")
-  })
-
-  it("adds one-decimal percentages only in the scored variant", () => {
-    const head = {
-      selectedId: "CLICK:shipping",
-      offered: [
-        { id: "CLICK:billing", label: "Edit", context: "Billing address", probability: 0.25 },
-        { id: "CLICK:shipping", label: "Edit", context: "Shipping address", probability: 0.75 },
-      ],
-    }
-    renderEnglish(<CandidateTable mode="probabilities" head={head} caption="Click targets" />)
-
-    const table = screen.getByRole("table", { name: "Click targets" })
-    expect(within(table).getByRole("columnheader", { name: "Probability" })).toBeVisible()
-    expect(within(table).getByText("25.0%")).toBeVisible()
-    expect(within(table).getByText("75.0%")).toBeVisible()
-    expect(rowIds(table)).toEqual(["CLICK:billing", "CLICK:shipping"])
-    expect(table.querySelector("[style]")).toBeNull()
-  })
-
-  it("formats percentages with the active locale", () => {
-    render(
-      <LocaleProvider initialLocale="zh" syncDocument={false}>
-        <CandidateTable
-          mode="probabilities"
-          head={{
-            selectedId: "target-one",
-            offered: [{ id: "target-one", label: "目标一", context: null, probability: 0.5 }],
-          }}
-          caption="候选目标"
-        />
-      </LocaleProvider>,
+function remainingOfferedIds(head: {
+  readonly offered: readonly { readonly id: string }[]
+  readonly selectedId: string
+  readonly previewIds: readonly string[]
+}): readonly string[] {
+  return head.offered
+    .filter(
+      (candidate) => candidate.id !== head.selectedId && !head.previewIds.includes(candidate.id),
     )
+    .map((candidate) => candidate.id)
+}
 
-    const table = screen.getByRole("table", { name: "候选目标" })
-    expect(within(table).getByRole("columnheader", { name: "概率" })).toBeVisible()
-    expect(within(table).getByText("50.0%")).toBeVisible()
-  })
-})
+function choiceGroupElement(
+  kind: "actions" | "things",
+  heading: string,
+  otherChoicesHeading: string,
+  head: Parameters<typeof DecisionChoiceGroup>[0]["head"],
+  reportedConfidence?: number | null,
+) {
+  return (
+    <DecisionChoiceGroup
+      kind={kind}
+      heading={heading}
+      otherChoicesHeading={otherChoicesHeading}
+      head={head}
+      {...(reportedConfidence === undefined ? {} : { reportedConfidence })}
+    />
+  )
+}
 
 describe("execution rail", () => {
   it.each(studyConditions)("shows the same chronological action labels for %s", (condition) => {
@@ -219,126 +208,355 @@ describe("execution rail", () => {
   })
 })
 
-describe("decision inspector", () => {
-  it("keeps baseline free of candidate evidence", () => {
-    const run = studyRuns("baseline").en
-    const { container } = renderInspector(run, { kind: "episode", episodeId: "episode-04" })
+describe("decision choice groups", () => {
+  it("shows the wallet choices and agent-reported confidence in probabilities", () => {
+    const run = walletRun("probabilities")
+    renderInspector(run, { kind: "episode", episodeId: "episode-03" })
 
-    expect(screen.getByText("Opened “Cloud Walk Red Sneakers”")).toBeVisible()
-    expect(screen.getByText("Viewed step 4")).toBeVisible()
-    expect(screen.queryByRole("table")).toBeNull()
-    expect(screen.queryByText("Offered operations")).toBeNull()
-    expect(screen.queryByText("Offered targets")).toBeNull()
-    expect(screen.queryByText("Probability")).toBeNull()
-    expect(screen.queryByText("No target required.")).toBeNull()
-    expect(container.querySelector("[data-candidate-id]")).toBeNull()
-    expect(container.querySelector("[title]")).toBeNull()
-    expect(container.querySelector("[aria-label]")).toBeNull()
-    expect(container.querySelector("[aria-labelledby]")).toBeNull()
-    expect(container.querySelector("[hidden]")).toBeNull()
-    expect(container.innerHTML).not.toMatch(/candidate|probability/i)
-    expect(within(container).queryByRole("button")).toBeNull()
-    expect(within(container).queryByRole("combobox")).toBeNull()
-    expect(within(container).queryByRole("textbox")).toBeNull()
+    const actions = groupOf("actions")
+    const things = groupOf("things")
+    expect(within(actions).getByRole("heading", { name: "What the agent did" })).toBeVisible()
+    expect(within(things).getByRole("heading", { name: "What it clicked" })).toBeVisible()
+
+    expect(cardIds(actions)).toEqual(["CLICK", "BLOCKED", "SCROLL_DOWN"])
+    expect(alternativeIds(actions)).toEqual(["BLOCKED", "SCROLL_DOWN"])
+    expect(cardIds(things)).toEqual(["39", "38"])
+    expect(alternativeIds(things)).toEqual(["38"])
+
+    expect(within(actions).getByText("96%")).toBeVisible()
+    expect(within(things).getByText("50%")).toBeVisible()
+    expect(screen.queryByText("97%")).toBeNull()
+    expect(screen.queryByText("51%")).toBeNull()
+    expect(screen.queryByText("97.0%")).toBeNull()
+    expect(screen.queryByText("51.0%")).toBeNull()
+
+    for (const card of alternativeCards(document.body)) {
+      expect(card.textContent).not.toMatch(/%/)
+    }
+    expect(screen.getAllByText(enStudyMessages.confidenceExplanation)).toHaveLength(1)
   })
 
-  it.each(studyConditions)("shows the same action and outcome in %s", (condition) => {
-    const run = projectRun(edgeRun("operation-error"), condition, fixtureRevision)
+  it("shows the same preview cards without confidence or scores in candidates", () => {
+    const candidates = renderInspector(walletRun("candidates"), {
+      kind: "episode",
+      episodeId: "episode-03",
+    })
+    const candidateCards = {
+      actions: alternativeIds(groupOf("actions")),
+      things: alternativeIds(groupOf("things")),
+    }
+    const candidateLabels = {
+      actions: alternativeCards(groupOf("actions")).map((card) => card.textContent),
+      things: alternativeCards(groupOf("things")).map((card) => card.textContent),
+    }
+    expect(screen.getByText("Click")).toBeVisible()
+    expect(screen.queryByText(/%/)).toBeNull()
+    expect(screen.queryByText(enStudyMessages.confidenceLabel)).toBeNull()
+    expect(screen.queryByText(enStudyMessages.confidenceExplanation)).toBeNull()
+    candidates.unmount()
+
+    renderInspector(walletRun("probabilities"), { kind: "episode", episodeId: "episode-03" })
+    expect({
+      actions: alternativeIds(groupOf("actions")),
+      things: alternativeIds(groupOf("things")),
+    }).toEqual(candidateCards)
+    expect({
+      actions: alternativeCards(groupOf("actions")).map((card) => card.textContent),
+      things: alternativeCards(groupOf("things")).map((card) => card.textContent),
+    }).toEqual(candidateLabels)
+  })
+
+  it("adds no choice group to baseline", () => {
+    const { container } = renderInspector(walletRun("baseline"), {
+      kind: "episode",
+      episodeId: "episode-03",
+    })
+
+    expect(screen.getByText("Open Classic Leather Wallet product page")).toBeVisible()
+    expect(container.querySelector("[data-choice-kind]")).toBeNull()
+    expect(container.querySelector("[data-candidate-id]")).toBeNull()
+    expect(container.querySelector("button[aria-expanded]")).toBeNull()
+    expect(container.textContent).not.toMatch(/%/)
+    expect(container.textContent).not.toMatch(/confidence/i)
+    expect(within(container).queryAllByRole("button")).toHaveLength(0)
+  })
+
+  it("rounds confidence to a whole percentage and renders zero as zero", () => {
+    renderEnglish(
+      choiceGroupElement(
+        "actions",
+        "What the agent did",
+        "Other actions offered",
+        {
+          selectedId: "CLICK",
+          previewIds: [],
+          offered: [{ id: "CLICK", label: "Click", context: null }],
+        },
+        0,
+      ),
+    )
+
+    expect(screen.getByText("0%")).toBeVisible()
+    expect(screen.queryByText("Confidence unavailable")).toBeNull()
+    expect(screen.getByText("Agent-reported confidence")).toBeVisible()
+  })
+
+  it("distinguishes unavailable confidence from zero and omits it when not supplied", () => {
+    const head = {
+      selectedId: "CLICK",
+      previewIds: [],
+      offered: [{ id: "CLICK", label: "Click", context: null }],
+    }
+    const unavailable = renderEnglish(
+      choiceGroupElement("actions", "What the agent did", "Other actions offered", head, null),
+    )
+
+    expect(screen.getByText("Confidence unavailable")).toBeVisible()
+    expect(screen.queryByText("0%")).toBeNull()
+    unavailable.unmount()
+
+    renderEnglish(
+      choiceGroupElement("actions", "What the agent did", "Other actions offered", head),
+    )
+    expect(screen.queryByText("Confidence unavailable")).toBeNull()
+    expect(screen.queryByText("Agent-reported confidence")).toBeNull()
+    expect(screen.queryByText(/%/)).toBeNull()
+  })
+
+  it("keeps duplicate labels as distinct cards identified by the offered ID", () => {
+    const head = {
+      selectedId: "CLICK:billing",
+      previewIds: ["CLICK:shipping", "CLICK:profile"],
+      offered: [
+        { id: "CLICK:billing", label: "Edit", context: "Billing address" },
+        { id: "CLICK:shipping", label: "Edit", context: "Shipping address" },
+        { id: "CLICK:profile", label: "Edit", context: "Profile address" },
+      ],
+    }
+    renderEnglish(choiceGroupElement("things", "What it clicked", "Other things offered", head))
+
+    const group = groupOf("things")
+    expect(within(group).getAllByText("Edit")).toHaveLength(3)
+    expect(cardIds(group)).toEqual(["CLICK:billing", "CLICK:shipping", "CLICK:profile"])
+    expect(within(group).getByText("Shipping address")).toBeVisible()
+    expect(within(group).getByText("Profile address")).toBeVisible()
+    for (const card of alternativeCards(group)) {
+      expect(card.querySelector("button, a, [tabindex]")).toBeNull()
+    }
+  })
+
+  it("keeps repeated target labels as separate projected cards", () => {
+    const run = projectRun(edgeRun("repeated-targets"), "candidates", fixtureRevision)
     renderInspector(run, { kind: "episode", episodeId: "episode-04" })
 
-    expect(screen.getByText("Attempted to open “Cloud Walk Red Sneakers”")).toBeVisible()
-    expect(
-      screen.getByText("The product click did not navigate to the product page."),
-    ).toBeVisible()
-  })
-
-  it("shows ordered operation and target tables without scores in candidates", () => {
-    const run = studyRuns("candidates").en
-    const { container } = renderInspector(run, { kind: "episode", episodeId: "episode-04" })
-
-    const tables = screen.getAllByRole("table")
-    expect(tables).toHaveLength(2)
-
-    const operationTable = screen.getByRole("table", { name: "Offered operations" })
-    const targetTable = screen.getByRole("table", { name: "Offered targets" })
-    expect(rowIds(operationTable)).toEqual(["CLICK", "TYPE_TEXT", "SELECT", "DONE"])
-    expect(rowIds(targetTable)).toEqual([
-      "target-breeze",
+    const things = groupOf("things")
+    expect(cardIds(things)).toEqual([
       "target-cloud-walk",
-      "target-blaze",
-      "target-retro",
+      "target-cloud-walk-copy",
+      "target-breeze",
     ])
-    expect(
-      operationTable
-        .querySelector('tbody tr[data-selected="true"]')
-        ?.getAttribute("data-candidate-id"),
-    ).toBe("CLICK")
-    expect(
-      targetTable
-        .querySelector('tbody tr[data-selected="true"]')
-        ?.getAttribute("data-candidate-id"),
-    ).toBe("target-cloud-walk")
-    expect(within(operationTable).queryByRole("columnheader", { name: "Probability" })).toBeNull()
-    expect(within(targetTable).queryByRole("columnheader", { name: "Probability" })).toBeNull()
-    expect(container.querySelector("[style]")).toBeNull()
+    expect(within(things).getAllByText("Cloud Walk Red Sneakers")).toHaveLength(2)
+    expect(within(things).getByText("Result card 2")).toBeVisible()
+    expect(within(things).getByText("Result card 3")).toBeVisible()
   })
 
-  it("keeps candidate and probability rows in the same authored order", () => {
-    const candidatesView = renderInspector(studyRuns("candidates").en, {
-      kind: "episode",
-      episodeId: "episode-04",
-    })
-    const candidateRows = allRowIds()
-    candidatesView.unmount()
+  it("puts each count button immediately after its previews and expands only that group", async () => {
+    const user = userEvent.setup()
+    const run = walletRun("probabilities")
+    renderInspector(run, { kind: "episode", episodeId: "episode-03" })
 
-    renderInspector(studyRuns("probabilities").en, {
-      kind: "episode",
-      episodeId: "episode-04",
-    })
-    expect(allRowIds()).toEqual(candidateRows)
+    const actions = groupOf("actions")
+    const things = groupOf("things")
+    const actionToggle = within(actions).getByRole("button", { name: "and 4 more actions" })
+    const thingToggle = within(things).getByRole("button", { name: "and 36 more things" })
 
-    const operationTable = screen.getByRole("table", { name: "Offered operations" })
-    const targetTable = screen.getByRole("table", { name: "Offered targets" })
-    expect(within(operationTable).getByText("68.0%")).toBeVisible()
-    expect(within(targetTable).getByText("55.0%")).toBeVisible()
-    expect(within(operationTable).getByText("14.0%")).toBeVisible()
-    expect(within(targetTable).getByText("27.0%")).toBeVisible()
-    expect(
-      screen.getByText(
-        "Probability values are recorded decision-model outputs, not synthetic examples or correctness estimates; they apply within each operation or target list only and are not overall action scores.",
-      ),
-    ).toBeVisible()
-    expect(
-      screen.getByText(
-        "Percentages are rounded to one decimal place and may not add up to exactly 100%.",
-      ),
-    ).toBeVisible()
+    for (const [group, toggle, previews] of [
+      [actions, actionToggle, ["BLOCKED", "SCROLL_DOWN"]],
+      [things, thingToggle, ["38"]],
+    ] as const) {
+      const list = group.querySelector("ul")
+      if (!list) throw new Error("Missing alternative list")
+      const previewItems = Array.from(list.querySelectorAll("li[data-candidate-id]"))
+      expect(previewItems.map((item) => item.getAttribute("data-candidate-id"))).toEqual([
+        ...previews,
+      ])
+      const toggleItem = toggle.closest("li")
+      expect(toggleItem?.previousElementSibling).toBe(previewItems.at(-1))
+      expect(list.children[previews.length]).toBe(toggleItem)
+    }
+
+    actionToggle.focus()
+    await user.keyboard("{Enter}")
+
+    expect(actionToggle).toHaveAttribute("aria-expanded", "true")
+    expect(document.activeElement).toBe(actionToggle)
+    expect(alternativeCards(actions)).toHaveLength(6)
+    expect(alternativeIds(actions)).toEqual([
+      "BLOCKED",
+      "SCROLL_DOWN",
+      "TYPE_TEXT",
+      "SELECT",
+      "WAIT",
+      "DONE",
+    ])
+    expect(thingToggle).toHaveAttribute("aria-expanded", "false")
+    expect(alternativeCards(things)).toHaveLength(1)
+
+    await user.keyboard("{Enter}")
+    expect(actionToggle).toHaveAttribute("aria-expanded", "false")
+    expect(document.activeElement).toBe(actionToggle)
+    expect(alternativeCards(actions)).toHaveLength(2)
   })
 
-  it.each(["candidates", "probabilities"] as const)(
-    "shows no target table for a terminal episode in %s",
-    (condition) => {
-      const run = studyRuns(condition).en
-      renderInspector(run, { kind: "episode", episodeId: "episode-08" })
+  it("expands all 36 remaining target choices in offered order", async () => {
+    const user = userEvent.setup()
+    const run = walletRun("probabilities")
+    if (run.condition === "baseline") throw new Error("Expected experimental run")
+    const episode = run.episodes.find((item) => item.id === "episode-03")
+    if (!episode?.targetHead) throw new Error("Missing wallet target head")
+    const expectedRemaining = remainingOfferedIds(episode.targetHead)
+    expect(expectedRemaining).toHaveLength(36)
 
-      expect(screen.getAllByRole("table")).toHaveLength(1)
-      expect(screen.getByRole("table", { name: "Offered operations" })).toBeVisible()
-      expect(screen.getByText("No target required.")).toBeVisible()
-    },
-  )
+    renderInspector(run, { kind: "episode", episodeId: "episode-03" })
+    const things = groupOf("things")
+    const toggle = within(things).getByRole("button", { name: "and 36 more things" })
+    await user.click(toggle)
 
-  it("shows no target table for a control episode", () => {
+    expect(alternativeCards(things)).toHaveLength(37)
+    expect(alternativeIds(things).slice(1)).toEqual(expectedRemaining)
+    expect(toggle).toHaveAttribute("aria-expanded", "true")
+    expect(document.activeElement).toBe(toggle)
+  })
+
+  it("renders no expansion button when no alternatives remain", () => {
+    renderInspector(walletRun("candidates"), { kind: "episode", episodeId: "episode-01" })
+
+    const things = groupOf("things")
+    expect(cardIds(things)).toEqual(["3"])
+    expect(toggleButton(things)).toBeNull()
+    expect(alternativeCards(things)).toHaveLength(0)
+  })
+
+  it("shows only a count button when every unchosen option scored zero", async () => {
+    const user = userEvent.setup()
+    renderInspector(walletRun("probabilities"), {
+      kind: "episode",
+      episodeId: "episode-02",
+    })
+
+    const things = groupOf("things")
+    expect(alternativeCards(things)).toHaveLength(0)
+    const toggle = within(things).getByRole("button", { name: "and 40 more things" })
+    expect(things.querySelector("h4")).toBeNull()
+    await user.click(toggle)
+    expect(alternativeCards(things)).toHaveLength(40)
+  })
+
+  it("renders no target group for a targetless step", () => {
     const run = projectRun(edgeRun("controls"), "probabilities", fixtureRevision)
     renderInspector(run, { kind: "episode", episodeId: "episode-03" })
 
-    expect(screen.getAllByRole("table")).toHaveLength(1)
+    expect(groupOf("actions")).toBeVisible()
+    expect(document.querySelector('[data-choice-kind="things"]')).toBeNull()
+    expect(screen.queryByRole("heading", { name: "What it clicked" })).toBeNull()
     expect(screen.getByText("No target required.")).toBeVisible()
   })
 
-  it.each(["candidates", "probabilities"] as const)(
-    "shows neutral missing-target evidence for a malformed %s targeted episode",
-    (condition) => {
-      // Given a targeted operation whose runtime target evidence is defensively null.
+  it("renders no choice cards in the final state", () => {
+    renderInspector(walletRun("probabilities"), { kind: "final" })
+
+    expect(screen.getByRole("heading", { name: "Final state" })).toBeVisible()
+    expect(document.querySelector("[data-choice-kind]")).toBeNull()
+    expect(document.querySelector("[data-candidate-id]")).toBeNull()
+    expect(document.querySelector("button[aria-expanded]")).toBeNull()
+    expect(screen.queryByText(/%/)).toBeNull()
+  })
+
+  it("keeps the viewed episode read-only apart from the local count buttons", () => {
+    const { container } = renderInspector(walletRun("candidates"), {
+      kind: "episode",
+      episodeId: "episode-03",
+    })
+
+    expect(screen.getByRole("heading", { name: "Viewed step 3" })).toBeVisible()
+    expect(screen.getByText("Open Classic Leather Wallet product page")).toBeVisible()
+    expect(within(container).queryByRole("combobox")).toBeNull()
+    expect(within(container).queryByRole("textbox")).toBeNull()
+    const buttons = within(container).getAllByRole("button")
+    expect(buttons.length).toBeGreaterThan(0)
+    for (const button of buttons) expect(button).toHaveAttribute("aria-expanded")
+    expect(within(container).queryByText("Your mark")).toBeNull()
+  })
+
+  it("resets expansions on step change but preserves them across a verdict edit", async () => {
+    const user = userEvent.setup()
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, "en")
+    render(<App runs={walletRuns("candidates")} />)
+
+    const railItems = document.querySelectorAll<HTMLButtonElement>(".execution-rail-item")
+    await user.click(railItems[2] ?? document.body)
+    const actionToggle = within(groupOf("actions")).getByRole("button", {
+      name: "and 4 more actions",
+    })
+    const thingToggle = within(groupOf("things")).getByRole("button", {
+      name: "and 36 more things",
+    })
+    await user.click(actionToggle)
+    await user.click(thingToggle)
+    expect(actionToggle).toHaveAttribute("aria-expanded", "true")
+    expect(thingToggle).toHaveAttribute("aria-expanded", "true")
+    expect(alternativeCards(groupOf("actions"))).toHaveLength(6)
+    expect(alternativeCards(groupOf("things"))).toHaveLength(37)
+
+    await user.click(screen.getByRole("button", { name: "Does not fulfill the request" }))
+    expect(actionToggle).toHaveAttribute("aria-expanded", "true")
+    expect(thingToggle).toHaveAttribute("aria-expanded", "true")
+    expect(alternativeCards(groupOf("actions"))).toHaveLength(6)
+    expect(alternativeCards(groupOf("things"))).toHaveLength(37)
+
+    await user.click(railItems[3] ?? document.body)
+    await user.click(railItems[2] ?? document.body)
+    const reopenedAction = within(groupOf("actions")).getByRole("button", {
+      name: "and 4 more actions",
+    })
+    const reopenedThing = within(groupOf("things")).getByRole("button", {
+      name: "and 36 more things",
+    })
+    expect(reopenedAction).toHaveAttribute("aria-expanded", "false")
+    expect(reopenedThing).toHaveAttribute("aria-expanded", "false")
+    expect(alternativeCards(groupOf("actions"))).toHaveLength(2)
+    expect(alternativeCards(groupOf("things"))).toHaveLength(1)
+  })
+})
+
+describe("decision inspector", () => {
+  it("shows the same action and outcome in every condition", () => {
+    for (const condition of studyConditions) {
+      const run = projectRun(edgeRun("operation-error"), condition, fixtureRevision)
+      const view = renderInspector(run, { kind: "episode", episodeId: "episode-04" })
+
+      expect(screen.getByText("Attempted to open “Cloud Walk Red Sneakers”")).toBeVisible()
+      expect(
+        screen.getByText("The product click did not navigate to the product page."),
+      ).toBeVisible()
+      view.unmount()
+    }
+  })
+
+  it("keeps a terminal episode to the action group only", () => {
+    for (const condition of ["candidates", "probabilities"] as const) {
+      const run = studyRuns(condition).en
+      const view = renderInspector(run, { kind: "episode", episodeId: "episode-08" })
+
+      expect(groupOf("actions")).toBeVisible()
+      expect(document.querySelector('[data-choice-kind="things"]')).toBeNull()
+      expect(screen.getByText("No target required.")).toBeVisible()
+      view.unmount()
+    }
+  })
+
+  it("shows neutral missing-target evidence for a malformed targeted episode", () => {
+    for (const condition of ["candidates", "probabilities"] as const) {
       const run = studyRuns(condition).en
       if (run.condition === "baseline") throw new Error("Expected an experimental run")
       const malformed = {
@@ -347,51 +565,13 @@ describe("decision inspector", () => {
           episode.id === "episode-04" ? { ...episode, targetHead: null } : episode,
         ),
       } as StudyRun
+      const view = renderInspector(malformed, { kind: "episode", episodeId: "episode-04" })
 
-      // When the malformed episode is rendered.
-      renderInspector(malformed, { kind: "episode", episodeId: "episode-04" })
-
-      // Then missing evidence is not presented as inapplicable.
-      expect(screen.getAllByRole("table")).toHaveLength(1)
+      expect(document.querySelector('[data-choice-kind="things"]')).toBeNull()
       expect(screen.queryByText("No target required.")).toBeNull()
       expect(screen.getByText("Target evidence is missing for this operation.")).toBeVisible()
-    },
-  )
-
-  it("keeps every native-select option as a separate contextual row", () => {
-    const run = studyRuns("candidates").en
-    renderInspector(run, { kind: "episode", episodeId: "episode-05" })
-
-    const targetTable = screen.getByRole("table", { name: "Offered targets" })
-    expect(rowIds(targetTable)).toEqual([
-      "target-size-40",
-      "target-size-41",
-      "target-size-42",
-      "target-size-43",
-    ])
-    expect(within(targetTable).getAllByText("Size option")).toHaveLength(4)
-    expect(within(targetTable).getByText("Size 40")).toBeVisible()
-    expect(within(targetTable).getByText("Size 43")).toBeVisible()
-    expect(
-      targetTable
-        .querySelector('tbody tr[data-selected="true"]')
-        ?.getAttribute("data-candidate-id"),
-    ).toBe("target-size-42")
-  })
-
-  it("distinguishes repeated target labels by context", () => {
-    const run = projectRun(edgeRun("repeated-targets"), "candidates", fixtureRevision)
-    renderInspector(run, { kind: "episode", episodeId: "episode-04" })
-
-    const targetTable = screen.getByRole("table", { name: "Offered targets" })
-    expect(within(targetTable).getAllByText("Cloud Walk Red Sneakers")).toHaveLength(2)
-    expect(within(targetTable).getByText("Result card 2")).toBeVisible()
-    expect(within(targetTable).getByText("Result card 3")).toBeVisible()
-    expect(
-      targetTable
-        .querySelector('tbody tr[data-selected="true"]')
-        ?.getAttribute("data-candidate-id"),
-    ).toBe("target-cloud-walk")
+      view.unmount()
+    }
   })
 
   it.each(studyConditions)("keeps entered text common and unscored in %s", (condition) => {
@@ -401,39 +581,5 @@ describe("decision inspector", () => {
     expect(screen.getByText("Entered text")).toBeVisible()
     expect(screen.getByText("red running shoes")).toBeVisible()
     expect(screen.getByText("Actual input; not scored.")).toBeVisible()
-    for (const table of screen.queryAllByRole("table")) {
-      expect(within(table).queryByText("red running shoes")).toBeNull()
-    }
-  })
-
-  it("shows no mark control for the final state", () => {
-    const run = studyRuns("probabilities").en
-    renderInspector(run, { kind: "final" })
-
-    expect(screen.getByText("Final state")).toBeVisible()
-    expect(
-      screen.getByText(
-        "The final page is shown after the last recorded action. It is not a numbered step and cannot be marked.",
-      ),
-    ).toBeVisible()
-    expect(screen.queryByRole("button")).toBeNull()
-    expect(screen.queryByRole("combobox")).toBeNull()
-    expect(screen.queryByRole("textbox")).toBeNull()
-    expect(screen.queryByRole("table")).toBeNull()
-  })
-
-  it("renders the viewed episode as read-only evidence", () => {
-    const run = studyRuns("candidates").en
-    const { container } = renderInspector(run, { kind: "episode", episodeId: "episode-04" })
-
-    // Then the authored evidence remains, without any participant navigation or marking.
-    expect(screen.getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
-    expect(screen.getByText("Opened “Cloud Walk Red Sneakers”")).toBeVisible()
-    expect(screen.getByRole("table", { name: "Offered operations" })).toBeVisible()
-    expect(screen.getByRole("table", { name: "Offered targets" })).toBeVisible()
-    expect(within(container).queryByRole("button")).toBeNull()
-    expect(within(container).queryByRole("combobox")).toBeNull()
-    expect(within(container).queryByRole("textbox")).toBeNull()
-    expect(within(container).queryByText("Your mark")).toBeNull()
   })
 })

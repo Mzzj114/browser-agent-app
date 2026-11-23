@@ -1,11 +1,11 @@
 import type * as React from "react"
 import { assertNever } from "../../domain/assert-never"
 import type { ViewedSelection } from "../../domain/decision-replay"
-import type { EpisodeCore } from "../../domain/decision-run-schema"
+import type { EpisodeCore, Operation } from "../../domain/decision-run-schema"
 import { isTargetlessOperation } from "../../domain/decision-run-schema"
 import type { StudyRun } from "../../domain/study-run-schema"
-import { useMessages } from "../../i18n"
-import { CandidateTable } from "./candidate-table"
+import { type Messages, useMessages } from "../../i18n"
+import { DecisionChoiceGroup } from "./decision-choice-group"
 
 type DecisionInspectorProps = {
   readonly run: StudyRun
@@ -22,6 +22,36 @@ function findEpisode<T extends { readonly id: string }>(
   episodeId: string,
 ): T | undefined {
   return episodes.find((episode) => episode.id === episodeId)
+}
+
+function targetHeading(operation: Operation, messages: Messages): string {
+  switch (operation) {
+    case "CLICK":
+      return messages.study.whatItClicked
+    case "TYPE_TEXT":
+      return messages.study.whereItTyped
+    case "SELECT":
+      return messages.study.whatItSelected
+    case "DONE":
+    case "BLOCKED":
+    case "WAIT":
+    case "SCROLL_DOWN":
+    case "SCROLL_UP":
+      return messages.study.whatItClicked
+    default:
+      return assertNever(operation)
+  }
+}
+
+function MissingTargetEvidence({ operation }: { readonly operation: Operation }) {
+  const messages = useMessages()
+  return (
+    <p className="decision-inspector-note">
+      {isTargetlessOperation(operation)
+        ? messages.study.noTargetRequired
+        : messages.study.missingTargetEvidence}
+    </p>
+  )
 }
 
 function FinalStatePanel(): React.JSX.Element {
@@ -79,21 +109,23 @@ export function DecisionInspector({ run, viewed }: DecisionInspectorProps): Reac
           episode={episode}
           evidence={
             <>
-              <CandidateTable
-                mode="candidates"
+              <DecisionChoiceGroup
+                key={`${episode.id}:actions`}
+                kind="actions"
+                heading={messages.study.whatTheAgentDid}
+                otherChoicesHeading={messages.study.otherActionsOffered}
                 head={episode.operationHead}
-                caption={messages.study.offeredOperations}
               />
               {episode.targetHead ? (
-                <CandidateTable
-                  mode="candidates"
+                <DecisionChoiceGroup
+                  key={`${episode.id}:things`}
+                  kind="things"
+                  heading={targetHeading(episode.operation, messages)}
+                  otherChoicesHeading={messages.study.otherThingsOffered}
                   head={episode.targetHead}
-                  caption={messages.study.offeredTargets}
                 />
-              ) : isTargetlessOperation(episode.operation) ? (
-                <p className="decision-inspector-note">{messages.study.noTargetRequired}</p>
               ) : (
-                <p className="decision-inspector-note">{messages.study.missingTargetEvidence}</p>
+                <MissingTargetEvidence operation={episode.operation} />
               )}
             </>
           }
@@ -109,26 +141,27 @@ export function DecisionInspector({ run, viewed }: DecisionInspectorProps): Reac
           episode={episode}
           evidence={
             <>
-              <CandidateTable
-                mode="probabilities"
+              <DecisionChoiceGroup
+                key={`${episode.id}:actions`}
+                kind="actions"
+                heading={messages.study.whatTheAgentDid}
+                otherChoicesHeading={messages.study.otherActionsOffered}
                 head={episode.operationHead}
-                caption={messages.study.offeredOperations}
+                reportedConfidence={episode.operationHead.reportedConfidence}
               />
               {episode.targetHead ? (
-                <CandidateTable
-                  mode="probabilities"
+                <DecisionChoiceGroup
+                  key={`${episode.id}:things`}
+                  kind="things"
+                  heading={targetHeading(episode.operation, messages)}
+                  otherChoicesHeading={messages.study.otherThingsOffered}
                   head={episode.targetHead}
-                  caption={messages.study.offeredTargets}
+                  reportedConfidence={episode.targetHead.reportedConfidence}
                 />
-              ) : isTargetlessOperation(episode.operation) ? (
-                <p className="decision-inspector-note">{messages.study.noTargetRequired}</p>
               ) : (
-                <p className="decision-inspector-note">{messages.study.missingTargetEvidence}</p>
+                <MissingTargetEvidence operation={episode.operation} />
               )}
-              <p className="decision-inspector-note">
-                {messages.study.conditionalScoreExplanation}
-              </p>
-              <p className="decision-inspector-note">{messages.study.roundingCaveat}</p>
+              <p className="decision-inspector-note">{messages.study.confidenceExplanation}</p>
             </>
           }
         />
