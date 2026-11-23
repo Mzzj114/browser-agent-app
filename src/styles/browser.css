@@ -74,7 +74,7 @@
 }
 
 .browser-frame[data-variant="compact"] {
-  grid-template-rows: 28px minmax(0, 1fr);
+  grid-template-rows: 44px minmax(0, 1fr);
 }
 
 .browser-compact-caption {
@@ -84,13 +84,17 @@
   justify-content: space-between;
   gap: var(--space-2);
   padding-inline: var(--space-2);
-  overflow: hidden;
   border-block-end: 1px solid var(--border-default);
   background: var(--surface-primary);
 }
 
 .browser-compact-zoom {
+  display: inline-flex;
   flex: 0 0 auto;
+  min-inline-size: 44px;
+  min-block-size: 44px;
+  align-items: center;
+  justify-content: center;
   padding: 0;
   border: 0;
   background: transparent;

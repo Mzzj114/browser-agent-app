@@ -238,7 +238,7 @@
 }
 
 .study-page > .browser-frame {
-  grid-template-rows: 28px minmax(0, 1fr);
+  grid-template-rows: 44px minmax(0, 1fr);
   block-size: clamp(18rem, 48vh, 34rem);
   border: 0;
   border-block-end: 1px solid var(--border-default);

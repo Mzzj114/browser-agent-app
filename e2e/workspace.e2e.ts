@@ -114,12 +114,29 @@ test("keeps a response tentative until submission and then locks judgments but n
   await expect(items.last()).toBeEnabled()
 })
 
+test("gives the compact study Zoom control a 44px target and toggles fit", async ({ page }) => {
+  await page.goto(runUrl("en"))
+  const zoom = page.locator(".browser-compact-zoom")
+  const trigger = page.locator(".screenshot-trigger")
+
+  const bounds = await zoom.boundingBox()
+  if (bounds === null) throw new Error("compact Zoom control has no bounding box")
+  expect(bounds.width).toBeGreaterThanOrEqual(44)
+  expect(bounds.height).toBeGreaterThanOrEqual(44)
+  await expect(zoom).toHaveText("Zoom")
+  await zoom.click()
+  await expect(zoom).toHaveText("Fit")
+  await expect(trigger).toHaveAttribute("data-zoomed", "true")
+  await zoom.click()
+  await expect(zoom).toHaveText("Zoom")
+  await expect(trigger).toHaveAttribute("data-zoomed", "false")
+})
+
 test("fits the screenshot by default and toggles to actual size on click", async ({ page }) => {
   await page.goto(runUrl("en"))
   const viewport = page.locator(".browser-viewport")
   const trigger = page.locator(".screenshot-trigger")
   const image = page.locator(".page-screenshot")
-
   await expect(image).toBeVisible()
   await expect(image).toHaveAttribute("width", String(runScreenshotSize.width))
   await expect(image).toHaveAttribute("height", String(runScreenshotSize.height))
