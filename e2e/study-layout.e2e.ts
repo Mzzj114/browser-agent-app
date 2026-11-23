@@ -67,6 +67,28 @@ async function box(locator: Locator) {
   }
 }
 
+async function expectFinalHasNoChoiceCards(page: Page): Promise<void> {
+  await expect(page.locator(".decision-choice-group")).toHaveCount(0)
+  await expect(page.locator('[data-choice="chosen"]')).toHaveCount(0)
+  await expect(page.locator('[data-choice="alternative"]')).toHaveCount(0)
+}
+
+async function expectStepFourChoiceCards(page: Page): Promise<void> {
+  if (studyCondition === "baseline") {
+    await expect(page.locator(".decision-choice-group")).toHaveCount(0)
+    await expect(page.locator('[data-choice="alternative"]')).toHaveCount(0)
+    return
+  }
+
+  await expect(page.locator(".decision-choice-group")).toHaveCount(2)
+  await expect(
+    page.locator('[data-choice-kind="actions"] [data-choice="alternative"]'),
+  ).toHaveCount(1)
+  await expect(page.locator('[data-choice-kind="things"] [data-choice="alternative"]')).toHaveCount(
+    0,
+  )
+}
+
 async function screenshotReference(image: Locator) {
   const path = await image.getAttribute("src")
   const width = Number.parseInt((await image.getAttribute("width")) ?? "", 10)
@@ -247,6 +269,7 @@ for (const locale of ["zh", "en"] as const) {
       await items.last().click()
       await expect(page.getByRole("heading", { name: text.finalState })).toBeVisible()
       await expect(page.locator(".browser-state-label")).toHaveText(text.lastRecordedState)
+      await expectFinalHasNoChoiceCards(page)
       const restoredFinalImage = page.locator(".page-screenshot")
       await expect(restoredFinalImage).toHaveAttribute("src", expectedFinal.path)
       await expect(restoredFinalImage).toHaveAttribute("width", String(expectedFinal.width))
@@ -255,6 +278,7 @@ for (const locale of ["zh", "en"] as const) {
       expect(finalReference).toEqual(initialReference)
       await viewedStep.click()
       await expect(page.getByText(text.beforeStep4)).toBeVisible()
+      await expectStepFourChoiceCards(page)
 
       const explanation = page.getByRole("textbox", { name: text.explanationPrompt })
       await tabUntilFocused(page, explanation)
@@ -315,8 +339,10 @@ for (const locale of ["zh", "en"] as const) {
       await items.last().click()
       await expect(page.getByRole("heading", { name: text.finalState })).toBeVisible()
       await expect(explanation).toHaveValue(explanationText)
+      await expectFinalHasNoChoiceCards(page)
       await viewedStep.click()
       await expect(page.getByText(text.beforeStep4)).toBeVisible()
+      await expectStepFourChoiceCards(page)
       await expect(page.locator(".page-screenshot")).toHaveAttribute("src", runFrame.step4)
       await expect(explanation).toHaveValue(explanationText)
       await expect(page.locator("[data-marked]")).toHaveCount(0)
