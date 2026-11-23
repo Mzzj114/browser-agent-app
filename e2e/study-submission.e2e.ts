@@ -101,6 +101,34 @@ test("retries a failed upload when the browser comes back online", async ({ page
   await expect(page.getByText("Your response was sent to the study server.")).toBeVisible()
 })
 
+test("retries a queued upload from the submitted notice when back online", async ({ page }) => {
+  let offline = true
+  await page.route(submissionUrl, (route) =>
+    offline ? route.abort("connectionfailed") : route.fulfill({ status: 201 }),
+  )
+
+  await page.goto(studyUrl(`p=P02&c=1&case=${caseCode}`))
+  await page.getByRole("button", { name: "Fulfills the request" }).click()
+  await page.getByRole("button", { name: "Submit assessment" }).click()
+  await expect(
+    page.getByText("Your response is saved on this device and will be sent automatically."),
+  ).toBeVisible()
+
+  await page.reload()
+
+  await expect(
+    page.getByRole("heading", { name: "Case submitted. Please wait for the researcher." }),
+  ).toBeVisible()
+  await expect(
+    page.getByText("Your response is saved on this device and will be sent automatically."),
+  ).toBeVisible()
+
+  offline = false
+  await page.evaluate(() => window.dispatchEvent(new Event("online")))
+
+  await expect(page.getByText("Your response was sent to the study server.")).toBeVisible()
+})
+
 test("reports a permanent rejection honestly", async ({ page }) => {
   await page.route(submissionUrl, (route) => route.fulfill({ status: 400 }))
 

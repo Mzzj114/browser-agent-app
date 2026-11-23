@@ -10,12 +10,9 @@ import { RunPicker } from "./RunPicker"
 import { caseCodes } from "./study/case-codes.ts"
 import { parseStudyLink } from "./study/case-link.ts"
 import { submissionSinkConfig } from "./study/config.ts"
+import { startQueueSync } from "./study/queue-sync.ts"
 import type { StudyRuntime } from "./study/runtime.ts"
-import {
-  flushSubmissionQueue,
-  queuedSubmissionStatus,
-  readCompletedMarker,
-} from "./study/submission-store.ts"
+import { queuedSubmissionStatus, readCompletedMarker } from "./study/submission-store.ts"
 import { restSubmissionSink } from "./study/supabase-rest.ts"
 
 type BootstrapNoticeProps = {
@@ -152,12 +149,15 @@ export async function mountStudyApp(
       )
     }
     renderSubmittedNotice()
-    void flushSubmissionQueue(window.localStorage, sink).then(renderSubmittedNotice)
+    // The notice's "will be sent automatically" copy must be true: keep
+    // flushing for the page lifetime, including when the browser reconnects.
+    startQueueSync(window.localStorage, sink, renderSubmittedNotice)
     return
   }
 
-  // A fresh case still retries anything older that is queued on this device.
-  void flushSubmissionQueue(window.localStorage, sink)
+  // A fresh case still retries anything older that is queued on this device,
+  // now and on every later reconnect while this page stays open.
+  startQueueSync(window.localStorage, sink)
 
   const summary = index.runs.find((run) => run.id === link.runId)
   if (summary === undefined) {
