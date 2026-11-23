@@ -108,7 +108,7 @@ All spacing derives from 4px.
 ### Grid
 
 - App shell: one fixed header row, a compact task context strip, a bounded two-column workspace row, and a bounded response row, using `100dvh` and `100dvb`.
-- Study context strip: one full-width original-task disclosure whose collapsed summary is a single clipped line. The expanded body scrolls internally when long, including the recorded-run provenance note at its end.
+- Study context strip: one full-width original-task disclosure whose collapsed summary is a single clipped line. Expanding replaces that line with the complete text in the body, so the task is not repeated; the body scrolls internally when long, including the recorded-run provenance note at its end.
 - Main workspace: `clamp(10.5rem, 13vw, 12rem) minmax(0, 1fr)` for the quiet step rail and the single white screenshot-first review panel, separated by a small gap on a sunken background.
 - Response region: a separate 156px shell row with stable verdict, explanation, and submit columns and a compact notice group. Normal controls remain visible; validation and enlarged explanations scroll internally. There is no localization control.
 - Browser metadata: the study page uses one 44px compact caption row with the state label and a Zoom/Fit control; the full `BrowserFrame` variant retains title, read-only URL, capture time, and recorded-not-live context for other surfaces. Navigation lives only in the execution rail; the review panel has no replay header.

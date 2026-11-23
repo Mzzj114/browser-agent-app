@@ -163,15 +163,19 @@ for (const locale of ["zh", "en"] as const) {
       await expect(taskStrip).toHaveCount(1)
       await expect(taskSummary).toContainText(text.originalTask)
       await expect(taskStrip.locator(".study-task-excerpt")).toHaveText(run.task)
+      await expect(taskStrip.locator(".study-task-excerpt")).toBeVisible()
       await expect(taskStrip.locator(".study-task-text")).toHaveText(run.task)
       await taskSummary.click()
       await expect(taskStrip).toHaveAttribute("open", "")
       await expect(taskStrip.locator(".study-task-text")).toHaveText(run.task)
+      // The expanded body carries the task, so the summary excerpt must not repeat it.
+      await expect(taskStrip.locator(".study-task-excerpt")).toBeHidden()
       await expect
         .poll(() => taskStrip.evaluate((element) => element.scrollWidth - element.clientWidth))
         .toBe(0)
       await taskSummary.click()
       await expect(taskStrip).not.toHaveAttribute("open", "")
+      await expect(taskStrip.locator(".study-task-excerpt")).toBeVisible()
       await capture(page, locale, viewport, "initial")
 
       const context = page.locator(".study-context")
