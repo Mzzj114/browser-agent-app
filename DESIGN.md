@@ -109,7 +109,7 @@ All spacing derives from 4px.
 
 - App shell: a pinned header, a pinned task context strip, a two-column workspace that grows with its content, and a response row in normal page flow, using a minimum of `100dvh`.
 - Study context strip: one full-width original-task disclosure pinned directly under the header while the page scrolls. Its collapsed summary is a single clipped line. Expanding replaces that line with the complete text in the body, so the task is not repeated; the body scrolls internally when long, including the recorded-run provenance note at its end.
-- Main workspace: `clamp(10.5rem, 13vw, 12rem) minmax(0, 1fr)` for the quiet step rail and the single white screenshot-first review panel, separated by a small gap on a sunken background. The review panel grows to fit its content instead of scrolling internally.
+- Main workspace: `clamp(13rem, 19vw, 18rem) minmax(0, 1fr)` for the quiet step rail and the single white screenshot-first review panel, separated by a small gap on a sunken background. The review panel grows to fit its content instead of scrolling internally.
 - Response region: a normal-flow row below the workspace with stable verdict, explanation, and submit columns and a compact notice group. It sits below the fold so participants reach it by scrolling. Normal controls remain visible; validation and enlarged explanations scroll internally. There is no localization control.
 - Browser metadata: the study page uses one 44px compact caption row with the state label and a Zoom/Fit control; the screenshot fills the panel width at its intrinsic aspect ratio. The full `BrowserFrame` variant retains title, read-only URL, capture time, and recorded-not-live context for other surfaces. Navigation lives only in the execution rail; the review panel has no replay header.
 - Home picker: the same fixed header above a bounded, two-column run list at 960px maximum width; one column below 800px. It is not part of the evidence workspace and has no score, condition, or trial-role metadata.
@@ -121,7 +121,7 @@ All spacing derives from 4px.
 
 - The document scrolls; the product header and compact task strip stay pinned at the top.
 - Task text and the recorded-run provenance note share the task body's internal scroll; neither stays fixed outside it.
-- `.execution-rail-list` owns chronological action scrolling, including Final state as the last item; there is no fixed final-state footer.
+- `.execution-rail-list` owns chronological action scrolling, including Final state as the last item; there is no fixed final-state footer. The rail is capped at the recorded screenshot's height (with a 20rem minimum for a missing image), so long runs scroll inside the rail instead of extending past the image.
 - `.browser-viewport` has no overflow in fit mode: the complete image fills the panel width at its intrinsic aspect ratio. Only actual-size inspection scrolls inside the image well, and only when the image exceeds the panel.
 - `.study-page` does not scroll: it grows with the screenshot and all viewed-step evidence, including long candidate chip lists. Its browser frame loses the outer card treatment so the image and evidence read as one page.
 - `.study-response` sits in normal page flow below the review panel, so it is reached by scrolling the document rather than by an inner scroll region.

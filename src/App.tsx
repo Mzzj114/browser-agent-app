@@ -1,5 +1,5 @@
 import { ListTree } from "lucide-react"
-import { useEffect, useReducer, useState } from "react"
+import { useEffect, useLayoutEffect, useReducer, useRef, useState } from "react"
 import { BrowserFrame } from "./components/ui/browser-frame"
 import { BrandMark, StatusBadge } from "./components/ui/buttons"
 import { DecisionInspector } from "./components/ui/decision-inspector"
@@ -60,6 +60,8 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
     initialStudyResponse(),
   )
   const viewedKey = activeViewed.kind === "final" ? "final" : activeViewed.episodeId
+  const mainRef = useRef<HTMLElement>(null)
+  const pageRef = useRef<HTMLElement>(null)
 
   // The document scrolls, so reset it to the top of the review page on selection.
   // biome-ignore lint/correctness/useExhaustiveDependencies: the viewed selection key controls the reset.
@@ -67,6 +69,22 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
     document.documentElement.scrollTop = 0
     document.body.scrollTop = 0
   }, [viewedKey])
+
+  // Cap the rail at the recorded screenshot's height so long runs scroll inside the rail.
+  useLayoutEffect(() => {
+    const main = mainRef.current
+    const frame = pageRef.current?.querySelector<HTMLElement>(".browser-frame")
+    if (!main || !frame) return
+    const apply = () => {
+      const height = frame.getBoundingClientRect().height
+      if (height > 0) main.style.setProperty("--rail-max-block-size", `${height}px`)
+    }
+    apply()
+    if (typeof ResizeObserver === "undefined") return
+    const observer = new ResizeObserver(apply)
+    observer.observe(frame)
+    return () => observer.disconnect()
+  }, [])
 
   const stateLabel =
     viewedEpisode === null
@@ -96,7 +114,7 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
           <StudyTaskStrip task={run.task} />
         </section>
 
-        <main className="study-main">
+        <main ref={mainRef} className="study-main">
           <ExecutionRail
             episodes={run.episodes}
             viewed={activeViewed}
@@ -104,7 +122,7 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
             onFinal={goFinal}
           />
 
-          <section className="study-page" aria-labelledby="study-page-heading">
+          <section ref={pageRef} className="study-page" aria-labelledby="study-page-heading">
             <h2 id="study-page-heading" className="sr-only">
               {messages.pageResultHeading}
             </h2>

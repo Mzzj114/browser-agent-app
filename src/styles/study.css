@@ -139,7 +139,7 @@
 .study-main {
   display: grid;
   grid-template-columns:
-    clamp(10.5rem, 13vw, 12rem)
+    clamp(13rem, 19vw, 18rem)
     minmax(0, 1fr);
   align-items: start;
   min-block-size: 0;
@@ -152,6 +152,8 @@
 .execution-rail {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
+  /* The step list scrolls once it is taller than the recorded screenshot. */
+  max-block-size: max(20rem, var(--rail-max-block-size, 0px));
   min-block-size: 0;
   min-inline-size: 0;
   gap: var(--space-1);

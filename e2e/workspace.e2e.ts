@@ -145,6 +145,11 @@ test("scrolls the whole page while the header and task stay pinned", async ({ pa
   if (reviewBox === null || imageBox === null) throw new Error("missing layout boxes")
   expect(imageBox.width).toBeGreaterThanOrEqual(reviewBox.width - 2)
   expect(imageBox.height).toBeGreaterThan(imageBox.width * 0.6)
+  // The rail is the wider column and the review page is narrower than the previous 48vh frame.
+  const railBox = await page.locator(".execution-rail").boundingBox()
+  if (railBox === null) throw new Error("missing rail box")
+  expect(railBox.width).toBeGreaterThanOrEqual(230)
+  expect(imageBox.height).toBeLessThan(720)
 
   // When the participant scrolls, the page moves while the header and task stay pinned.
   await page.evaluate(() => window.scrollTo(0, 400))
@@ -162,6 +167,32 @@ test("scrolls the whole page while the header and task stay pinned", async ({ pa
   await expect(
     page.getByRole("button", { name: "Submit assessment", exact: true }),
   ).toBeInViewport()
+})
+
+test("caps a long step rail at the screenshot and scrolls it", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 })
+  await page.goto("/?lang=en&run=F1_spec_comparison_clean")
+  await page.evaluate(() => document.fonts.ready)
+  const rail = page.locator(".execution-rail")
+  const frame = page.locator(".browser-frame")
+  const list = page.locator(".execution-rail-list")
+  const items = list.locator(".execution-rail-item")
+
+  // Then every recorded step plus Final state is in the rail.
+  await expect(items).toHaveCount(37)
+
+  // And the rail never grows past the recorded screenshot.
+  const railBox = await rail.boundingBox()
+  const frameBox = await frame.boundingBox()
+  if (railBox === null || frameBox === null) throw new Error("missing rail boxes")
+  expect(railBox.height).toBeLessThanOrEqual(frameBox.height + 1)
+
+  // The overflowing step list scrolls inside the rail instead.
+  await expect
+    .poll(() => list.evaluate((element) => element.scrollHeight - element.clientHeight))
+    .toBeGreaterThan(0)
+  await items.last().scrollIntoViewIfNeeded()
+  await expect(items.last()).toBeInViewport()
 })
 
 test("gives the compact study Zoom control a 44px target and toggles fit", async ({ page }) => {
