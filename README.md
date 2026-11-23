@@ -52,20 +52,22 @@ bun run dev        # prepares the run library, then http://127.0.0.1:5173
 
 ## Deploying the study sites
 
-`bun run build:sites` builds the same source three times, once per condition, into `dist/baseline/`, `dist/candidates/`, and `dist/probabilities/`, verifies each build, and writes a root condition picker plus `robots.txt`. `vercel.json` sets `trailingSlash` so relative asset and run URLs resolve inside each condition directory, and marks every response `noindex`.
+`bun run build:sites` builds the same source three times, once per condition, into the neutral path segments `dist/b/` (baseline), `dist/c/` (candidates), and `dist/p/` (probabilities), verifies each build, and writes a root condition picker plus `robots.txt`. `vercel.json` sets `trailingSlash` so relative asset and run URLs resolve inside each condition directory, and marks every response `noindex`.
 
 The linked Vercel project serves:
 
-- `/baseline/`
-- `/candidates/`
-- `/probabilities/`
+- `/b/` — baseline
+- `/c/` — candidates
+- `/p/` — probabilities
 
 ## Study links and data collection
 
 Each participant receives three researcher-built links — one per case, one per condition:
 
 ```text
-/{condition}/?p=P01&c=1&case=C07
+/b/?p=P01&c=1&case=C07   (baseline)
+/c/?p=P01&c=1&case=C07   (candidates)
+/p/?p=P01&c=1&case=C07   (probabilities)
 ```
 
 - `p` is the pseudonymous participant code, `c` is the case order (1–3), and `case` is a short code resolved by the checked-in `src/study/cases.json` map (23 codes over the approved roster). The map carries no expected answers, and raw run IDs never appear in study links.
@@ -82,7 +84,7 @@ Each participant receives three researcher-built links — one per case, one per
 | ------------------------------------------ | ----------------------------------------------------------------------------- |
 | `bun run dev`                              | Prepare the run library and start Vite                                        |
 | `bun run build`                            | Prepare, typecheck, build, and verify the participant artifacts               |
-| `bun run build:sites`                      | Build and verify all three condition sites into `dist/<condition>/`           |
+| `bun run build:sites`                      | Build and verify all three condition sites into `dist/{b,c,p}/`               |
 | `bun run preview`                          | Verify the build and serve it with Vite preview                               |
 | `bun run prepare:runs`                     | Project the checked-in condition into `public/runs/`                          |
 | `node scripts/import-agent-runs.ts`        | Rebuild the committed library from collected research output                  |
