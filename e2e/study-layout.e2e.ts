@@ -137,7 +137,7 @@ async function selectedRun(locale: Locale): Promise<StudyRun> {
 
 for (const locale of ["zh", "en"] as const) {
   for (const viewport of viewports) {
-    test(`${locale} at ${viewport.width}x${viewport.height} keeps long evidence bounded and emits an equivalence report`, async ({
+    test(`${locale} at ${viewport.width}x${viewport.height} keeps the page scrollable and emits an equivalence report`, async ({
       page,
     }) => {
       const text = copy[locale]
@@ -158,6 +158,24 @@ for (const locale of ["zh", "en"] as const) {
       await expect(initialImage).toHaveAttribute("height", String(expectedFinal.height))
       const initialReference = await screenshotReference(initialImage)
       expect(initialReference).toEqual(expectedFinal)
+      // The screenshot fills the review panel, so the document itself must scroll.
+      const review = page.locator(".study-page")
+      const response = page.locator(".study-response")
+      const reviewBox = await box(review)
+      const imageBox = await box(initialImage)
+      expect(imageBox.width).toBeGreaterThanOrEqual(reviewBox.width - 2)
+      expect(imageBox.height).toBeGreaterThan(imageBox.width * 0.6)
+      await expect(response).not.toBeInViewport()
+      await expect
+        .poll(() =>
+          page.evaluate(
+            () => document.documentElement.scrollHeight - document.documentElement.clientHeight,
+          ),
+        )
+        .toBeGreaterThan(0)
+      await expect
+        .poll(() => review.evaluate((element) => element.scrollHeight - element.clientHeight))
+        .toBeLessThanOrEqual(0)
       const taskStrip = page.locator(".study-task-strip")
       const taskSummary = taskStrip.locator("summary")
       await expect(taskStrip).toHaveCount(1)
@@ -219,7 +237,6 @@ for (const locale of ["zh", "en"] as const) {
         ).toHaveCount(0)
       }
 
-      const review = page.locator(".study-page")
       await items.nth(2).click()
       await expect(page.getByText(text.beforeStep3)).toBeVisible()
 
@@ -253,11 +270,9 @@ for (const locale of ["zh", "en"] as const) {
         )
         await capture(page, locale, viewport, "expanded")
 
-        await review.evaluate((element) => {
-          element.scrollTop = element.scrollHeight
-        })
-        await expect(things.locator('[data-choice="alternative"]').last()).toBeInViewport()
-        await expect(page.getByRole("button", { name: text.submit, exact: true })).toBeInViewport()
+        const lastChip = things.locator('[data-choice="alternative"]').last()
+        await lastChip.scrollIntoViewIfNeeded()
+        await expect(lastChip).toBeInViewport()
         await expect
           .poll(() =>
             page.evaluate(
@@ -265,16 +280,17 @@ for (const locale of ["zh", "en"] as const) {
             ),
           )
           .toBe(0)
+        await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
+        await expect(page.getByRole("button", { name: text.submit, exact: true })).toBeInViewport()
         await capture(page, locale, viewport, "expanded-last")
       }
 
-      await review.evaluate((element) => {
-        element.scrollTop = element.scrollHeight
-      })
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
+      await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0)
       await viewedStep.click()
       await expect(page.getByText(text.beforeStep4)).toBeVisible()
       await expect(viewedStep).toBeFocused()
-      await expect.poll(() => review.evaluate((element) => element.scrollTop)).toBe(0)
+      await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
       if (studyCondition !== "baseline") {
         await expect(
           page.locator('.decision-choice-group button[aria-expanded="true"]'),
@@ -304,8 +320,10 @@ for (const locale of ["zh", "en"] as const) {
       const rail = page.locator(".execution-rail-list")
       const viewer = page.locator(".browser-viewport")
       await expect(rail).toHaveCSS("overflow-y", "auto")
-      await expect(review).toHaveCSS("overflow-y", "auto")
-      await expect(review).toHaveCSS("scrollbar-gutter", "stable")
+      await expect(review).toHaveCSS("overflow-y", "clip")
+      await expect
+        .poll(() => review.evaluate((element) => element.scrollHeight - element.clientHeight))
+        .toBeLessThanOrEqual(0)
       await expect
         .poll(() => viewer.evaluate((element) => element.scrollHeight > element.clientHeight))
         .toBe(false)
@@ -319,18 +337,10 @@ for (const locale of ["zh", "en"] as const) {
             .evaluate((element) => getComputedStyle(element).objectFit),
         )
         .toBe("contain")
-      // Tabbing to the inline count buttons may have scrolled the review column.
-      await review.evaluate((element) => {
-        element.scrollTop = 0
-      })
-      await rail.evaluate((element) => {
-        element.scrollTop = element.scrollHeight
-      })
-      await expect.poll(() => review.evaluate((element) => element.scrollTop)).toBe(0)
+      // Tabbing to the inline count buttons may have scrolled the page.
+      await page.evaluate(() => window.scrollTo(0, 0))
+      await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
       await expect.poll(() => viewer.evaluate((element) => element.scrollTop)).toBe(0)
-      await rail.evaluate((element) => {
-        element.scrollTop = 0
-      })
       await expect
         .poll(() =>
           page.evaluate(
@@ -344,7 +354,7 @@ for (const locale of ["zh", "en"] as const) {
             () => document.documentElement.scrollHeight - document.documentElement.clientHeight,
           ),
         )
-        .toBe(0)
+        .toBeGreaterThan(0)
 
       const explanationText = locale === "zh" ? "证".repeat(500) : "x".repeat(500)
       await explanation.fill(explanationText)
@@ -369,11 +379,17 @@ for (const locale of ["zh", "en"] as const) {
           page.locator('.decision-choice-group button[aria-expanded="true"]'),
         ).toHaveCount(0)
       }
-      await review.evaluate((element) => {
-        element.scrollTop = 0
-      })
-      await expect.poll(() => review.evaluate((element) => element.scrollTop)).toBe(0)
+      await page.evaluate(() => window.scrollTo(0, 0))
+      await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
       await capture(page, locale, viewport, "draft")
+
+      // Measure shared geometry in the final view: every condition renders the same evidence there,
+      // so the page height and response position stay condition-independent.
+      await items.last().click()
+      await expect(page.getByRole("heading", { name: text.finalState })).toBeVisible()
+      await expectFinalHasNoChoiceCards(page)
+      await page.evaluate(() => window.scrollTo(0, 0))
+      await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0)
 
       const controls = {
         task: await box(taskSummary),
@@ -399,9 +415,7 @@ for (const locale of ["zh", "en"] as const) {
       await page.getByRole("button", { name: text.submit, exact: true }).click()
       await expect(page.getByText(text.submitted)).toBeVisible()
       await expect(explanation).toBeDisabled()
-      await page.locator(".study-response").evaluate((element) => {
-        element.scrollTop = element.scrollHeight
-      })
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
       await capture(page, locale, viewport, "submitted")
 
       await writeReport(locale, viewport, {

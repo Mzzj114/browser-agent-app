@@ -1,5 +1,5 @@
 import { ListTree } from "lucide-react"
-import { useEffect, useReducer, useRef, useState } from "react"
+import { useEffect, useReducer, useState } from "react"
 import { BrowserFrame } from "./components/ui/browser-frame"
 import { BrandMark, StatusBadge } from "./components/ui/buttons"
 import { DecisionInspector } from "./components/ui/decision-inspector"
@@ -59,12 +59,13 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
     (state: StudyResponse, action: ResponseAction) => updateStudyResponse(state, action),
     initialStudyResponse(),
   )
-  const reviewRef = useRef<HTMLElement>(null)
   const viewedKey = activeViewed.kind === "final" ? "final" : activeViewed.episodeId
 
+  // The document scrolls, so reset it to the top of the review page on selection.
   // biome-ignore lint/correctness/useExhaustiveDependencies: the viewed selection key controls the reset.
   useEffect(() => {
-    if (reviewRef.current) reviewRef.current.scrollTop = 0
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
   }, [viewedKey])
 
   const stateLabel =
@@ -103,7 +104,7 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
             onFinal={goFinal}
           />
 
-          <section ref={reviewRef} className="study-page" aria-labelledby="study-page-heading">
+          <section className="study-page" aria-labelledby="study-page-heading">
             <h2 id="study-page-heading" className="sr-only">
               {messages.pageResultHeading}
             </h2>

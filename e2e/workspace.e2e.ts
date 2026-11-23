@@ -114,6 +114,56 @@ test("keeps a response tentative until submission and then locks judgments but n
   await expect(items.last()).toBeEnabled()
 })
 
+test("scrolls the whole page while the header and task stay pinned", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 })
+  await page.goto(runUrl("en"))
+  await page.evaluate(() => document.fonts.ready)
+  const header = page.locator(".product-header")
+  const context = page.locator(".study-context")
+  const review = page.locator(".study-page")
+  const image = page.locator(".page-screenshot")
+  const response = page.locator(".study-response")
+
+  // Then the document, not the review panel, owns the scroll.
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () => document.documentElement.scrollHeight - document.documentElement.clientHeight,
+      ),
+    )
+    .toBeGreaterThan(0)
+  await expect
+    .poll(() => review.evaluate((element) => element.scrollHeight - element.clientHeight))
+    .toBeLessThanOrEqual(0)
+
+  // And the response form starts below the fold.
+  await expect(response).not.toBeInViewport()
+
+  // The screenshot fills the review panel at its intrinsic aspect ratio.
+  const reviewBox = await review.boundingBox()
+  const imageBox = await image.boundingBox()
+  if (reviewBox === null || imageBox === null) throw new Error("missing layout boxes")
+  expect(imageBox.width).toBeGreaterThanOrEqual(reviewBox.width - 2)
+  expect(imageBox.height).toBeGreaterThan(imageBox.width * 0.6)
+
+  // When the participant scrolls, the page moves while the header and task stay pinned.
+  await page.evaluate(() => window.scrollTo(0, 400))
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0)
+  const headerBox = await header.boundingBox()
+  const contextBox = await context.boundingBox()
+  if (headerBox === null || contextBox === null) throw new Error("missing pinned boxes")
+  expect(Math.round(headerBox.y)).toBe(0)
+  expect(Math.round(contextBox.y)).toBe(56)
+  await expect(context).toBeInViewport()
+
+  // And scrolling to the bottom reveals the response form.
+  await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight))
+  await expect(response).toBeInViewport()
+  await expect(
+    page.getByRole("button", { name: "Submit assessment", exact: true }),
+  ).toBeInViewport()
+})
+
 test("gives the compact study Zoom control a 44px target and toggles fit", async ({ page }) => {
   await page.goto(runUrl("en"))
   const zoom = page.locator(".browser-compact-zoom")
@@ -133,6 +183,7 @@ test("gives the compact study Zoom control a 44px target and toggles fit", async
 })
 
 test("fits the screenshot by default and toggles to actual size on click", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 720 })
   await page.goto(runUrl("en"))
   const viewport = page.locator(".browser-viewport")
   const trigger = page.locator(".screenshot-trigger")
@@ -182,9 +233,10 @@ test("fits the screenshot by default and toggles to actual size on click", async
       ),
     )
     .toBe(true)
+  // The page grows to the image height, so only the horizontal axis overflows the image well.
   await expect
     .poll(() => viewport.evaluate((element) => element.scrollHeight > element.clientHeight))
-    .toBe(true)
+    .toBe(false)
 
   await trigger.click()
   await expect(trigger).toHaveAttribute("data-zoomed", "false")

@@ -107,11 +107,11 @@ All spacing derives from 4px.
 
 ### Grid
 
-- App shell: one fixed header row, a compact task context strip, a bounded two-column workspace row, and a bounded response row, using `100dvh` and `100dvb`.
-- Study context strip: one full-width original-task disclosure whose collapsed summary is a single clipped line. Expanding replaces that line with the complete text in the body, so the task is not repeated; the body scrolls internally when long, including the recorded-run provenance note at its end.
-- Main workspace: `clamp(10.5rem, 13vw, 12rem) minmax(0, 1fr)` for the quiet step rail and the single white screenshot-first review panel, separated by a small gap on a sunken background.
-- Response region: a separate 156px shell row with stable verdict, explanation, and submit columns and a compact notice group. Normal controls remain visible; validation and enlarged explanations scroll internally. There is no localization control.
-- Browser metadata: the study page uses one 44px compact caption row with the state label and a Zoom/Fit control; the full `BrowserFrame` variant retains title, read-only URL, capture time, and recorded-not-live context for other surfaces. Navigation lives only in the execution rail; the review panel has no replay header.
+- App shell: a pinned header, a pinned task context strip, a two-column workspace that grows with its content, and a response row in normal page flow, using a minimum of `100dvh`.
+- Study context strip: one full-width original-task disclosure pinned directly under the header while the page scrolls. Its collapsed summary is a single clipped line. Expanding replaces that line with the complete text in the body, so the task is not repeated; the body scrolls internally when long, including the recorded-run provenance note at its end.
+- Main workspace: `clamp(10.5rem, 13vw, 12rem) minmax(0, 1fr)` for the quiet step rail and the single white screenshot-first review panel, separated by a small gap on a sunken background. The review panel grows to fit its content instead of scrolling internally.
+- Response region: a normal-flow row below the workspace with stable verdict, explanation, and submit columns and a compact notice group. It sits below the fold so participants reach it by scrolling. Normal controls remain visible; validation and enlarged explanations scroll internally. There is no localization control.
+- Browser metadata: the study page uses one 44px compact caption row with the state label and a Zoom/Fit control; the screenshot fills the panel width at its intrinsic aspect ratio. The full `BrowserFrame` variant retains title, read-only URL, capture time, and recorded-not-live context for other surfaces. Navigation lives only in the execution rail; the review panel has no replay header.
 - Home picker: the same fixed header above a bounded, two-column run list at 960px maximum width; one column below 800px. It is not part of the evidence workspace and has no score, condition, or trial-role metadata.
 - Supported viewport: 1280x720 minimum; designed at 1366x768 and 1440x900 in both locales.
 - Below the minimum width or height, replace the workspace with the approved desktop requirement message.
@@ -119,13 +119,13 @@ All spacing derives from 4px.
 
 ### Scroll Ownership
 
-- Product header and response controls stay fixed; the compact task strip sits above the workspace.
+- The document scrolls; the product header and compact task strip stay pinned at the top.
 - Task text and the recorded-run provenance note share the task body's internal scroll; neither stays fixed outside it.
 - `.execution-rail-list` owns chronological action scrolling, including Final state as the last item; there is no fixed final-state footer.
-- `.browser-viewport` has no overflow in fit mode: the complete image is aspect-preserving and centered within both available dimensions. Only actual-size inspection owns two-axis image scrolling.
-- `.study-page` is the single normal scroll container for the screenshot and all viewed-step evidence, including long candidate chip lists. Its browser frame loses the outer card treatment so the image and evidence read as one page.
-- `.study-response` owns response-form overflow when dense.
-- Every scroll region has `min-block-size: 0` and `min-inline-size: 0`; no region may create page-level shell overflow or cover another pane's controls.
+- `.browser-viewport` has no overflow in fit mode: the complete image fills the panel width at its intrinsic aspect ratio. Only actual-size inspection scrolls inside the image well, and only when the image exceeds the panel.
+- `.study-page` does not scroll: it grows with the screenshot and all viewed-step evidence, including long candidate chip lists. Its browser frame loses the outer card treatment so the image and evidence read as one page.
+- `.study-response` sits in normal page flow below the review panel, so it is reached by scrolling the document rather than by an inner scroll region.
+- Every scroll region has `min-block-size: 0` and `min-inline-size: 0`; no region may create page-level horizontal overflow or cover another pane's controls.
 
 ## 5. Components
 
@@ -171,7 +171,7 @@ The production entry composes these components. Legacy chat/transcript component
 - Variants: `compact` (study page) and `full` (other surfaces); explicit final observation, viewed historical step, missing screenshot, fitted, actual size.
 - States: final, historical, missing evidence, zoomed; the compact Zoom control is disabled when no screenshot is usable.
 - Accessibility: read-only text is not presented as editable; alt text names the recorded page; both the screenshot trigger and the compact text control name the current fit/actual-size action, and the visible Zoom/Fit copy stays inside that accessible name.
-- Layout: the complete image fits both available dimensions inside a viewport-bounded region, preserving aspect ratio and centering unused space without cropping or scrolling. Native-pixel inspection enables two-axis scrolling; returning to fit shows all edges again. Images keep intrinsic dimensions and unfiltered opacity.
+- Layout: in the study page the image fills the review panel's width at its intrinsic aspect ratio and the document scrolls; in the full variant and any bounded frame the complete image fits both available dimensions, preserving aspect ratio and centering unused space without cropping. Native-pixel inspection scrolls inside the image well when the image exceeds the panel; returning to fit shows all edges again. Images keep intrinsic dimensions and unfiltered opacity.
 - Failure: a real image error shows missing evidence while keeping the step action and any full-variant URL/title. Moving to a healthy path recovers the image; the renderer never substitutes an after-state and labels it “before.”
 
 #### RunPicker
@@ -364,7 +364,7 @@ Structural borders and tonal shifts own normal hierarchy. Only the recorded brow
 
 ### Decision-Evidence Contract
 
-- The participant entry is one shared two-column replay workspace selected from a neutral home picker: a quiet step rail and a single screenshot-first review panel. The checked-in condition at `src/study-condition.ts` determines whether offered candidates and recorded probabilities are projected; no URL, query, storage, or runtime selector changes it. `?run=<id>` selects a run only.
+- The participant entry is one shared two-column replay workspace selected from a neutral home picker: a quiet step rail and a single screenshot-first review panel. The page itself scrolls; the header and original-task strip stay pinned, and the response form sits below the fold. The checked-in condition at `src/study-condition.ts` determines whether offered candidates and recorded probabilities are projected; no URL, query, storage, or runtime selector changes it. `?run=<id>` selects a run only.
 - The recorded decision-model agent writes no final answer, so there is no agent-report panel. The compact original-task disclosure is the only context strip; the final observation is the completion evidence.
 - Initial view is the explicit final observation. Episode selection shows the before-action screenshot. Final and terminal episode states remain semantically distinct even when the screenshot pixels match.
 - The rail identifies the viewed step with `aria-current="step"` and a highlighted row; its viewed text stays available to assistive technology without adding a redundant visible pill.

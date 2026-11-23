@@ -273,21 +273,20 @@ describe("decision evidence workspace", () => {
     expect(screen.getByText("第 4 步操作前 · 共 8 步")).toBeVisible()
   })
 
-  it("resets the review scroller on replay selection without moving focus", async () => {
-    // Given a scrolled review column in the final view.
+  it("resets the page scroll on replay selection without moving focus", async () => {
+    // Given a scrolled document in the final view.
     useEnglish()
     const user = userEvent.setup()
     render(<App runs={studyRuns("probabilities")} />)
-    const page = reviewPage()
-    page.scrollTop = 320
+    document.documentElement.scrollTop = 320
     const secondStep = railButtons()[1]
     if (!secondStep) throw new Error("Missing second rail step")
 
     // When the rail selects another step.
     await user.click(secondStep)
 
-    // Then the screenshot is back at the top and the rail keeps keyboard focus.
-    expect(page.scrollTop).toBe(0)
+    // Then the page is back at the top and the rail keeps keyboard focus.
+    expect(document.documentElement.scrollTop).toBe(0)
     expect(document.activeElement).toBe(secondStep)
   })
 

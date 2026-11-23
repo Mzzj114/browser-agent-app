@@ -2,10 +2,18 @@
   grid-template-rows:
     var(--header-height)
     auto
-    minmax(0, 1fr)
-    156px;
-  overflow: hidden;
+    auto
+    auto;
+  block-size: auto;
+  min-block-size: 100dvh;
+  overflow: visible;
   background: var(--canvas);
+}
+
+/* The header and task strip stay pinned while the document scrolls. */
+.study-shell > .product-header {
+  position: sticky;
+  inset-block-start: 0;
 }
 
 .study-bootstrap {
@@ -33,6 +41,9 @@
 }
 
 .study-context {
+  position: sticky;
+  z-index: 5;
+  inset-block-start: var(--header-height);
   min-block-size: 0;
   min-inline-size: 0;
   overflow: visible;
@@ -130,6 +141,7 @@
   grid-template-columns:
     clamp(10.5rem, 13vw, 12rem)
     minmax(0, 1fr);
+  align-items: start;
   min-block-size: 0;
   min-inline-size: 0;
   gap: var(--space-2);
@@ -232,22 +244,26 @@
   display: grid;
   grid-template-rows: auto auto;
   align-content: start;
-  min-block-size: 0;
   min-inline-size: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  scrollbar-gutter: stable;
+  overflow: clip;
   border: 1px solid var(--border-default);
   border-radius: var(--radius-surface);
   background: var(--surface-primary);
 }
 
+/* The page grows with the screenshot; the document owns the scroll. */
 .study-page > .browser-frame {
-  block-size: clamp(18rem, 48vh, 34rem);
+  block-size: auto;
   border: 0;
   border-block-end: 1px solid var(--border-default);
   border-radius: 0;
   box-shadow: none;
+}
+
+.study-page > .browser-frame .browser-viewport,
+.study-page > .browser-frame .screenshot-trigger,
+.study-page > .browser-frame .page-screenshot {
+  block-size: auto;
 }
 
 .decision-inspector {
@@ -499,11 +515,8 @@
 }
 
 .study-response {
-  min-block-size: 0;
   min-inline-size: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 6px var(--space-4) var(--space-2);
+  padding: 6px var(--space-4) var(--space-3);
   border-block-start: 1px solid var(--border-default);
   background: var(--surface-primary);
 }
