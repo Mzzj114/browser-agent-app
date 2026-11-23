@@ -52,6 +52,8 @@ export type StudyMessages = {
   readonly uploadSynced: string
   readonly uploadRetrying: string
   readonly uploadFailedNotice: string
+  readonly submissionDialogTitle: string
+  readonly submissionDialogClose: string
   readonly chooseRun: string
   readonly chooseRunHint: string
   readonly runListLabel: string
@@ -119,6 +121,8 @@ export const zhStudyMessages = {
   uploadSynced: "你的评估已发送到研究服务器。",
   uploadRetrying: "你的评估已保存在本设备，稍后会自动发送。",
   uploadFailedNotice: "你的评估已保存在本设备。请告知研究人员。",
+  submissionDialogTitle: "评估已提交",
+  submissionDialogClose: "完成",
   chooseRun: "选择一个执行记录",
   chooseRunHint: "选择一条记录，查看执行过程并提交你的评估。",
   runListLabel: "执行记录列表",
@@ -188,6 +192,8 @@ export const enStudyMessages = {
   uploadSynced: "Your response was sent to the study server.",
   uploadRetrying: "Your response is saved on this device and will be sent automatically.",
   uploadFailedNotice: "Your response is saved on this device. Please tell the researcher.",
+  submissionDialogTitle: "Response submitted",
+  submissionDialogClose: "Done",
   chooseRun: "Choose a recorded run",
   chooseRunHint: "Select a run to inspect its execution and submit your assessment.",
   runListLabel: "Recorded runs",

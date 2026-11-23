@@ -690,3 +690,49 @@
 .study-response-status:empty {
   display: none;
 }
+
+.submission-success-dialog {
+  inline-size: min(28rem, calc(100vw - 2 * var(--space-6)));
+  padding: var(--space-5);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-panel);
+  background: var(--surface-primary);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-dialog);
+}
+
+.submission-success-dialog::backdrop {
+  background: var(--scrim);
+}
+
+.submission-success-heading {
+  font-size: 18px;
+  font-weight: 590;
+  line-height: 1.4;
+}
+
+.submission-success-body {
+  display: grid;
+  gap: var(--space-2);
+  margin-block-start: var(--space-2);
+}
+
+.submission-success-body p {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.submission-success-status {
+  color: var(--text-tertiary);
+}
+
+.submission-success-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-block-start: var(--space-4);
+}
+
+.submission-success-actions .action-button {
+  min-inline-size: 6rem;
+}
