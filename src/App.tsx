@@ -10,6 +10,7 @@ import { StudyResponseForm } from "./components/ui/study-response-form"
 import { StudyTaskStrip } from "./components/ui/study-task-strip"
 import { SubmissionSuccessDialog } from "./components/ui/submission-success-dialog"
 import {
+  firstViewedSelection,
   initialViewedSelection,
   normalizeViewedSelection,
   type ViewedSelection,
@@ -69,7 +70,9 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
   const session = study?.session ?? null
   const run = runs[locale]
   const episodeIds = run.episodes.map((episode) => episode.id)
-  const [viewed, setViewed] = useState<ViewedSelection>(initialViewedSelection)
+  const [viewed, setViewed] = useState<ViewedSelection>(() =>
+    session === null ? initialViewedSelection() : firstViewedSelection(episodeIds),
+  )
   const activeViewed = normalizeViewedSelection(viewed, episodeIds)
   const viewedEpisode = selectedEpisode(run, activeViewed)
   const observation = viewedObservation(run, activeViewed)

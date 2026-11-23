@@ -10,6 +10,17 @@ export function initialViewedSelection(): ViewedSelection {
   return { kind: "final" }
 }
 
+/**
+ * Study cases open on the first step so participants start at the beginning of
+ * the recorded run. An empty run falls back to the final state.
+ */
+export function firstViewedSelection(episodeIds: readonly string[]): ViewedSelection {
+  const firstEpisodeId = episodeIds[0]
+  return firstEpisodeId === undefined
+    ? initialViewedSelection()
+    : { kind: "episode", episodeId: firstEpisodeId }
+}
+
 export function normalizeViewedSelection(
   selection: ViewedSelection,
   episodeIds: readonly string[],

@@ -40,6 +40,19 @@ function runtime(sink: SubmissionSink): StudyRuntime {
 }
 
 describe("study submission wiring", () => {
+  it("opens a case on the first step while the demo keeps the final state", () => {
+    useEnglish()
+
+    const studyView = render(<App runs={studyRuns("baseline")} study={runtime(async () => {})} />)
+    expect(screen.getByRole("heading", { name: "Viewed step 1" })).toBeVisible()
+    expect(screen.getByText("Before step 1 of 8")).toBeVisible()
+    studyView.unmount()
+
+    render(<App runs={studyRuns("baseline")} />)
+    expect(screen.getByRole("heading", { name: "Final state" })).toBeVisible()
+    expect(screen.getByText("Last recorded state")).toBeVisible()
+  })
+
   it("submits once with the built payload and marks the case complete", async () => {
     useEnglish()
     const user = userEvent.setup()

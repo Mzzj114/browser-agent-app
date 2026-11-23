@@ -31,7 +31,8 @@ test("collects a study submission through a researcher link", async ({ page }) =
   await page.goto(studyUrl(`p=P01&c=1&case=${caseCode}`))
 
   await expect(page.getByText("Case 1 of 3")).toBeVisible()
-  await expect(page.getByRole("heading", { name: "Final state" })).toBeVisible()
+  await expect(page.getByRole("heading", { name: "Viewed step 1" })).toBeVisible()
+  await expect(page.getByText("Before step 1 of 4")).toBeVisible()
   await expect(page.getByRole("heading", { name: "Choose a recorded run" })).toHaveCount(0)
 
   await page.locator(".execution-rail-item").nth(3).click()

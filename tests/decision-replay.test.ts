@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest"
 import {
+  firstViewedSelection,
   initialViewedSelection,
   nextViewedSelection,
   normalizeViewedSelection,
@@ -23,6 +24,22 @@ describe("decision replay selection", () => {
     const selection = initialViewedSelection()
     // Then the separate final state is selected.
     expect(selection).toEqual({ kind: "final" })
+  })
+
+  it("opens a study case on the first step", () => {
+    // Given the episode order of a run.
+    // When the first selection for entering a case is created.
+    const selection = firstViewedSelection(episodeIds)
+    // Then the first step is selected instead of the final state.
+    expect(selection).toEqual(viewedEpisode("episode-01"))
+    expect(viewedObservation(run, selection).id).toBe("obs-00")
+  })
+
+  it("falls back to the final state when a run has no steps", () => {
+    // Given a run without episodes.
+    // When the first selection is created.
+    // Then the final state remains the only valid selection.
+    expect(firstViewedSelection([])).toEqual({ kind: "final" })
   })
 
   it("goes from final state to the terminal decision without conflating them", () => {
