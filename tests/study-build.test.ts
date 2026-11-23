@@ -1,7 +1,8 @@
+import { readFileSync } from "node:fs"
 import { mkdir, readFile, rm, unlink, writeFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
 import { afterEach, describe, expect, it } from "vitest"
-import { type BuildReport, verifyStudyBuild } from "../scripts/study-build.ts"
+import { assertCaseCodes, type BuildReport, verifyStudyBuild } from "../scripts/study-build.ts"
 import { studyConditions } from "../src/domain/study-condition.ts"
 import { studyRunIndexSchema, studyRunSchema } from "../src/domain/study-run-schema.ts"
 import { fixtureRunId, writeBuildFixture } from "./fixtures/study-builds.ts"
@@ -315,5 +316,45 @@ describe("study build verification", () => {
     for (const report of reports) {
       expect(report.coreDigests).toEqual(reports[0]?.coreDigests)
     }
+  })
+})
+
+describe("study case map gate", () => {
+  const manifestIds = new Set(
+    (
+      JSON.parse(readFileSync("fixtures/agent-runs/manifest.json", "utf8")) as {
+        runs: readonly { id: string }[]
+      }
+    ).runs.map((run) => run.id),
+  )
+  const checkedIn = JSON.parse(readFileSync("src/study/cases.json", "utf8")) as Record<
+    string,
+    string
+  >
+
+  function withoutFirstCode(): Record<string, string> {
+    const map = { ...checkedIn }
+    delete map["C01"]
+    return map
+  }
+
+  it("accepts the checked-in case map against the committed library", () => {
+    expect(() => assertCaseCodes(checkedIn, manifestIds)).not.toThrow()
+  })
+
+  it.each([
+    ["a non-object map", null],
+    ["a 22-entry map", withoutFirstCode()],
+    [
+      "a 24-entry map with a duplicate run",
+      { ...checkedIn, C24: checkedIn["C01"] } as Record<string, string>,
+    ],
+    ["an unknown run id", { ...checkedIn, C01: "F1_not_in_library" } as Record<string, string>],
+    [
+      "a bad case code key",
+      { ...withoutFirstCode(), C1: checkedIn["C01"] } as Record<string, string>,
+    ],
+  ])("rejects %s", (_label, raw) => {
+    expect(() => assertCaseCodes(raw, manifestIds)).toThrow()
   })
 })

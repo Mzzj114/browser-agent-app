@@ -88,6 +88,68 @@ const legacySentinels: readonly LegacySentinel[] = [
   { label: "model usage metadata", pattern: /["']?usage["']\s*:/ },
 ]
 
+const caseCodeCount = 23
+const caseCodePattern = /^C\d{2}$/
+
+/**
+ * Spec §8: the checked-in case map must have exactly 23 well-formed codes over
+ * runs that exist in the committed library, or the participant build fails.
+ * This runs at build time; the map never carries expected answers.
+ */
+export function assertCaseCodes(raw: unknown, knownRunIds: ReadonlySet<string>): void {
+  if (typeof raw !== "object" || raw === null || Array.isArray(raw)) {
+    throw new Error("Case code map must be an object mapping codes to run ids")
+  }
+
+  const entries = Object.entries(raw as Record<string, unknown>)
+  if (entries.length !== caseCodeCount) {
+    throw new Error(
+      `Case code map must have exactly ${caseCodeCount} entries, found ${entries.length}`,
+    )
+  }
+
+  const runIds = new Set<string>()
+  for (const [code, runId] of entries) {
+    if (!caseCodePattern.test(code)) {
+      throw new Error(`Invalid case code "${code}"`)
+    }
+    if (typeof runId !== "string" || runId.length === 0) {
+      throw new Error(`Case code "${code}" must map to a non-empty run id`)
+    }
+    if (runIds.has(runId)) {
+      throw new Error(`Duplicate case run id "${runId}"`)
+    }
+    if (!knownRunIds.has(runId)) {
+      throw new Error(`Case code "${code}" references unknown run "${runId}"`)
+    }
+    runIds.add(runId)
+  }
+}
+
+async function assertCaseCodeMap(): Promise<void> {
+  const raw = JSON.parse(await readFile(resolve("src", "study", "cases.json"), "utf8")) as unknown
+  const manifest = JSON.parse(
+    await readFile(resolve("fixtures", "agent-runs", "manifest.json"), "utf8"),
+  ) as { runs?: unknown }
+
+  if (typeof manifest !== "object" || manifest === null || !Array.isArray(manifest.runs)) {
+    throw new Error("The committed run manifest is malformed")
+  }
+  const knownRunIds = new Set<string>()
+  for (const run of manifest.runs as readonly unknown[]) {
+    if (typeof run !== "object" || run === null) {
+      throw new Error("The committed run manifest is malformed")
+    }
+    const id = (run as { id?: unknown }).id
+    if (typeof id !== "string" || id.length === 0) {
+      throw new Error("The committed run manifest is malformed")
+    }
+    knownRunIds.add(id)
+  }
+
+  assertCaseCodes(raw, knownRunIds)
+}
+
 type BuildFile = {
   readonly absolute: string
   readonly relativePath: string
@@ -820,6 +882,10 @@ async function verifyStudyBuildWithRuns(
 
   const runsDirectory = await assertRunsDirectory(buildDirectory)
   const files = await collectFiles(buildDirectory)
+
+  // The checked-in case map gates every participant build against the
+  // committed library, before any artifact inspection.
+  await assertCaseCodeMap()
 
   for (const file of files) {
     assertPermittedPath(buildDirectory, file)
