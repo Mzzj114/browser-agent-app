@@ -150,6 +150,15 @@ test("scrolls the whole page while the header and task stay pinned", async ({ pa
   if (railBox === null) throw new Error("missing rail box")
   expect(railBox.width).toBeGreaterThanOrEqual(230)
   expect(imageBox.height).toBeLessThan(720)
+  // A short run shows every step without an internal rail scroll.
+  expect(railBox.height).toBeLessThanOrEqual(reviewBox.height + 1)
+  await expect
+    .poll(() =>
+      page
+        .locator(".execution-rail-list")
+        .evaluate((element) => element.scrollHeight - element.clientHeight),
+    )
+    .toBeLessThanOrEqual(0)
 
   // When the participant scrolls, the page moves while the header and task stay pinned.
   await page.evaluate(() => window.scrollTo(0, 400))
@@ -169,23 +178,23 @@ test("scrolls the whole page while the header and task stay pinned", async ({ pa
   ).toBeInViewport()
 })
 
-test("caps a long step rail at the screenshot and scrolls it", async ({ page }) => {
+test("caps a long step rail at the review page and scrolls it", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 })
   await page.goto("/?lang=en&run=F1_spec_comparison_clean")
   await page.evaluate(() => document.fonts.ready)
   const rail = page.locator(".execution-rail")
-  const frame = page.locator(".browser-frame")
+  const review = page.locator(".study-page")
   const list = page.locator(".execution-rail-list")
   const items = list.locator(".execution-rail-item")
 
   // Then every recorded step plus Final state is in the rail.
   await expect(items).toHaveCount(37)
 
-  // And the rail never grows past the recorded screenshot.
+  // And the rail never grows past the review page.
   const railBox = await rail.boundingBox()
-  const frameBox = await frame.boundingBox()
-  if (railBox === null || frameBox === null) throw new Error("missing rail boxes")
-  expect(railBox.height).toBeLessThanOrEqual(frameBox.height + 1)
+  const reviewBox = await review.boundingBox()
+  if (railBox === null || reviewBox === null) throw new Error("missing rail boxes")
+  expect(railBox.height).toBeLessThanOrEqual(reviewBox.height + 1)
 
   // The overflowing step list scrolls inside the rail instead.
   await expect

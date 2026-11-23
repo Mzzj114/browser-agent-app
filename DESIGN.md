@@ -121,7 +121,7 @@ All spacing derives from 4px.
 
 - The document scrolls; the product header and compact task strip stay pinned at the top.
 - Task text and the recorded-run provenance note share the task body's internal scroll; neither stays fixed outside it.
-- `.execution-rail-list` owns chronological action scrolling, including Final state as the last item; there is no fixed final-state footer. The rail is capped at the recorded screenshot's height (with a 20rem minimum for a missing image), so long runs scroll inside the rail instead of extending past the image.
+- `.execution-rail-list` owns chronological action scrolling, including Final state as the last item; there is no fixed final-state footer. The rail is capped at the review page's height, so short runs show every step and long runs scroll inside the rail instead of growing past the page.
 - `.browser-viewport` has no overflow in fit mode: the complete image fills the panel width at its intrinsic aspect ratio. Only actual-size inspection scrolls inside the image well, and only when the image exceeds the panel.
 - `.study-page` does not scroll: it grows with the screenshot and all viewed-step evidence, including long candidate chip lists. Its browser frame loses the outer card treatment so the image and evidence read as one page.
 - `.study-response` sits in normal page flow below the review panel, so it is reached by scrolling the document rather than by an inner scroll region.

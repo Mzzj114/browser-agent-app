@@ -70,19 +70,19 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
     document.body.scrollTop = 0
   }, [viewedKey])
 
-  // Cap the rail at the recorded screenshot's height so long runs scroll inside the rail.
+  // Cap the rail at the review page's height so it only scrolls when the steps outgrow the page.
   useLayoutEffect(() => {
     const main = mainRef.current
-    const frame = pageRef.current?.querySelector<HTMLElement>(".browser-frame")
-    if (!main || !frame) return
+    const page = pageRef.current
+    if (!main || !page) return
     const apply = () => {
-      const height = frame.getBoundingClientRect().height
+      const height = page.getBoundingClientRect().height
       if (height > 0) main.style.setProperty("--rail-max-block-size", `${height}px`)
     }
     apply()
     if (typeof ResizeObserver === "undefined") return
     const observer = new ResizeObserver(apply)
-    observer.observe(frame)
+    observer.observe(page)
     return () => observer.disconnect()
   }, [])
 
