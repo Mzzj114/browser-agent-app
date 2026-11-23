@@ -201,7 +201,7 @@ describe("primitive controls", () => {
     expect(document.querySelector(".screenshot-trigger")).toHaveAttribute("data-zoomed", "true")
   })
 
-  it("disables compact zoom when no screenshot is usable", () => {
+  it("renders an accurate compact missing-image state and disables zoom", () => {
     renderWithLocale(
       <BrowserFrame
         {...browserProps}
@@ -210,6 +210,13 @@ describe("primitive controls", () => {
       />,
     )
 
+    // Then the compact state names the missing evidence and what remains available.
+    expect(screen.getByText("此步骤没有可用截图")).toBeVisible()
+    expect(screen.getByText("任务和步骤详情仍可查看。")).toBeVisible()
+    expect(screen.getByText("步骤 2 / 8 · 此步之后录制")).toBeVisible()
+    // And it does not promise the full-variant URL/title metadata.
+    expect(screen.queryByText(samplePage.title)).toBeNull()
+    expect(screen.queryByText(samplePage.url)).toBeNull()
     const zoom = screen.getByText("放大").closest("button")
     expect(zoom).toBeDisabled()
   })

@@ -24,9 +24,6 @@ export type Messages = {
   readonly missingScreenshotHint: string
   readonly stepRecordedAfter: (ordinal: number, total: number) => string
   readonly lastRecordedState: string
-  readonly lastRecordedStateNote: string
-  readonly recordedNotLive: string
-  readonly capturedAt: (time: string) => string
   readonly zoomScreenshot: string
   readonly fitScreenshot: string
   readonly zoomLabel: string
@@ -93,12 +90,9 @@ export const zhMessages = {
   recordedExecution: (count) => `录制执行 · ${count} 步`,
   screenshotAlt: (pageTitle) => `${pageTitle}，录制页面截图`,
   missingScreenshotTitle: "此步骤没有可用截图",
-  missingScreenshotHint: "仍可查看上方记录的网址与页面标题。",
+  missingScreenshotHint: "任务和步骤详情仍可查看。",
   stepRecordedAfter: (ordinal, total) => `步骤 ${ordinal} / ${total} · 此步之后录制`,
   lastRecordedState: "最后一次录制的状态",
-  lastRecordedStateNote: "运行结束时录制 · 非实时",
-  recordedNotLive: "录制 · 非实时",
-  capturedAt: (time) => `录制于 ${time}`,
   zoomScreenshot: "放大截图至实际大小",
   fitScreenshot: "缩放截图以适应面板",
   zoomLabel: "放大",
@@ -169,12 +163,9 @@ export const enMessages = {
   recordedExecution: (count) => `Recorded execution · ${count} ${count === 1 ? "step" : "steps"}`,
   screenshotAlt: (pageTitle) => `${pageTitle}, recorded page screenshot`,
   missingScreenshotTitle: "No screenshot for this step",
-  missingScreenshotHint: "The recorded URL and page title are still shown above.",
+  missingScreenshotHint: "The task and step details remain available.",
   stepRecordedAfter: (ordinal, total) => `Step ${ordinal} / ${total} · recorded after this step`,
   lastRecordedState: "Last recorded state",
-  lastRecordedStateNote: "End of run · not live",
-  recordedNotLive: "Recorded · not live",
-  capturedAt: (time) => `Captured ${time}`,
   zoomScreenshot: "Zoom screenshot to actual size",
   fitScreenshot: "Fit screenshot to panel",
   zoomLabel: "Zoom",
