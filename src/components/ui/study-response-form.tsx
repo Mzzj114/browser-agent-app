@@ -12,6 +12,8 @@ import { ActionButton } from "./buttons"
 type StudyResponseFormProps = {
   readonly state: StudyResponse
   readonly onResponse: (action: ResponseAction) => void
+  readonly mode?: "demo" | "study"
+  readonly uploadStatus?: "synced" | "retrying" | "failed" | null
 }
 
 function describedBy(...values: readonly (string | undefined)[]): string | undefined {
@@ -22,9 +24,12 @@ function describedBy(...values: readonly (string | undefined)[]): string | undef
 export function StudyResponseForm({
   state,
   onResponse,
+  mode = "demo",
+  uploadStatus = null,
 }: StudyResponseFormProps): React.JSX.Element {
   const messages = useMessages()
   const idPrefix = useId()
+  const studyMode = mode === "study"
   const [submitAttempted, setSubmitAttempted] = useState(false)
   const [invalidSubmitCount, setInvalidSubmitCount] = useState(0)
   const summaryRef = useRef<HTMLDivElement>(null)
@@ -157,7 +162,7 @@ export function StudyResponseForm({
         <ActionButton
           type="submit"
           disabled={submitted || state.verdict === null}
-          aria-describedby={describedBy(consequenceId, onScreenOnlyId)}
+          aria-describedby={describedBy(consequenceId, studyMode ? undefined : onScreenOnlyId)}
         >
           {messages.decisionSubmit}
         </ActionButton>
@@ -168,12 +173,27 @@ export function StudyResponseForm({
         <p id={consequenceId} className="study-response-consequence">
           {messages.decisionExplanation}
         </p>
-        <p id={onScreenOnlyId} className="study-response-on-screen-only">
-          {messages.study.onScreenOnly}
-        </p>
+        {studyMode ? null : (
+          <p id={onScreenOnlyId} className="study-response-on-screen-only">
+            {messages.study.onScreenOnly}
+          </p>
+        )}
         <p className="study-response-status" role="status" aria-live="polite">
-          {submitted ? messages.study.responseSubmittedStatus : ""}
+          {submitted
+            ? studyMode
+              ? messages.study.studySubmittedNotice
+              : messages.study.responseSubmittedStatus
+            : ""}
         </p>
+        {submitted && studyMode && uploadStatus !== null ? (
+          <p className="study-response-upload" role="status">
+            {uploadStatus === "synced"
+              ? messages.study.uploadSynced
+              : uploadStatus === "retrying"
+                ? messages.study.uploadRetrying
+                : messages.study.uploadFailedNotice}
+          </p>
+        ) : null}
       </div>
     </form>
   )

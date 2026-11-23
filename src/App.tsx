@@ -22,11 +22,25 @@ import {
 } from "./domain/study-response"
 import type { StudyRun, StudyRuns } from "./domain/study-run-schema"
 import { LocaleProvider, useLocale } from "./i18n"
-import type { StudySession } from "./study/session"
+import type { StudyRuntime } from "./study/runtime"
+import { buildSubmission } from "./study/submission"
+import {
+  enqueueSubmission,
+  flushSubmissionQueue,
+  queuedSubmissionStatus,
+  writeCompletedMarker,
+} from "./study/submission-store"
+import {
+  finishReviewTiming,
+  type ReviewTiming,
+  recordFinalView,
+  recordStepView,
+  startReviewTiming,
+} from "./study/timing"
 
 type AppProps = {
   readonly runs: StudyRuns
-  readonly study?: StudySession | null
+  readonly study?: StudyRuntime | null
 }
 
 type ViewedEpisode = {
@@ -51,6 +65,7 @@ export function App({ runs, study }: AppProps): React.JSX.Element {
 
 function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
   const { locale, messages } = useLocale()
+  const session = study?.session ?? null
   const run = runs[locale]
   const episodeIds = run.episodes.map((episode) => episode.id)
   const [viewed, setViewed] = useState<ViewedSelection>(initialViewedSelection)
@@ -61,9 +76,17 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
     (state: StudyResponse, action: ResponseAction) => updateStudyResponse(state, action),
     initialStudyResponse(),
   )
+  const [uploadStatus, setUploadStatus] = useState<"synced" | "retrying" | "failed" | null>(null)
   const viewedKey = activeViewed.kind === "final" ? "final" : activeViewed.episodeId
   const mainRef = useRef<HTMLElement>(null)
   const pageRef = useRef<HTMLElement>(null)
+  const timingRef = useRef<ReviewTiming | null>(null)
+  const submissionIdRef = useRef<string | null>(null)
+  const submittedRef = useRef(false)
+
+  if (session !== null && timingRef.current === null) {
+    timingRef.current = startReviewTiming(new Date().toISOString(), performance.now())
+  }
 
   // The document scrolls, so reset it to the top of the review page on selection.
   // biome-ignore lint/correctness/useExhaustiveDependencies: the viewed selection key controls the reset.
@@ -94,11 +117,79 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
       : messages.study.beforeStepCaption(viewedEpisode.episode.ordinal, run.episodes.length)
 
   const viewEpisode = (episodeId: string) => {
+    if (session !== null) {
+      const current =
+        timingRef.current ?? startReviewTiming(new Date().toISOString(), performance.now())
+      timingRef.current = recordStepView(current, episodeId)
+    }
     setViewed({ kind: "episode", episodeId })
   }
   const goFinal = () => {
+    if (session !== null) {
+      const current =
+        timingRef.current ?? startReviewTiming(new Date().toISOString(), performance.now())
+      timingRef.current = recordFinalView(current)
+    }
     setViewed(initialViewedSelection())
   }
+
+  // A submitted study case is persisted and queued exactly once, even if this
+  // effect re-runs after a locale switch or a re-render.
+  useEffect(() => {
+    if (study == null || response.status !== "submitted" || response.verdict === null) return
+    if (submittedRef.current) return
+    submittedRef.current = true
+
+    const { session: submittedSession, sink } = study
+    const timing =
+      timingRef.current ?? startReviewTiming(new Date().toISOString(), performance.now())
+    const submissionId = crypto.randomUUID()
+    submissionIdRef.current = submissionId
+    const payload = buildSubmission({
+      session: submittedSession,
+      locale,
+      verdict: response.verdict,
+      explanation: response.explanation,
+      timing,
+      finished: finishReviewTiming(timing, performance.now()),
+      submittedAtIso: new Date().toISOString(),
+      viewport: { width: window.innerWidth, height: window.innerHeight },
+      submissionId,
+    })
+
+    writeCompletedMarker(
+      window.localStorage,
+      submittedSession.participantCode,
+      submittedSession.caseOrder,
+      submittedSession.runId,
+      submissionId,
+    )
+    enqueueSubmission(window.localStorage, payload)
+
+    const refreshUploadStatus = () => {
+      const id = submissionIdRef.current
+      if (id === null) return
+      const outcome = queuedSubmissionStatus(window.localStorage, id)
+      setUploadStatus(outcome === "delivered" ? "synced" : outcome)
+    }
+    void flushSubmissionQueue(window.localStorage, sink).then(refreshUploadStatus)
+  }, [study, locale, response])
+
+  // While the case upload is still pending, going back online retries it.
+  useEffect(() => {
+    if (study == null || uploadStatus !== "retrying") return
+
+    const onOnline = () => {
+      void flushSubmissionQueue(window.localStorage, study.sink).then(() => {
+        const id = submissionIdRef.current
+        if (id === null) return
+        const outcome = queuedSubmissionStatus(window.localStorage, id)
+        setUploadStatus(outcome === "delivered" ? "synced" : outcome)
+      })
+    }
+    window.addEventListener("online", onOnline)
+    return () => window.removeEventListener("online", onOnline)
+  }, [study, uploadStatus])
 
   return (
     <>
@@ -107,9 +198,9 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
         <header className="product-header">
           <BrandMark />
           <div className="product-header-actions">
-            {study === null || study === undefined ? null : (
+            {session === null ? null : (
               <span className="case-progress">
-                {messages.study.caseProgress(study.caseOrder, 3)}
+                {messages.study.caseProgress(session.caseOrder, 3)}
               </span>
             )}
             <StatusBadge label={messages.stepCountBadge(run.episodes.length)} icon={<ListTree />} />
@@ -139,7 +230,12 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
         </main>
 
         <section className="study-response" aria-label={messages.decisionQuestion}>
-          <StudyResponseForm state={response} onResponse={dispatchResponse} />
+          <StudyResponseForm
+            state={response}
+            onResponse={dispatchResponse}
+            mode={session === null ? "demo" : "study"}
+            uploadStatus={session === null ? null : uploadStatus}
+          />
         </section>
       </div>
       <DesktopOnlyMessage />

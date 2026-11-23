@@ -259,6 +259,12 @@ describe("study copy", () => {
       expect(messages.studyConfigErrorHint).not.toBe("")
       expect(messages.caseProgress(2, 3)).toContain("2")
       expect(messages.caseProgress(2, 3)).toContain("3")
+      expect(typeof messages.studySubmittedNotice).toBe("string")
+      expect(typeof messages.uploadSynced).toBe("string")
+      expect(typeof messages.uploadRetrying).toBe("string")
+      expect(typeof messages.uploadFailedNotice).toBe("string")
+      expect(messages.uploadSynced).not.toBe(messages.uploadRetrying)
+      expect(messages.uploadRetrying).not.toBe(messages.uploadFailedNotice)
     }
   })
 })

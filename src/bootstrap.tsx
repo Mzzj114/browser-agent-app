@@ -1,6 +1,7 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { App } from "./App"
+import { StudySubmittedNotice } from "./components/ui/study-submitted-notice"
 import { loadRunIndex, loadStudyRun } from "./data/load-study-runs"
 import type { StudyCondition } from "./domain/study-condition"
 import type { StudyRunIndex } from "./domain/study-run-schema"
@@ -9,7 +10,13 @@ import { RunPicker } from "./RunPicker"
 import { caseCodes } from "./study/case-codes.ts"
 import { parseStudyLink } from "./study/case-link.ts"
 import { submissionSinkConfig } from "./study/config.ts"
-import type { StudySession } from "./study/session.ts"
+import type { StudyRuntime } from "./study/runtime.ts"
+import {
+  flushSubmissionQueue,
+  queuedSubmissionStatus,
+  readCompletedMarker,
+} from "./study/submission-store.ts"
+import { restSubmissionSink } from "./study/supabase-rest.ts"
 
 type BootstrapNoticeProps = {
   readonly text: string
@@ -123,20 +130,52 @@ export async function mountStudyApp(
     return
   }
 
+  const sink = restSubmissionSink(sinkConfig)
+
+  const marker = readCompletedMarker(
+    window.localStorage,
+    link.participantCode,
+    link.caseOrder,
+    link.runId,
+  )
+  if (marker !== null) {
+    // A submitted case never revives a blank form on reload or the back button.
+    const renderSubmittedNotice = () => {
+      root.render(
+        <StrictMode>
+          <LocaleProvider>
+            <StudySubmittedNotice
+              uploadStatus={queuedSubmissionStatus(window.localStorage, marker.submissionId)}
+            />
+          </LocaleProvider>
+        </StrictMode>,
+      )
+    }
+    renderSubmittedNotice()
+    void flushSubmissionQueue(window.localStorage, sink).then(renderSubmittedNotice)
+    return
+  }
+
+  // A fresh case still retries anything older that is queued on this device.
+  void flushSubmissionQueue(window.localStorage, sink)
+
   const summary = index.runs.find((run) => run.id === link.runId)
   if (summary === undefined) {
     renderError(messages.invalidLinkTitle, messages.invalidLinkHint)
     return
   }
 
-  const session: StudySession = {
-    participantCode: link.participantCode,
-    caseOrder: link.caseOrder,
-    caseCode: link.caseCode,
-    runId: link.runId,
-    condition,
-    fixtureRevision: index.fixtureRevision,
-    appVersion: __APP_VERSION__,
+  const runtime: StudyRuntime = {
+    session: {
+      participantCode: link.participantCode,
+      caseOrder: link.caseOrder,
+      caseCode: link.caseCode,
+      runId: link.runId,
+      condition,
+      fixtureRevision: index.fixtureRevision,
+      appVersion: __APP_VERSION__,
+    },
+    sink,
   }
 
   root.render(
@@ -149,7 +188,7 @@ export async function mountStudyApp(
     const runs = await loadStudyRun(runsBaseUrl, index, summary.id)
     root.render(
       <StrictMode>
-        <App runs={runs} study={session} />
+        <App runs={runs} study={runtime} />
       </StrictMode>,
     )
   } catch {

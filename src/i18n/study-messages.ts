@@ -48,6 +48,10 @@ export type StudyMessages = {
   readonly studyConfigErrorTitle: string
   readonly studyConfigErrorHint: string
   readonly caseProgress: (order: number, total: number) => string
+  readonly studySubmittedNotice: string
+  readonly uploadSynced: string
+  readonly uploadRetrying: string
+  readonly uploadFailedNotice: string
   readonly chooseRun: string
   readonly chooseRunHint: string
   readonly runListLabel: string
@@ -111,6 +115,10 @@ export const zhStudyMessages = {
   studyConfigErrorTitle: "研究材料暂时不可用",
   studyConfigErrorHint: "请告知研究人员，以便恢复数据收集。",
   caseProgress: (order, total) => `案例 ${order} / ${total}`,
+  studySubmittedNotice: "案例已提交。请等待研究人员继续。",
+  uploadSynced: "你的评估已发送到研究服务器。",
+  uploadRetrying: "你的评估已保存在本设备，稍后会自动发送。",
+  uploadFailedNotice: "你的评估已保存在本设备。请告知研究人员。",
   chooseRun: "选择一个执行记录",
   chooseRunHint: "选择一条记录，查看执行过程并提交你的评估。",
   runListLabel: "执行记录列表",
@@ -176,6 +184,10 @@ export const enStudyMessages = {
   studyConfigErrorTitle: "The study is not available right now",
   studyConfigErrorHint: "Please tell the researcher so the setup can be fixed.",
   caseProgress: (order, total) => `Case ${order} of ${total}`,
+  studySubmittedNotice: "Case submitted. Please wait for the researcher.",
+  uploadSynced: "Your response was sent to the study server.",
+  uploadRetrying: "Your response is saved on this device and will be sent automatically.",
+  uploadFailedNotice: "Your response is saved on this device. Please tell the researcher.",
   chooseRun: "Choose a recorded run",
   chooseRunHint: "Select a run to inspect its execution and submit your assessment.",
   runListLabel: "Recorded runs",

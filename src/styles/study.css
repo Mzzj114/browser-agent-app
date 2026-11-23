@@ -667,7 +667,8 @@
 
 .study-response-consequence,
 .study-response-on-screen-only,
-.study-response-status {
+.study-response-status,
+.study-response-upload {
   font-size: 12px;
   line-height: 1.5;
 }
@@ -677,8 +678,13 @@
 }
 
 .study-response-on-screen-only,
-.study-response-status {
+.study-response-status,
+.study-response-upload {
   color: var(--text-tertiary);
+}
+
+.study-response-upload {
+  margin: 0;
 }
 
 .study-response-status:empty {

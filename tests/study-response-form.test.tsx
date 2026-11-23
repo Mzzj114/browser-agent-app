@@ -15,9 +15,11 @@ type HarnessProps = {
   readonly locale?: "en" | "zh"
   readonly initial?: StudyResponse
   readonly onResponse?: (action: ResponseAction) => void
+  readonly mode?: "demo" | "study"
+  readonly uploadStatus?: "synced" | "retrying" | "failed" | null
 }
 
-function Harness({ locale = "en", initial, onResponse }: HarnessProps) {
+function Harness({ locale = "en", initial, onResponse, mode, uploadStatus }: HarnessProps) {
   const [state, setState] = useState(initial ?? initialStudyResponse())
 
   function handleResponse(action: ResponseAction) {
@@ -27,7 +29,12 @@ function Harness({ locale = "en", initial, onResponse }: HarnessProps) {
 
   return (
     <LocaleProvider initialLocale={locale} syncDocument={false}>
-      <StudyResponseForm state={state} onResponse={handleResponse} />
+      <StudyResponseForm
+        state={state}
+        onResponse={handleResponse}
+        mode={mode ?? "demo"}
+        uploadStatus={uploadStatus ?? null}
+      />
     </LocaleProvider>
   )
 }
@@ -234,5 +241,56 @@ describe("study response form", () => {
     expect(fetchSpy).not.toHaveBeenCalled()
     expect(storageSpy).not.toHaveBeenCalled()
     expect(document.querySelector("a[download]")).toBeNull()
+  })
+
+  it("replaces the on-page-only copy with the study submitted notice", async () => {
+    const user = userEvent.setup()
+    render(<Harness mode="study" />)
+
+    expect(
+      screen.queryByText("Shown on this page only. Reloading clears your response."),
+    ).toBeNull()
+
+    await user.click(screen.getByRole("button", { name: "Fulfills the request" }))
+    await user.click(submitButton())
+
+    expect(screen.getByText("Case submitted. Please wait for the researcher.")).toBeVisible()
+    expect(screen.queryByText("Response recorded on this page only.")).toBeNull()
+  })
+
+  it("shows the honest upload line for each sync status", () => {
+    const cases = [
+      ["synced", "Your response was sent to the study server."],
+      ["retrying", "Your response is saved on this device and will be sent automatically."],
+      ["failed", "Your response is saved on this device. Please tell the researcher."],
+    ] as const
+
+    for (const [uploadStatus, line] of cases) {
+      const view = render(
+        <Harness
+          mode="study"
+          uploadStatus={uploadStatus}
+          initial={{ status: "submitted", verdict: "accepted", explanation: "" }}
+        />,
+      )
+      expect(screen.getByText(line)).toBeVisible()
+      view.unmount()
+    }
+  })
+
+  it("keeps the demo copy and submitted status in demo mode", async () => {
+    const user = userEvent.setup()
+    render(<Harness />)
+
+    expect(
+      screen.getByText("Shown on this page only. Reloading clears your response."),
+    ).toBeVisible()
+
+    await user.click(screen.getByRole("button", { name: "Fulfills the request" }))
+    await user.click(submitButton())
+
+    expect(screen.getByText("Response recorded on this page only.")).toBeVisible()
+    expect(screen.queryByText("Case submitted. Please wait for the researcher.")).toBeNull()
+    expect(screen.queryByText(/saved on this device|sent to the study server/i)).toBeNull()
   })
 })

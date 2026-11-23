@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest"
 import { App } from "../src/App"
 import { studyConditions } from "../src/domain/study-condition.ts"
 import type { StudySession } from "../src/study/session.ts"
+import type { SubmissionSink } from "../src/study/supabase-rest.ts"
 import { studyRuns } from "./fixtures/decision-runs.ts"
 
 function useEnglish(): void {
@@ -523,7 +524,7 @@ describe("decision evidence workspace", () => {
   it("shows the quiet case progress label in study mode", () => {
     // Given a researcher-built study link for the second of three cases.
     useEnglish()
-    const study: StudySession = {
+    const session: StudySession = {
       participantCode: "P07",
       caseOrder: 2,
       caseCode: "C12",
@@ -532,9 +533,10 @@ describe("decision evidence workspace", () => {
       fixtureRevision: "decision-replay/2",
       appVersion: "0.1.0",
     }
+    const sink: SubmissionSink = async () => {}
 
     // When the workspace mounts in study mode.
-    render(<App runs={studyRuns("baseline")} study={study} />)
+    render(<App runs={studyRuns("baseline")} study={{ session, sink }} />)
 
     // Then a quiet progress label sits in the header without revealing more.
     expect(screen.getByText("Case 2 of 3")).toBeVisible()
