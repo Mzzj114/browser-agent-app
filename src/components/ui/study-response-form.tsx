@@ -14,6 +14,7 @@ type StudyResponseFormProps = {
   readonly onResponse: (action: ResponseAction) => void
   readonly mode?: "demo" | "study"
   readonly uploadStatus?: "synced" | "retrying" | "failed" | null
+  readonly statusRef?: React.RefObject<HTMLParagraphElement | null>
 }
 
 function describedBy(...values: readonly (string | undefined)[]): string | undefined {
@@ -26,6 +27,7 @@ export function StudyResponseForm({
   onResponse,
   mode = "demo",
   uploadStatus = null,
+  statusRef,
 }: StudyResponseFormProps): React.JSX.Element {
   const messages = useMessages()
   const idPrefix = useId()
@@ -178,7 +180,13 @@ export function StudyResponseForm({
             {messages.study.onScreenOnly}
           </p>
         )}
-        <p className="study-response-status" role="status" aria-live="polite">
+        <p
+          ref={statusRef}
+          className="study-response-status"
+          role="status"
+          aria-live="polite"
+          tabIndex={-1}
+        >
           {submitted
             ? studyMode
               ? messages.study.studySubmittedNotice

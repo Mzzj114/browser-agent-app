@@ -1,13 +1,19 @@
 import { fireEvent, render, screen, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { useState } from "react"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import { SubmissionSuccessDialog } from "../src/components/ui/submission-success-dialog"
 import { LocaleProvider } from "../src/i18n"
 
 type UploadStatus = "synced" | "retrying" | "failed" | null
 
-function Harness({ uploadStatus }: { readonly uploadStatus: UploadStatus }) {
+function Harness({
+  uploadStatus,
+  onClose,
+}: {
+  readonly uploadStatus: UploadStatus
+  readonly onClose?: () => void
+}) {
   const [open, setOpen] = useState(true)
 
   return (
@@ -15,7 +21,10 @@ function Harness({ uploadStatus }: { readonly uploadStatus: UploadStatus }) {
       <SubmissionSuccessDialog
         open={open}
         uploadStatus={uploadStatus}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          onClose?.()
+          setOpen(false)
+        }}
       />
     </LocaleProvider>
   )
@@ -52,23 +61,25 @@ describe("submission success dialog", () => {
     }
   })
 
-  it("omits the upload line until an outcome is known and updates it later", () => {
+  it("keeps an empty live region until an outcome is known and updates it later", () => {
     const view = render(<Harness uploadStatus={null} />)
 
-    expect(within(screen.getByRole("dialog")).queryByRole("status")).toBeNull()
+    expect(within(screen.getByRole("dialog")).getByRole("status")).toBeEmptyDOMElement()
 
     view.rerender(<Harness uploadStatus="synced" />)
 
-    expect(
-      within(screen.getByRole("dialog")).getByText("Your response was sent to the study server."),
-    ).toBeVisible()
+    expect(within(screen.getByRole("dialog")).getByRole("status")).toHaveTextContent(
+      "Your response was sent to the study server.",
+    )
   })
 
-  it("closes on the dialog cancel event", () => {
-    render(<Harness uploadStatus="retrying" />)
+  it("closes through onClose on the dialog cancel event", () => {
+    const onClose = vi.fn()
+    render(<Harness uploadStatus="retrying" onClose={onClose} />)
 
     fireEvent(screen.getByRole("dialog"), new Event("cancel", { bubbles: true, cancelable: true }))
 
+    expect(onClose).toHaveBeenCalledTimes(1)
     expect(document.querySelector("dialog")).not.toHaveAttribute("open")
   })
 

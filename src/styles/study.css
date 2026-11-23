@@ -727,6 +727,10 @@
   color: var(--text-tertiary);
 }
 
+.submission-success-status:empty {
+  display: none;
+}
+
 .submission-success-actions {
   display: flex;
   justify-content: flex-end;

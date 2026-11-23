@@ -52,6 +52,7 @@ test("collects a study submission through a researcher link", async ({ page }) =
 
   await expect(dialog).toHaveCount(0)
   await expect(page.getByText("Case submitted. Please wait for the researcher.")).toBeVisible()
+  await expect(page.getByText("Case submitted. Please wait for the researcher.")).toBeFocused()
   await expect(page.getByText("Your response was sent to the study server.")).toBeVisible()
   await expect(
     page.getByText("Shown on this page only. Reloading clears your response."),
@@ -82,15 +83,32 @@ test("shows the submitted notice on reload instead of a blank form", async ({ pa
   await page.getByRole("button", { name: "Submit assessment" }).click()
   const dialog = page.getByRole("dialog")
   await expect(dialog).toBeVisible()
-  await dialog.getByRole("button", { name: "Done" }).click()
-  await expect(page.getByText("Case submitted. Please wait for the researcher.")).toBeVisible()
 
   await page.reload()
 
   await expect(
     page.getByRole("heading", { name: "Case submitted. Please wait for the researcher." }),
   ).toBeVisible()
+  await expect(page.getByRole("dialog")).toHaveCount(0)
   await expect(page.getByRole("button", { name: "Submit assessment" })).toHaveCount(0)
+})
+
+test("dismisses the success dialog with Escape and focuses the submitted notice", async ({
+  page,
+}) => {
+  await page.route(submissionUrl, (route) => route.fulfill({ status: 201 }))
+
+  await page.goto(studyUrl(`p=P03&c=2&case=${caseCode}`))
+  await page.getByRole("button", { name: "Fulfills the request" }).click()
+  await page.getByRole("button", { name: "Submit assessment" }).click()
+
+  const dialog = page.getByRole("dialog")
+  await expect(dialog).toBeVisible()
+
+  await page.keyboard.press("Escape")
+
+  await expect(dialog).toHaveCount(0)
+  await expect(page.getByText("Case submitted. Please wait for the researcher.")).toBeFocused()
 })
 
 test("retries a failed upload when the browser comes back online", async ({ page }) => {

@@ -67,11 +67,9 @@ export function SubmissionSuccessDialog({
       </h2>
       <div id={descriptionId} className="submission-success-body">
         <p>{messages.study.studySubmittedNotice}</p>
-        {uploadLine === null ? null : (
-          <p className="submission-success-status" role="status" aria-live="polite">
-            {uploadLine}
-          </p>
-        )}
+        <p className="submission-success-status" role="status" aria-live="polite">
+          {uploadLine ?? ""}
+        </p>
       </div>
       <div className="submission-success-actions">
         <ActionButton onClick={onClose}>{messages.study.submissionDialogClose}</ActionButton>

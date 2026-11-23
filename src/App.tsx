@@ -82,6 +82,8 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
   const viewedKey = activeViewed.kind === "final" ? "final" : activeViewed.episodeId
   const mainRef = useRef<HTMLElement>(null)
   const pageRef = useRef<HTMLElement>(null)
+  const responseStatusRef = useRef<HTMLParagraphElement>(null)
+  const restoreResponseFocus = useRef(false)
   const timingRef = useRef<ReviewTiming | null>(null)
   const submissionIdRef = useRef<string | null>(null)
   const submittedRef = useRef(false)
@@ -177,6 +179,13 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
     void flushSubmissionQueue(window.localStorage, sink).then(refreshUploadStatus)
   }, [study, locale, response])
 
+  // Closing the acknowledgement must not strand keyboard focus on the body.
+  useEffect(() => {
+    if (!successDialogDismissed || !restoreResponseFocus.current) return
+    restoreResponseFocus.current = false
+    responseStatusRef.current?.focus()
+  }, [successDialogDismissed])
+
   // While the case upload is still pending, going back online retries it.
   useEffect(() => {
     if (study == null || uploadStatus !== "retrying") return
@@ -237,6 +246,7 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
             onResponse={dispatchResponse}
             mode={session === null ? "demo" : "study"}
             uploadStatus={session === null ? null : uploadStatus}
+            statusRef={responseStatusRef}
           />
         </section>
       </div>
@@ -244,7 +254,10 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
         <SubmissionSuccessDialog
           open
           uploadStatus={uploadStatus}
-          onClose={() => setSuccessDialogDismissed(true)}
+          onClose={() => {
+            restoreResponseFocus.current = true
+            setSuccessDialogDismissed(true)
+          }}
         />
       )}
       <DesktopOnlyMessage />

@@ -93,6 +93,7 @@ describe("study submission wiring", () => {
 
     expect(screen.queryByRole("dialog")).toBeNull()
     expect(screen.getByText("Case submitted. Please wait for the researcher.")).toBeVisible()
+    expect(screen.getByText("Case submitted. Please wait for the researcher.")).toHaveFocus()
     await screen.findByText("Your response was sent to the study server.")
     expect(
       screen.queryByText("Shown on this page only. Reloading clears your response."),
@@ -203,13 +204,15 @@ describe("study submission wiring", () => {
     await user.click(screen.getByRole("button", { name: "Submit assessment" }))
 
     const dialog = await screen.findByRole("dialog", { name: "Response submitted" })
-    expect(within(dialog).queryByRole("status")).toBeNull()
+    expect(within(dialog).getByRole("status")).toBeEmptyDOMElement()
 
     await waitFor(() => expect(sunk).toHaveLength(1))
     delivery.resolve()
 
     await waitFor(() =>
-      expect(within(dialog).getByText("Your response was sent to the study server.")).toBeVisible(),
+      expect(within(dialog).getByRole("status")).toHaveTextContent(
+        "Your response was sent to the study server.",
+      ),
     )
   })
 
