@@ -42,6 +42,15 @@ test("collects a study submission through a researcher link", async ({ page }) =
     .fill("The cart holds the wrong product.")
   await page.getByRole("button", { name: "Submit assessment" }).click()
 
+  const dialog = page.getByRole("dialog")
+  await expect(dialog.getByRole("heading", { name: "Response submitted" })).toBeVisible()
+  await expect(dialog.getByRole("button", { name: "Done" })).toBeFocused()
+  await expect(dialog.getByText("Case submitted. Please wait for the researcher.")).toBeVisible()
+  await expect(dialog.getByText("Your response was sent to the study server.")).toBeVisible()
+
+  await dialog.getByRole("button", { name: "Done" }).click()
+
+  await expect(dialog).toHaveCount(0)
   await expect(page.getByText("Case submitted. Please wait for the researcher.")).toBeVisible()
   await expect(page.getByText("Your response was sent to the study server.")).toBeVisible()
   await expect(
@@ -71,6 +80,9 @@ test("shows the submitted notice on reload instead of a blank form", async ({ pa
   await page.goto(studyUrl(`p=P01&c=2&case=${caseCode}`))
   await page.getByRole("button", { name: "Fulfills the request" }).click()
   await page.getByRole("button", { name: "Submit assessment" }).click()
+  const dialog = page.getByRole("dialog")
+  await expect(dialog).toBeVisible()
+  await dialog.getByRole("button", { name: "Done" }).click()
   await expect(page.getByText("Case submitted. Please wait for the researcher.")).toBeVisible()
 
   await page.reload()
@@ -91,14 +103,15 @@ test("retries a failed upload when the browser comes back online", async ({ page
   await page.getByRole("button", { name: "Fulfills the request" }).click()
   await page.getByRole("button", { name: "Submit assessment" }).click()
 
+  const dialog = page.getByRole("dialog")
   await expect(
-    page.getByText("Your response is saved on this device and will be sent automatically."),
+    dialog.getByText("Your response is saved on this device and will be sent automatically."),
   ).toBeVisible()
 
   offline = false
   await page.evaluate(() => window.dispatchEvent(new Event("online")))
 
-  await expect(page.getByText("Your response was sent to the study server.")).toBeVisible()
+  await expect(dialog.getByText("Your response was sent to the study server.")).toBeVisible()
 })
 
 test("retries a queued upload from the submitted notice when back online", async ({ page }) => {
@@ -110,9 +123,11 @@ test("retries a queued upload from the submitted notice when back online", async
   await page.goto(studyUrl(`p=P02&c=1&case=${caseCode}`))
   await page.getByRole("button", { name: "Fulfills the request" }).click()
   await page.getByRole("button", { name: "Submit assessment" }).click()
+  const dialog = page.getByRole("dialog")
   await expect(
-    page.getByText("Your response is saved on this device and will be sent automatically."),
+    dialog.getByText("Your response is saved on this device and will be sent automatically."),
   ).toBeVisible()
+  await dialog.getByRole("button", { name: "Done" }).click()
 
   await page.reload()
 
@@ -137,7 +152,9 @@ test("reports a permanent rejection honestly", async ({ page }) => {
   await page.getByRole("button", { name: "Submit assessment" }).click()
 
   await expect(
-    page.getByText("Your response is saved on this device. Please tell the researcher."),
+    page
+      .getByRole("dialog")
+      .getByText("Your response is saved on this device. Please tell the researcher."),
   ).toBeVisible()
   await expect(
     page.getByText("Your response is saved on this device and will be sent automatically."),
