@@ -11,6 +11,7 @@
 **Spec:** `docs/superpowers/specs/2026-11-18-evidence-first-inspector-design.md`
 
 ## Global Constraints
+
 - Final state is the last item in the SAME scrolling execution list, using the same item style and selection treatment as episodes; no fixed footer or extra step number.
 - Initial view remains final state; final state cannot be marked.
 - Navigation and marking remain independent; submission locks the form, not navigation.
@@ -19,6 +20,7 @@
 - Skip visual/E2E execution; keep unit/build checks. Leave uncommitted on the existing fork.
 
 ## Review Focus
+
 - Final state must be inside the episode list and last, with only one currently viewed item.
 - Choosing another episode or final must preserve a concrete mark and submitted response.
 - The earliest-mistake select must remain the only marking control, with no final option.
@@ -38,12 +40,14 @@
 - [x] Run focused tests (58 passing), full suite (329 passing), production build, and targeted Biome checks (10 source/test/E2E files clean).
 
 ## Controller maintenance and completion
+
 - [x] Align README/DESIGN and current compact-layout documentation with the new navigation.
 - [x] Update obsolete E2E locators and expectations only; do not run browsers.
 - [x] Read-only source review of this change, without repeated verification or reviewing prior compact-layout work again: spec and quality PASS, no Critical/Important findings.
 - [x] Record results and leave the fork uncommitted for manual inspection.
 
 ## Completion
+
 Controller independently verified 16 test files / 329 tests passing, production build
 (typecheck, Vite, baseline artifact verification), targeted Biome (10 files), and
 `git diff --check`. Visual/E2E/AT verification was not performed, as requested.
@@ -51,4 +55,5 @@ Source review found no blocking issues. Optional test-hardening and unused-label
 were left out to keep the approved small scope.
 
 ## Execution decision
+
 The user said implement and continue, with no visual/E2E verification. Use one DeepSeek implementation pass and one source review; do not reopen design or plan approval.

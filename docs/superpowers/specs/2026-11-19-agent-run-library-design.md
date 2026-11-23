@@ -49,11 +49,11 @@ fabricates evidence. It is removed.
 
 ## 6. Approaches Considered
 
-| Approach | Description | Verdict |
-|---|---|---|
-| A | Commit a canonical library under `fixtures/agent-runs/`; a checked-in importer converts the research folder once; each build projects the selected condition into `public/runs/`. | **Chosen.** One source of truth, reproducible, fail-closed validation, still fully static. |
-| B | Copy the whole `final/` tree into `public/` and parse `trace.json` in the browser. | Rejected. Ships model internals and evaluator data, parses untrusted 1 MB files at runtime, and offers no schema gate. |
-| C | Ship only prebuilt JSON and frames in `public/`, with no canonical layer. | Rejected. Not reproducible; translation and condition projection become hand-maintained. |
+| Approach | Description                                                                                                                                                                       | Verdict                                                                                                                |
+| -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| A        | Commit a canonical library under `fixtures/agent-runs/`; a checked-in importer converts the research folder once; each build projects the selected condition into `public/runs/`. | **Chosen.** One source of truth, reproducible, fail-closed validation, still fully static.                             |
+| B        | Copy the whole `final/` tree into `public/` and parse `trace.json` in the browser.                                                                                                | Rejected. Ships model internals and evaluator data, parses untrusted 1 MB files at runtime, and offers no schema gate. |
+| C        | Ship only prebuilt JSON and frames in `public/`, with no canonical layer.                                                                                                         | Rejected. Not reproducible; translation and condition projection become hand-maintained.                               |
 
 ## 7. Canonical Library
 

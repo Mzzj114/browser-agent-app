@@ -551,14 +551,10 @@ describe("canonical decision schema rejection", () => {
     const episodes = run.episodes.map((episode) => ({
       ...episode,
       operationHead: { ...episode.operationHead, reportedConfidence: 0.75 },
-      targetHead: episode.targetHead
-        ? { ...episode.targetHead, reportedConfidence: 0 }
-        : null,
+      targetHead: episode.targetHead ? { ...episode.targetHead, reportedConfidence: 0 } : null,
     }))
 
-    expect(
-      decisionRunSchema.safeParse({ ...run, source: "recorded", episodes }).success,
-    ).toBe(true)
+    expect(decisionRunSchema.safeParse({ ...run, source: "recorded", episodes }).success).toBe(true)
   })
 
   it("keeps synthetic runs parseable when confidence is omitted", () => {

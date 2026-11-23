@@ -2,8 +2,8 @@ import { spawn } from "node:child_process"
 import { copyFile, rm, writeFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import { type StudyCondition, studyConditions } from "../src/domain/study-condition.ts"
-import { verifyStudyBuild } from "./study-build.ts"
 import { writeRunLibrary } from "./run-library.ts"
+import { verifyStudyBuild } from "./study-build.ts"
 
 const distRoot = resolve("dist")
 const fixturesDirectory = resolve("public", "runs")

@@ -1,9 +1,9 @@
 import { createHash } from "node:crypto"
 import { readFile } from "node:fs/promises"
 import {
-  decisionOperations,
-  type DecisionRun,
   decisionRunSchema as canonicalRunSchema,
+  type DecisionRun,
+  decisionOperations,
   isTargetlessOperation,
   type Operation,
   type ScoredCandidate,
@@ -12,9 +12,7 @@ import {
 export type Translations = {
   readonly tasks: Readonly<Record<string, string>>
   readonly actions: Readonly<Record<string, string>>
-  readonly taskTitles: Readonly<
-    Record<string, { readonly en: string; readonly zh: string }>
-  >
+  readonly taskTitles: Readonly<Record<string, { readonly en: string; readonly zh: string }>>
   readonly roles: Readonly<Record<string, string>>
   readonly operations: Readonly<Record<Operation, string>>
 }
@@ -364,7 +362,8 @@ export function buildCanonicalRuns(input: {
   const repairedActions = steps.map((step) => repairMojibake(step.action))
   assertCompleteTranslations([repairedTasks], repairedActions, translations)
 
-  const observationTime = (index: number): number => Date.parse(observations[index]?.capturedAt ?? "")
+  const observationTime = (index: number): number =>
+    Date.parse(observations[index]?.capturedAt ?? "")
   const episodePairs = steps.map((step, index) => {
     const decision = trace.decisions[step.decision_index]
     if (!decision) {
@@ -444,7 +443,9 @@ export function buildCanonicalRuns(input: {
 }
 
 export function combinationRevision(revisions: readonly string[]): string {
-  return createHash("sha256").update([...revisions].sort().join("\n")).digest("hex")
+  return createHash("sha256")
+    .update([...revisions].sort().join("\n"))
+    .digest("hex")
 }
 
 export async function readJpegSize(path: string): Promise<FrameSize> {

@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from "node:fs/promises"
+import { mkdir, mkdtemp, readdir, readFile, rm, stat, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join, resolve } from "node:path"
 import { afterEach, describe, expect, it } from "vitest"
@@ -224,29 +224,22 @@ describe("study run schema", () => {
     expect(studyRunSchema.safeParse(forged).success).toBe(false)
   })
 
-  it.each(["duplicate", "selected", "unknown"] as const)(
-    "rejects a %s preview ID",
-    (kind) => {
-      const forged = structuredClone(projected("candidates")) as unknown as Record<string, unknown>
-      const episodes = forged["episodes"] as Record<string, unknown>[]
-      const head = record(record(episodes[2])["operationHead"])
-      const previewIds = head["previewIds"]
-      const selectedId = head["selectedId"]
-      if (!Array.isArray(previewIds) || typeof selectedId !== "string") {
-        throw new Error("Expected a previewed operation head")
-      }
-      const first = previewIds[0]
-      if (typeof first !== "string") throw new Error("Expected a preview ID")
-      head["previewIds"] =
-        kind === "duplicate"
-          ? [first, first]
-          : kind === "selected"
-            ? [selectedId]
-            : ["not-offered"]
+  it.each(["duplicate", "selected", "unknown"] as const)("rejects a %s preview ID", (kind) => {
+    const forged = structuredClone(projected("candidates")) as unknown as Record<string, unknown>
+    const episodes = forged["episodes"] as Record<string, unknown>[]
+    const head = record(record(episodes[2])["operationHead"])
+    const previewIds = head["previewIds"]
+    const selectedId = head["selectedId"]
+    if (!Array.isArray(previewIds) || typeof selectedId !== "string") {
+      throw new Error("Expected a previewed operation head")
+    }
+    const first = previewIds[0]
+    if (typeof first !== "string") throw new Error("Expected a preview ID")
+    head["previewIds"] =
+      kind === "duplicate" ? [first, first] : kind === "selected" ? [selectedId] : ["not-offered"]
 
-      expect(studyRunSchema.safeParse(forged).success).toBe(false)
-    },
-  )
+    expect(studyRunSchema.safeParse(forged).success).toBe(false)
+  })
 
   it("rejects an order that disagrees with the scored probabilities", () => {
     const forged = structuredClone(projected("probabilities")) as unknown as Record<string, unknown>
@@ -288,9 +281,7 @@ describe("run library writer", () => {
     expect((await readdir(runDirectory)).sort()).toEqual(["frames", "run.en.json", "run.zh.json"])
 
     for (const locale of ["zh", "en"] as const) {
-      const run = studyRunSchema.parse(
-        await readJson(join(runDirectory, `run.${locale}.json`)),
-      )
+      const run = studyRunSchema.parse(await readJson(join(runDirectory, `run.${locale}.json`)))
       expect(run.runId).toBe(fixtureRunId)
       expect(run.locale).toBe(locale)
       expect(run.condition).toBe("candidates")

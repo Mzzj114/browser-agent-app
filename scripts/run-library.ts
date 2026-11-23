@@ -22,9 +22,7 @@ const manifestSchema = z
             id: z.string().regex(/^[A-Za-z0-9][A-Za-z0-9_-]*$/),
             ordinal: z.number().int().positive(),
             steps: z.number().int().positive(),
-            title: z
-              .strictObject({ zh: z.string().min(1), en: z.string().min(1) })
-              .readonly(),
+            title: z.strictObject({ zh: z.string().min(1), en: z.string().min(1) }).readonly(),
             files: z
               .strictObject({ zh: z.literal("run.zh.json"), en: z.literal("run.en.json") })
               .readonly(),

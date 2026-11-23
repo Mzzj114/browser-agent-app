@@ -1,14 +1,17 @@
 # Evidence-first inspector — approved Option A
 
 ## Intent
+
 Free the right inspector for agent choices and probabilities by removing duplicate navigation and marking controls. The user selected Option A and requested implementation with no visual or E2E verification.
 
 ## Approaches
+
 - **A, selected:** navigation only in the execution rail; marking only in the assessment's existing earliest-mistake select. Maximum evidence space, without replay shortcuts.
 - **B, not selected:** relocate shortcuts into the rail and assessment. Retains duplicate controls and makes those areas denser.
 - Keep the current inspector controls: rejected because they obstruct evidence.
 
 ## Design and constraints
+
 - Remove Previous / step menu / Next, Return to final state, and Mark / Clear mark from the participant inspector.
 - Append **Final state** / **最终状态** as the last item in the SAME scrolling execution list, using the same item style and selection treatment as episodes. No fixed footer, separate button area, divider, special promotion, or extra step number.
 - Final state remains a view of the observation after the last action, not a markable action. Initial view remains final state.
@@ -18,4 +21,5 @@ Free the right inspector for agent choices and probabilities by removing duplica
 - No dependencies, persistence, telemetry, domain refactor, commits, merge, or unrelated cleanup.
 
 ## Verification
+
 Use a focused failing component test followed by implementation, the unit suite, production build, and targeted formatting checks. Maintain stale browser-test selectors without running visual/E2E checks; the user will verify manually.

@@ -1,5 +1,6 @@
 import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises"
 import { basename, join, resolve } from "node:path"
+import type { StudyRunSummary } from "../src/domain/study-run-schema.ts"
 import {
   buildCanonicalRuns,
   combinationRevision,
@@ -11,7 +12,6 @@ import {
   type SourceTrace,
   type Translations,
 } from "./agent-run-import.ts"
-import type { StudyRunSummary } from "../src/domain/study-run-schema.ts"
 
 const ownedFiles = new Set(["manifest.json", "provenance.json", "translations.json"])
 
@@ -31,7 +31,9 @@ function parseArguments(argv: readonly string[]): { source: string; out: string 
   }
 
   if (!source) {
-    throw new Error("Usage: node scripts/import-agent-runs.ts --source <final-runs-dir> [--out <dir>]")
+    throw new Error(
+      "Usage: node scripts/import-agent-runs.ts --source <final-runs-dir> [--out <dir>]",
+    )
   }
 
   return { source: resolve(source), out }
@@ -183,9 +185,7 @@ async function main(): Promise<void> {
   }
   await writeFile(join(out, "provenance.json"), serialize(provenance))
 
-  console.log(
-    `imported ${runs.length} runs with revision ${fixtureRevision} into ${out}`,
-  )
+  console.log(`imported ${runs.length} runs with revision ${fixtureRevision} into ${out}`)
 }
 
 main().catch((error: unknown) => {

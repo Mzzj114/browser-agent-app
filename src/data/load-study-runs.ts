@@ -4,8 +4,8 @@ import {
   type StudyEpisode,
   type StudyRun,
   type StudyRunIndex,
-  type StudyRuns,
   type StudyRunSummary,
+  type StudyRuns,
   studyRunIndexSchema,
   studyRunSchema,
 } from "../domain/study-run-schema.ts"
@@ -106,9 +106,7 @@ function assertRunMatchesIndex(
     throw new Error(`Study fixture locale mismatch: expected ${locale}, received ${run.locale}`)
   }
   if (run.runId !== summary.id) {
-    throw new Error(
-      `Study fixture run ID mismatch: expected ${summary.id}, received ${run.runId}`,
-    )
+    throw new Error(`Study fixture run ID mismatch: expected ${summary.id}, received ${run.runId}`)
   }
   if (run.condition !== index.condition) {
     throw new Error(

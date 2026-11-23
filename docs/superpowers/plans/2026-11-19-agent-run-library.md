@@ -35,6 +35,7 @@
 ### Task 1: Schema v2 and report-free workspace
 
 **Files:**
+
 - Modify: `src/domain/decision-run-schema.ts`
 - Modify: `src/domain/study-run-schema.ts`
 - Modify: `src/domain/project-run.ts`
@@ -47,6 +48,7 @@
 - Modify: `tests/workspace.test.tsx`, `tests/decision-evidence.test.tsx`, `tests/i18n.test.tsx`
 
 **Interfaces:**
+
 - Produces: `DecisionRun` without `report`; `StudyRun` without `report`; `screenshotSchema` path `^(?:frames|screenshots)\/[A-Za-z0-9_.-]+\.(?:jpe?g|png|webp)$`; `source` union `"recorded" | "synthetic-render"`; `fixtureVersion` literal `"decision-replay/2"`.
 - Produces: `StudyMessages` without `agentReportedResult`.
 
@@ -75,13 +77,16 @@ git commit -m "refactor: remove the invented agent report from the workspace"
 ### Task 2: Run index and per-run loader
 
 **Files:**
+
 - Modify: `src/domain/study-run-schema.ts`
 - Modify: `src/data/load-study-runs.ts`
 - Modify: `tests/load-study-runs.test.ts`
 - Modify: `tests/study-build.test.ts`
 
 **Interfaces:**
+
 - Produces:
+
   ```ts
   type RunTitle = { readonly zh: string; readonly en: string }
   type RunSummary = {
@@ -127,6 +132,7 @@ git commit -m "feat: load a validated run index and individual recorded runs"
 ### Task 3: Importer, translations, and the canonical 44-run library
 
 **Files:**
+
 - Create: `scripts/agent-run-import.ts` (pure helpers)
 - Create: `scripts/import-agent-runs.ts` (CLI)
 - Create: `fixtures/agent-runs/translations.json`
@@ -136,9 +142,11 @@ git commit -m "feat: load a validated run index and individual recorded runs"
 - Create: `tests/agent-run-import.test.ts`
 
 **Interfaces:**
+
 - Produces: `repairMojibake(value: string): string`; `translateRun(run: DecisionRun, translations: Translations): DecisionRun`; `buildCanonicalRun(input: { runId, meta, trace, translations, imageSize }): { en: DecisionRun; zh: DecisionRun }`.
 - CLI: `node scripts/import-agent-runs.ts --source "<research>/stimuli/final" --out fixtures/agent-runs`.
 - `translations.json` shape:
+
   ```json
   {
     "tasks": { "<exact English instruction>": "<Chinese>" },
@@ -176,6 +184,7 @@ git commit -m "feat: import and translate the recorded agent-run library"
 ### Task 4: Home picker and query routing
 
 **Files:**
+
 - Create: `src/RunPicker.tsx`
 - Create: `src/styles/run-picker.css`
 - Modify: `src/styles/index.css`
@@ -184,6 +193,7 @@ git commit -m "feat: import and translate the recorded agent-run library"
 - Modify: `tests/bootstrap.test.tsx`
 
 **Interfaces:**
+
 - Produces: `RunPicker({ index }: { index: StudyRunIndex })`; links built as `?run=<id>` while preserving existing query params.
 - Consumes: `loadRunIndex`, `loadStudyRun`.
 
@@ -214,6 +224,7 @@ git commit -m "feat: add a neutral run picker at the home URL"
 ### Task 5: Runtime library build and verification
 
 **Files:**
+
 - Create: `scripts/run-library.ts`
 - Create: `scripts/prepare-runs.ts`
 - Delete: `scripts/prepare-study.ts`, `scripts/study-fixtures.ts`, `tests/study-fixtures.test.ts` (replaced)
@@ -224,6 +235,7 @@ git commit -m "feat: add a neutral run picker at the home URL"
 - Modify: `tests/study-build.test.ts`
 
 **Interfaces:**
+
 - Produces: `writeRunLibrary({ condition, sourceDir: "fixtures/agent-runs", outputDir: "public/runs" }): Promise<StudyRunIndex>`.
 - Produces: `verifyStudyBuild(directory, expectedCondition)` over the new layout; `BuildReport.coreDigests` covers every run.
 
@@ -258,6 +270,7 @@ git commit -m "build: emit and verify the static recorded-run library"
 ### Task 6: E2E against a real recorded run
 
 **Files:**
+
 - Modify: `e2e/decision-evidence.e2e.ts`
 - Modify: `e2e/study-layout.e2e.ts`
 - Modify: `e2e/workspace.e2e.ts`
@@ -266,6 +279,7 @@ git commit -m "build: emit and verify the static recorded-run library"
 - Create: `e2e/run-picker.e2e.ts`
 
 **Interfaces:**
+
 - Representative run: `F1_add_single_item_clean` (4 episodes, English frames).
 - URLs: `/?run=F1_add_single_item_clean&lang=en|zh`.
 
@@ -298,6 +312,7 @@ git commit -m "test: exercise the participant workspace with a recorded run"
 ### Task 7: Documentation and final verification
 
 **Files:**
+
 - Modify: `README.md`
 - Modify: `DESIGN.md`
 - Modify: `docs/superpowers/specs/2026-11-19-agent-run-library-design.md` (status only if needed)

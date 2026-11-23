@@ -127,9 +127,9 @@ describe("run library loading", () => {
     record(files[`${runId}/run.en.json`])["fixtureRevision"] = "e".repeat(64)
     const index = await loadRunIndex(baseUrl(), "baseline", respondWith(files).fetcher)
 
-    await expect(
-      loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher),
-    ).rejects.toThrow(/revision/i)
+    await expect(loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher)).rejects.toThrow(
+      /revision/i,
+    )
   })
 
   it("rejects a locale key mismatch", async () => {
@@ -137,9 +137,9 @@ describe("run library loading", () => {
     record(files[`${runId}/run.zh.json`])["locale"] = "en"
     const index = await loadRunIndex(baseUrl(), "baseline", respondWith(files).fetcher)
 
-    await expect(
-      loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher),
-    ).rejects.toThrow(/locale/i)
+    await expect(loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher)).rejects.toThrow(
+      /locale/i,
+    )
   })
 
   it("rejects a missing locale file", async () => {
@@ -175,9 +175,9 @@ describe("run library loading", () => {
     episodeRecord(record(files[`${runId}/run.en.json`]))["id"] = "episode-99"
     const index = await loadRunIndex(baseUrl(), "baseline", respondWith(files).fetcher)
 
-    await expect(
-      loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher),
-    ).rejects.toThrow(/structure/i)
+    await expect(loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher)).rejects.toThrow(
+      /structure/i,
+    )
   })
 
   it("rejects a valid-looking but mismatched preview order between locales", async () => {
@@ -191,9 +191,9 @@ describe("run library loading", () => {
     head["previewIds"] = [...previewIds].reverse()
     const index = await loadRunIndex(baseUrl(), "candidates", respondWith(files).fetcher)
 
-    await expect(
-      loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher),
-    ).rejects.toThrow(/structure/i)
+    await expect(loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher)).rejects.toThrow(
+      /structure/i,
+    )
   })
 
   it("rejects a valid-looking but mismatched reported confidence between locales", async () => {
@@ -202,9 +202,9 @@ describe("run library loading", () => {
     record(episode["operationHead"])["reportedConfidence"] = 0.1
     const index = await loadRunIndex(baseUrl(), "probabilities", respondWith(files).fetcher)
 
-    await expect(
-      loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher),
-    ).rejects.toThrow(/structure/i)
+    await expect(loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher)).rejects.toThrow(
+      /structure/i,
+    )
   })
 
   it("rejects a mismatched outcome presence between locales", async () => {
@@ -215,9 +215,9 @@ describe("run library loading", () => {
     }
     const index = await loadRunIndex(baseUrl(), "baseline", respondWith(files).fetcher)
 
-    await expect(
-      loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher),
-    ).rejects.toThrow(/structure/i)
+    await expect(loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher)).rejects.toThrow(
+      /structure/i,
+    )
   })
 
   it("rejects a mismatched entered-text presence between locales", async () => {
@@ -225,9 +225,9 @@ describe("run library loading", () => {
     episodeRecord(record(files[`${runId}/run.en.json`]), 0)["enteredText"] = null
     const index = await loadRunIndex(baseUrl(), "baseline", respondWith(files).fetcher)
 
-    await expect(
-      loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher),
-    ).rejects.toThrow(/structure/i)
+    await expect(loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher)).rejects.toThrow(
+      /structure/i,
+    )
   })
 
   it("rejects a step count that disagrees with the index", async () => {
@@ -238,9 +238,9 @@ describe("run library loading", () => {
     record(runs[0])["steps"] = 99
     const index = await loadRunIndex(baseUrl(), "baseline", respondWith(files).fetcher)
 
-    await expect(
-      loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher),
-    ).rejects.toThrow(/step count/i)
+    await expect(loadStudyRun(baseUrl(), index, runId, respondWith(files).fetcher)).rejects.toThrow(
+      /step count/i,
+    )
   })
 
   it("rejects an unknown run id without fetching a run file", async () => {
@@ -248,9 +248,7 @@ describe("run library loading", () => {
     const { calls, fetcher } = respondWith(files)
     const index = await loadRunIndex(baseUrl(), "baseline", fetcher)
 
-    await expect(loadStudyRun(baseUrl(), index, "missing-run", fetcher)).rejects.toThrow(
-      /unknown/i,
-    )
+    await expect(loadStudyRun(baseUrl(), index, "missing-run", fetcher)).rejects.toThrow(/unknown/i)
     expect(calls).toEqual(["/runs/index.json"])
   })
 

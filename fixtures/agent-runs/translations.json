@@ -120,24 +120,63 @@
     "amazon_add_new_address": { "en": "Add a new shipping address", "zh": "添加新的收货地址" },
     "amazon_add_single_item": { "en": "Add one item to the cart", "zh": "将一件商品加入购物车" },
     "amazon_add_to_wishlist": { "en": "Add an item to the wishlist", "zh": "将商品加入心愿单" },
-    "amazon_browse_category": { "en": "Find the cheapest item in a category", "zh": "在分类中查找最低价商品" },
-    "amazon_buy_highest_rated": { "en": "Buy the highest-rated product in a category", "zh": "购买分类中评分最高的商品" },
+    "amazon_browse_category": {
+      "en": "Find the cheapest item in a category",
+      "zh": "在分类中查找最低价商品"
+    },
+    "amazon_buy_highest_rated": {
+      "en": "Buy the highest-rated product in a category",
+      "zh": "购买分类中评分最高的商品"
+    },
     "amazon_cancel_order": { "en": "Cancel an order", "zh": "取消订单" },
     "amazon_cart_management": { "en": "Edit items in the cart", "zh": "修改购物车中的商品" },
-    "amazon_cart_recover_from_oos": { "en": "Replace out-of-stock cart items", "zh": "替换购物车中的缺货商品" },
-    "amazon_category_exploration": { "en": "Buy items from three categories", "zh": "购买三个分类中的商品" },
-    "amazon_optimized_shopping_spree": { "en": "Buy five category winners under budget", "zh": "在预算内购买五个分类的最佳商品" },
-    "amazon_price_research": { "en": "Research wireless earbuds under budget", "zh": "调研预算内的无线耳机" },
+    "amazon_cart_recover_from_oos": {
+      "en": "Replace out-of-stock cart items",
+      "zh": "替换购物车中的缺货商品"
+    },
+    "amazon_category_exploration": {
+      "en": "Buy items from three categories",
+      "zh": "购买三个分类中的商品"
+    },
+    "amazon_optimized_shopping_spree": {
+      "en": "Buy five category winners under budget",
+      "zh": "在预算内购买五个分类的最佳商品"
+    },
+    "amazon_price_research": {
+      "en": "Research wireless earbuds under budget",
+      "zh": "调研预算内的无线耳机"
+    },
     "amazon_reorder_past_item": { "en": "Reorder a past item", "zh": "再次购买历史订单中的商品" },
     "amazon_return_item": { "en": "Request a return", "zh": "申请退货" },
-    "amazon_review_aggregation": { "en": "Write reviews for three products", "zh": "为三件商品撰写评价" },
-    "amazon_review_aggregation_read_only": { "en": "Compare three coffee makers (read-only)", "zh": "比较三款咖啡机（只读）" },
-    "amazon_selective_reorder": { "en": "Reorder two past items together", "zh": "合并再次购买两件历史商品" },
-    "amazon_spec_comparison": { "en": "Compare two monitors' specifications", "zh": "比较两款显示器的规格" },
-    "amazon_stale_wishlist_refresh": { "en": "Refresh out-of-stock wishlist items", "zh": "更新心愿单中的缺货商品" },
-    "amazon_update_shipping": { "en": "Change the default address and place an order", "zh": "更改默认地址并下单" },
+    "amazon_review_aggregation": {
+      "en": "Write reviews for three products",
+      "zh": "为三件商品撰写评价"
+    },
+    "amazon_review_aggregation_read_only": {
+      "en": "Compare three coffee makers (read-only)",
+      "zh": "比较三款咖啡机（只读）"
+    },
+    "amazon_selective_reorder": {
+      "en": "Reorder two past items together",
+      "zh": "合并再次购买两件历史商品"
+    },
+    "amazon_spec_comparison": {
+      "en": "Compare two monitors' specifications",
+      "zh": "比较两款显示器的规格"
+    },
+    "amazon_stale_wishlist_refresh": {
+      "en": "Refresh out-of-stock wishlist items",
+      "zh": "更新心愿单中的缺货商品"
+    },
+    "amazon_update_shipping": {
+      "en": "Change the default address and place an order",
+      "zh": "更改默认地址并下单"
+    },
     "amazon_verify_order_ok": { "en": "Verify an order's details", "zh": "核对订单详情" },
-    "amazon_write_detailed_review": { "en": "Write a detailed product review", "zh": "撰写详细的商品评价" },
+    "amazon_write_detailed_review": {
+      "en": "Write a detailed product review",
+      "zh": "撰写详细的商品评价"
+    },
     "amazon_write_review": { "en": "Write a product review", "zh": "撰写商品评价" }
   },
   "roles": {

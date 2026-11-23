@@ -2,8 +2,8 @@ import { z } from "zod"
 import { LOCALES, type Locale } from "../i18n/locale.ts"
 import { rankPreviewIds } from "./choice-preview.ts"
 import {
-  decisionOperations,
   type DecisionHead,
+  decisionOperations,
   type EpisodeCore,
   isTargetlessOperation,
   type Observation,
@@ -340,7 +340,11 @@ function validateHead(
     seenPreviewIds.add(previewId)
 
     if (previewId === head.selectedId) {
-      addIssue(context, [...path, "previewIds", index], "Preview IDs must not include the selection")
+      addIssue(
+        context,
+        [...path, "previewIds", index],
+        "Preview IDs must not include the selection",
+      )
     } else if (!head.offered.some((candidate) => candidate.id === previewId)) {
       addIssue(context, [...path, "previewIds", index], "Preview IDs must reference offered IDs")
     }
@@ -349,11 +353,7 @@ function validateHead(
   if (scored) {
     const expected = rankPreviewIds(head as DecisionHead<ScoredCandidate>)
     if (JSON.stringify(previewIds) !== JSON.stringify(expected)) {
-      addIssue(
-        context,
-        [...path, "previewIds"],
-        "Preview IDs must rank the positive alternatives",
-      )
+      addIssue(context, [...path, "previewIds"], "Preview IDs must rank the positive alternatives")
     }
   }
 }

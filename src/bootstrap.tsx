@@ -1,11 +1,11 @@
 import { StrictMode } from "react"
 import { createRoot } from "react-dom/client"
 import { App } from "./App"
-import { RunPicker } from "./RunPicker"
 import { loadRunIndex, loadStudyRun } from "./data/load-study-runs"
 import type { StudyCondition } from "./domain/study-condition"
 import type { StudyRunIndex } from "./domain/study-run-schema"
 import { HTML_LANG, initialLocale, LocaleProvider, messagesFor } from "./i18n"
+import { RunPicker } from "./RunPicker"
 
 type BootstrapNoticeProps = {
   readonly text: string

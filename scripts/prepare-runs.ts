@@ -1,6 +1,6 @@
 import { resolve } from "node:path"
-import { studyConditionFromEnvironment } from "./study-condition.ts"
 import { writeRunLibrary } from "./run-library.ts"
+import { studyConditionFromEnvironment } from "./study-condition.ts"
 
 async function main(): Promise<void> {
   const index = await writeRunLibrary({

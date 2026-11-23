@@ -24,11 +24,7 @@ function applicationBaseUrl(): URL {
 }
 
 function runFixtureUrls(applicationBase: URL): readonly string[] {
-  return [
-    "index.json",
-    `${runId}/run.en.json`,
-    `${runId}/run.zh.json`,
-  ]
+  return ["index.json", `${runId}/run.en.json`, `${runId}/run.zh.json`]
     .map((file) => new URL(`runs/${file}`, applicationBase).href)
     .sort()
 }
@@ -224,7 +220,10 @@ describe("participant bootstrap", () => {
     })
 
     expect(screenText(element)).toContain(enMessages.study.chooseRun)
-    expect(element.querySelector(".picker-list a")).toHaveAttribute("href", `/?lang=en&run=${runId}`)
+    expect(element.querySelector(".picker-list a")).toHaveAttribute(
+      "href",
+      `/?lang=en&run=${runId}`,
+    )
     expect(element.querySelector(".study-shell")).toBeNull()
   })
 
