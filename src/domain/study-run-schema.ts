@@ -2,13 +2,11 @@ import { z } from "zod"
 import { LOCALES, type Locale } from "../i18n/locale.ts"
 import { rankPreviewIds } from "./choice-preview.ts"
 import {
-  type DecisionHead,
   decisionOperations,
   type EpisodeCore,
   isTargetlessOperation,
   type Observation,
   type Operation,
-  type ScoredCandidate,
 } from "./decision-run-schema.ts"
 import { studyConditions } from "./study-condition.ts"
 
@@ -156,7 +154,7 @@ type CandidateLike = {
 type HeadLike = {
   readonly offered: readonly CandidateLike[]
   readonly selectedId: string
-  readonly previewIds?: readonly string[]
+  readonly previewIds: readonly string[]
   readonly reportedConfidence?: number | null
 }
 
@@ -327,10 +325,6 @@ function validateHead(
   }
 
   const previewIds = head.previewIds
-  if (previewIds === undefined) {
-    addIssue(context, [...path, "previewIds"], "Preview IDs are required")
-    return
-  }
 
   const seenPreviewIds = new Set<string>()
   for (const [index, previewId] of previewIds.entries()) {
@@ -351,7 +345,7 @@ function validateHead(
   }
 
   if (scored) {
-    const expected = rankPreviewIds(head as DecisionHead<ScoredCandidate>)
+    const expected = rankPreviewIds(head)
     if (JSON.stringify(previewIds) !== JSON.stringify(expected)) {
       addIssue(context, [...path, "previewIds"], "Preview IDs must rank the positive alternatives")
     }

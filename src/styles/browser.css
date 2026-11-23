@@ -74,7 +74,7 @@
 }
 
 .browser-frame[data-variant="compact"] {
-  grid-template-rows: 44px minmax(0, 1fr);
+  grid-template-rows: var(--control-height) minmax(0, 1fr);
 }
 
 .browser-compact-caption {
@@ -91,8 +91,8 @@
 .browser-compact-zoom {
   display: inline-flex;
   flex: 0 0 auto;
-  min-inline-size: 44px;
-  min-block-size: 44px;
+  min-inline-size: var(--control-height);
+  min-block-size: var(--control-height);
   align-items: center;
   justify-content: center;
   padding: 0;

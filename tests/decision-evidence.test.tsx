@@ -313,7 +313,7 @@ describe("decision choice groups", () => {
     )
 
     expect(screen.getByText("0%")).toBeVisible()
-    expect(screen.queryByText("Confidence unavailable")).toBeNull()
+    expect(screen.queryByText("Not recorded")).toBeNull()
     expect(screen.getByText("Confidence")).toBeVisible()
   })
 
@@ -327,14 +327,15 @@ describe("decision choice groups", () => {
       choiceGroupElement("actions", "What the agent did", "Other actions offered", head, null),
     )
 
-    expect(screen.getByText("Confidence unavailable")).toBeVisible()
+    expect(screen.getByText("Confidence")).toBeVisible()
+    expect(screen.getByText("Not recorded")).toBeVisible()
     expect(screen.queryByText("0%")).toBeNull()
     unavailable.unmount()
 
     renderEnglish(
       choiceGroupElement("actions", "What the agent did", "Other actions offered", head),
     )
-    expect(screen.queryByText("Confidence unavailable")).toBeNull()
+    expect(screen.queryByText("Not recorded")).toBeNull()
     expect(screen.queryByText(enStudyMessages.confidenceLabel)).toBeNull()
     expect(screen.queryByText(/%/)).toBeNull()
   })
@@ -470,6 +471,9 @@ describe("decision choice groups", () => {
     expect(actionToggle).toHaveAttribute("aria-expanded", "true")
     expect(document.activeElement).toBe(actionToggle)
     expect(alternativeCards(actions)).toHaveLength(6)
+    for (const card of alternativeCards(actions)) {
+      expect(card.querySelector("button, a, [tabindex]")).toBeNull()
+    }
     expect(alternativeIds(actions)).toEqual([
       "BLOCKED",
       "SCROLL_DOWN",
@@ -543,6 +547,16 @@ describe("decision choice groups", () => {
     expect(document.querySelector('[data-choice-kind="things"]')).toBeNull()
     expect(screen.queryByRole("heading", { name: "What it clicked" })).toBeNull()
     expect(screen.getByText("No target required.")).toBeVisible()
+  })
+
+  it("uses operation-specific target headings for typing and selecting", () => {
+    const run = studyRuns("candidates").en
+    const typed = renderInspector(run, { kind: "episode", episodeId: "episode-01" })
+    expect(screen.getByRole("heading", { name: "Where it typed" })).toBeVisible()
+    typed.unmount()
+
+    renderInspector(run, { kind: "episode", episodeId: "episode-05" })
+    expect(screen.getByRole("heading", { name: "What it selected" })).toBeVisible()
   })
 
   it("renders no choice cards in the final state", () => {

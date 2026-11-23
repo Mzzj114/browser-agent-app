@@ -64,7 +64,7 @@ export const zhStudyMessages = {
   originalTaskHint: "展开以查看完整原始任务",
   beforeStepCaption: (ordinal, total) => `第 ${ordinal} 步操作前 · 共 ${total} 步`,
   finalStateHeading: "最终状态",
-  finalStateExplanation: "此处显示最后一次记录操作后的页面。最终状态不是编号步骤，也不能被标记。",
+  finalStateExplanation: "此处显示最后一次记录操作后的页面。最终状态不是编号步骤。",
   recordedOutcome: "记录的结果",
   enteredText: "已输入文本",
   enteredTextNote: "实际输入的文本，不参与评分。",
@@ -79,7 +79,7 @@ export const zhStudyMessages = {
   fewerActions: "收起其他操作",
   fewerThings: "收起其他目标",
   confidenceLabel: "置信度",
-  confidenceUnavailable: "未记录置信度",
+  confidenceUnavailable: "未记录",
   confidenceExplanation:
     "置信度是 Agent 对其选择给出的自我报告，不代表对该选择是否正确的外部核验。",
   selected: "已选择",
@@ -123,7 +123,7 @@ export const enStudyMessages = {
   beforeStepCaption: (ordinal, total) => `Before step ${ordinal} of ${total}`,
   finalStateHeading: "Final state",
   finalStateExplanation:
-    "The final page is shown after the last recorded action. It is not a numbered step and cannot be marked.",
+    "The final page is shown after the last recorded action. It is not a numbered step.",
   recordedOutcome: "Recorded outcome",
   enteredText: "Entered text",
   enteredTextNote: "Actual input; not scored.",
@@ -138,7 +138,7 @@ export const enStudyMessages = {
   fewerActions: "Show fewer actions",
   fewerThings: "Show fewer things",
   confidenceLabel: "Confidence",
-  confidenceUnavailable: "Confidence unavailable",
+  confidenceUnavailable: "Not recorded",
   confidenceExplanation:
     "Confidence is the value the agent reported for its choice. It is not a check that the choice was correct.",
   selected: "Selected",

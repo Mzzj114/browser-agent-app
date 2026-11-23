@@ -56,6 +56,9 @@ export function StudyResponseForm({
     event.preventDefault()
     if (submitted) return
 
+    // The submit button is disabled without a verdict, so this invalid branch is only reachable
+    // when a seeded or externally constructed response is submitted before the form re-renders.
+    // Keep the alert summary and focus handoff so that state still gets accessible feedback.
     setSubmitAttempted(true)
     if (errors.length === 0) {
       onResponse({ type: "submit" })

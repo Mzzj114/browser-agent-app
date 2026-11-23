@@ -223,6 +223,7 @@ describe("study build verification", () => {
   })
 
   it.each([
+    ["raw confidence", "const raw = { confidence: 0.5 };\n"],
     ["target confidence", "const raw = { target_confidence: 0.5 };\n"],
     ["selected probability", "const raw = { p_selected: 0.51 };\n"],
   ])("rejects raw %s source fields in emitted assets", async (_name, contents) => {

@@ -241,4 +241,13 @@ describe("study copy", () => {
     expect(enStudyMessages.beforeStepCaption(4, 8)).toBe("Before step 4 of 8")
     expect(zhStudyMessages.beforeStepCaption(4, 8)).toBe("第 4 步操作前 · 共 8 步")
   })
+
+  it("describes the final state without removed marking copy", () => {
+    expect(enStudyMessages.finalStateExplanation).toBe(
+      "The final page is shown after the last recorded action. It is not a numbered step.",
+    )
+    expect(zhStudyMessages.finalStateExplanation).toBe(
+      "此处显示最后一次记录操作后的页面。最终状态不是编号步骤。",
+    )
+  })
 })

@@ -108,7 +108,7 @@ All spacing derives from 4px.
 ### Grid
 
 - App shell: one fixed header row, a compact task context strip, a bounded two-column workspace row, and a bounded response row, using `100dvh` and `100dvb`.
-- Study context strip: one full-width original-task disclosure whose collapsed summary is a single clipped line. The expanded body scrolls internally when long; the recorded-run provenance note stays visible.
+- Study context strip: one full-width original-task disclosure whose collapsed summary is a single clipped line. The expanded body scrolls internally when long, including the recorded-run provenance note at its end.
 - Main workspace: `clamp(10.5rem, 13vw, 12rem) minmax(0, 1fr)` for the quiet step rail and the single white screenshot-first review panel, separated by a small gap on a sunken background.
 - Response region: a separate 156px shell row with stable verdict, explanation, and submit columns and a compact notice group. Normal controls remain visible; validation and enlarged explanations scroll internally. There is no localization control.
 - Browser metadata: the study page uses one 44px compact caption row with the state label and a Zoom/Fit control; the full `BrowserFrame` variant retains title, read-only URL, capture time, and recorded-not-live context for other surfaces. Navigation lives only in the execution rail; the review panel has no replay header.
@@ -120,7 +120,7 @@ All spacing derives from 4px.
 ### Scroll Ownership
 
 - Product header and response controls stay fixed; the compact task strip sits above the workspace.
-- Task text owns context overflow without scrolling away the recorded-run provenance note.
+- Task text and the recorded-run provenance note share the task body's internal scroll; neither stays fixed outside it.
 - `.execution-rail-list` owns chronological action scrolling, including Final state as the last item; there is no fixed final-state footer.
 - `.browser-viewport` has no overflow in fit mode: the complete image is aspect-preserving and centered within both available dimensions. Only actual-size inspection owns two-axis image scrolling.
 - `.study-page` is the single normal scroll container for the screenshot and all viewed-step evidence, including long candidate chip lists. Its browser frame loses the outer card treatment so the image and evidence read as one page.
@@ -392,7 +392,7 @@ Structural borders and tonal shifts own normal hierarchy. Only the recorded brow
 | Raw REPL cells remain verbatim for provenance | StepCard technical details | Explicit user decision to reflect real 1.x REPL tools without generated summaries; now secondary to the action label and screenshot | Preserve native code and readable formatting; reconsider only through a new research decision |
 | Decision irreversibility lasts only for the mounted session | Decision footer | Backend and durable study flow are explicitly out of scope | Future study apparatus owns persistence |
 | Recorded evidence is English-only while the interface and narrative fields are Chinese | Run library and translation dictionary | Chinese participants are expected to read English page content, and English screenshots keep the evidence match visible | Add a fully localized recording only through a new research decision |
-| Literal page strings in candidate labels and observation titles stay English | Chinese run projection | Translating them would disagree with the visible page and could mislead localization judgments | Revisit if the study separates evidence reading from interface language |
+| Literal page strings in candidate labels and observation titles stay English | Chinese run projection | Translating them would disagree with the visible page and could mislead page interpretation or evidence reading | Revisit if the study separates evidence reading from interface language |
 | About 36 MB of JPEG evidence is committed to Git | `fixtures/agent-runs/*/frames` | Keeps the deploy static, reproducible, and free of an external asset dependency | Move to versioned object storage only if the library grows substantially |
 | Six step-capped runs reuse the last before frame as the final observation | Run import mapping | Those runs recorded no post-run frame; the replay still needs an explicit final state | Re-record those runs if a post-run frame becomes necessary |
 | Chinese glyph appearance varies with local system fonts | All Chinese text | Avoids a multi-megabyte CJK webfont and keeps runtime assets local | Revisit if cross-platform screenshot fidelity becomes a study requirement |

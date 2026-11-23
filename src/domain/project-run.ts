@@ -2,12 +2,12 @@ import { assertNever } from "./assert-never.ts"
 import { rankPreviewIds } from "./choice-preview.ts"
 import type {
   Candidate,
-  DecisionHead,
+  DecisionHeadInput,
   DecisionRun,
   EpisodeCore,
   Observation,
   ScoredCandidate,
-  TargetDecisionHead,
+  TargetDecisionHeadInput,
 } from "./decision-run-schema.ts"
 import type { StudyCondition } from "./study-condition.ts"
 import { type StudyRun, type StudyRunCore, studyRunSchema } from "./study-run-schema.ts"
@@ -65,7 +65,7 @@ function projectScoredCandidate(candidate: ScoredCandidate) {
   }
 }
 
-function projectUnscoredHead(head: DecisionHead<ScoredCandidate>) {
+function projectUnscoredHead(head: DecisionHeadInput<ScoredCandidate>) {
   return {
     offered: head.offered.map(projectCandidate),
     selectedId: head.selectedId,
@@ -73,7 +73,7 @@ function projectUnscoredHead(head: DecisionHead<ScoredCandidate>) {
   }
 }
 
-function projectUnscoredTargetHead(head: TargetDecisionHead) {
+function projectUnscoredTargetHead(head: TargetDecisionHeadInput) {
   return {
     operation: head.operation,
     offered: head.offered.map(projectCandidate),
@@ -82,7 +82,7 @@ function projectUnscoredTargetHead(head: TargetDecisionHead) {
   }
 }
 
-function projectScoredHead(head: DecisionHead<ScoredCandidate>) {
+function projectScoredHead(head: DecisionHeadInput<ScoredCandidate>) {
   return {
     offered: head.offered.map(projectScoredCandidate),
     selectedId: head.selectedId,
@@ -91,7 +91,7 @@ function projectScoredHead(head: DecisionHead<ScoredCandidate>) {
   }
 }
 
-function projectScoredTargetHead(head: TargetDecisionHead) {
+function projectScoredTargetHead(head: TargetDecisionHeadInput) {
   return {
     operation: head.operation,
     offered: head.offered.map(projectScoredCandidate),

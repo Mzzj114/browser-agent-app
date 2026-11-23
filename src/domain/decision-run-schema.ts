@@ -116,10 +116,21 @@ export type ScoredCandidate = z.infer<typeof scoredCandidateSchema>
 export type DecisionHead<T> = {
   readonly offered: readonly T[]
   readonly selectedId: string
+  readonly reportedConfidence?: number | null
+}
+
+/** Parsed Zod heads expose optional fields with an explicit `undefined` under exactOptionalPropertyTypes. */
+export type DecisionHeadInput<T> = {
+  readonly offered: readonly T[]
+  readonly selectedId: string
   readonly reportedConfidence?: number | null | undefined
 }
 
 export type TargetDecisionHead = DecisionHead<ScoredCandidate> & {
+  readonly operation: Operation
+}
+
+export type TargetDecisionHeadInput = DecisionHeadInput<ScoredCandidate> & {
   readonly operation: Operation
 }
 
@@ -189,7 +200,7 @@ function validateScoredHead(
 }
 
 function validateRecordedConfidence(
-  head: DecisionHead<ScoredCandidate>,
+  head: DecisionHeadInput<ScoredCandidate>,
   path: readonly (string | number)[],
   context: z.RefinementCtx,
 ): void {

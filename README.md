@@ -35,7 +35,7 @@ Selection probabilities are the decision model's recorded outputs used to rank t
 ## Recorded-run library
 
 - The canonical library lives in `fixtures/agent-runs/`: `manifest.json`, `translations.json`, `provenance.json`, and one directory per run with `run.en.json`, `run.zh.json`, and `frames/`.
-- `scripts/import-agent-runs.ts` rebuilds the library from a collected research directory. It repairs cp1252 mojibake, maps trace steps and decisions to the replay contract, applies the exact-match Chinese dictionary, and fails on a missing translation or invalid probability head.
+- `scripts/import-agent-runs.ts` rebuilds the library from a collected research directory. It repairs cp1252 mojibake, maps trace steps and decisions to the replay contract, applies the exact-match Chinese dictionary, and fails on a missing translation, missing or invalid recorded confidence, or invalid probability head.
 - The 44 committed runs are recorded stimulus material from the decision-model browser agent. Both locales share the same English JPEG evidence. Step-capped runs without a post-run frame reuse the last before frame as the explicit final observation.
 - `bun run prepare:runs` validates the library, projects the selected evidence condition, and writes `public/runs/` (`index.json`, one directory per run). `public/runs/` is generated and ignored by Git.
 - The loader validates the index condition and revision, per-run locale and step count, zh/en structural parity, and every referenced frame at build time. Missing, malformed, stale, or extra artifacts fail closed.
@@ -89,7 +89,7 @@ The layout suite writes six ignored `study-equivalence/2` reports to `test-resul
 
 `compareStudyBuilds` / the comparator CLI validates all six reports for every condition, checks common fixture revision and semantic core digests across every run, compares unscored candidate order and selection between `candidates` and `probabilities`, and requires the named shared bounds to match within 1px. It rejects reports with an obsolete schema version or unshared pane/control names. Run it after all three fixed-condition worktrees have completed their own build and E2E suites.
 
-The layout suite also captures ignored inspection images under `test-results/study-evidence/<locale>-<width>x<height>/` for the initial, expanded-choice, draft, and submitted states.
+The layout suite also captures ignored inspection images under `test-results/study-evidence/<locale>-<width>x<height>/` for the `initial`, `expanded`, `expanded-last`, `draft`, and `submitted` states. The `baseline` condition has no alternative chips, so it skips the two expanded states.
 
 ## Project layout
 

@@ -75,7 +75,7 @@ const legacySentinels: readonly LegacySentinel[] = [
   },
   {
     label: "undocumented confidence field",
-    pattern: /(?<![A-Za-z0-9])["']?confidence["']?\s*:/,
+    pattern: /(?<![A-Za-z0-9_])["']?confidence["']?\s*:/,
   },
   { label: "undocumented confidence field", pattern: /["']?target_confidence["']?\s*:/ },
   { label: "source selection probability", pattern: /["']?p_selected["']?\s*:/ },

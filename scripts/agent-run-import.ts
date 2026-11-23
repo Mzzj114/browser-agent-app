@@ -230,7 +230,7 @@ function targetHead(
   decision: SourceDecision,
   translations: Translations,
   locale: "zh" | "en",
-  reportedConfidence: number,
+  reportedConfidence: number | null,
 ): {
   readonly operation: Operation
   readonly offered: readonly ScoredCandidate[]
@@ -238,6 +238,9 @@ function targetHead(
   readonly reportedConfidence: number
 } | null {
   if (isTargetlessOperation(step.operation)) return null
+  if (reportedConfidence === null || !Number.isFinite(reportedConfidence)) {
+    throw new Error(`Run step ${step.step} is missing target confidence`)
+  }
 
   const question = questionByOperation[step.operation as keyof typeof questionByOperation]
   const answer = decision.raw_answers?.[question]
@@ -400,13 +403,13 @@ export function buildCanonicalRuns(input: {
         ...core,
         action,
         operationHead: operationHead(decision, translations, "en", reportedConfidence),
-        targetHead: targetHead(step, decision, translations, "en", targetReportedConfidence ?? 0),
+        targetHead: targetHead(step, decision, translations, "en", targetReportedConfidence),
       },
       zh: {
         ...core,
         action: translatedAction,
         operationHead: operationHead(decision, translations, "zh", reportedConfidence),
-        targetHead: targetHead(step, decision, translations, "zh", targetReportedConfidence ?? 0),
+        targetHead: targetHead(step, decision, translations, "zh", targetReportedConfidence),
       },
     }
   })
