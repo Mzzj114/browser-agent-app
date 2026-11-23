@@ -1,9 +1,8 @@
-import { fireEvent, render, screen, within } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { useState } from "react"
 import { describe, expect, it, vi } from "vitest"
 import { StudyResponseForm } from "../src/components/ui/study-response-form"
-import type { EpisodeCore } from "../src/domain/decision-run-schema.ts"
 import {
   initialStudyResponse,
   type ResponseAction,
@@ -11,9 +10,6 @@ import {
   updateStudyResponse,
 } from "../src/domain/study-response.ts"
 import { LocaleProvider } from "../src/i18n"
-import { canonicalRun } from "./fixtures/decision-runs.ts"
-
-type EpisodeSummary = Pick<EpisodeCore, "id" | "ordinal" | "action">
 
 type HarnessProps = {
   readonly locale?: "en" | "zh"
@@ -22,24 +18,18 @@ type HarnessProps = {
 }
 
 function Harness({ locale = "en", initial, onResponse }: HarnessProps) {
-  const episodes: readonly EpisodeSummary[] = canonicalRun(locale).episodes
-  const episodeIds = episodes.map((episode) => episode.id)
   const [state, setState] = useState(initial ?? initialStudyResponse())
 
   function handleResponse(action: ResponseAction) {
     onResponse?.(action)
-    setState((current) => updateStudyResponse(current, action, episodeIds))
+    setState((current) => updateStudyResponse(current, action))
   }
 
   return (
     <LocaleProvider initialLocale={locale} syncDocument={false}>
-      <StudyResponseForm episodes={episodes} state={state} onResponse={handleResponse} />
+      <StudyResponseForm state={state} onResponse={handleResponse} />
     </LocaleProvider>
   )
-}
-
-function episodeIds(): readonly string[] {
-  return canonicalRun("en").episodes.map((episode) => episode.id)
 }
 
 function submitButton(): HTMLElement {
@@ -47,7 +37,7 @@ function submitButton(): HTMLElement {
 }
 
 describe("study response form", () => {
-  it("offers equal neutral verdict buttons without a no-mistake answer", () => {
+  it("offers equal neutral verdict buttons without a localization control", () => {
     render(<Harness />)
 
     const accept = screen.getByRole("button", { name: "Fulfills the request" })
@@ -58,23 +48,20 @@ describe("study response form", () => {
     expect(accept.className).toBe(reject.className)
     expect(accept).not.toHaveAttribute("data-variant")
     expect(reject).not.toHaveAttribute("data-variant")
-    expect(screen.queryByRole("button", { name: /No mistaken action/i })).toBeNull()
+    expect(screen.queryByRole("combobox")).toBeNull()
+    expect(screen.queryByRole("button", { name: /earliest mistake|mark/i })).toBeNull()
   })
 
-  it("uses stable episode IDs and a persistent explanation field", () => {
+  it("keeps one optional explanation field with a 500-character counter", () => {
     render(<Harness />)
-
-    expect(screen.getAllByRole("option").map((option) => option.getAttribute("value"))).toEqual([
-      "",
-      ...episodeIds(),
-      "cannot-determine",
-    ])
-    expect(screen.getByRole("option", { name: "Cannot determine" })).toBeInTheDocument()
-    expect(screen.queryByRole("option", { name: /No mistaken action/i })).toBeNull()
 
     const explanation = screen.getByRole("textbox")
     expect(explanation).toBeVisible()
     expect(explanation).toHaveAttribute("maxLength", "500")
+    expect(explanation).toHaveAttribute("aria-required", "false")
+    expect(screen.getByText("Optional")).toBeVisible()
+    expect(screen.getByText("Optional for either judgment.")).toBeVisible()
+    expect(screen.getByText("0/500")).toBeVisible()
     expect(
       screen.getByText("Shown on this page only. Reloading clears your response."),
     ).toBeVisible()
@@ -82,9 +69,10 @@ describe("study response form", () => {
       screen.getByText("Submitting does not place an order, rerun the agent, or trigger a repair."),
     ).toBeVisible()
     expect(submitButton()).toBeDisabled()
+    expect(screen.queryByRole("combobox")).toBeNull()
   })
 
-  it("dispatches only response actions through the shared reducer", async () => {
+  it("dispatches only verdict and explanation actions through the shared reducer", async () => {
     const user = userEvent.setup()
     const onResponse = vi.fn()
     render(<Harness onResponse={onResponse} />)
@@ -92,20 +80,19 @@ describe("study response form", () => {
     await user.click(screen.getByRole("button", { name: "Fulfills the request" }))
     expect(onResponse).toHaveBeenCalledWith({ type: "verdict", verdict: "accepted" })
 
-    await user.selectOptions(screen.getByRole("combobox"), "episode-04")
-    expect(onResponse).toHaveBeenCalledWith({
-      type: "localize",
-      localization: { kind: "episode", episodeId: "episode-04" },
-    })
-
-    await user.selectOptions(screen.getByRole("combobox"), "cannot-determine")
-    expect(onResponse).toHaveBeenCalledWith({
-      type: "localize",
-      localization: { kind: "cannot-determine" },
-    })
+    await user.click(screen.getByRole("button", { name: "Does not fulfill the request" }))
+    expect(onResponse).toHaveBeenLastCalledWith({ type: "verdict", verdict: "rejected" })
 
     await user.type(screen.getByRole("textbox"), "Checked the cart")
     expect(onResponse).toHaveBeenLastCalledWith({ type: "explain", text: "Checked the cart" })
+    expect(onResponse).not.toHaveBeenCalledWith(expect.objectContaining({ type: "localize" }))
+  })
+
+  it("counts the explanation up to the limit", () => {
+    render(<Harness initial={{ ...initialStudyResponse(), explanation: "x".repeat(500) }} />)
+
+    expect(screen.getByText("500/500")).toBeVisible()
+    expect(screen.getByRole("textbox")).toHaveAttribute("maxLength", "500")
   })
 
   it("disables submit until a verdict and locks judgments after a valid submission", async () => {
@@ -123,118 +110,72 @@ describe("study response form", () => {
     expect(screen.getByRole("status")).toHaveTextContent("Response recorded on this page only.")
     expect(screen.getByRole("button", { name: "Fulfills the request" })).toBeDisabled()
     expect(screen.getByRole("button", { name: "Does not fulfill the request" })).toBeDisabled()
-    expect(screen.getByRole("combobox")).toBeDisabled()
     expect(screen.getByRole("textbox")).toBeDisabled()
     expect(screen.queryByRole("alert")).toBeNull()
   })
 
-  it("reports a missing localization without dispatching an invalid submit", async () => {
+  it("submits a rejection with a blank explanation", async () => {
     const user = userEvent.setup()
     const onResponse = vi.fn()
     render(<Harness onResponse={onResponse} />)
 
     await user.click(screen.getByRole("button", { name: "Does not fulfill the request" }))
-    await user.click(submitButton())
-
-    expect(onResponse).not.toHaveBeenCalledWith({ type: "submit" })
-    const alert = screen.getByRole("alert")
-    expect(
-      within(alert).getByText("Select the earliest mistaken step or Cannot determine."),
-    ).toBeVisible()
-
-    const select = screen.getByRole("combobox")
-    expect(select).toHaveAttribute("aria-invalid", "true")
-    const errorId = select
-      .getAttribute("aria-describedby")
-      ?.split(" ")
-      .find((id) => id.endsWith("localization-required"))
-    expect(errorId).toBeDefined()
-    if (!errorId) throw new Error("Missing localization error association")
-    expect(document.getElementById(errorId)).toHaveTextContent(
-      "Select the earliest mistaken step or Cannot determine.",
-    )
-
-    await user.selectOptions(select, "cannot-determine")
-    expect(screen.queryByRole("alert")).toBeNull()
-    expect(select).not.toHaveAttribute("aria-invalid")
-  })
-
-  it("focuses the error summary on invalid submit without stealing typing focus", async () => {
-    const user = userEvent.setup()
-    const onResponse = vi.fn()
-    render(<Harness onResponse={onResponse} />)
-
-    await user.click(screen.getByRole("button", { name: "Does not fulfill the request" }))
-    await user.selectOptions(screen.getByRole("combobox"), "episode-04")
-
-    // When an invalid attempt is submitted.
-    await user.click(submitButton())
-
-    // Then the inserted summary receives focus and the submit is rejected.
-    expect(onResponse).not.toHaveBeenCalledWith({ type: "submit" })
-    expect(screen.getByRole("alert")).toHaveFocus()
-
-    // When the participant resumes typing in the explanation.
-    const explanation = screen.getByRole("textbox")
-    await user.click(explanation)
-    await user.type(explanation, "The cart step did not add the selected shoe.")
-    expect(explanation).toHaveFocus()
-    expect(explanation).toHaveValue("The cart step did not add the selected shoe.")
-
-    // When the field becomes invalid again without a submit, focus is not stolen.
-    await user.clear(explanation)
-    expect(explanation).toHaveFocus()
-
-    // Then another invalid attempt remains reachable and refocuses the summary.
-    await user.click(submitButton())
-    expect(screen.getByRole("alert")).toHaveFocus()
-    expect(onResponse).not.toHaveBeenCalledWith({ type: "submit" })
-  })
-
-  it("requires a marked explanation for a rejection and then submits it", async () => {
-    const user = userEvent.setup()
-    const onResponse = vi.fn()
-    render(<Harness onResponse={onResponse} />)
-
-    await user.click(screen.getByRole("button", { name: "Does not fulfill the request" }))
-    await user.selectOptions(screen.getByRole("combobox"), "episode-04")
-
-    const explanation = screen.getByRole("textbox")
-    expect(explanation).toHaveAttribute("aria-required", "true")
-    expect(screen.getByText("Required")).toBeVisible()
-
-    await user.click(submitButton())
-    expect(onResponse).not.toHaveBeenCalledWith({ type: "submit" })
-    expect(screen.getByRole("alert")).toHaveTextContent(
-      "Add a short explanation for the marked step.",
-    )
-    expect(explanation).toHaveAttribute("aria-invalid", "true")
-
-    await user.type(explanation, "The cart step did not add the selected shoe.")
     await user.click(submitButton())
 
     expect(onResponse).toHaveBeenCalledWith({ type: "submit" })
     expect(screen.getByRole("status")).toHaveTextContent("Response recorded on this page only.")
+    expect(screen.getByRole("textbox")).toHaveValue("")
   })
 
-  it("permits rejection with uncertainty and an optional explanation", async () => {
+  it("reports an over-limit explanation without dispatching an invalid submit", async () => {
     const user = userEvent.setup()
     const onResponse = vi.fn()
-    render(<Harness onResponse={onResponse} />)
+    render(
+      <Harness
+        initial={{
+          ...initialStudyResponse(),
+          verdict: "rejected",
+          explanation: "x".repeat(501),
+        }}
+        onResponse={onResponse}
+      />,
+    )
 
-    await user.click(screen.getByRole("button", { name: "Does not fulfill the request" }))
-    await user.selectOptions(screen.getByRole("combobox"), "cannot-determine")
-
-    expect(screen.getByText("Optional when you choose Cannot determine.")).toBeVisible()
-    expect(screen.getByRole("textbox")).toHaveAttribute("aria-required", "false")
-    expect(screen.getByText("Optional")).toBeVisible()
-
+    // When the invalid response is submitted.
     await user.click(submitButton())
+
+    // Then the summary explains the limit and the submit is rejected.
+    expect(onResponse).not.toHaveBeenCalledWith({ type: "submit" })
+    const alert = screen.getByRole("alert")
+    expect(alert).toHaveTextContent("Shorten the explanation to 500 characters or fewer.")
+    expect(alert).toHaveFocus()
+    expect(screen.getByRole("textbox")).toHaveAttribute("aria-invalid", "true")
+
+    // When the explanation is shortened to the limit.
+    fireEvent.change(screen.getByRole("textbox"), { target: { value: "x".repeat(500) } })
+    await user.click(submitButton())
+
+    // Then it submits and the error summary clears.
     expect(onResponse).toHaveBeenCalledWith({ type: "submit" })
     expect(screen.queryByRole("alert")).toBeNull()
   })
 
-  it("preserves the exact explanation while localization changes", async () => {
+  it("does not steal typing focus while the explanation is valid", async () => {
+    const user = userEvent.setup()
+    render(<Harness />)
+
+    // When the participant types a normal explanation before choosing a verdict.
+    const explanation = screen.getByRole("textbox")
+    await user.click(explanation)
+    await user.type(explanation, "Checked the cart.")
+
+    // Then the explanation keeps focus and no error summary appears.
+    expect(explanation).toHaveFocus()
+    expect(explanation).toHaveValue("Checked the cart.")
+    expect(screen.queryByRole("alert")).toBeNull()
+  })
+
+  it("preserves the exact explanation while the verdict changes", async () => {
     const user = userEvent.setup()
     render(<Harness />)
 
@@ -242,10 +183,10 @@ describe("study response form", () => {
     fireEvent.change(explanation, { target: { value: "  Checked the cart\nand the total.  " } })
     expect(explanation).toHaveValue("  Checked the cart\nand the total.  ")
 
-    await user.selectOptions(screen.getByRole("combobox"), "cannot-determine")
+    await user.click(screen.getByRole("button", { name: "Does not fulfill the request" }))
     expect(explanation).toHaveValue("  Checked the cart\nand the total.  ")
 
-    await user.selectOptions(screen.getByRole("combobox"), "episode-04")
+    await user.click(screen.getByRole("button", { name: "Fulfills the request" }))
     expect(explanation).toHaveValue("  Checked the cart\nand the total.  ")
   })
 
@@ -256,27 +197,29 @@ describe("study response form", () => {
           ...initialStudyResponse(),
           status: "submitted",
           verdict: "rejected",
-          localization: { kind: "cannot-determine" },
+          explanation: "An authored explanation.",
         }}
       />,
     )
 
     expect(screen.getByRole("status")).toHaveTextContent("Response recorded on this page only.")
     expect(screen.getByRole("button", { name: "Does not fulfill the request" })).toBeDisabled()
-    expect(screen.getByRole("combobox")).toBeDisabled()
     expect(screen.getByRole("textbox")).toBeDisabled()
+    expect(screen.getByRole("textbox")).toHaveValue("An authored explanation.")
+    expect(screen.queryByRole("combobox")).toBeNull()
     expect(screen.queryByText(/correct|success/i)).toBeNull()
   })
 
   it("renders the Chinese form copy and on-screen-only notice", () => {
     render(<Harness locale="zh" />)
 
-    expect(screen.getByRole("option", { name: "无法判断" })).toBeInTheDocument()
     expect(screen.getByText("评估仅显示在本页，刷新后将清除。")).toBeVisible()
     expect(screen.getByRole("button", { name: "符合原始任务" })).toBeVisible()
     expect(screen.getByRole("button", { name: "不符合原始任务" })).toBeVisible()
     expect(screen.getByRole("button", { name: "提交评估" })).toBeVisible()
     expect(screen.getByRole("textbox")).toHaveAttribute("maxLength", "500")
+    expect(screen.getByText("可选")).toBeVisible()
+    expect(screen.queryByRole("combobox")).toBeNull()
   })
 
   it("does not call network, storage, or download APIs", async () => {

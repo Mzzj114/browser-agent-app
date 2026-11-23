@@ -173,16 +173,6 @@
   line-height: 1.45;
 }
 
-.execution-rail-mark {
-  padding: 0 var(--space-2);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-control);
-  color: var(--text-secondary);
-  font-size: 11px;
-  font-weight: 510;
-  line-height: 1.5;
-}
-
 .study-page {
   display: grid;
   grid-template-rows: minmax(0, 1fr);
@@ -350,7 +340,7 @@
 
 .study-response-form {
   display: grid;
-  grid-template-columns: 268px 300px minmax(0, 1fr) 152px;
+  grid-template-columns: 268px minmax(0, 1fr) 152px;
   grid-auto-flow: row dense;
   min-inline-size: 0;
   align-items: start;
@@ -390,12 +380,8 @@
   gap: 2px;
 }
 
-.study-response-localization {
-  grid-column: 2;
-}
-
 .study-response-explanation {
-  grid-column: 3;
+  grid-column: 2;
 }
 
 .study-response-field label {
@@ -404,7 +390,6 @@
   line-height: 1.35;
 }
 
-.study-response-field select,
 .study-response-field textarea {
   inline-size: 100%;
   min-block-size: var(--control-height);
@@ -422,7 +407,6 @@
   resize: vertical;
 }
 
-.study-response-field select:disabled,
 .study-response-field textarea:disabled {
   background: var(--surface-secondary);
   color: var(--text-secondary);
@@ -472,7 +456,7 @@
 
 .study-response-submit-row {
   display: grid;
-  grid-column: 4;
+  grid-column: 3;
   min-inline-size: 0;
   gap: 2px;
 }

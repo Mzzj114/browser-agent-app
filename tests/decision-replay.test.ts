@@ -118,7 +118,6 @@ describe("decision replay selection", () => {
     const response = {
       ...initialStudyResponse(),
       verdict: "rejected" as const,
-      localization: viewedEpisode("episode-04"),
       explanation: "  Keep this authored text  ",
     }
     const snapshot = structuredClone(response)

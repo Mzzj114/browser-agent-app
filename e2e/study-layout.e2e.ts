@@ -5,12 +5,7 @@ import { studyConditionFromEnvironment } from "../scripts/study-condition.ts"
 import type { StudyRun } from "../src/domain/study-run-schema.ts"
 import type { Locale } from "../src/i18n/locale.ts"
 import type { StudyEquivalenceReport } from "../tests/fixtures/study-builds.ts"
-import {
-  representativeRunId,
-  runFrame,
-  runScreenshotSize,
-  runUrl,
-} from "./run.ts"
+import { representativeRunId, runFrame, runScreenshotSize, runUrl } from "./run.ts"
 
 const studyCondition = studyConditionFromEnvironment()
 
@@ -26,8 +21,6 @@ const copy = {
     accept: "符合原始任务",
     reject: "不符合原始任务",
     submit: "提交评估",
-    cannotDetermine: "无法判断",
-    localizationPrompt: /最早的错误操作/,
     explanationPrompt: /简短说明/,
     finalState: "最终状态",
     lastRecordedState: "最后一次录制的状态",
@@ -41,8 +34,6 @@ const copy = {
     accept: "Fulfills the request",
     reject: "Does not fulfill the request",
     submit: "Submit assessment",
-    cannotDetermine: "Cannot determine",
-    localizationPrompt: /earliest mistaken action/,
     explanationPrompt: /short explanation/i,
     finalState: "Final state",
     lastRecordedState: "Last recorded state",
@@ -185,10 +176,11 @@ for (const locale of ["zh", "en"] as const) {
       await viewedStep.click()
       await expect(page.getByText(text.beforeStep4)).toBeVisible()
 
-      const mark = page.getByRole("combobox", { name: text.localizationPrompt })
-      await tabUntilFocused(page, mark)
-      await expect(mark).toBeFocused()
-      await expect(mark).toHaveCSS("outline-style", "solid")
+      const explanation = page.getByRole("textbox", { name: text.explanationPrompt })
+      await tabUntilFocused(page, explanation)
+      await expect(explanation).toBeFocused()
+      await expect(explanation).toHaveCSS("outline-style", "solid")
+      await expect(page.getByRole("combobox")).toHaveCount(0)
 
       const rail = page.locator(".execution-rail-list")
       const inspector = page.locator(".study-inspector-panel")
@@ -221,38 +213,26 @@ for (const locale of ["zh", "en"] as const) {
         )
         .toBe(0)
 
-      await mark.selectOption("episode-04")
-      await expect(page.getByRole("combobox", { name: text.localizationPrompt })).toHaveValue(
-        "episode-04",
-      )
-      await expect(page.locator('.execution-rail-item[data-marked="true"]')).toHaveCount(1)
-      await expect(page.locator('.execution-rail-item[data-marked="true"]')).toContainText(
-        locale === "en" ? "Your mark" : "你的标记",
-      )
-      await page.locator('.execution-rail-item[data-marked="true"]').scrollIntoViewIfNeeded()
-      await capture(page, locale, viewport, "historical-mark")
-
-      const explanation = page.getByRole("textbox", { name: text.explanationPrompt })
       const explanationText = locale === "zh" ? "证".repeat(500) : "x".repeat(500)
       await explanation.fill(explanationText)
       await expect(explanation).toHaveValue(explanationText)
       await expect(page.getByText("500/500")).toBeVisible()
 
-      await page
-        .getByRole("combobox", { name: text.localizationPrompt })
-        .selectOption("cannot-determine")
-      await expect(page.locator('.execution-rail-item[data-marked="true"]')).toHaveCount(0)
+      await items.last().click()
+      await expect(page.getByRole("heading", { name: text.finalState })).toBeVisible()
+      await expect(explanation).toHaveValue(explanationText)
+      await viewedStep.click()
       await expect(page.getByText(text.beforeStep4)).toBeVisible()
       await expect(page.locator(".page-screenshot")).toHaveAttribute("src", runFrame.step4)
       await expect(explanation).toHaveValue(explanationText)
-      await capture(page, locale, viewport, "uncertainty")
+      await expect(page.locator("[data-marked]")).toHaveCount(0)
+      await capture(page, locale, viewport, "draft")
 
       const controls = {
         viewedStep: await box(viewedStep),
         final: await box(items.last()),
         accept: await box(page.getByRole("button", { name: text.accept, exact: true })),
         reject: await box(page.getByRole("button", { name: text.reject, exact: true })),
-        localization: await box(page.getByRole("combobox", { name: text.localizationPrompt })),
         explanation: await box(explanation),
         submit: await box(page.getByRole("button", { name: text.submit, exact: true })),
       }

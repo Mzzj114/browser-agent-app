@@ -122,7 +122,6 @@ describe("execution rail", () => {
       <ExecutionRail
         episodes={run.episodes}
         viewed={{ kind: "final" }}
-        localization={{ kind: "unanswered" }}
         onView={vi.fn()}
         onFinal={vi.fn()}
       />,
@@ -136,16 +135,15 @@ describe("execution rail", () => {
     expect(screen.getByText("Typed “red running shoes”")).toBeVisible()
     expect(screen.getByText("Opened “Cloud Walk Red Sneakers”")).toBeVisible()
     expect(screen.getByText("Reported task completion")).toBeVisible()
-    expect(screen.queryByText("Your mark")).toBeNull()
+    expect(document.querySelector("[data-marked]")).toBeNull()
   })
 
-  it("keeps viewed and marked labels separate", () => {
+  it("ties the viewed label and aria-current only to the viewed item", () => {
     const run = studyRuns("candidates").en
     renderEnglish(
       <ExecutionRail
         episodes={run.episodes}
         viewed={{ kind: "episode", episodeId: "episode-04" }}
-        localization={{ kind: "episode", episodeId: "episode-02" }}
         onView={vi.fn()}
         onFinal={vi.fn()}
       />,
@@ -153,18 +151,20 @@ describe("execution rail", () => {
 
     const buttons = screen.getAllByRole("button")
     const viewedButton = buttons[3]
-    const markedButton = buttons[1]
+    const otherButton = buttons[1]
     const finalButton = buttons[8]
-    if (!viewedButton || !markedButton || !finalButton) {
+    if (!viewedButton || !otherButton || !finalButton) {
       throw new Error("Expected nine rail buttons")
     }
 
     expect(within(viewedButton).getByText("Viewed step 4")).toBeVisible()
-    expect(within(viewedButton).queryByText("Your mark")).toBeNull()
-    expect(within(markedButton).getByText("Your mark")).toBeVisible()
-    expect(within(markedButton).queryByText("Viewed step 4")).toBeNull()
-    expect(finalButton).toHaveAttribute("data-marked", "false")
+    expect(viewedButton).toHaveAttribute("aria-current", "step")
+    expect(within(otherButton).queryByText("Viewed step 4")).toBeNull()
+    expect(otherButton).not.toHaveAttribute("aria-current", "step")
+    expect(finalButton).toHaveAttribute("data-viewed", "false")
     expect(finalButton).not.toHaveAttribute("aria-current", "step")
+    expect(document.querySelector("[data-marked]")).toBeNull()
+    expect(screen.queryByText("Your mark")).toBeNull()
   })
 
   it("reports the stable episode ID when a viewed item is chosen", async () => {
@@ -176,7 +176,6 @@ describe("execution rail", () => {
       <ExecutionRail
         episodes={run.episodes}
         viewed={{ kind: "final" }}
-        localization={{ kind: "unanswered" }}
         onView={onView}
         onFinal={onFinal}
       />,
@@ -196,7 +195,6 @@ describe("execution rail", () => {
       <ExecutionRail
         episodes={run.episodes}
         viewed={{ kind: "episode", episodeId: "episode-08" }}
-        localization={{ kind: "unanswered" }}
         onView={onView}
         onFinal={onFinal}
       />,
@@ -210,7 +208,7 @@ describe("execution rail", () => {
     expect(finalItem).toHaveTextContent("Final state")
     expect(finalItem.querySelector(".execution-rail-item")).not.toBeNull()
     const finalButton = within(finalItem).getByRole("button")
-    expect(finalButton).toHaveAttribute("data-marked", "false")
+    expect(finalButton).not.toHaveAttribute("data-marked")
 
     // When the final item is chosen.
     await user.click(finalButton)

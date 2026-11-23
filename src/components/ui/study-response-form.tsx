@@ -1,6 +1,5 @@
 import type * as React from "react"
 import { useEffect, useId, useRef, useState } from "react"
-import type { EpisodeCore } from "../../domain/decision-run-schema"
 import {
   type ResponseAction,
   type ResponseError,
@@ -11,13 +10,9 @@ import { useMessages } from "../../i18n"
 import { ActionButton } from "./buttons"
 
 type StudyResponseFormProps = {
-  readonly episodes: readonly Pick<EpisodeCore, "id" | "ordinal" | "action">[]
   readonly state: StudyResponse
   readonly onResponse: (action: ResponseAction) => void
 }
-
-const unansweredValue = ""
-const cannotDetermineValue = "cannot-determine"
 
 function describedBy(...values: readonly (string | undefined)[]): string | undefined {
   const ids = values.filter((value): value is string => value !== undefined).join(" ")
@@ -25,7 +20,6 @@ function describedBy(...values: readonly (string | undefined)[]): string | undef
 }
 
 export function StudyResponseForm({
-  episodes,
   state,
   onResponse,
 }: StudyResponseFormProps): React.JSX.Element {
@@ -35,8 +29,7 @@ export function StudyResponseForm({
   const [invalidSubmitCount, setInvalidSubmitCount] = useState(0)
   const summaryRef = useRef<HTMLDivElement>(null)
   const lastFocusedInvalidSubmit = useRef(0)
-  const episodeIds = episodes.map((episode) => episode.id)
-  const errors = responseErrors(state, episodeIds)
+  const errors = responseErrors(state)
   const submitted = state.status === "submitted"
   const showErrors = submitAttempted && !submitted && errors.length > 0
   const hasError = (error: ResponseError) => showErrors && errors.includes(error)
@@ -48,53 +41,16 @@ export function StudyResponseForm({
   }, [invalidSubmitCount, showErrors])
 
   const questionId = `${idPrefix}-question`
-  const localizationId = `${idPrefix}-localization`
-  const localizationHelperId = `${idPrefix}-localization-helper`
   const verdictErrorId = `${idPrefix}-verdict-required`
-  const localizationRequiredErrorId = `${idPrefix}-localization-required`
-  const unknownEpisodeErrorId = `${idPrefix}-unknown-episode`
   const explanationId = `${idPrefix}-explanation`
   const explanationHelperId = `${idPrefix}-explanation-helper`
-  const explanationRequiredErrorId = `${idPrefix}-explanation-required`
   const explanationTooLongErrorId = `${idPrefix}-explanation-too-long`
   const errorsId = `${idPrefix}-errors`
   const consequenceId = `${idPrefix}-consequence`
   const onScreenOnlyId = `${idPrefix}-on-screen-only`
 
-  const localizationValue =
-    state.localization.kind === "episode"
-      ? state.localization.episodeId
-      : state.localization.kind === "cannot-determine"
-        ? cannotDetermineValue
-        : unansweredValue
-
-  const explanationRequired = state.localization.kind === "episode"
-  const explanationHelper =
-    state.localization.kind === "episode"
-      ? messages.study.explanationRequiredHelper
-      : state.localization.kind === "cannot-determine"
-        ? messages.study.explanationCannotDetermineHelper
-        : messages.study.explanationOptionalHelper
-
   const verdictHasError = hasError("verdict-required")
-  const localizationRequired = hasError("localization-required")
-  const unknownEpisode = hasError("unknown-episode")
-  const explanationMissing = hasError("explanation-required")
   const explanationTooLong = hasError("explanation-too-long")
-
-  function handleLocalizationChange(value: string) {
-    if (value === cannotDetermineValue) {
-      onResponse({ type: "localize", localization: { kind: "cannot-determine" } })
-      return
-    }
-
-    if (value === unansweredValue) {
-      onResponse({ type: "localize", localization: { kind: "unanswered" } })
-      return
-    }
-
-    onResponse({ type: "localize", localization: { kind: "episode", episodeId: value } })
-  }
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -163,52 +119,10 @@ export function StudyResponseForm({
         </div>
       ) : null}
 
-      <div className="study-response-field study-response-localization">
-        <label htmlFor={localizationId}>{messages.study.localizationPrompt}</label>
-        <select
-          id={localizationId}
-          name="earliest-mistake"
-          value={localizationValue}
-          disabled={submitted}
-          aria-invalid={localizationRequired || unknownEpisode ? true : undefined}
-          aria-describedby={describedBy(
-            localizationHelperId,
-            localizationRequired ? localizationRequiredErrorId : undefined,
-            unknownEpisode ? unknownEpisodeErrorId : undefined,
-          )}
-          onChange={(event) => handleLocalizationChange(event.target.value)}
-        >
-          <option value={unansweredValue}>{messages.study.localizationPlaceholder}</option>
-          {episodes.map((episode) => (
-            <option key={episode.id} value={episode.id}>
-              {messages.stepOption(episode.ordinal, episode.action)}
-            </option>
-          ))}
-          <option value={cannotDetermineValue}>{messages.study.cannotDetermine}</option>
-        </select>
-        <p id={localizationHelperId} className="study-response-helper">
-          {messages.study.uncertaintyHelper}
-        </p>
-        {localizationRequired ? (
-          <p id={localizationRequiredErrorId} className="study-response-error">
-            {messages.study.responseErrorMessages["localization-required"]}
-          </p>
-        ) : null}
-        {unknownEpisode ? (
-          <p id={unknownEpisodeErrorId} className="study-response-error">
-            {messages.study.responseErrorMessages["unknown-episode"]}
-          </p>
-        ) : null}
-      </div>
-
       <div className="study-response-field study-response-explanation">
         <label htmlFor={explanationId}>
           {messages.study.explanationHeading}{" "}
-          <span className="study-response-indicator">
-            {explanationRequired
-              ? messages.study.explanationRequired
-              : messages.study.explanationOptional}
-          </span>
+          <span className="study-response-indicator">{messages.study.explanationOptional}</span>
         </label>
         <textarea
           id={explanationId}
@@ -217,24 +131,18 @@ export function StudyResponseForm({
           rows={2}
           maxLength={500}
           disabled={submitted}
-          aria-required={explanationRequired}
-          aria-invalid={explanationMissing || explanationTooLong ? true : undefined}
+          aria-required={false}
+          aria-invalid={explanationTooLong ? true : undefined}
           aria-describedby={describedBy(
             explanationHelperId,
-            explanationMissing ? explanationRequiredErrorId : undefined,
             explanationTooLong ? explanationTooLongErrorId : undefined,
           )}
           placeholder={messages.study.explanationPlaceholder}
           onChange={(event) => onResponse({ type: "explain", text: event.target.value })}
         />
         <p id={explanationHelperId} className="study-response-helper">
-          {explanationHelper}
+          {messages.study.explanationOptionalHelper}
         </p>
-        {explanationMissing ? (
-          <p id={explanationRequiredErrorId} className="study-response-error">
-            {messages.study.responseErrorMessages["explanation-required"]}
-          </p>
-        ) : null}
         {explanationTooLong ? (
           <p id={explanationTooLongErrorId} className="study-response-error">
             {messages.study.responseErrorMessages["explanation-too-long"]}

@@ -65,8 +65,7 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
   const viewedEpisode = selectedEpisode(run, activeViewed)
   const observation = viewedObservation(run, activeViewed)
   const [response, dispatchResponse] = useReducer(
-    (state: StudyResponse, action: ResponseAction) =>
-      updateStudyResponse(state, action, episodeIds),
+    (state: StudyResponse, action: ResponseAction) => updateStudyResponse(state, action),
     initialStudyResponse(),
   )
 
@@ -111,7 +110,6 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
           <ExecutionRail
             episodes={run.episodes}
             viewed={activeViewed}
-            localization={response.localization}
             onView={viewEpisode}
             onFinal={goFinal}
           />
@@ -136,11 +134,7 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
         </main>
 
         <section className="study-response" aria-label={messages.decisionQuestion}>
-          <StudyResponseForm
-            episodes={run.episodes}
-            state={response}
-            onResponse={dispatchResponse}
-          />
+          <StudyResponseForm state={response} onResponse={dispatchResponse} />
         </section>
       </div>
       <DesktopOnlyMessage />

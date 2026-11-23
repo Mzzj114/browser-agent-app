@@ -1,13 +1,11 @@
 import type * as React from "react"
 import type { ViewedSelection } from "../../domain/decision-replay"
 import type { EpisodeCore } from "../../domain/decision-run-schema"
-import type { Localization } from "../../domain/study-response"
 import { useMessages } from "../../i18n"
 
 type ExecutionRailProps = {
   readonly episodes: readonly Pick<EpisodeCore, "id" | "ordinal" | "action">[]
   readonly viewed: ViewedSelection
-  readonly localization: Localization
   readonly onView: (episodeId: string) => void
   readonly onFinal: () => void
 }
@@ -15,7 +13,6 @@ type ExecutionRailProps = {
 export function ExecutionRail({
   episodes,
   viewed,
-  localization,
   onView,
   onFinal,
 }: ExecutionRailProps): React.JSX.Element {
@@ -28,7 +25,6 @@ export function ExecutionRail({
       <ol className="execution-rail-list">
         {episodes.map((episode) => {
           const isViewed = viewed.kind === "episode" && viewed.episodeId === episode.id
-          const isMarked = localization.kind === "episode" && localization.episodeId === episode.id
 
           return (
             <li key={episode.id}>
@@ -36,7 +32,6 @@ export function ExecutionRail({
                 type="button"
                 className="execution-rail-item"
                 data-viewed={isViewed}
-                data-marked={isMarked}
                 aria-current={isViewed ? "step" : undefined}
                 onClick={() => onView(episode.id)}
               >
@@ -50,9 +45,6 @@ export function ExecutionRail({
                       {messages.study.viewedStep(episode.ordinal)}
                     </span>
                   ) : null}
-                  {isMarked ? (
-                    <span className="execution-rail-mark">{messages.study.yourMark}</span>
-                  ) : null}
                 </span>
               </button>
             </li>
@@ -63,7 +55,6 @@ export function ExecutionRail({
             type="button"
             className="execution-rail-item"
             data-viewed={isFinalViewed}
-            data-marked={false}
             aria-current={isFinalViewed ? "step" : undefined}
             onClick={onFinal}
           >

@@ -7,7 +7,6 @@ const localeCopy = {
     accept: "符合原始任务",
     reject: "不符合原始任务",
     submit: "提交评估",
-    localizationPrompt: "哪一步包含 Agent 最早的错误操作？",
     desktopOnlyTitle: "请在桌面窗口中使用浏览助手",
   },
   en: {
@@ -15,7 +14,6 @@ const localeCopy = {
     accept: "Fulfills the request",
     reject: "Does not fulfill the request",
     submit: "Submit assessment",
-    localizationPrompt: "Which step contains the agent's earliest mistaken action?",
     desktopOnlyTitle: "Please use Browser Assistant in a desktop window",
   },
 } as const
@@ -304,9 +302,10 @@ test("keeps keyboard focus visible on replay and response controls", async ({ pa
     await tabUntilFocused(page, assessment)
     await expectVisibleFocusRing(assessment)
 
-    const mark = page.getByRole("combobox", { name: /earliest mistaken action/i })
-    await tabUntilFocused(page, mark)
-    await expectVisibleFocusRing(mark)
+    const explanation = page.getByRole("textbox", { name: /short explanation/i })
+    await tabUntilFocused(page, explanation)
+    await expectVisibleFocusRing(explanation)
+    await expect(page.getByRole("combobox")).toHaveCount(0)
   }
 })
 
@@ -388,9 +387,6 @@ for (const locale of ["zh", "en"] as const) {
     await page.goto(copy.url)
     await page.evaluate(() => document.fonts.ready)
     await rejected.click()
-    await page
-      .getByRole("combobox", { name: copy.localizationPrompt })
-      .selectOption("cannot-determine")
     await submit.click()
     await expect(accepted).toBeDisabled()
     await expect(rejected).toBeDisabled()

@@ -133,11 +133,19 @@ describe("bilingual workspace", () => {
 })
 
 describe("study copy", () => {
-  it("uses the approved bilingual localization prompt", () => {
-    expect(enStudyMessages.localizationPrompt).toBe(
-      "Which step contains the agent's earliest mistaken action?",
-    )
-    expect(zhStudyMessages.localizationPrompt).toBe("哪一步包含 Agent 最早的错误操作？")
+  it("keeps the explanation optional for either verdict and drops localization controls", () => {
+    for (const messages of [enStudyMessages, zhStudyMessages]) {
+      expect(messages.explanationHeading).not.toBe("")
+      expect(messages.explanationOptional).not.toBe("")
+      expect(messages.explanationOptionalHelper).not.toBe("")
+      expect("localizationPrompt" in messages).toBe(false)
+      expect("localizationPlaceholder" in messages).toBe(false)
+      expect("cannotDetermine" in messages).toBe(false)
+      expect("uncertaintyHelper" in messages).toBe(false)
+      expect("yourMark" in messages).toBe(false)
+      expect("markEarliestMistake" in messages).toBe(false)
+      expect("clearMark" in messages).toBe(false)
+    }
   })
 
   it("exposes the study copy through the shared message contract", () => {
@@ -166,9 +174,9 @@ describe("study copy", () => {
       expect(messages.probabilityColumn).not.toBe("")
       expect(messages.selected).not.toBe("")
       expect(messages.noTargetRequired).not.toBe("")
-      expect(messages.markEarliestMistake).not.toBe("")
-      expect(messages.clearMark).not.toBe("")
-      expect(messages.yourMark).not.toBe("")
+      expect(messages.explanationHeading).not.toBe("")
+      expect(messages.explanationOptional).not.toBe("")
+      expect(messages.explanationOptionalHelper).not.toBe("")
       expect(messages.syntheticProvenance).not.toBe("")
       expect(messages.conditionalScoreExplanation).not.toBe("")
       expect(messages.roundingCaveat).not.toBe("")
