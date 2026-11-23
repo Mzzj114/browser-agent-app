@@ -16,8 +16,9 @@ export type BrowserFramePageState = {
 type BrowserFrameProps = {
   readonly pageState: BrowserFramePageState
   readonly stateLabel: string
-  readonly stateNote: string | null
-  readonly capturedAtLabel: string
+  readonly stateNote?: string | null
+  readonly capturedAtLabel?: string
+  readonly variant?: "full" | "compact"
 }
 
 export function BrowserFrame({
@@ -25,6 +26,7 @@ export function BrowserFrame({
   stateLabel,
   stateNote,
   capturedAtLabel,
+  variant = "full",
 }: BrowserFrameProps) {
   const messages = useMessages()
   const screenshot = pageState.screenshot
@@ -42,30 +44,51 @@ export function BrowserFrame({
   }
 
   return (
-    <section className="browser-frame" aria-label={messages.browserLabel}>
-      <div className="browser-meta">
-        <div className="browser-tab">
-          <Globe2 aria-hidden="true" />
-          <span className="browser-tab-title" title={pageState.title}>
-            {pageState.title}
+    <section className="browser-frame" data-variant={variant} aria-label={messages.browserLabel}>
+      {variant === "compact" ? (
+        <div className="browser-compact-caption">
+          <span className="browser-state-label" aria-live="polite" title={stateLabel}>
+            {stateLabel}
           </span>
+          <button
+            type="button"
+            className="browser-compact-zoom"
+            onClick={toggleZoom}
+            disabled={!hasScreenshot}
+            aria-label={isZoomed ? messages.fitScreenshot : messages.zoomScreenshot}
+          >
+            {isZoomed ? messages.fitLabel : messages.zoomLabel}
+          </button>
         </div>
-        <div className="browser-address">
-          <LockKeyhole aria-hidden="true" />
-          <span className="browser-address-text" title={pageState.url}>
-            {pageState.url}
-          </span>
-        </div>
-      </div>
-      <div className="browser-evidence-caption">
-        <span className="browser-state-label" aria-live="polite" title={stateLabel}>
-          {stateLabel}
-        </span>
-        <time className="browser-state-time" dateTime={pageState.capturedAt}>
-          {capturedAtLabel}
-        </time>
-        {stateNote === null ? null : <span className="browser-state-badge">{stateNote}</span>}
-      </div>
+      ) : (
+        <>
+          <div className="browser-meta">
+            <div className="browser-tab">
+              <Globe2 aria-hidden="true" />
+              <span className="browser-tab-title" title={pageState.title}>
+                {pageState.title}
+              </span>
+            </div>
+            <div className="browser-address">
+              <LockKeyhole aria-hidden="true" />
+              <span className="browser-address-text" title={pageState.url}>
+                {pageState.url}
+              </span>
+            </div>
+          </div>
+          <div className="browser-evidence-caption">
+            <span className="browser-state-label" aria-live="polite" title={stateLabel}>
+              {stateLabel}
+            </span>
+            {capturedAtLabel ? (
+              <time className="browser-state-time" dateTime={pageState.capturedAt}>
+                {capturedAtLabel}
+              </time>
+            ) : null}
+            {stateNote ? <span className="browser-state-badge">{stateNote}</span> : null}
+          </div>
+        </>
+      )}
       <div className="browser-viewport" data-zoomed={isZoomed}>
         {hasScreenshot ? (
           <button

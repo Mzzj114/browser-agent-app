@@ -372,6 +372,36 @@ describe("decision choice groups", () => {
     expect(toggle).not.toHaveAttribute("aria-controls")
   })
 
+  it("hides generic role context but keeps meaningful context", () => {
+    const head = {
+      selectedId: "39",
+      previewIds: ["38", "40", "41"],
+      offered: [
+        { id: "39", label: "[39] Open Classic Leather Wallet", context: "link" },
+        { id: "38", label: "[38] Submit search", context: "button" },
+        { id: "40", label: "[40] Use this address", context: "Billing address" },
+        { id: "41", label: "[41] Open travel wallet", context: "链接" },
+      ],
+    }
+    renderEnglish(
+      choiceGroupElement("things", "What it clicked", "Other things it could click", head),
+    )
+
+    const things = groupOf("things")
+    const chosen = things.querySelector('[data-choice="chosen"]')
+    if (!(chosen instanceof HTMLElement)) throw new Error("Missing chosen card")
+    expect(chosen.querySelector(".decision-choice-context")).toBeNull()
+    expect(chosen).not.toHaveTextContent("link")
+
+    const [submit, address, chineseLink] = alternativeCards(things)
+    if (!submit || !address || !chineseLink) throw new Error("Missing alternative chips")
+    expect(submit.querySelector(".decision-choice-context")).toBeNull()
+    expect(submit).not.toHaveTextContent("button")
+    expect(address).toHaveTextContent("Billing address")
+    expect(chineseLink.querySelector(".decision-choice-context")).toBeNull()
+    expect(chineseLink).not.toHaveTextContent("链接")
+  })
+
   it("keeps duplicate labels as distinct cards identified by the offered ID", () => {
     const head = {
       selectedId: "CLICK:billing",

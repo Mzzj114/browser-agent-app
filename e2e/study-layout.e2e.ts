@@ -420,8 +420,7 @@ for (const locale of ["zh", "en"] as const) {
   }
 }
 
-test("keeps a single chosen card for a targetless step", async ({ page }) => {
-  test.skip(studyCondition === "baseline", "baseline has no choice cards")
+test("keeps a targetless step to one full-width chosen card", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 720 })
   await page.goto("/?lang=en&run=F2_write_detailed_review_clean")
   await page.evaluate(() => document.fonts.ready)
@@ -429,9 +428,25 @@ test("keeps a single chosen card for a targetless step", async ({ page }) => {
   const items = page.locator(".execution-rail-list .execution-rail-item")
   await items.nth(2).click()
   await expect(page.locator(".browser-state-label")).toContainText("Before step 3")
-  await expect(page.locator(".decision-choice-pair")).toHaveCount(1)
-  await expect(page.locator('.decision-choice-pair [data-choice="chosen"]')).toHaveCount(1)
-  await expect(page.locator('[data-choice-kind="actions"] [data-choice="chosen"]')).toHaveCount(1)
+
+  if (studyCondition === "baseline") {
+    await expect(page.locator(".decision-choice-pair")).toHaveCount(0)
+    await expect(page.locator('[data-choice="chosen"]')).toHaveCount(0)
+    await expect(page.locator('[data-choice-kind="things"]')).toHaveCount(0)
+    return
+  }
+
+  const pair = page.locator(".decision-choice-pair")
+  const chosen = page.locator('[data-choice-kind="actions"] [data-choice="chosen"]')
+  await expect(pair).toHaveCount(1)
+  await expect(pair.locator(":scope > .decision-choice-group")).toHaveCount(1)
+  await expect(pair.locator('[data-choice="chosen"]')).toHaveCount(1)
+  await expect(chosen).toHaveCount(1)
   await expect(page.locator('[data-choice-kind="things"]')).toHaveCount(0)
   await expect(page.getByText("No target required.")).toBeVisible()
+
+  const pairBounds = await box(pair)
+  const chosenBounds = await box(chosen)
+  expect(Math.abs(pairBounds.x - chosenBounds.x)).toBeLessThanOrEqual(1)
+  expect(Math.abs(pairBounds.width - chosenBounds.width)).toBeLessThanOrEqual(1)
 })

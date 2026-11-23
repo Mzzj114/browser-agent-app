@@ -14,6 +14,23 @@ export type DecisionChoiceGroupProps = {
 
 const rawIdentifierPrefix = /^\[[A-Za-z0-9:_-]+\]\s+/
 
+const genericContexts = new Set([
+  "button",
+  "checkbox",
+  "combobox",
+  "link",
+  "radio",
+  "textbox",
+  "element",
+  "按钮",
+  "复选框",
+  "下拉框",
+  "链接",
+  "单选按钮",
+  "文本框",
+  "元素",
+])
+
 function formatConfidence(value: number, locale: Locale): string {
   return new Intl.NumberFormat(locale === "zh" ? "zh-CN" : "en-US", {
     style: "percent",
@@ -26,7 +43,12 @@ function displayLabel(label: string): string {
   return stripped.length > 0 ? stripped : label
 }
 
+function displayContext(context: string): string | null {
+  return genericContexts.has(context.trim().toLowerCase()) ? null : context
+}
+
 function AlternativeCard({ candidate }: { readonly candidate: Candidate }) {
+  const context = candidate.context ? displayContext(candidate.context) : null
   return (
     <li
       className="decision-choice-card decision-choice-card-alternative"
@@ -34,9 +56,7 @@ function AlternativeCard({ candidate }: { readonly candidate: Candidate }) {
       data-candidate-id={candidate.id}
     >
       <span className="decision-choice-label">{displayLabel(candidate.label)}</span>
-      {candidate.context ? (
-        <span className="decision-choice-context">{candidate.context}</span>
-      ) : null}
+      {context ? <span className="decision-choice-context">{context}</span> : null}
     </li>
   )
 }
@@ -65,6 +85,7 @@ export function DecisionChoiceGroup({
 
   if (!chosen) return null
 
+  const chosenContext = chosen.context ? displayContext(chosen.context) : null
   const moreLabel =
     kind === "actions"
       ? messages.study.moreActions(remaining.length)
@@ -84,9 +105,7 @@ export function DecisionChoiceGroup({
           </h3>
           <span className="decision-choice-label">{displayLabel(chosen.label)}</span>
           <span className="decision-choice-selected sr-only">{messages.study.selected}</span>
-          {chosen.context ? (
-            <span className="decision-choice-context">{chosen.context}</span>
-          ) : null}
+          {chosenContext ? <span className="decision-choice-context">{chosenContext}</span> : null}
         </div>
         {reportedConfidence === undefined ? null : (
           <span className="decision-choice-confidence">

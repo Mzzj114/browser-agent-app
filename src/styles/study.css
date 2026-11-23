@@ -238,41 +238,12 @@
 }
 
 .study-page > .browser-frame {
-  grid-template-rows: 26px 28px minmax(0, 1fr);
-  block-size: clamp(16rem, 42vh, 32rem);
+  grid-template-rows: 28px minmax(0, 1fr);
+  block-size: clamp(18rem, 48vh, 34rem);
   border: 0;
   border-block-end: 1px solid var(--border-default);
   border-radius: 0;
   box-shadow: none;
-}
-
-.study-page > .browser-frame .browser-meta {
-  gap: var(--space-2);
-  padding-inline: var(--space-2);
-}
-
-.study-page > .browser-frame .browser-tab,
-.study-page > .browser-frame .browser-address {
-  font-size: 11px;
-}
-
-.study-page > .browser-frame .browser-evidence-caption {
-  gap: var(--space-1) var(--space-2);
-  padding-inline: var(--space-2);
-}
-
-.study-page > .browser-frame .browser-state-label {
-  font-size: 12px;
-}
-
-.study-page > .browser-frame .browser-state-time {
-  font-size: 11px;
-}
-
-.study-page > .browser-frame .browser-state-badge {
-  padding: 0 var(--space-1);
-  font-size: 10px;
-  line-height: 1.5;
 }
 
 .decision-inspector {
@@ -367,6 +338,10 @@
   min-inline-size: 0;
   align-items: start;
   gap: var(--space-3);
+}
+
+.decision-choice-pair > .decision-choice-group:only-child {
+  grid-column: 1 / -1;
 }
 
 .decision-choice-group {

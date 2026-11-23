@@ -29,6 +29,8 @@ export type Messages = {
   readonly capturedAt: (time: string) => string
   readonly zoomScreenshot: string
   readonly fitScreenshot: string
+  readonly zoomLabel: string
+  readonly fitLabel: string
   readonly replayBarLabel: string
   readonly jumpToStep: string
   readonly stepOption: (ordinal: number, action: string) => string
@@ -99,6 +101,8 @@ export const zhMessages = {
   capturedAt: (time) => `录制于 ${time}`,
   zoomScreenshot: "放大截图至实际大小",
   fitScreenshot: "缩放截图以适应面板",
+  zoomLabel: "放大",
+  fitLabel: "适应",
   replayBarLabel: "回放已录制的执行",
   jumpToStep: "跳转步骤",
   stepOption: (ordinal, action) => `步骤 ${ordinal} · ${action}`,
@@ -173,6 +177,8 @@ export const enMessages = {
   capturedAt: (time) => `Captured ${time}`,
   zoomScreenshot: "Zoom screenshot to actual size",
   fitScreenshot: "Fit screenshot to panel",
+  zoomLabel: "Zoom",
+  fitLabel: "Fit",
   replayBarLabel: "Replay recorded execution",
   jumpToStep: "Jump to step",
   stepOption: (ordinal, action) => `Step ${ordinal} · ${action}`,

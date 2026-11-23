@@ -59,10 +59,11 @@ describe("decision evidence workspace", () => {
     expect(within(taskStrip()).getAllByText(run.task).length).toBeGreaterThan(0)
     expect(screen.getByText("Original task")).toBeVisible()
     const browser = screen.getByRole("region", { name: "Agent browser" })
-    expect(within(browser).getByText(finalObservation.title)).toBeVisible()
-    expect(within(browser).getByText(finalObservation.url)).toBeVisible()
     expect(within(browser).getByText("Last recorded state")).toBeVisible()
-    expect(within(browser).getByText("End of run · not live")).toBeVisible()
+    expect(within(browser).queryByText(finalObservation.title)).toBeNull()
+    expect(within(browser).queryByText(finalObservation.url)).toBeNull()
+    expect(within(browser).queryByText("End of run · not live")).toBeNull()
+    expect(within(browser).getByText("Zoom")).toBeVisible()
     expect(document.querySelector(".page-screenshot")).toHaveAttribute(
       "src",
       "screenshots/en/08-cart.webp",
@@ -161,9 +162,10 @@ describe("decision evidence workspace", () => {
         "screenshots/en/04-sorted.webp",
       )
       const browser = screen.getByRole("region", { name: "Agent browser" })
-      expect(within(browser).getByText(beforeEpisodeFour.title)).toBeVisible()
-      expect(within(browser).getByText(beforeEpisodeFour.url)).toBeVisible()
-      expect(within(browser).getByText("Recorded · not live")).toBeVisible()
+      expect(within(browser).getByText("Before step 4 of 8")).toBeVisible()
+      expect(within(browser).queryByText(beforeEpisodeFour.title)).toBeNull()
+      expect(within(browser).queryByText(beforeEpisodeFour.url)).toBeNull()
+      expect(within(browser).queryByText("Recorded · not live")).toBeNull()
       expect(screen.getByRole("heading", { name: "Viewed step 4" })).toBeVisible()
       expect(screen.queryByRole("combobox")).toBeNull()
     },
@@ -198,7 +200,34 @@ describe("decision evidence workspace", () => {
     const browser = screen.getByRole("region", { name: "Agent browser" })
     expect(within(browser).queryByText(episode.action)).toBeNull()
     expect(panel.querySelector(".decision-inspector-action")).toHaveTextContent(episode.action)
-    expect(within(browser).getByText("Recorded · not live")).toBeVisible()
+    expect(within(browser).getByText("Zoom")).toBeVisible()
+  })
+
+  it("renders one compact state-and-zoom caption without full browser metadata", async () => {
+    // Given the study workspace in its compact browser-frame mode.
+    useEnglish()
+    const user = userEvent.setup()
+    render(<App runs={studyRuns("candidates")} />)
+    const browser = screen.getByRole("region", { name: "Agent browser" })
+
+    // Then only the state label and Zoom control sit above the screenshot.
+    expect(within(browser).getByText("Last recorded state")).toBeVisible()
+    expect(browser.querySelector(".browser-meta")).toBeNull()
+    expect(browser.querySelector(".browser-evidence-caption")).toBeNull()
+    expect(browser.querySelector(".browser-state-time")).toBeNull()
+    expect(browser.querySelector(".browser-state-badge")).toBeNull()
+    const zoom = within(browser).getByText("Zoom").closest("button")
+    if (!(zoom instanceof HTMLButtonElement)) throw new Error("Missing compact zoom control")
+    expect(zoom).toHaveAttribute("aria-label", "Zoom screenshot to actual size")
+
+    // When the caption control is used, it toggles the screenshot's shared zoom state.
+    await user.click(zoom)
+    expect(zoom).toHaveTextContent("Fit")
+    expect(zoom).toHaveAttribute("aria-label", "Fit screenshot to panel")
+    expect(document.querySelector(".screenshot-trigger")).toHaveAttribute("data-zoomed", "true")
+    await user.click(zoom)
+    expect(zoom).toHaveTextContent("Zoom")
+    expect(document.querySelector(".screenshot-trigger")).toHaveAttribute("data-zoomed", "false")
   })
 
   it("expands a long bilingual task without losing the draft or viewed step", async () => {

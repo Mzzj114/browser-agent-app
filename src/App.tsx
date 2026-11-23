@@ -21,7 +21,6 @@ import {
   updateStudyResponse,
 } from "./domain/study-response"
 import type { StudyRun, StudyRuns } from "./domain/study-run-schema"
-import type { Locale } from "./i18n"
 import { LocaleProvider, useLocale } from "./i18n"
 
 type AppProps = {
@@ -38,15 +37,6 @@ function selectedEpisode(run: StudyRun, viewed: ViewedSelection): ViewedEpisode 
   const index = run.episodes.findIndex((episode) => episode.id === viewed.episodeId)
   const episode = run.episodes[index]
   return index < 0 || episode === undefined ? null : { index, episode }
-}
-
-function formatCapturedAt(iso: string, locale: Locale): string {
-  const date = new Date(iso)
-  if (Number.isNaN(date.getTime())) return ""
-  return new Intl.DateTimeFormat(locale === "zh" ? "zh-CN" : "en-US", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  }).format(date)
 }
 
 export function App({ runs }: AppProps): React.JSX.Element {
@@ -81,9 +71,6 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
     viewedEpisode === null
       ? messages.lastRecordedState
       : messages.study.beforeStepCaption(viewedEpisode.episode.ordinal, run.episodes.length)
-  const stateNote =
-    viewedEpisode === null ? messages.lastRecordedStateNote : messages.recordedNotLive
-  const capturedAtLabel = messages.capturedAt(formatCapturedAt(observation.capturedAt, locale))
 
   const viewEpisode = (episodeId: string) => {
     setViewed({ kind: "episode", episodeId })
@@ -120,12 +107,7 @@ function StudyWorkspace({ runs }: AppProps): React.JSX.Element {
             <h2 id="study-page-heading" className="sr-only">
               {messages.pageResultHeading}
             </h2>
-            <BrowserFrame
-              pageState={observation}
-              stateLabel={stateLabel}
-              stateNote={stateNote}
-              capturedAtLabel={capturedAtLabel}
-            />
+            <BrowserFrame variant="compact" pageState={observation} stateLabel={stateLabel} />
             <DecisionInspector run={run} viewed={activeViewed} />
           </section>
         </main>

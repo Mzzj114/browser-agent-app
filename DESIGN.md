@@ -111,7 +111,7 @@ All spacing derives from 4px.
 - Study context strip: one full-width original-task disclosure whose collapsed summary is a single clipped line. The expanded body scrolls internally when long; the recorded-run provenance note stays visible.
 - Main workspace: `clamp(10.5rem, 13vw, 12rem) minmax(0, 1fr)` for the quiet step rail and the single white screenshot-first review panel, separated by a small gap on a sunken background.
 - Response region: a separate 156px shell row with stable verdict, explanation, and submit columns and a compact notice group. Normal controls remain visible; validation and enlarged explanations scroll internally. There is no localization control.
-- Browser metadata: compact quieter rows merging title and read-only URL above state/capture/recorded-not-live context. Navigation lives only in the execution rail; the review panel has no replay header.
+- Browser metadata: the study page uses one compact caption row with the state label and a Zoom/Fit control; the full `BrowserFrame` variant retains title, read-only URL, capture time, and recorded-not-live context for other surfaces. Navigation lives only in the execution rail; the review panel has no replay header.
 - Home picker: the same fixed header above a bounded, two-column run list at 960px maximum width; one column below 800px. It is not part of the evidence workspace and has no score, condition, or trial-role metadata.
 - Supported viewport: 1280x720 minimum; designed at 1366x768 and 1440x900 in both locales.
 - Below the minimum width or height, replace the workspace with the approved desktop requirement message.
@@ -167,12 +167,12 @@ The production entry composes these components. Legacy chat/transcript component
 
 #### BrowserFrame participant contract
 
-- Structure: a combined title/read-only-address row, a before/final-state/capture/recorded-not-live row, and a screenshot whose trigger toggles fit/actual size. The product header supplies step count; the step evidence supplies the action label. Inside `.study-page` the frame drops its outer border, radius, and shadow so the image and evidence read as one page.
-- Variants: explicit final observation, viewed historical step, missing screenshot, fitted, actual size.
-- States: final, historical, missing evidence, zoomed.
-- Accessibility: read-only text is not presented as editable; alt text names the recorded page; the trigger names the current fit/actual-size action.
+- Structure: the study page uses the default `compact` variant with one caption row (state label plus a text-style Zoom/Fit control) above the screenshot; the `full` variant adds the combined title/read-only-address row and the before/final-state/capture/recorded-not-live row. Both variants share the screenshot trigger that toggles fit/actual size. The product header supplies step count; the step evidence supplies the action label. Inside `.study-page` the frame drops its outer border, radius, and shadow so the image and evidence read as one page.
+- Variants: `compact` (study page) and `full` (other surfaces); explicit final observation, viewed historical step, missing screenshot, fitted, actual size.
+- States: final, historical, missing evidence, zoomed; the compact Zoom control is disabled when no screenshot is usable.
+- Accessibility: read-only text is not presented as editable; alt text names the recorded page; both the screenshot trigger and the compact text control name the current fit/actual-size action, and the visible Zoom/Fit copy stays inside that accessible name.
 - Layout: the complete image fits both available dimensions inside a viewport-bounded region, preserving aspect ratio and centering unused space without cropping or scrolling. Native-pixel inspection enables two-axis scrolling; returning to fit shows all edges again. Images keep intrinsic dimensions and unfiltered opacity.
-- Failure: a real image error shows missing evidence while keeping URL/title and the step action. Moving to a healthy path recovers the image; the renderer never substitutes an after-state and labels it “before.”
+- Failure: a real image error shows missing evidence while keeping the step action and any full-variant URL/title. Moving to a healthy path recovers the image; the renderer never substitutes an after-state and labels it “before.”
 
 #### RunPicker
 

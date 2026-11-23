@@ -178,6 +178,42 @@ describe("primitive controls", () => {
     expect(trigger).toHaveAttribute("data-zoomed", "false")
   })
 
+  it("renders a compact state-and-zoom caption without full browser metadata", async () => {
+    // Given the study page's compact browser frame.
+    const user = userEvent.setup()
+    renderWithLocale(<BrowserFrame {...browserProps} variant="compact" />)
+
+    // Then only the state label and a text-style zoom control are shown.
+    expect(screen.getByText("步骤 2 / 8 · 此步之后录制")).toBeVisible()
+    expect(screen.queryByText(samplePage.title)).toBeNull()
+    expect(screen.queryByText(samplePage.url)).toBeNull()
+    expect(screen.queryByText("录制 · 非实时")).toBeNull()
+    expect(screen.queryByText("录制于 17:00")).toBeNull()
+    const zoom = screen.getByText("放大").closest("button")
+    if (!(zoom instanceof HTMLButtonElement)) throw new Error("Missing compact zoom control")
+    expect(zoom).toBeEnabled()
+    expect(zoom).toHaveAttribute("aria-label", "放大截图至实际大小")
+
+    // When the compact control is used, it toggles the shared screenshot zoom.
+    await user.click(zoom)
+    expect(zoom).toHaveTextContent("适应")
+    expect(zoom).toHaveAttribute("aria-label", "缩放截图以适应面板")
+    expect(document.querySelector(".screenshot-trigger")).toHaveAttribute("data-zoomed", "true")
+  })
+
+  it("disables compact zoom when no screenshot is usable", () => {
+    renderWithLocale(
+      <BrowserFrame
+        {...browserProps}
+        variant="compact"
+        pageState={{ ...samplePage, screenshot: null }}
+      />,
+    )
+
+    const zoom = screen.getByText("放大").closest("button")
+    expect(zoom).toBeDisabled()
+  })
+
   it("marks the last recorded state as an end-of-run capture, not a live check", () => {
     // Given the final recorded state rather than a historical step.
     renderWithLocale(
