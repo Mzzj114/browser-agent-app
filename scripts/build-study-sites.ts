@@ -4,6 +4,7 @@ import { resolve } from "node:path"
 import { type StudyCondition, studyConditions } from "../src/domain/study-condition.ts"
 import { writeRunLibrary } from "./run-library.ts"
 import { verifyStudyBuild } from "./study-build.ts"
+import { studyConditionRoutes } from "./study-condition.ts"
 
 const distRoot = resolve("dist")
 const fixturesDirectory = resolve("public", "runs")
@@ -31,14 +32,15 @@ async function buildCondition(condition: StudyCondition): Promise<void> {
     outputDir: fixturesDirectory,
   })
 
-  const outputDirectory = resolve(distRoot, condition)
+  const route = studyConditionRoutes[condition]
+  const outputDirectory = resolve(distRoot, route)
   await run(process.execPath, [viteBin, "build", "--outDir", outputDirectory, "--emptyOutDir"], {
     ...process.env,
     VITE_STUDY_CONDITION: condition,
   })
 
   const report = await verifyStudyBuild(outputDirectory, condition)
-  console.log(`built ${report.condition} in dist/${condition} (${report.fixtureRevision})`)
+  console.log(`built ${report.condition} in dist/${route} (${report.fixtureRevision})`)
 }
 
 async function main(): Promise<void> {
