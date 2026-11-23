@@ -60,6 +60,22 @@ The linked Vercel project serves:
 - `/candidates/`
 - `/probabilities/`
 
+## Study links and data collection
+
+Each participant receives three researcher-built links — one per case, one per condition:
+
+```text
+/{condition}/?p=P01&c=1&case=C07
+```
+
+- `p` is the pseudonymous participant code, `c` is the case order (1–3), and `case` is a short code resolved by the checked-in `src/study/cases.json` map (23 codes over the approved roster). The map carries no expected answers, and raw run IDs never appear in study links.
+- Study mode opens exactly that case. Invalid or partial links show a neutral error instead of the run picker; `?run=<id>` keeps its existing demo meaning.
+- Submitting stores the verdict, optional explanation, review timing, step views, and final-state views: first in a `localStorage` queue, then as one insert into the Supabase `study_submissions` table using the public publishable key. Failed inserts retry on page load and when the browser comes back online; a `409` on the same `submission_id` counts as delivered.
+- Reloading or revisiting a submitted link shows a submitted notice. A completed marker in `localStorage` blocks a second insert from the same browser.
+- The table is insert-only for `anon` (RLS with no read policy); apply `supabase/migrations/20261123_create_study_submissions.sql` to the study project. Analysis keeps the first complete row per `(participant_code, case_order)` and flags later duplicates.
+
+`VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` must both be present — in `.env.local` (ignored by Git) or as Vercel project variables. Without them, study links fail closed with a neutral configuration error; demo links still work.
+
 ## Scripts
 
 | Command                                    | Purpose                                                                       |
