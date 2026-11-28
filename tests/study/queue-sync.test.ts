@@ -16,7 +16,13 @@ const session: StudySession = {
   appVersion: "0.1.0",
 }
 
-const finished = { wallMs: 1_000, stepViews: 1, uniqueStepsViewed: 1, finalViews: 0 }
+const finished = {
+  wallMs: 1_000,
+  stepViews: 1,
+  uniqueStepsViewed: 1,
+  finalViews: 0,
+  firstInteractionMs: 400,
+}
 
 const queued: SubmissionPayload = buildSubmission({
   session,

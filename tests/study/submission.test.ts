@@ -18,7 +18,13 @@ const session: StudySession = {
 }
 
 const timing = startReviewTiming("2026-11-23T10:00:00.000Z", 0)
-const finished = { wallMs: 45_000, stepViews: 0, uniqueStepsViewed: 0, finalViews: 0 }
+const finished = {
+  wallMs: 45_000,
+  stepViews: 0,
+  uniqueStepsViewed: 0,
+  finalViews: 0,
+  firstInteractionMs: 12_000,
+}
 
 const payload: SubmissionPayload = buildSubmission({
   session,
@@ -70,6 +76,27 @@ test("accepts a blank explanation for either verdict", () => {
 
 test("the payload schema accepts a built payload unchanged", () => {
   expect(submissionPayloadSchema.parse(payload)).toEqual(payload)
+})
+
+test("the payload schema treats a missing first interaction as unknown", () => {
+  const legacyTiming = {
+    wallMs: payload.timing.wallMs,
+    stepViews: payload.timing.stepViews,
+    uniqueStepsViewed: payload.timing.uniqueStepsViewed,
+    finalViews: payload.timing.finalViews,
+  }
+
+  const parsed = submissionPayloadSchema.parse({ ...payload, timing: legacyTiming })
+  expect(parsed.timing.firstInteractionMs).toBeNull()
+})
+
+test("the payload schema rejects an interaction after the review ends", () => {
+  expect(() =>
+    submissionPayloadSchema.parse({
+      ...payload,
+      timing: { ...payload.timing, firstInteractionMs: payload.timing.wallMs + 1 },
+    }),
+  ).toThrow()
 })
 
 test("the payload schema rejects invalid rows", () => {

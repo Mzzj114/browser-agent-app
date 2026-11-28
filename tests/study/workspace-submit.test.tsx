@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import { App } from "../../src/App"
 import { StudySubmittedNotice } from "../../src/components/ui/study-submitted-notice"
 import { LocaleProvider } from "../../src/i18n"
@@ -84,6 +84,8 @@ describe("study submission wiring", () => {
     expect(row.timing.stepViews).toBe(0)
     expect(row.timing.uniqueStepsViewed).toBe(0)
     expect(row.timing.finalViews).toBe(0)
+    expect(row.timing.firstInteractionMs).toBeTypeOf("number")
+    expect(row.timing.firstInteractionMs).toBeGreaterThanOrEqual(0)
     expect(row.startedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
     expect(row.submittedAt).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
     expect(row.appVersion).toBe("0.1.0")
@@ -136,6 +138,61 @@ describe("study submission wiring", () => {
     expect(row.timing.stepViews).toBe(2)
     expect(row.timing.uniqueStepsViewed).toBe(2)
     expect(row.timing.finalViews).toBe(1)
+    expect(row.timing.firstInteractionMs).toBeTypeOf("number")
+    expect(row.timing.firstInteractionMs).toBeGreaterThanOrEqual(0)
+    expect(row.timing.firstInteractionMs).toBeLessThanOrEqual(row.timing.wallMs)
+  })
+
+  it("stamps the first rail-step view as the first interaction", async () => {
+    useEnglish()
+    const user = userEvent.setup()
+    const sent: SubmissionPayload[] = []
+    const sink: SubmissionSink = async (row) => {
+      sent.push(row)
+    }
+
+    let now = 0
+    vi.spyOn(performance, "now").mockImplementation(() => now)
+
+    render(<App runs={studyRuns("baseline")} study={runtime(sink)} />)
+    now = 1_000
+    await user.click(railButtons()[3] ?? document.body)
+    now = 20_000
+    await user.click(screen.getByRole("button", { name: "Fulfills the request" }))
+    await user.click(screen.getByRole("button", { name: "Submit assessment" }))
+
+    await waitFor(() => expect(sent).toHaveLength(1))
+    const row = sent[0]
+    if (!row) throw new Error("Missing submitted row")
+    expect(row.timing.firstInteractionMs).toBe(1_000)
+    expect(row.timing.wallMs).toBe(20_000)
+  })
+
+  it("stamps a final-state view as the first interaction", async () => {
+    useEnglish()
+    const user = userEvent.setup()
+    const sent: SubmissionPayload[] = []
+    const sink: SubmissionSink = async (row) => {
+      sent.push(row)
+    }
+
+    let now = 0
+    vi.spyOn(performance, "now").mockImplementation(() => now)
+
+    render(<App runs={studyRuns("baseline")} study={runtime(sink)} />)
+    const finalItem = document.querySelector(".execution-rail-list li:last-child")
+    if (!(finalItem instanceof HTMLElement)) throw new Error("Missing final rail item")
+    now = 1_000
+    await user.click(within(finalItem).getByRole("button"))
+    now = 20_000
+    await user.click(screen.getByRole("button", { name: "Fulfills the request" }))
+    await user.click(screen.getByRole("button", { name: "Submit assessment" }))
+
+    await waitFor(() => expect(sent).toHaveLength(1))
+    const row = sent[0]
+    if (!row) throw new Error("Missing submitted row")
+    expect(row.timing.firstInteractionMs).toBe(1_000)
+    expect(row.timing.wallMs).toBe(20_000)
   })
 
   it("keeps the response queued when the insert fails to send", async () => {

@@ -36,6 +36,7 @@ import {
   finishReviewTiming,
   type ReviewTiming,
   recordFinalView,
+  recordFirstInteraction,
   recordStepView,
   startReviewTiming,
 } from "./study/timing"
@@ -127,7 +128,10 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
     if (session !== null) {
       const current =
         timingRef.current ?? startReviewTiming(new Date().toISOString(), performance.now())
-      timingRef.current = recordStepView(current, episodeId)
+      timingRef.current = recordStepView(
+        recordFirstInteraction(current, performance.now()),
+        episodeId,
+      )
     }
     setViewed({ kind: "episode", episodeId })
   }
@@ -135,9 +139,17 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
     if (session !== null) {
       const current =
         timingRef.current ?? startReviewTiming(new Date().toISOString(), performance.now())
-      timingRef.current = recordFinalView(current)
+      timingRef.current = recordFinalView(recordFirstInteraction(current, performance.now()))
     }
     setViewed(initialViewedSelection())
+  }
+  const respond = (action: ResponseAction) => {
+    if (session !== null) {
+      const current =
+        timingRef.current ?? startReviewTiming(new Date().toISOString(), performance.now())
+      timingRef.current = recordFirstInteraction(current, performance.now())
+    }
+    dispatchResponse(action)
   }
 
   // A submitted study case is persisted and queued exactly once, even if this
@@ -246,7 +258,7 @@ function StudyWorkspace({ runs, study }: AppProps): React.JSX.Element {
         <section className="study-response" aria-label={messages.decisionQuestion}>
           <StudyResponseForm
             state={response}
-            onResponse={dispatchResponse}
+            onResponse={respond}
             mode={session === null ? "demo" : "study"}
             uploadStatus={session === null ? null : uploadStatus}
             statusRef={responseStatusRef}

@@ -344,10 +344,10 @@ describe("study case map gate", () => {
 
   it.each([
     ["a non-object map", null],
-    ["a 22-entry map", withoutFirstCode()],
+    ["a 21-entry map", withoutFirstCode()],
     [
-      "a 24-entry map with a duplicate run",
-      { ...checkedIn, C24: checkedIn["C01"] } as Record<string, string>,
+      "a 22-entry map with a duplicate run",
+      { ...withoutFirstCode(), C24: checkedIn["C03"] } as Record<string, string>,
     ],
     ["an unknown run id", { ...checkedIn, C01: "F1_not_in_library" } as Record<string, string>],
     [

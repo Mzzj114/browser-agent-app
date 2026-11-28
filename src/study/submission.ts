@@ -63,12 +63,22 @@ export const submissionPayloadSchema = z.strictObject({
   locale: z.enum(["zh", "en"]),
   verdict: z.enum(["accepted", "rejected"]),
   explanation: z.string().max(500),
-  timing: z.strictObject({
-    wallMs: z.number().min(0),
-    stepViews: z.number().min(0),
-    uniqueStepsViewed: z.number().min(0),
-    finalViews: z.number().min(0),
-  }),
+  timing: z
+    .strictObject({
+      wallMs: z.number().min(0),
+      stepViews: z.number().min(0),
+      uniqueStepsViewed: z.number().min(0),
+      finalViews: z.number().min(0),
+      // Missing on rows queued before this metric existed; treat those as unknown.
+      firstInteractionMs: z.number().min(0).nullable().default(null),
+    })
+    .refine(
+      (timing) => timing.firstInteractionMs === null || timing.firstInteractionMs <= timing.wallMs,
+      {
+        message: "First interaction cannot follow the end of the review",
+        path: ["firstInteractionMs"],
+      },
+    ),
   startedAt: z.string().min(1),
   submittedAt: z.string().min(1),
   appVersion: z.string().min(1),

@@ -74,6 +74,10 @@ test("collects a study submission through a researcher link", async ({ page }) =
   expect(timing["stepViews"]).toBe(1)
   expect(timing["uniqueStepsViewed"]).toBe(1)
   expect(timing["finalViews"]).toBe(0)
+  expect(timing["firstInteractionMs"]).toBeGreaterThanOrEqual(0)
+  const wallMs = timing["wallMs"]
+  if (wallMs === undefined) throw new Error("Missing wall time")
+  expect(timing["firstInteractionMs"]).toBeLessThanOrEqual(wallMs)
 })
 
 test("shows the submitted notice on reload instead of a blank form", async ({ page }) => {

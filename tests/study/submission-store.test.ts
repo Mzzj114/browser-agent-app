@@ -1,6 +1,6 @@
 import { expect, test } from "vitest"
 import type { StudySession } from "../../src/study/session.ts"
-import { buildSubmission } from "../../src/study/submission.ts"
+import { buildSubmission, type SubmissionPayload } from "../../src/study/submission.ts"
 import {
   enqueueSubmission,
   flushSubmissionQueue,
@@ -53,7 +53,13 @@ const session: StudySession = {
 }
 
 const timing = startReviewTiming("2026-11-23T10:00:00.000Z", 0)
-const finished = { wallMs: 1_000, stepViews: 1, uniqueStepsViewed: 1, finalViews: 0 }
+const finished = {
+  wallMs: 1_000,
+  stepViews: 1,
+  uniqueStepsViewed: 1,
+  finalViews: 0,
+  firstInteractionMs: 400,
+}
 
 function payload(submissionId: string, caseOrder: 1 | 2 | 3 = 1) {
   return buildSubmission({
@@ -124,6 +130,34 @@ test("corrupt storage is treated as empty", () => {
 
   expect(readSubmissionQueue(storage)).toEqual([])
   expect(readCompletedMarker(storage, "P07", 1, first.runId)).toBeNull()
+})
+
+test("keeps a legacy queued payload without firstInteractionMs", async () => {
+  const storage = new MemoryStorage()
+  const legacyTiming = {
+    wallMs: first.timing.wallMs,
+    stepViews: first.timing.stepViews,
+    uniqueStepsViewed: first.timing.uniqueStepsViewed,
+    finalViews: first.timing.finalViews,
+  }
+  storage.setItem(
+    "study.submission-queue.v1",
+    JSON.stringify([{ payload: { ...first, timing: legacyTiming }, status: "pending" }]),
+  )
+
+  const queue = readSubmissionQueue(storage)
+  expect(queue).toHaveLength(1)
+  expect(queue[0]?.payload.timing.firstInteractionMs).toBeNull()
+  expect(queuedSubmissionStatus(storage, first.submissionId)).toBe("retrying")
+
+  const sent: SubmissionPayload[] = []
+  const outcome = await flushSubmissionQueue(storage, async (row) => {
+    sent.push(row)
+  })
+
+  expect(sent).toHaveLength(1)
+  expect(sent[0]?.timing.firstInteractionMs).toBeNull()
+  expect(outcome.get(first.submissionId)).toBe("delivered")
 })
 
 test("queued status is delivered when absent, retrying when pending", () => {

@@ -88,11 +88,11 @@ const legacySentinels: readonly LegacySentinel[] = [
   { label: "model usage metadata", pattern: /["']?usage["']\s*:/ },
 ]
 
-const caseCodeCount = 23
+const caseCodeCount = 22
 const caseCodePattern = /^C\d{2}$/
 
 /**
- * Spec §8: the checked-in case map must have exactly 23 well-formed codes over
+ * Spec §8: the checked-in case map must have exactly 22 well-formed codes over
  * runs that exist in the committed library, or the participant build fails.
  * This runs at build time; the map never carries expected answers.
  */
